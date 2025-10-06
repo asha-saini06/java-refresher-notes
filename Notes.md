@@ -272,7 +272,8 @@ class Output{
 }
 ```
 
-Output: 
+Output:
+
 ```
 b= true
 b= false
@@ -280,12 +281,12 @@ b= true
 b= false
 ```
 
-> ❓ *What is the difference between `==` and `=`?*
-➡ `==` checks if two values are equal, while `=` assigns a value to a variable.
+> ❓ _What is the difference between `==` and `=`?_
+> ➡ `==` checks if two values are equal, while `=` assigns a value to a variable.
 
-```java 
+```java
 int  a = 5;
-int b = a ++; 
+int b = a ++;
 
 System.out.println(a); // 6
 System.out.println(b); // 5
@@ -293,14 +294,14 @@ System.out.println(b); // 5
 
 ```java
 int a = 29;
-a--; 
+a--;
 a -= ++a;
 System.out.println(a); // 0
 ```
 
 ```java
 int a = 8;
-int b = ++a + (--a) + a 
+int b = ++a + (--a) + a
 System.out.println(a); // 8
 System.out.println(b); // 25
 ```
@@ -314,13 +315,17 @@ Procedural programming is about writing procedures or methods that perform opera
 Object-oriented programming has several advantages over procedural programming:
 
 - OOP is faster and easier to execute
+
 * OOP provides a clear structure for the programs
+
 - OOP helps to keep the Java code DRY "Don't Repeat Yourself", and makes the code easier to maintain, modify and debug
+
 * OOP makes it possible to create full reusable applications with less code and shorter development time
 
 > 📝: The "**Don't Repeat Yourself**" (DRY) principle is about reducing the repetition of code. You should extract out the codes that are common for the application, and place them at a single place and reuse them instead of repeating it.
 
 ### What are Classes and Objects?
+
 Classes and objects are the two main aspects of object-oriented programming.
 
 Look at the following illustration to see the difference between class and objects:
@@ -351,38 +356,42 @@ When an object of a class is created, the class is said to be instantiated. All 
 ---
 
 `String[] args` is a parameter. It is a variable that is passed to the method. It is used to store the command-line arguments passed to the program.
+
 ```java
 class abc {
     public static void main(String[] args) {
-        
+
     }
 }
 ```
 
 ### Why `main` uses `String[] args` (and not int[], float[], etc.)
 
-1. **Command-line arguments are always text**  
-   - When you run a Java program from the terminal, everything after the class name is passed as **plain strings**.  
-   - Example:  
+1. **Command-line arguments are always text**
+
+   - When you run a Java program from the terminal, everything after the class name is passed as **plain strings**.
+   - Example:
      ```bash
      java MyApp 10 20
-     ```  
+     ```
      The JVM receives `"10"` and `"20"` (strings), not numbers.
 
-2. **Strings are universal**  
-   - Using `String[]` allows the program to accept any kind of input — numbers, words, file paths, flags like `-help`, etc.  
+2. **Strings are universal**
+
+   - Using `String[]` allows the program to accept any kind of input — numbers, words, file paths, flags like `-help`, etc.
    - If the parameter type were `int[]`, you couldn’t pass non-numeric input like `"hello"`.
 
-3. **Conversion to other types is possible**  
-   - Strings can be converted to the required type inside the program:  
+3. **Conversion to other types is possible**
+
+   - Strings can be converted to the required type inside the program:
      ```java
      int x = Integer.parseInt(args[0]);
      double y = Double.parseDouble(args[1]);
      ```
    - This gives flexibility: one program can handle multiple input formats.
 
-4. **Defined by the JVM specification**  
-   - The JVM only looks for the method signature:  
+4. **Defined by the JVM specification**
+   - The JVM only looks for the method signature:
      ```java
      public static void main(String[] args)
      ```
@@ -392,6 +401,7 @@ class abc {
 Command-line input always comes in as text. `String[] args` ensures Java can accept any kind of input, and the program can later parse those strings into numbers or other data types as needed.
 
 ## 6. Variables in Java:
+
 Variables are containers to store data in memory. Each variable has a name, type and value. It is the basic unit of storage in a program. Java has 4 types of variables.
 
 - `Local Variables`: Declared inside a method, constructor, or block. Accessible only within that block.
@@ -402,10 +412,10 @@ Variables are containers to store data in memory. Each variable has a name, type
 ```java
 class A {
     // Instance variable (belongs to each object)
-    int a;  
+    int a;
 
     // Static variable (shared by all objects)
-    static int b;  
+    static int b;
 
     // Final variable (cannot be changed)
     final int c = 10;
@@ -440,6 +450,7 @@ class XYZ {
 ```
 
 Output:
+
 ```
 obj1.a = 20
 obj2.a = 50
@@ -454,6 +465,8 @@ Local variable d: 5
     - Static variable → shared across all objects.
     - Final variable → constant (cannot change once set).
     - Local variable → lives inside a method.
+
+### Instance Variables & Static Variables
 
 > 📝: We can use an `instance` variable only through the object of the class in which it is defined. **Instance variables** have default values. For numbers, the default value is 0; for booleans, it is False; and for Object refrences it is Null.
 
@@ -471,14 +484,13 @@ class xyz {
      a1.display(); // calling instance method
 
      abc a2 = new abc();
-     a2.a = 10; 
+     a2.a = 10;
      a2.display(); // display 10
  }
 }
 ```
 
-     
-```java 
+```java
 class abc{
     int  a; // instance variable
     public static void main(String[] args) {
@@ -486,6 +498,7 @@ class abc{
     }
 }
 ```
+
 📝: We can't access instance variable without object in `main()` even if both are present in the same class. To access an instance variable in `main()`:
 
     abc a1 = new abc(); // creating object of class abc
@@ -499,6 +512,7 @@ class xyz {
     }
 }
 ```
+
 📝: However, if the instance variable is declared `static`, we can directly (without an object) access that variable in the `main()`.
 
 ❓ **Why do we need abc obj = new abc();?**
@@ -507,48 +521,48 @@ class xyz {
 - To access an instance variable inside a static method (like `main`), you must first create an object of that class.
 - That’s why `obj.a` works: you created an object (`obj`) and then accessed its variable.
 
-
 ❓ **What if you don’t create an object?**
 
 If you write just `System.out.println(a);`, it won’t compile.
 
 You’ll get:
 
-```non-static variable a cannot be referenced from a static context```
+`non-static variable a cannot be referenced from a static context`
 
 Because `main` is static and cannot directly access non-static members (like `a`) without an object.
 
 creating an object (`new abc()`) is necessary here because `a` is an instance variable.
 If you want to avoid creating an object, you’d need to make `a` static.
 
-> 📝: **Static** variable retains the values. **Instance** variables have their won memories, so the values get overwritten. 
+> 📝: **Static** variable retains the values. **Instance** variables have their won memories, so the values get overwritten.
 
 > 📝: **Static (Class)** variables and **Instance** variables both are member variables because they are both associated with a specific class, but the difference between them is `Class (Static)` variables only have one copy that is shared by all the different objects of a class, whereas every object has it's own personal copy of an `instance`.
 
-```java 
+```java
 class abc {
    static int a; // Static variables default to 0 if not explicitly initialized.
    public static void main(String[] args) {
        abc a1 = new abc();
        a1.a = 10; // This sets the class variable `a` to 10.
-       System.out.println(a1.a); // 10 
+       System.out.println(a1.a); // 10
 
        abc a2 = new abc();
        a2.a = 5; // Even though we used a2, `a` is static → same variable is updated.
        System.out.println(a2.a); // 5
 
        abc a3 = new abc(); // Creates another object, but static variable `a` is still shared.
-       System.out.println(a3.a); // 5 
+       System.out.println(a3.a); // 5
        a3 = a1; // Just makes a3 refer to the same object as a1. But since `a` is static, it doesn’t matter.
 
        System.out.println(a1.a); // 5
 
        System.out.println(new abc().a); // 5 // Even with a brand-new object, static variable is still the same.
-   } 
+   }
 }
 ```
 
 Output:
+
 ```
 10
 5
@@ -560,6 +574,177 @@ Output:
 
 ⚡ So the key takeaway:
 
-   - **Static variables are shared across all instances.**
-   - Changing them via any object (or even class name `abc.a`) updates the single shared copy.
+- **Static variables are shared across all instances.**
+- Changing them via any object (or even class name `abc.a`) updates the single shared copy.
 
+## 7. Loops
+
+`for`, `while`, `do-while`, `foreach`
+
+### for loop
+Used when you know beforehand how many times you want to run the loop.
+
+```java
+for (int i = 0; i < arr.length; i++) {
+    System.out.println(arr[i]);
+}
+```
+
+Output:
+
+```
+1
+2
+3
+4
+5
+```
+
+### foreach loop (Enhanced For Loop)
+
+Syntax: `for(Type var:array) { }`
+
+The `foreach` loop is used to traverse array or collection (i.e. for accessing array). It works on elements basis not index. It returns elements one by one in the defined variable.
+
+```java
+for (int i : arr) {
+    System.out.println(i);
+}
+```
+
+Output:
+
+```
+1
+2
+3
+4
+5
+```
+
+### while loop
+Used when the number of iterations is unknown and depends on a condition.
+
+```java
+int i = 0;
+while (i < arr.length) {
+    System.out.println(arr[i]);
+    i++;
+}
+```
+
+Output:
+
+```
+1
+2
+3
+4
+5
+```
+
+### do-while loop
+Similar to `while`, but executes the code at least once before checking condition.
+
+```java
+int i = 0;
+do {
+    System.out.println(arr[i]);
+    i++;
+} while (i < arr.length);
+```
+
+Output:
+
+```
+1
+2
+3
+4
+5
+```
+
+📝 **Difference between while and do-while:**
+
+- `while` → checks condition first, may run 0 times.
+- `do-while` → executes at least once before checking condition.
+
+## 8. Arrays
+
+Array is a collection of similar data types. Arrays are used to store multiple values in a single variable.
+
+```java
+int[] numbers = new int[5]; // Declaration + Memory allocation
+numbers[0] = 10;            // Assigning values
+numbers[1] = 20;
+
+int[] values = {1, 2, 3, 4, 5}; // Declaration + Initialization in one step
+```
+
+### Array declaration
+
+```java
+int arr[] = new int[3];
+int arr1[] = {10, 20, 30, 40};
+int arr2[] = new int[]{10, 20, 30, 40};
+
+char a[] = new char[3];
+new char[] = {'A', 'B', 'C'};
+```
+
+### Multidimensional Arrays
+
+```java
+int arr[][] = {{10, 20}, {10, 20, 30}, {30, 40, 4, 5, 6}, {2}};
+
+int len = arr[0].length;
+System.out.println(arr[1][1]);  // prints 20
+System.out.println(arr[1][2]);  // prints 30
+```
+
+```java
+for(int i = 0; i < arr.length; i++) {
+   for(int j = 0; j < arr[i].length; j++) {
+      System.out.println(arr[i][j]);
+   }
+}
+
+int arr[][] = new int[][] {{10, 20, 30, 40}, {10, 5}}
+```
+
+```java
+int arr[][] = new int[3][3];
+arr[0] = new int [10];
+arr[1] = new int [20];
+arr[2] = new int [30];
+```
+
+> 📖 Arrays are **fixed in size** (cannot be resized after creation).
+
+Default values:
+
+- `int` → 0
+- `boolean` → false
+- `Object` → null
+
+>  Arrays in Java are objects stored in heap memory.
+
+**❓ Difference between Array and ArrayList**
+
+- Array → Fixed size, can hold primitives and objects.
+- ArrayList → Dynamic size, only holds objects (wrapper classes needed for primitives).
+
+---
+
+📝 **Data Types**
+
+- `byte` : 1 byte
+- `char` : 2 bytes
+- `int` : 4 bytes
+- `float` : 4 bytes
+- `long` : 8 bytes
+- `double` : 8 bytes
+- `boolean` : 1 byte
+- `short` : 2 bytes
+- `String` : 2 bytes per character
+- `Object` : 4 bytes
