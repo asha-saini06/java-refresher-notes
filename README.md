@@ -7,6 +7,9 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 ![Status](https://img.shields.io/badge/Status-In_Progress-yellow)
 ![Contributions welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen)
 
+## 📖 Full Notes
+For the complete detailed notes, check out 👉 [Notes.md](./Notes.md)
+
 
 ## 📂 Contents  
 1. Intro 
