@@ -111,7 +111,7 @@ Java has two main categories of data types:
 - Classes
 - Interfaces
 
-### Example
+**Example**
 
 ```java
 public class DataTypeExample {
@@ -137,7 +137,7 @@ public class DataTypeExample {
 📖 **Important Rule – You Cannot Change the Type of a Variable**  
 Once a variable is declared with a type, it cannot change to another type later in the program.
 
-### Example
+**Example**
 
 ```java
 int myNum = 5;       // myNum is an int
@@ -751,9 +751,9 @@ Default values:
 
 ## 9. Functions (methods)
 
-A function is a block of code that performs a specific task.
+A function (in Java, commonly called a **method**) is a block of code that performs a specific task. Methods help in *code reusability* and *modularity*.
 
-### Syntax:
+### Structure of a Method
 
 ```java
  accessModifier keyword returnType functionName(parameterList) {
@@ -850,4 +850,78 @@ Output:
 0 0
 10 20
 ```
+
+📝: Methods **must be defined inside a class** in Java.
+
+- `main()` is also a method (entry point of program).
+
+- Methods can be:
+
+    * With return value (e.g., `int add()` returns a number).
+
+    * Without return value (`void greet()` just performs an action).
+
+> 📝 Method Signature → Consists of method name and parameter list.
+
+Example: `add(int a, int b)` is the method signature.
+
+📝 **Difference between Function and Method:**
+
+- In general programming → "Function" = **block of reusable code.**
+- In Java → **functions are always inside a class, so they’re called methods.**
+
+
+## 10. `this` Keyword
+
+The `this` keyword is a reference variable in Java that refers to the current object of a class.
+It is used to avoid ambiguity, call constructors, and pass the current object as an argument.
+
+```java
+class abc {
+    int a, b; // instance variable
+    void display() {
+        int a = 10, b = 20; // local variable
+        this.a = a; // this keyword is used to access instance variables // 'this.a' refers to instance variable
+        this.b = b;  // assigns local b to instance b
+    }
+    void output() {
+        System.out.println(a + " " +b);
+    }
+}
+
+class xyz {
+    public static void main(String[] args) {
+        abc a1 = new abc();
+        a1.display(); // initializes instance variables a and b using local values
+        a1.output(); // prints: 10 20
+
+        abc a2 = new abc();// again assigns values
+        a2.output();   // prints: 10 20
+    }
+}
+```
+- Without `this`:
+The local variables `a` and `b` would shadow (hide) the instance variables, leaving the instance variables uninitialized (default `0`).
+
+- With `this`: 
+We explicitly tell Java:
+
+> "Assign the value of the local variable `a` to the instance variable `a` of this object."
+
+That’s why `a1.output()` prints 10 20 instead of 0 0.
+
+Output:
+```
+ 10  20
+ 10  20
+```
+
+📝: `this` variable holds the value of the current object.
+The `this` keyword can be used to refer current class instance variable. If there is ambiguity between the instance variables and parameteres, `this` keyword resolves the problem of ambguity.
+
+> 📝:The keyword `this` is used only within instance methods or constructors.
+
+- `this` cannot be used inside `static` methods (since static methods do not belong to an object).
+
+- `this` is **automatically added by the compiler** when accessing instance variables, but we use it explicitly when needed for clarity.
 
