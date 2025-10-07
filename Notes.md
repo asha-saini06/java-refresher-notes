@@ -748,3 +748,106 @@ Default values:
 - `short` : 2 bytes
 - `String` : 2 bytes per character
 - `Object` : 4 bytes
+
+## 9. Functions (methods)
+
+A function is a block of code that performs a specific task.
+
+### Syntax:
+
+```java
+ accessModifier keyword returnType functionName(parameterList) {
+    function body;
+}
+```
+
+```java
+    returnType functionName(parameterList) {
+        function body;
+    }
+```
+
+**Example:**
+```java
+class abc {
+    void display{ // function declaration
+        System.out.println("Function body");
+    }
+}
+
+class xyz {
+    public static void main(String[] args) {
+        abc a1 = new abc(); // creating object of class abc
+        a1.display(); // function call
+    }
+}
+```
+
+> 📝: We can't declare two functions having same name & same signature in a class or it'll generate `compile time error`.
+
+> 📝: We can't call a function before it is declared. 
+
+```java
+class abc{
+    int a;
+    void display{
+        System.out.println(a); 
+    }
+}
+
+class xyz{
+    public static void main(String[] args) {
+        abc a1 = new abc();
+        a1.a = 23;
+        a1.display(); // displays 23
+
+        new abc().display(); // displays 0
+        abc a2 = new abc();
+        a2.display(); // displays 0
+    }
+}
+```
+
+Output: 
+```
+23
+0
+0
+```
+
+> 📝: Non-static member can be accessed in a static function but vice versa is not possible.
+
+```java
+class abc{
+    int a, b; // instance variable
+    void display() {
+        int c = 10, d =20; // local variable
+        a = c;
+        b = d;
+    }
+    void output() {
+        System.out.println(a + " " + b); 
+    }
+}
+
+class xyz {
+    public static void main(String[] args) {
+        abc a1 = new abc();
+        a1.display(); // initializes a and b
+        abc a2 = new abc();
+        a2.output();  // prints 0 0 
+        a1.output();  // prints 10 20
+    }
+}
+
+```
+First `display()` is called by  using `a1` object of class `abc`, it will set the values of `a` and `b` as 10, 20 respectively.
+Then `output()` is called by `a2` object of class `abc`. It will print the values of `a` and `b` which are 0, 0 respectively.
+At last, `output()` is called which displays `a`, `b` as set by `display()` function which is 10, 20 respectively.
+
+Output: 
+```
+0 0
+10 20
+```
+
