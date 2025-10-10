@@ -925,3 +925,286 @@ The `this` keyword can be used to refer current class instance variable. If ther
 
 - `this` is **automatically added by the compiler** when accessing instance variables, but we use it explicitly when needed for clarity.
 
+
+### this variable
+![this variable](./resources/this-variable.png)]
+
+```java
+class xyz {
+    int a, b;
+    void display(int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
+    void output() {
+        System.out.println(a + " " + b);
+    }
+}
+
+class mno{
+    public static void main(String[] args) {
+        xyz x1 = new xyz();
+        x1.display(10, 20);
+        x1.output(); // prints 10 20
+    }
+}
+```
+Output:
+```
+10 20
+```
+
+> 📝: In Java, `this` is a reference variable that refers to the current object.
+
+- By the use of `this` keyword, we can refer to any member of the current object within an instance method or constructor.
+- `this`keyword can be used to refer to the current object, and it always acts as a reference to an object in which method was invoked.
+- There are various uses of `this` keyword in Java. These are:
+     * `this` can be used to refer current instance variable. [Example: `this.a;`]
+     * `this` can be used to invoke current instance method (implicity). [Example: `this.display();`]
+     * `this` can be used to invoke current class constructor. [Example: `this();`]
+
+## 11. Types of functions
+
+| Type                                        | Description                                                   | Example                                                                    |
+| ------------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 1. Without arguments & without return value | Method does not take any input, and does not return anything. | `java\nvoid greet() {\n    System.out.println("Hello!");\n}\n`             |
+| 2. Without arguments & with return value    | Method does not take input, but returns a value.              | `java\nint getNumber() {\n    return 10;\n}\n`                             |
+| 3. With arguments & without return value    | Method takes input, but does not return anything.             | `java\nvoid printSum(int a, int b) {\n    System.out.println(a + b);\n}\n` |
+| 4. With arguments & with return value       | Method takes input and also returns a value.                  | `java\nint add(int a, int b) {\n    return a + b;\n}\n`                    |
+
+
+### Parameterized functions
+
+```java
+class abc {
+    int c; 
+    void display(int a, int b) {
+        c = a + b;
+        System.out.println(c);
+    }
+}
+
+class xyz {
+    public static void main(String[] args) {
+        abc a1 = new abc();
+        a1.display(10, 20); // prints 30
+        System.out.println(a1.c); // prints 30
+    }
+}
+```
+
+Output:
+
+```
+30
+30
+```
+
+📝: Parameters are added to a constructor in the same way that they are added to a method, just declare them inside the paranthesis after constructor's name.
+
+#### Passing Array as an Argument in a function
+
+```java
+class abc {
+    int c;
+    void display(int a[])
+    {
+        for(int i = 0; i < a.length; i++)
+            c += a[i];
+        System.out.println(c);
+    }
+}
+
+class xyz {
+    public static void main(String[] args) {
+        // int arr[] = {10, 20, 30, 40};
+        abc a1 = new abc();
+        a1.display(new int[]{10, 20, 30, 40});  // prints 100
+        System.out.println(a1.c);  // prints 100
+    }
+}
+```
+
+Output:
+```
+100
+100
+```
+
+> 📝: Java doesn't support **default arguments**, like C++. 
+
+## 12. Method Overloading (Compile Time Polymorphism)
+
+Same function name & different parameters are called **method overloading**.
+
+> 📝: **Compile Time Polymorphism** is a feature of Java that allows a single method name to be used for multiple different functions with different parameters.
+
+```java 
+class xyz {
+    void display(int a, int b) {
+        int c = a + b;
+        System.out.println(c);
+    }
+    void display(int a){
+        System.out.println(a);
+    }
+}
+
+class mno{
+    public static void main(String[] args) {
+        xyz x1 = new xyz();
+        x1.display(10, 20); // prints 30
+        xyz x2 = new xyz();
+        x1.display(30); // prints 30
+    }
+}
+```
+
+Output:
+```
+30
+30
+```
+
+## 13. var args
+
+Variable length Arguments
+
+**Syntax:** `typeName... parameterName`
+
+```java
+class xyz{
+    void sum(int... arr) { // var args
+        int sum = 0;
+        for(int k:arr) {
+            sum += k;
+        }
+        System.out.println(sum);
+    }
+}
+
+class mno{
+    public static void main(String... args) { // we can use var args here as well
+        xyz x1 = new xyz();
+        x1.sum(10, 20, 30); // prints 60
+         x1.sum(10, 20, 30, 40); // prints 100
+        
+    }
+}
+```
+
+Output:
+```
+60
+100
+```
+
+- `int... arr` → means **zero or more `int` arguments**.
+
+- Inside the method, Java treats `arr` like a normal array.
+
+- You can only have **one varargs parameter** in a method, and it must be the last parameter.
+
+```java
+void display(String msg, int... nums) { ... } // ✅ valid
+void display(int... nums, String msg) { ... } // ❌ invalid
+```
+
+## 14. Passing Object as Argument
+In Java, we can pass objects as **arguments** to methods. Since everything in Java is pass-by-value, what actually gets passed is the **reference (address)** of the object, not the actual object itself.
+
+```java 
+class xyz{
+    void sum(){
+        System.out.println("hello");
+    }
+}
+
+class mno{
+    xyz x1; // Reference of class xyz 
+
+    void output(xyz x1) { // takes xyz object as argument
+        this.x1 = x1;     // assign to instance variable
+        x1.sum();         // call method of xyz
+    }
+}
+
+class pqr{
+    public static void main(String... args) {
+        xyz kk = new xyz(); // create object of xyz
+        mno m1 = new mno(); // create object of mno
+        m1.output(kk); // pass object kk of class xyz to output()
+    }
+}
+```
+
+Output:
+```
+hello
+```
+
+- When we write `m1.output(kk);`, the reference of object `kk` is passed.
+- Inside the method `output(xyz x1)`, the parameter `x1` now refers to the same object as `kk`.
+- This means changes made to `x1` inside the method will affect the original object `kk`.
+
+> 📝: Objects are passed by **reference value** → meaning the reference (memory address) is copied, so both variables point to the same object in heap memory.
+
+--
+
+- When you pass an object to a method, what’s actually passed is the **reference (address)** of the object.
+
+- This means:
+    - The method can call the object’s methods.
+    - The method can modify the object’s fields (since it has the reference).
+
+## 15. Passing Array of Objects to a method
+
+```java 
+class abc{
+    String s;
+    void display(){
+        System.out.println(s);
+    }
+    void callObjectArray(abc a1[]) {
+        a1[0].display();
+        a1[1].display();
+    }
+    public static void main(String... args) {
+        abc a1 = new abc();
+        a1.s = "A";
+        abc a2 = new abc();
+        a2.s = "B";
+        abc a3 = new abc();
+
+        // Method 1: Using an array reference
+        // Passing pre-created array of objects
+        /*  abc arr[] = new abc[2];
+            arr[0] = a1;
+            arr[1] = a2;
+            a3.callObjectArray(arr);
+        */
+
+       // Method 2: Passing anonymous array of objects
+       // Passing array of objects directly (inline)
+       a3.callObjectArray(new abc[]{a1, a2}); // passing array of objects
+    }
+}
+```
+
+- An array can store **objects** just like primitives.
+- `new abc[]{a1, a2}` is an **anonymous array** — you don’t store it in a variable, just directly pass it.
+- Inside the method, you can use the array just like any normal array.
+- Useful in scenarios like:
+    * Passing multiple students (objects) to a method.
+    * Processing a list of employees, products, etc.
+
+- Arrays in Java can hold objects (references), not just primitive values.
+- When you pass an array of objects, you’re passing the **reference** to that array (so changes inside the method affect the original array).
+- You can either:
+    * Create the array beforehand and pass it.
+    * Or directly pass a **new array literal** in the method call (`new abc[]{obj1, obj2}`).
+
+> 📝: Arrays in Java are objects, not primitives.
+
+> 📝: If we declare the function callObjectArray as static method, we won't need an object and we can call the function as: `abc.callObjectArray(new abc[] {a1, a2});`
+
