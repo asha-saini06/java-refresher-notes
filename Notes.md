@@ -582,6 +582,7 @@ Output:
 `for`, `while`, `do-while`, `foreach`
 
 ### for loop
+
 Used when you know beforehand how many times you want to run the loop.
 
 ```java
@@ -623,6 +624,7 @@ Output:
 ```
 
 ### while loop
+
 Used when the number of iterations is unknown and depends on a condition.
 
 ```java
@@ -644,6 +646,7 @@ Output:
 ```
 
 ### do-while loop
+
 Similar to `while`, but executes the code at least once before checking condition.
 
 ```java
@@ -727,7 +730,7 @@ Default values:
 - `boolean` → false
 - `Object` → null
 
->  Arrays in Java are objects stored in heap memory.
+> Arrays in Java are objects stored in heap memory.
 
 **❓ Difference between Array and ArrayList**
 
@@ -751,7 +754,7 @@ Default values:
 
 ## 9. Functions (methods)
 
-A function (in Java, commonly called a **method**) is a block of code that performs a specific task. Methods help in *code reusability* and *modularity*.
+A function (in Java, commonly called a **method**) is a block of code that performs a specific task. Methods help in _code reusability_ and _modularity_.
 
 ### Structure of a Method
 
@@ -768,6 +771,7 @@ A function (in Java, commonly called a **method**) is a block of code that perfo
 ```
 
 **Example:**
+
 ```java
 class abc {
     void display{ // function declaration
@@ -785,13 +789,13 @@ class xyz {
 
 > 📝: We can't declare two functions having same name & same signature in a class or it'll generate `compile time error`.
 
-> 📝: We can't call a function before it is declared. 
+> 📝: We can't call a function before it is declared.
 
 ```java
 class abc{
     int a;
     void display{
-        System.out.println(a); 
+        System.out.println(a);
     }
 }
 
@@ -808,7 +812,8 @@ class xyz{
 }
 ```
 
-Output: 
+Output:
+
 ```
 23
 0
@@ -826,7 +831,7 @@ class abc{
         b = d;
     }
     void output() {
-        System.out.println(a + " " + b); 
+        System.out.println(a + " " + b);
     }
 }
 
@@ -835,17 +840,19 @@ class xyz {
         abc a1 = new abc();
         a1.display(); // initializes a and b
         abc a2 = new abc();
-        a2.output();  // prints 0 0 
+        a2.output();  // prints 0 0
         a1.output();  // prints 10 20
     }
 }
 
 ```
-First `display()` is called by  using `a1` object of class `abc`, it will set the values of `a` and `b` as 10, 20 respectively.
+
+First `display()` is called by using `a1` object of class `abc`, it will set the values of `a` and `b` as 10, 20 respectively.
 Then `output()` is called by `a2` object of class `abc`. It will print the values of `a` and `b` which are 0, 0 respectively.
 At last, `output()` is called which displays `a`, `b` as set by `display()` function which is 10, 20 respectively.
 
-Output: 
+Output:
+
 ```
 0 0
 10 20
@@ -857,9 +864,9 @@ Output:
 
 - Methods can be:
 
-    * With return value (e.g., `int add()` returns a number).
+  - With return value (e.g., `int add()` returns a number).
 
-    * Without return value (`void greet()` just performs an action).
+  - Without return value (`void greet()` just performs an action).
 
 > 📝 Method Signature → Consists of method name and parameter list.
 
@@ -869,7 +876,6 @@ Example: `add(int a, int b)` is the method signature.
 
 - In general programming → "Function" = **block of reusable code.**
 - In Java → **functions are always inside a class, so they’re called methods.**
-
 
 ## 10. `this` Keyword
 
@@ -900,17 +906,19 @@ class xyz {
     }
 }
 ```
-- Without `this`:
-The local variables `a` and `b` would shadow (hide) the instance variables, leaving the instance variables uninitialized (default `0`).
 
-- With `this`: 
-We explicitly tell Java:
+- Without `this`:
+  The local variables `a` and `b` would shadow (hide) the instance variables, leaving the instance variables uninitialized (default `0`).
+
+- With `this`:
+  We explicitly tell Java:
 
 > "Assign the value of the local variable `a` to the instance variable `a` of this object."
 
 That’s why `a1.output()` prints 10 20 instead of 0 0.
 
 Output:
+
 ```
  10  20
  10  20
@@ -925,8 +933,8 @@ The `this` keyword can be used to refer current class instance variable. If ther
 
 - `this` is **automatically added by the compiler** when accessing instance variables, but we use it explicitly when needed for clarity.
 
-
 ### this variable
+
 ![this variable](./resources/this-variable.png)]
 
 ```java
@@ -949,7 +957,9 @@ class mno{
     }
 }
 ```
+
 Output:
+
 ```
 10 20
 ```
@@ -959,9 +969,9 @@ Output:
 - By the use of `this` keyword, we can refer to any member of the current object within an instance method or constructor.
 - `this`keyword can be used to refer to the current object, and it always acts as a reference to an object in which method was invoked.
 - There are various uses of `this` keyword in Java. These are:
-     * `this` can be used to refer current instance variable. [Example: `this.a;`]
-     * `this` can be used to invoke current instance method (implicity). [Example: `this.display();`]
-     * `this` can be used to invoke current class constructor. [Example: `this();`]
+  - `this` can be used to refer current instance variable. [Example: `this.a;`]
+  - `this` can be used to invoke current instance method (implicity). [Example: `this.display();`]
+  - `this` can be used to invoke current class constructor. [Example: `this();`]
 
 ## 11. Types of functions
 
@@ -972,12 +982,11 @@ Output:
 | 3. With arguments & without return value    | Method takes input, but does not return anything.             | `java\nvoid printSum(int a, int b) {\n    System.out.println(a + b);\n}\n` |
 | 4. With arguments & with return value       | Method takes input and also returns a value.                  | `java\nint add(int a, int b) {\n    return a + b;\n}\n`                    |
 
-
 ### Parameterized functions
 
 ```java
 class abc {
-    int c; 
+    int c;
     void display(int a, int b) {
         c = a + b;
         System.out.println(c);
@@ -1026,12 +1035,13 @@ class xyz {
 ```
 
 Output:
+
 ```
 100
 100
 ```
 
-> 📝: Java doesn't support **default arguments**, like C++. 
+> 📝: Java doesn't support **default arguments**, like C++.
 
 ## 12. Method Overloading (Compile Time Polymorphism)
 
@@ -1039,7 +1049,7 @@ Same function name & different parameters are called **method overloading**.
 
 > 📝: **Compile Time Polymorphism** is a feature of Java that allows a single method name to be used for multiple different functions with different parameters.
 
-```java 
+```java
 class xyz {
     void display(int a, int b) {
         int c = a + b;
@@ -1061,6 +1071,7 @@ class mno{
 ```
 
 Output:
+
 ```
 30
 30
@@ -1088,12 +1099,13 @@ class mno{
         xyz x1 = new xyz();
         x1.sum(10, 20, 30); // prints 60
          x1.sum(10, 20, 30, 40); // prints 100
-        
+
     }
 }
 ```
 
 Output:
+
 ```
 60
 100
@@ -1111,9 +1123,10 @@ void display(int... nums, String msg) { ... } // ❌ invalid
 ```
 
 ## 14. Passing Object as Argument
+
 In Java, we can pass objects as **arguments** to methods. Since everything in Java is pass-by-value, what actually gets passed is the **reference (address)** of the object, not the actual object itself.
 
-```java 
+```java
 class xyz{
     void sum(){
         System.out.println("hello");
@@ -1121,7 +1134,7 @@ class xyz{
 }
 
 class mno{
-    xyz x1; // Reference of class xyz 
+    xyz x1; // Reference of class xyz
 
     void output(xyz x1) { // takes xyz object as argument
         this.x1 = x1;     // assign to instance variable
@@ -1139,6 +1152,7 @@ class pqr{
 ```
 
 Output:
+
 ```
 hello
 ```
@@ -1154,12 +1168,12 @@ hello
 - When you pass an object to a method, what’s actually passed is the **reference (address)** of the object.
 
 - This means:
-    - The method can call the object’s methods.
-    - The method can modify the object’s fields (since it has the reference).
+  - The method can call the object’s methods.
+  - The method can modify the object’s fields (since it has the reference).
 
 ## 15. Passing Array of Objects to a method
 
-```java 
+```java
 class abc{
     String s;
     void display(){
@@ -1195,16 +1209,93 @@ class abc{
 - `new abc[]{a1, a2}` is an **anonymous array** — you don’t store it in a variable, just directly pass it.
 - Inside the method, you can use the array just like any normal array.
 - Useful in scenarios like:
-    * Passing multiple students (objects) to a method.
-    * Processing a list of employees, products, etc.
+
+  - Passing multiple students (objects) to a method.
+  - Processing a list of employees, products, etc.
 
 - Arrays in Java can hold objects (references), not just primitive values.
 - When you pass an array of objects, you’re passing the **reference** to that array (so changes inside the method affect the original array).
 - You can either:
-    * Create the array beforehand and pass it.
-    * Or directly pass a **new array literal** in the method call (`new abc[]{obj1, obj2}`).
+  - Create the array beforehand and pass it.
+  - Or directly pass a **new array literal** in the method call (`new abc[]{obj1, obj2}`).
 
 > 📝: Arrays in Java are objects, not primitives.
 
 > 📝: If we declare the function callObjectArray as static method, we won't need an object and we can call the function as: `abc.callObjectArray(new abc[] {a1, a2});`
+
+## 16. Returning Value by a Method
+
+The `return` keyword has a specific meaning in Java compiler. It is only used with a method to specify if that method will return certain value to the calling method.
+`return` keyword forces the method to retrun value to the calling method of a particular type.
+
+```java
+    class abc {
+    int display(int a, int b) {
+        return a + b;
+    }
+
+    public static void main(String... args) {
+        abc a1 = new abc();
+        int c = a1.display(10, 20);
+        System.out.println(c);
+
+        // Alternatively:
+        System.out.println(new abc().display(10, 20));
+    }
+}
+```
+
+- `a1.display(10, 20)` → calls the instance method and returns `30`.
+- `new abc().display(10, 20)` → creates a temporary object and immediately calls the method on it.
+- Both print `30`, but the second one does not store any reference to the object.
+
+Output:
+
+```
+30
+30
+```
+
+> 📝: We can't overload a function even if its return type is different, but it contains same signature.
+
+❌ Example: Invalid Overloading (Different Return Type Only)
+
+```java
+    class abc{
+        int display(int a, int b){
+             return a + b;
+        }
+        float display(int a, int b){
+             return a + b;
+        }
+    }
+```
+
+In the above class `abc`, even if the return type of the two `display()` functions is different, we can't define two functions having same name, unless its signature is different.
+
+**Why is this invalid?**
+
+- Both methods have the **same name** (`display`) and **same parameter list** (`int, int`).
+- Java identifies methods by their **name and parameter list only** (not return type).
+- The compiler cannot decide which method to call, since both look identical at call time.
+
+🧩 error: method display(int,int) is already defined in class abc
+
+✅ Example: Valid Overloading (Different Parameters)
+```java
+class abc {
+    int display(int a, int b) {
+        return a + b;
+    }
+
+    float display(float a, float b) {
+        return a + b;
+    }
+}
+```
+Now the compiler can distinguish between the two methods because the **parameter types differ** (`int vs. float`).
+
+> 📝: In Java, **method signature = method name + parameter list**
+
+> Return type is not part of the method signature.
 
