@@ -1299,3 +1299,156 @@ Now the compiler can distinguish between the two methods because the **parameter
 
 > Return type is not part of the method signature.
 
+## 17. To print an array element by element 
+When you print an array directly in Java (e.g., `System.out.println(arr);`),
+it doesn’t print the elements — instead, it prints the **memory address** (like `[C@15db9742`).
+This is because arrays in Java are **objects**, not primitive values.
+
+To print elements **one by one**, you must **traverse (iterate)** the array using a loop.
+
+```java
+ class abc{
+    char[] display(String s) // defining array of char type
+    {
+        char ar[] = new char[s.length()];
+        for(int i = 0; i < ar.length(); i++)
+        {
+            ar[i] = s.charAt(i); // returns a char value at given index no
+        }
+        return ar;
+    }
+    public static void main(String... args) {
+        abc a1 = new abc();
+        char am[] = a1.display("hello");
+        // System.out.println(am); // would print memory reference, not characters
+        for(char p: am){ // for-each loop to print each character
+            System.out.println(p);
+        }
+    }
+ }
+```
+Output:
+```
+h
+e
+l
+l
+o
+```
+
+- **Arrays are objects** in Java, so printing them directly prints the reference (like `[C@hashcode`).
+- To view individual elements, use a loop (`for`, `for-each`, or `while`).
+- `String.charAt(index)` returns the character at a specific position.
+- You can return an array from a method just like any other object.
+- `for (char p : am)` is a for-each loop, introduced in Java 5, ideal for reading array elements sequentially.
+
+
+- The method `charAt(int index)` returns the character at the specified index.
+The index value should lie between `0` and `length() - 1` (the length of the string minus 1).
+
+- `.length` → **Property** (not method) used to find the size of **an array**.
+Example:
+```java
+int size = arr.length;
+```
+
+- `.length()` → **Method** used to find the length of a **String**.
+Example:
+```java
+int len = str.length();
+```
+
+This distinction avoids confusion between Strings and Arrays — both have “length,” but one uses a *method* and the other a *field*.
+
+> 📝: If you want to **print an array without loops** (for debugging), use: `System.out.println(Arrays.toString(am));` (but remember to `import java.util.Arrays;`)
+
+## 18. Passing Objects as arguments
+In Java, you can **pass objects as parameters** to methods just like variables.
+
+When you pass an object to a method, its **reference** (memory address) is passed, not the actual copy of the object.
+
+This means that changes made to the object inside the method affect the original object (since both refer to the same memory location).
+
+```java
+    class pqr {
+        void sum(){
+            System.out.println("World");
+        }
+    }
+    class xyz{
+        void sum(){
+            System.out.println("Hello");
+        }
+    }
+    class mno {
+    xyz x1; // Reference to xyz class object
+    pqr p1; // Reference to pqr class object
+
+    // Method accepts two objects as parameters
+    void output(xyz x1, pqr p1) {
+        // 'this' keyword refers to current object of mno
+        this.x1 = x1; // assign parameter reference to instance variable
+        this.p1 = p1; // assign parameter reference to instance variable
+
+        x1.sum(); // calls xyz.sum()
+        p1.sum(); // calls pqr.sum()
+    }
+}
+
+class abc {
+    public static void main(String... args) {
+        xyz kk = new xyz();   // create object of xyz
+        mno m1 = new mno();   // create object of mno
+        m1.output(kk, new pqr()); // passing object references to output()
+    }
+}
+```
+Output:
+```
+Hello
+World
+```
+
+Explanation:
+
+- `m1.output(kk, new pqr());`
+→ The method `output()` is called with two **object arguments**:
+one existing object (`kk` of `xyz`) and one anonymous object (`new pqr()`).
+→ kk (object of xyz) and new pqr() (new object of pqr) are passed as **references**.
+- Inside `output(xyz x1, pqr p1)`:
+→ The parameters `x1` and `p1` now refer to the **same memory** locations as the objects `kk` and `new pqr()` created in `main()`.
+- Inside the method:
+    - `this.x1 = x1;` → assigns the `xyz` object reference to instance variable x1.
+    - `this.p1 = p1;` → assigns the `pqr` object reference to instance variable p1.
+    - Then `x1.sum()` prints "Hello" and `p1.sum()` prints "World".
+
+ 💬 **Important Concepts:**
+- Java is **pass-by-value**, even for objects — but the *value passed* is the **reference** to the object.
+So both caller and callee refer to the *same* object in memory.
+
+- This means that **modifying an object inside a method** will reflect in the calling method,
+because both point to the same memory address.
+
+- If you create a **new object** inside the method and reassign the parameter, it won’t affect the original reference outside the method.
+
+- When an **object** is passed to a method, Java passes the **reference value** (address in memory).
+This means:
+    - The method can call the object’s methods.
+    - The method can modify the object’s fields.
+
+- **Objects are never passed by value** (*copy of the object*) —
+only the reference is copied and passed.
+
+- You can pass:
+    - Pre-created objects (`kk`), or
+    - Anonymous objects (`new pqr()`).
+
+📘 **Key Takeaways:**
+
+✅ You can pass multiple objects as arguments in a single method.
+
+✅ The method can call functions of those objects or even modify their data.
+
+⚠️ Remember: both the caller and callee share the same memory reference.
+
+📝 If you modify the object inside the method, the change reflects outside too — since both refer to the same object in the heap.
