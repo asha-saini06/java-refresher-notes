@@ -1452,3 +1452,82 @@ only the reference is copied and passed.
 ⚠️ Remember: both the caller and callee share the same memory reference.
 
 📝 If you modify the object inside the method, the change reflects outside too — since both refer to the same object in the heap.
+
+## 19. String
+String is basically an object that represents sequence of char values.
+
+```java
+class abc{
+    public static void main(String... args) {
+        String s = "1234hello";
+        String str = s + "hello"; 
+        System.out.println(str); // displays 1234hellohello
+    }
+}
+```
+
+Output:
+
+```
+1234hellohello
+```
+
+Explanation:
+- `String s = "1234hello";` → creates a string object `s` with value "1234hello".
+- `String str = s + "hello";` → creates a new string object `str` by concatenating `s` and "hello".
+- `System.out.println(str);` → prints the value of `str`, which is "1234hellohello".
+
+💬 **Important Concepts:**
+
+- String is a **class** that represents a sequence of characters.
+- Strings are **immutable**, which means they cannot be changed once created.
+- String objects are created using double quotes.
+- String concatenation is done using the `+` operator. The `+` operator concatenates strings.   
+
+```java
+String str = "hello";
+
+int len = str.length();     // returns length of the string (5)
+char ch = str.charAt(3);    // returns the character at index 3 → 'l'
+
+System.out.println("Length: " + len);
+System.out.println("Character at index 3: " + ch);
+```
+
+- `str.length()` → returns an int representing the number of characters in the string.
+- `str.charAt(index)` → returns the character at the given index (0-based).
+
+        - For "hello",
+                charAt(0) → 'h'
+                charAt(1) → 'e'
+                charAt(2) → 'l'
+                charAt(3) → 'l'
+                charAt(4) → 'o'
+
+- The valid index range is `0` to `length() - 1`.
+
+```java 
+String st = "Welcome";
+for(int i=0; i < st.length(); i++)
+{
+    System.out.println(st.charAt(i));
+}
+```
+
+Output:
+```
+W
+e
+l
+c
+o
+m
+e
+``` 
+```java
+String st = "Welcome";
+for(char ch: st.toCharArray())
+{
+    System.out.println(ch);
+}
+```
