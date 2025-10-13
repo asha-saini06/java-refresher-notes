@@ -1508,9 +1508,9 @@ System.out.println("Character at index 3: " + ch);
 
 ```java 
 String st = "Welcome";
-for(int i=0; i < st.length(); i++)
+for(int i=0; i < st.length(); i++) // length() returns the length of the string
 {
-    System.out.println(st.charAt(i));
+    System.out.println(st.charAt(i)); // prints each character
 }
 ```
 
@@ -1524,10 +1524,58 @@ o
 m
 e
 ``` 
+
 ```java
 String st = "Welcome";
-for(char ch: st.toCharArray())
+char arr[] = new char[st.length()]; // array of char type
+for(int i=0; i < st.length(); i++)
 {
-    System.out.println(ch);
+    arr[i] = st.charAt(i); // returns a char value at given index no
+    System.out.println(p); // prints each character
 }
 ```
+Output:
+```
+W
+e
+l
+c
+o
+m
+e
+```
+![String](./resources/Strings.jpg)
+
+- String : Immutable
+- StringBuffer : Mutable
+- StringBuilder : Mutable
+- StringJoin : Mutable
+
+**Immutable** → cannot change the object once created (`String`)
+
+**Mutable** → can modify contents without creating new object (`StringBuffer`, `StringBuilder`, `StringJoiner`)
+
+**Thread-safety** → `StringBuffer` is synchronized (safe in multithreading), others are not.
+
+        int b = arr.length // to calculate length of an array
+
+```java
+class abc{
+    int a = 10;
+    String ss = "hello";
+    public static void main(String... args) {
+        abc a1 = new abc();
+        System.out.println(a1.a);
+        System.out.println(a1.ss);
+    }
+}
+```
+📝: As instance variable requires an object to be able to access it throughout any method in the class; we aren't able to access the instance variable in a static method directly (using variable's name only).
+
+As static methods don't require objects for their invokation and instance variable can't be accessed without an object.
+
+📝: Instance variables can be accessed directly by calling the variable name inside the class. However, within static menthods (when instance variables are given accessibility), they should be called using the fully qualified name. `ObjectReference.VariableName`
+
+📝: `substring(int beginIndex)` returns a new string that is a substring of this string. 
+`substring(int beginIndex, int endIndex)` returns a new string that is a substring of this string. The substring includes the characters at the specified beginIndex and excludes the character at endIndex. Thus, the length of the returned substring is `endIndex - beginIndex`.
+
