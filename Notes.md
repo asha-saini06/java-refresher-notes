@@ -1903,3 +1903,48 @@ r
 a
 ```
 
+## 20. Wrapper Class
+A wrapper class is a class whose object **wraps** or contains a primitive data types.
+When we create an 'object' to a wrapper class, it contains a field and in this field, we can store a primitive data type.
+In other words, we can wrap a primitve value into a wrapper class.
+
+❓ **Why there is need for wrapper classes?**
+➤ Wrapper classes are used to convert any data types into an  object. The primitve data types are not objects; they do not belong to any class; they are defined in the language itself. Sometimes, it is required to convert data types into objects in Java language.
+
+> 📝: Wrapper class is defined in `java.lang.*` package.
+
+The eight classes of `java.lang.package` are known as wrapper classes in Java.
+
+![Wrapper Classes](./resources/WrapperClasses.png)
+
+- **Purpose**:
+Wrapper classes "wrap" primitive values into objects so they can be stored in classes like `ArrayList`, `HashMap`, etc.
+
+- **Autoboxing:**
+Automatic conversion of a primitive to its wrapper class.
+
+        Integer num = 5;  // int → Integer automatically
+
+
+- **Unboxing:**
+Automatic conversion of a wrapper object back to its primitive.
+
+        int x = num;  // Integer → int automatically
+
+
+- **All wrapper classes are immutable** — once created, their value cannot be changed.
+
+- In Java, the wrapper classes — `Byte`, `Short`, `Integer`, `Long`, `Float`, and `Double` are subclasses of the abstract class `Number`.
+![Wrapper Classes](./resources/WrapperClasses2.png)
+
+- Number is an abstract class in `java.lang` package.
+- It provides **methods to convert numeric values** to different primitive types.
+- Subclasses of `Number` represent **numeric wrapper classes**.
+
+- **The wrapper classes are not thread-safe.**
+
+📝: Wrapper class in Java provides the mechanism to convert a primitive data type into an object and vice versa.
+
+- Number → Abstract superclass for numeric wrapper classes.
+
+- The classes `Character` and `Boolean` are not subclasses of `Number` because they represent non-numeric data types.
