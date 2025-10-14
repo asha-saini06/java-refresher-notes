@@ -737,6 +737,146 @@ Default values:
 - Array → Fixed size, can hold primitives and objects.
 - ArrayList → Dynamic size, only holds objects (wrapper classes needed for primitives).
 
+### Array Operations: Reversing and Summing Arrays
+```java
+// Class to perform array operations
+class Arr {
+
+    // Method to reverse an array
+    int[] rev(int a[]) {
+        // Initialize two pointers: i from start, j from end
+        for (int i = 0, j = a.length - 1; i < j; i++, j--) {
+            int temp = a[i];   // Swap the elements at i and j
+            a[i] = a[j];
+            a[j] = temp;
+        }
+        return a;  // Return the reversed array
+    }
+
+    // Static method to add two arrays element-wise
+    static int[] sum(int a[], int a1[]) {
+        // Create a new array to store the sum
+        int c[] = new int[a.length];
+        for (int i = 0; i < a.length; i++) {
+            c[i] = a[i] + a1[i];   // Add corresponding elements
+        }
+        return c;   // Return the resultant array
+    }
+}
+
+// Main class
+class xyz {
+    public static void main(String[] args) {
+        // Create an object of Arr to use non-static methods
+        Arr s1 = new Arr();
+        
+        // Reverse the first array {3,2,1} → {1,2,3}
+        int A[] = s1.rev(new int[]{3, 2, 1});
+        
+        // Reverse the second array {1,2,3} → {3,2,1}
+        Arr s2 = new Arr();
+        int B[] = s2.rev(new int[]{1, 2, 3});
+        
+        // Add the two reversed arrays element-wise
+        // A = {1,2,3}, B = {3,2,1} → C = {4,4,4}
+        int C[] = Arr.sum(A, B);
+
+        // Reverse the sum array again
+        Arr s3 = new Arr();
+        int result[] = s3.rev(C);
+
+        // Print the final reversed array
+        // Since arrays printed directly won't show elements,
+        // we use Arrays.toString() for readable output
+        System.out.println(java.util.Arrays.toString(result));
+    }
+}
+```
+Output:
+```
+[4, 4, 4]
+```
+🧭 **Quick Real-World Analogy**
+
+Reversing an array is like flipping a line of people — the person at the start goes to the end, and vice versa.
+Adding arrays is like combining two teams’ scores position-wise — first player’s score + first player’s score, and so on.
+
+🔹 **1. Arrays in Java**
+
+> Arrays are fixed-size, indexed, and homogeneous data structures.
+
+- Syntax for declaration:
+
+        int[] arr = new int[5];
+        int[] arr = {1, 2, 3, 4};
+
+- Index starts at **0 and ends at length - 1**.
+
+🔹 **2. Reversing an Array**
+
+**Logic**: Swap the first element with the last, second with the second-last, and so on until the middle is reached.
+
+    for (int i = 0, j = arr.length - 1; i < j; i++, j--) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+🧩 Concept Used:
+- Two-pointer approach (start and end)
+- Array element swapping
+
+🔹 **3. Summing Two Arrays**
+
+**Logic**: Add corresponding elements of two arrays and store in a third array.
+Example:
+
+    A = [1, 2, 3]
+    B = [4, 5, 6]
+    C = [5, 7, 9]
+
+**Code:**
+
+    for (int i = 0; i < a.length; i++) {
+        c[i] = a[i] + a1[i];
+    }
+
+
+🧩 **Concept Used**:
+- Iteration over arrays using `for` loop
+- Element-wise operation
+- Returning an array
+
+🔹 **4. Returning Arrays from Methods**
+
+Arrays can be returned just like **primitive data types**.
+
+- Example:
+        
+        int[] rev(int a[]) { ... return a; }
+
+- The returned array holds changes because **arrays are passed by reference** (not by value).
+
+🔹 5. Static vs Non-static Methods
+
+- Static methods (like `sum()`) can be called without creating an object:
+
+    Arr.sum(A, B);
+
+- Non-static methods (like `rev()`) require an object:
+
+    Arr obj = new Arr();
+    obj.rev(A);
+
+❓ **Explain how arrays are passed to methods in Java.**
+➤ Arrays are passed by reference, meaning the method can modify the original array.
+
+❓ **Can arrays of different lengths be added?**
+➤ Not directly — it will cause `ArrayIndexOutOfBoundsException`. You must handle it manually.
+
+❓ **What happens if you return an array from a method — does it create a copy or return a reference?**
+➤ It returns a reference to the same array object in memory.
+
 ---
 
 📝 **Data Types**
@@ -751,6 +891,16 @@ Default values:
 - `short` : 2 bytes
 - `String` : 2 bytes per character
 - `Object` : 4 bytes
+
+> 📝: **Primitive data types are stored in stack and objects are stored in heap.**
+
+> 📝: **Primitive data types are faster than objects.**
+
+📝: Arrays are faster than ArrayList.
+
+📝: Wrapper classes are faster than primitive data types.
+
+
 
 ## 9. Functions (methods)
 
@@ -876,6 +1026,107 @@ Example: `add(int a, int b)` is the method signature.
 
 - In general programming → "Function" = **block of reusable code.**
 - In Java → **functions are always inside a class, so they’re called methods.**
+
+> 📝: **Method overloading** allows a class to have multiple methods with the same name but different parameter lists.
+
+> 📝: **Constructor overloading** allows a class to have multiple constructors with different parameter lists.
+
+> 📝: **Method overriding** allows a subclass to provide a different implementation for a method that is already defined in the superclass.
+
+### Returning Object from a Method
+A function can return any data type, including class objects.
+
+```java
+    class abc{
+        static xyz getObj() { 
+            return new xyz(); // returns xyz object
+        }
+    }
+
+    class xyz {
+        int sum(int a, int b) {
+            return a + b;
+        }
+    }
+
+    class mno {
+       public static void main(String[] args) {
+        // Direct call — object returned by getObj() is used immediately
+        System.out.println(abc.getObj().sum(10, 20));
+
+        /* Equivalent approach:
+        xyz x1 = abc.getObj();  // getObj() returns xyz object
+        int c = x1.sum(10, 20);
+        System.out.println(c);
+        */
+        }
+    }
+```
+
+Output:
+
+```
+30
+```
+- `getObj()` returns a **new object** of class `xyz`.
+- The expression `abc.getObj()` returns that object reference, which can be used directly to call methods of `xyz`.
+- This technique helps **avoid explicit object creation** in the calling method.
+
+📝: The **return type** of the method must match the **class type** of the object being returned.
+e.g., `static xyz getObj()` → must return a `xyz` object.
+
+📝: You can either:
+ - **store the returned object in a variable**, or
+ - **use it directly in a chained method call** (`abc.getObj().sum(10, 20)`).
+
+📝: Static methods can return objects even though they belong to the class (not an instance).
+
+### ⚙️ Static Context Notes
+
+Static methods can also return objects, even though they belong to the class (not an instance).
+
+> 📝: Static methods can't access **instance variables** without an object.
+
+```java
+class abc {
+    int a;
+    static xyz getObj() {
+        System.out.println(a); // ❌ error — cannot access instance variable
+        return new xyz();
+    }
+}
+```
+> 📝: Static variable **cannot be declared in local scope** (inside methods).
+
+**Example: Static Variable Behavior**
+```java
+class abc{
+    static int a;
+    public static void main(String[] args) {
+        abc a1 = new abc();
+        a1.a = 90; // changes static variable
+        abc a2 = new abc();
+        a2.a = 40; // overwrites previous value
+        a1.display(); // prints 40
+    }
+    void display() {
+        System.out.println(a);
+    }
+}
+```
+Output:
+```
+40
+```
+
+> 📝: Static variable retains the previous value of the recent object.
+> 📝: Instance variables can't be declared in local scope.
+
+#### 💬 Key Takeaways: 
+- **Static variable** → shared by all objects; retains last updated value.
+- **Instance variable** → unique for each object; requires an object to access.
+- **Static variable / method** → can be accessed using class name (`ClassName.var` or `ClassName.method()`).
+- **Instance variable / method** → requires an object reference (`obj.var` or `obj.method()`).
 
 ## 10. `this` Keyword
 
@@ -1578,4 +1829,77 @@ As static methods don't require objects for their invokation and instance variab
 
 📝: `substring(int beginIndex)` returns a new string that is a substring of this string. 
 `substring(int beginIndex, int endIndex)` returns a new string that is a substring of this string. The substring includes the characters at the specified beginIndex and excludes the character at endIndex. Thus, the length of the returned substring is `endIndex - beginIndex`.
+
+```java
+class abc{
+    public static void main(String... args) {
+        String s = "1234hello";
+        String sst = s + "hello";
+        s = s + "hello"; // concatenate String s
+        System.out.println(sst);
+        System.out.println(s);
+    }
+}
+```
+
+### String Concatenation  
+In Java, string concatenation forms a new string that is combination of multiple strings.
+There are two ways to concatenate strings in Java: 
+- `+` operator
+- `concat()` method
+
+* After a string literal, all the `+` will be treated as string concatenation operator.
+
+### To print a string character by character
+You can use a `for loop` with `charAt()` method.
+
+```java
+class abc {
+    public static void main(String... args) {
+        String s = "Arigatou!";
+        for(int i = 0; i < s.length(); i++)
+        {
+            System.out.println(s.charAt(i));
+        }
+    }
+}
+```
+Output:
+```
+A
+r
+i
+g
+a
+t
+o
+u
+!
+```
+
+### To store a string into an array
+
+```java
+class abc {
+    public static void main(String... args) 
+    {
+        String s = "Sakura";
+        char ar[] = new char[s.length()];
+        for(int i = 0; i < ar.length; i++)
+        {
+            ar[i] = s.charAt(i);
+            System.out.println(ar[i]);
+        }
+    }
+}
+```
+Output:
+```
+S
+a
+k
+u
+r
+a
+```
 
