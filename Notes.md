@@ -1948,3 +1948,33 @@ Automatic conversion of a wrapper object back to its primitive.
 - Number → Abstract superclass for numeric wrapper classes.
 
 - The classes `Character` and `Boolean` are not subclasses of `Number` because they represent non-numeric data types.
+
+## 21. Boxing, Unboxing, Autoboxing
+
+### Boxing
+**Encapsulating value in an object.** Converting primitive data types into object is called boxing, and this is taken care by the compiler. Therefore, while using a wrapper class you just need to pass the value of the primitive data type to the constructor of the wrapper class.
+
+```java
+class Demo {
+    public static void main(String[] args) {
+        int a; 
+        Integer b = new Integer(10); // boxes int into an Integer object (manual boxing)
+        System.out.println(b);         // prints 10 (toString() of Integer)
+        System.out.println(b.intValue()); // unboxes Integer to primitive int
+ }
+}
+```
+**Explanation**
+
+- `int a;` → **Declares a primitive variable** `a` (but here it’s unused).
+- `Integer b = new Integer(10);` → **Creates a wrapper object** for the primitive value 10.
+    - This is **manual boxing** (before Java 5).
+
+    - In modern Java (Java 9+), using new Integer(10) is **deprecated** — use autoboxing instead:
+
+            `Integer b = 10;`  // autoboxing (preferred)
+
+- `System.out.println(b);` → Prints `10`, since `Integer.toString()` returns the numeric value as a string.
+- `b.intValue()` → Converts (unboxes) the wrapper object `b` back to a primitive `int`.
+
+
