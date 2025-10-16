@@ -1978,3 +1978,131 @@ class Demo {
 - `b.intValue()` → Converts (unboxes) the wrapper object `b` back to a primitive `int`.
 
 
+### Unboxing
+
+**Converting a wrapper object back to a primitive value.** Unboxing is done automatically by the compiler. This is called **autoboxing**.
+
+    int b = a.intValue(); // unboxing 
+
+```java
+class Demo {
+    public static void main(String[] args) {
+        Integer a = new Integer(10);  // manual boxing (deprecated in modern Java)
+        int b = a.intValue();         // explicit unboxing
+        System.out.println(b);        // prints 10
+
+        // OR (preferred - auto-unboxing)
+        Integer x = 20;   // autoboxing
+        int y = x;        // auto-unboxing
+        System.out.println(y);  // prints 20
+    }
+}
+```
+
+**Explanation:**
+
+- `Integer a = new Integer(10);` → creates an **Integer object** with value `10`.
+- `a.intValue()` → **explicitly converts** the wrapper object `a` into primitive `int`.
+- `int y = x;` → **auto-unboxing** — Java automatically converts the wrapper `Integer` to primitive `int`.
+
+⚙️**Key Notes**
+
+- Unboxing is the **reverse** of boxing/autoboxing.
+- It happens automatically when:
+    - Assigning a wrapper object to a primitive variable.
+    - Using a wrapper in arithmetic operations.
+
+            Integer num = 50;
+            int result = num + 10;  // auto-unboxed → 60
+
+- **All wrapper classes** (`Integer`, `Double`, `Float`, etc.) support unboxing.
+
+### Autoboxing
+
+Autoboxing is the automatic conversion that the Java compiler makes between the primitive types and their corresponding object wrapper classes. It is done when you assign a primitive value to a variable of a wrapper class or when you use a primitive value in an arithmetic operation.
+For example, converting an `int` to an `Integer`, a `double` to a `Double`, and so on.
+
+```java
+    int a = 10;
+    Integer a = 10;  // autoboxing
+
+    int b = a;  // auto-unboxing
+    // casting object into primitive type automatically done by compiler
+```
+
+```java
+    int a = 5; 
+    // Integer b = a;  
+    Integer b = Integer.valueOf(a); 
+```
+`valueOf()` method is used to convert a primitive type to a wrapper object. It is a static method of the `Integer` class.
+
+```java 
+    // String to primitive type
+    String s = "20";
+    int i = Integer.parseInt(s);
+```
+`parseInt()` method is used to convert a string to a primitive integer value.
+
+```java 
+    String s = "20.5";
+    double d = Double.parseDouble(s);
+```
+`parseDouble()` method is used to convert a string to a primitive double value.
+
+```java
+    String s = "hello";
+    int i = Integer.parseInt(s); // ❌ runtime error - // throws NumberFormatException
+```
+💡 Reason: `"hello"` cannot be parsed into a number.
+The `Integer.parseInt()` method expects a numeric string like `"10"` or `"123"`.
+
+**String to Class Type:**
+```java 
+   class Demo {
+    public static void main(String[] args) {
+        String s = "123";   // numeric string
+
+        // String → int (primitive)
+        int num = Integer.parseInt(s);
+        System.out.println(num);  // 123
+
+        // String → Integer (class type)
+        Integer obj = Integer.valueOf(s);
+        System.out.println(obj);  // 123
+    }
+}   
+```
+- `Integer.parseInt(String s)` → returns primitive int
+- `Integer.valueOf(String s)` → returns Integer object
+
+✅ Works only if `s` contains numeric characters (e.g., `"10"`, `"200"`).
+
+❌ Throws `NumberFormatException` if `s` contains non-numeric characters.
+
+**Primitive to String:**
+```java
+   int a = 5;                            // primitive int
+    String s1 = Integer.toString(a);       // int → String
+    System.out.println(s1);                // prints "5"
+
+    Integer b = 9;                         // Wrapper class object
+    String s2 = Integer.toString(b);       // Integer → String
+    System.out.println(s2);                // prints "9"
+```
+- `Integer.toString()` is an **overloaded method** that can take either an `int` or an `Integer` object.
+- This conversion is useful when you need to display numeric values as text or concatenate them with strings.
+
+| Conversion Type        | Method Used                 | Example                |
+| ---------------------- | --------------------------- | ---------------------- |
+| int → String           | `Integer.toString(int)`     | `Integer.toString(5)`  |
+| Integer → String       | `Integer.toString(Integer)` | `Integer.toString(a)`  |
+| any primitive → String | `String.valueOf(primitive)` | `String.valueOf(10.5)` |
+| quick conversion       | `+ ""`                      | `num + ""`             |
+
+- Wrapper classes bridge the gap between **primitive types** and **objects**.
+- **Autoboxing** → primitive → wrapper
+- **Unboxing** → wrapper → primitive
+- **All wrapper classes are immutable** and belong to the `java.lang` package.
+- Numeric wrappers inherit from Number, providing conversion methods like `intValue()`, `doubleValue()`, etc.
+- Wrapper classes are **not thread-safe**.
