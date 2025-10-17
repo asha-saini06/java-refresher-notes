@@ -2200,5 +2200,278 @@ String from char array: JAVA
 String from byte array: Hello
 ```
 
+## 23. Character Class
+Java provides a wrapper class `Character` in `java.lang` package. An object of type `Character` contains a single field, whose type is `char`. The Character class offers a number of useful class (i.e., static) methods for manipulating characters. You can create a `Character` object with the `Character` constructor.
 
+**Creating a Character object:** 
 
+    Character ch = new Character('a');
+
+The above statement creates a Character object which contains '`a`' of type char. There is only one constructor in the Character class that expects an argument of char data type.
+
+If we pass a primitive char into a method that expects an object, the compiler automatically converts the char to a Character class object. This feature is called **Autoboxing** and **Unboxing**.
+
+> 📝: The **Character class is immutable** like String class i.e once it's object is created, it **cannot be changed**.
+
+### Methods in Character Class  
+The methods of Character class are as follows:
+
+**1. boolean isLetter(char ch)**: This method is used to determine whether the specified char value(ch) is a letter or not. The method will return true if it is letter([A-Z],[a-z]), otherwise return false. In place of character, we can also pass ASCII value as an argument as char to int is implicitly typecasted in java.
+
+**Syntax:** 
+
+    boolean isLetter(char ch)
+
+**Parameters:**
+
+**ch** - a primitive character
+
+**Returns**: It returns true if ch is an alphabet, otherwise, return false
+
+**Example**:
+```java
+// Java program to demonstrate isLetter() method
+​
+public class Test {
+    public static void main(String[] args)
+    {
+        System.out.println(Character.isLetter('A'));
+​
+        System.out.println(Character.isLetter('0'));
+    }
+}
+```
+Output:
+```
+true
+false
+```
+
+**2. boolean isDigit(char ch)**: This method is used to determine whether the specified char value(ch) is a digit or not. Here also we can pass ASCII value as an argument. 
+
+**Syntax:** 
+
+    boolean isDigit(char ch)
+
+**Parameters:** 
+**ch** - a primitive character
+
+**Returns**: It returns true if ch is a digit, otherwise, return false
+
+**Example:**
+```java
+// Java program to demonstrate isDigit() method
+​
+public class Test {
+    public static void main(String[] args)
+    {
+        // print false as A is character
+        System.out.println(Character.isDigit('A'));
+​
+        System.out.println(Character.isDigit('0'));
+    }
+}
+```
+Output:
+```
+false
+true
+```
+
+**3. boolean isWhitespace(char ch)**: It determines whether the specified char value(ch) is white space. Whitespace includes space, tab, or newline. 
+
+**Syntax:** 
+
+    boolean isWhitespace(char ch)
+
+**Parameters:** 
+
+ch - a primitive character
+Returns: It returns true if ch is whitespace, otherwise, returns false.
+
+Example:
+```java
+// Java program to demonstrate isWhitespace() method
+​
+public class Test {
+    public static void main(String[] args)
+    {
+        System.out.println(Character.isWhitespace('A'));
+        System.out.println(Character.isWhitespace(' '));
+        System.out.println(Character.isWhitespace('\n'));
+        System.out.println(Character.isWhitespace('\t'));
+​
+        // ASCII value of tab
+        System.out.println(Character.isWhitespace(9));
+​
+        System.out.println(Character.isWhitespace('9'));
+    }
+}
+```
+Output:
+```
+false
+true
+true
+true
+true
+false
+```
+
+**4. boolean isUpperCase(char ch)**: It determines whether the specified char value(ch) is uppercase or not. 
+
+**Syntax:** 
+
+    boolean isUpperCase(char ch)
+
+**Parameters:** 
+**ch** - a primitive character
+
+**Returns**: It returns true if ch is upper case, otherwise, returns false.
+
+Example:
+```java
+// Java program to demonstrate isUpperCase() method
+​
+public class Test {
+    public static void main(String[] args)
+    {
+        System.out.println(Character.isUpperCase('A'));
+        System.out.println(Character.isUpperCase('a'));
+        System.out.println(Character.isUpperCase(65));
+    }
+}
+```
+Output:
+```
+true
+false
+true
+```
+
+**5. boolean isLowerCase(char ch)**: It determines whether the specified char value(ch) is lowercase or not. 
+
+**Syntax:** 
+
+    boolean isLowerCase(char ch)
+
+**Parameters**: 
+
+**ch** - a primitive character
+
+**Returns**: It returns true if ch is lower case, otherwise, returns false.
+
+**Example:**
+```java
+// Java program to demonstrate isLowerCase() method
+​
+public class Test {
+    public static void main(String[] args)
+    {
+        System.out.println(Character.isLowerCase('A'));
+        System.out.println(Character.isLowerCase('a'));
+        System.out.println(Character.isLowerCase(97));
+    }
+}
+```
+Output:
+```
+false
+true
+true
+```
+
+**6. char toUpperCase(char ch)**: It returns the uppercase of the specified char value(ch). If an ASCII value is passed, then the ASCII value of its uppercase will be returned. 
+
+**Syntax:** 
+
+    char toUpperCase(char ch)
+
+**Parameters:**
+
+**ch** - a primitive character
+
+**Returns:** It returns the uppercase form of the specified char value.
+
+**Example:**
+```java
+// Java program to demonstrate toUpperCase() method
+​
+public class Test {
+    public static void main(String[] args)
+    {
+        System.out.println(Character.toUpperCase('a'));
+        System.out.println(Character.toUpperCase(97));
+        System.out.println(Character.toUpperCase(48));
+    }
+}
+```
+Output:
+```
+A
+65
+48
+```
+
+**7. char toLowerCase(char ch)**: It returns the lowercase of the specified char value(ch). 
+
+**Syntax**: 
+
+    char toLowerCase(char ch)
+
+**Parameters:**
+
+**ch** - a primitive character
+
+**Returns:** It returns the lowercase form of the specified char value.
+
+Example:
+```java
+// Java program to demonstrate toLowerCase() method
+​
+public class Test {
+    public static void main(String[] args)
+    {
+        System.out.println(Character.toLowerCase('A'));
+        System.out.println(Character.toLowerCase(65));
+        System.out.println(Character.toLowerCase(48));
+    }
+}
+```
+Output:
+```
+a
+97
+48
+```
+
+**8. toString(char ch):** It returns a String class object representing the specified character value(ch) i.e a one-character string. Here we cannot pass ASCII value. 
+
+**Syntax:** 
+
+    String toString(char ch)
+
+**Parameters:** 
+
+**ch** - a primitive character
+
+**Returns:** It returns a String object.
+
+**Example:**
+```java
+// Java program to demonstrate toString() method
+
+```java
+public class Test {
+    public static void main(String[] args)
+    {
+        System.out.println(Character.toString('x'));
+        System.out.println(Character.toString('Y'));
+    }
+}
+```
+Output:
+```
+x
+Y
+```
