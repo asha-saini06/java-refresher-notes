@@ -2475,3 +2475,101 @@ Output:
 x
 Y
 ```
+
+## 24. Date class
+
+The class Date represents a specific instant in time, with millisecond precision. The Date class of `java.util` package implements **Serializable**, **Cloneable** and **Comparable** interface. It provides constructors and methods to deal with date and time with java. Constructors
+
+- **Date()** : Creates date object representing current date and time.
+- **Date(long milliseconds)** : Creates a date object for the given milliseconds since January 1, 1970, 00:00:00 GMT.
+- **Date(int year, int month, int date)**
+- **Date(int year, int month, int date, int hrs, int min)**
+- **Date(int year, int month, int date, int hrs, int min, int sec)**
+- **Date(String s)**
+
+> 📝 : The last 4 constructors of the Date class are Deprecated.
+
+```java
+// Java program to demonstrate constuctors of Date
+import java.util.*;
+​
+public class Main
+{
+    public static void main(String[] args)
+    {
+        Date d1 = new Date();
+        System.out.println("Current date is " + d1);
+        Date d2 = new Date(2323223232L);
+        System.out.println("Date represented is "+ d2 );
+    }
+}
+```
+Output:
+```
+Current date is Tue Jul 12 18:35:37 IST 2016
+Date represented is Wed Jan 28 02:50:23 IST 1970
+```
+### Important Methods:
+- **boolean after(Date date)** : Tests if current date is after the given date.
+- **boolean before(Date date)** : Tests if current date is before the given date.
+- **int compareTo(Date date)** : Compares current date with given date. Returns 0 if the argument Date is equal to the Date; a value less than 0 if the Date is before the Date argument; and a value greater than 0 if the Date is after the Date argument.
+- **long getTime()** : Returns the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+- **void setTime(long time)** : Changes the current date and time to given time.
+
+```java
+// Program to demonstrate methods of the java.util.Date class
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+
+        // Creating Date objects
+        // ⚠️ The following constructor is deprecated (year starts from 1900, month from 0)
+        Date d1 = new Date(2000, 11, 21); // Deprecated way
+        Date d2 = new Date();              // Current system date and time
+        Date d3 = new Date(2010, 1, 3);    // Deprecated way
+
+        // Check if d3 comes after d1
+        boolean a = d3.after(d1);
+        System.out.println("Date d3 comes after date d1: " + a);
+
+        // Check if d3 comes before d2
+        boolean b = d3.before(d2);
+        System.out.println("Date d3 comes before date d2: " + b);
+
+        // Compare two dates (returns 0 if equal, <0 if before, >0 if after)
+        int c = d1.compareTo(d2);
+        System.out.println("Comparison result of d1 and d2: " + c);
+
+        // Get milliseconds since January 1, 1970 (Epoch time)
+        System.out.println("Milliseconds from Jan 1, 1970 to d1: " + d1.getTime());
+
+        // Set a new time in milliseconds
+        System.out.println("Before setting: " + d2);
+        d2.setTime(204587433443L);
+        System.out.println("After setting: " + d2);
+    }
+}
+```
+The Date(int year, int month, int date) constructor adds 1900 to the year and treats month as 0-indexed.
+
+That’s why new Date(2000, 11, 21) → Dec 21, 3900.
+
+Always prefer `java.time.LocalDate`, `Instant`, or `Calendar` for modern, accurate date handling.
+Output:
+```
+Date d3 comes after date d1: true
+Date d3 comes before date d2: false
+Comparison result of d1 and d2: 1
+Milliseconds from Jan 1, 1970 to d1: 60935500800000
+Before setting: Sat Oct 18 17:30:41 UTC 2025
+After setting: Fri Jun 25 21:50:33 UTC 1976
+```
+
+- `Date.after(Date when)` → returns `true` if this date is after the given date.
+- `Date.before(Date when)` → returns `true` if this date is before the given date.
+- `Date.compareTo(Date anotherDate)` → compares two dates chronologically.
+- `Date.getTime()` → returns time in milliseconds since epoch (`01-01-1970 00:00:00 UTC`).
+- `Date.setTime(long time)` → sets the date object using milliseconds since epoch.
+
+> 💡 **Modern alternative:** Use `java.time.LocalDate`, `LocalDateTime`, or `Instant` (Java 8+) instead of the deprecated constructors of Date.
