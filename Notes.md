@@ -2475,6 +2475,57 @@ Output:
 x
 Y
 ```
+---
+1. **valueOf()**
+
+    Returns an `Integer` object holding the value of the specificed primitive.
+
+2. **toString()**
+
+    Returns a `String` object representation of the specified int or Integer.
+
+3. **parseInt()**
+    The `parseInt()` method in the `Integer` class is used to convert a string into a primitive `int`.
+
+    It is a **static method** — meaning it belongs to the `Integer` class and can be called without creating an object.
+
+    - Commonly used for converting **numeric input strings** (like from user input, files, or APIs) into integers.
+
+    - Always ensure the string contains only digits (and an optional minus sign for negatives).
+
+4. **doubleValue()**
+
+    This method returns the value of this `Integer` as a double.
+
+5. **floatValue()** 
+    This method returns the value of this `Integer` as a double.
+
+6. **intValue()**
+    This method returns the value of this `Integer` as an `int`.
+
+7. **longValue()**
+    This method returns the value of this `Integer` as a long.
+
+❓ **Why Java is not a pure object oriented language?** 
+
+▶ Java is not a pure object-oriented language **because it supports primitive data types** such as `int`, `byte`, `short`, `long`, `float`, `double`, `char`, and `boolean`. These are **not objects**, but rather **basic data types** that exist for performance and memory efficiency.
+
+In a **pure OOP language** (like Smalltalk), **everything is an object** — including numbers, booleans, and even control structures.
+However, in Java, primitives are treated differently and do not require object wrappers to perform basic operations.
+```java
+int a = 10;           // primitive, not an object
+Integer b = 20;       // wrapper class object
+System.out.println(a + b);  // works due to autoboxing/unboxing
+```
+Java is **object-based** and **object-oriented**, but not **purely object-oriented** because it includes **non-object primitives** for efficiency.
+
+❓ **Is String is a wrapper class in Java?**
+▶ No. String is not a wrapper class, simply because there is no parallel primitive type that it wraps.
+
+![wrapper-methods](./resources/wrapper-methods.png)
+
+All wrapper classes in Java (`Byte`, `Short`, `Integer`, `Long`, `Float`, `Double`, `Character`, `Boolean`) are **immutable** and belong to the package java.lang.
+They help in converting between **primitive types and objects**, enabling use in **collections**, **generics**, etc.
 
 ## 24. Date class
 
