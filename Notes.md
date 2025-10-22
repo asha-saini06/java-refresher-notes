@@ -2107,6 +2107,65 @@ The `Integer.parseInt()` method expects a numeric string like `"10"` or `"123"`.
 - Numeric wrappers inherit from Number, providing conversion methods like `intValue()`, `doubleValue()`, etc.
 - Wrapper classes are **not thread-safe**.
 
+> 📝: Autoboxing and unboxing feature converts primitive into object and object into primitive automatically. The automatic conversion of **primitive into object** is known as `autoboxing` and vice-versa `unboxing`.
+
+**Primitive to Wrapper**: `AUTOBOXING`
+```java
+    class Wrap1 {
+        public static void main(String[] args) {
+            int a = 10;
+            Integer i = Integer.valueOf(a); // converting int to Integer
+            Integer j = a; // autoboxing, now compiler will write Integer.valueOf(a) internally
+            System.out.println(a+ " " + i + " " + j);
+        }
+    }
+```
+Output:
+
+```
+10 10 10
+```
+Explanation:
+
+- `Integer.valueOf(a)` → explicit boxing (manual conversion)
+- `Integer j = a;` → implicit boxing (autoboxing)
+- `System.out.println()` automatically calls `toString()` on `Integer` objects, so all print as numbers.
+
+**Wrapper to Primitive**: `UNBOXING`
+```java
+    class Wrap2 {
+        public static void main(String[] args) {
+            Integer a = new Integer(3);
+            int i = a.intValue(); // converting Integer to int
+            int j = a; // unboxing, now compiler will write a.intValue() internally
+            System.out.println(a+ " " + i + " " + j);
+        }
+    }
+```
+Output:
+```
+3 3 3
+```
+Explanation:
+1. `Integer a = new Integer(3);`
+ - Creates an **Integer object** `a` wrapping the primitive value `3`.
+ - This is manual boxing (explicit object creation).
+
+2. `int i = a.intValue();`
+ - **Explicit unboxing**: Converts the `Integer` object a to primitive int using intValue() method.
+
+3. `int j = a;`
+ - **Auto-unboxing**: Compiler automatically converts `Integer` to `int` behind the scenes (`a.intValue()` is called internally).
+
+4. `System.out.println(a + " " + i + " " + j);`
+ - Prints all three values:
+
+    - `a` → the `Integer` object, automatically converted to string via `toString()`.
+    - `i` → primitive int.
+    - `j` → primitive int from auto-unboxing.
+
+> 📝: Autoboxing/unboxing lets you mix primitives and wrapper objects seamlessly in expressions.    
+
 ## 22. String Class
 
 The `String` class in Java is used to create and manipulate sequences of characters. It is one of the most commonly used classes in Java. Objects of the String class are **immutable**, which means they **cannot be changed once created.**
@@ -2529,7 +2588,36 @@ They help in converting between **primitive types and objects**, enabling use in
 
 ## 24. Date class
 
-The class Date represents a specific instant in time, with millisecond precision. The Date class of `java.util` package implements **Serializable**, **Cloneable** and **Comparable** interface. It provides constructors and methods to deal with date and time with java. Constructors
+The `Date` class encapsulates the current date and time.
+
+> Standard Time of Java : 1970, 1 Jan, 00:00:00 GMT (midnight)
+
+> Java calculates any amount of time in milliseconds.
+> `import java.util.*;` package contains Date class.
+
+➡ Date ➡ Calendar ➡ Simple Date-Time Format
+
+```java
+import java.util.*;
+class abc {
+    public static void main(String[] args) {
+        Date d = new Date(); // Create a new Date object representing the current date and time
+        System.out.println(d);  // Print the Date object
+        // Default toString() gives a readable format like: // Sat Oct 18 17:30:41 IST 2025
+        }
+    }
+```
+Output:
+```
+Wed Oct 22 13:45:12 IST 2025
+```
+- `java.util.Date` represents **date** and **time**.
+- `new Date()` creates a Date object with the **current system date and time**.
+- Printing a `Date` object directly calls its `toString()` **method**, which shows the date in a human-readable format.
+
+> The class `Date` represents a specific instant in time, with millisecond precision. 
+
+The class **Date** represents a specific instant in time, with millisecond precision. The Date class of `java.util` package implements **Serializable**, **Cloneable** and **Comparable** interface. It provides constructors and methods to deal with date and time with java. Constructors
 
 - **Date()** : Creates date object representing current date and time.
 - **Date(long milliseconds)** : Creates a date object for the given milliseconds since January 1, 1970, 00:00:00 GMT.
@@ -2548,18 +2636,20 @@ public class Main
 {
     public static void main(String[] args)
     {
-        Date d1 = new Date();
+        Date d1 = new Date(); // uses the default constructor to get the current system date and time.
         System.out.println("Current date is " + d1);
-        Date d2 = new Date(2323223232L);
+        Date d2 = new Date(2323223232L); // creates a date object representing 2323223232 milliseconds after January 1, 1970.
         System.out.println("Date represented is "+ d2 );
     }
 }
 ```
 Output:
 ```
-Current date is Tue Jul 12 18:35:37 IST 2016
-Date represented is Wed Jan 28 02:50:23 IST 1970
+Current date is Wed Oct 22 13:45:12 IST 2025
+Date represented is Thu Jan 27 12:53:43 IST 1970
 ```
+⚠️ Note: The `Date(long millis)` constructor interprets the long value as **milliseconds since epoch (Jan 1, 1970)**.
+
 ### Important Methods:
 - **boolean after(Date date)** : Tests if current date is after the given date.
 - **boolean before(Date date)** : Tests if current date is before the given date.
@@ -2624,3 +2714,142 @@ After setting: Fri Jun 25 21:50:33 UTC 1976
 - `Date.setTime(long time)` → sets the date object using milliseconds since epoch.
 
 > 💡 **Modern alternative:** Use `java.time.LocalDate`, `LocalDateTime`, or `Instant` (Java 8+) instead of the deprecated constructors of Date.
+
+### Calendar Class
+- Package: `java.util.Calendar`
+- It’s an **abstract class** used to work with dates and times more flexibly than `Date`.
+- You **cannot instantiate it directly**; you use `Calendar.getInstance()` to get a concrete subclass object (usually `GregorianCalendar`).
+
+```java
+    import java.util.*;
+    class abc{
+        // Get an instance of Calendar (returns GregorianCalendar by default)
+        Calendar c = Calendar.getInstance();
+
+        // Retrieve the current date of the month (1 to 31)
+        int j = c.get(Calendar.DATE); // Get the current date // int constant passed in the get() method
+        // j has the range of 1 to 31
+    }
+```
+- `Calendar.getInstance()` returns a **Calendar object initialized to the current date and time.**
+- `Calendar.DATE` is a **constant** representing the day of the month.
+- Months in `Calendar` are **zero-based**: January = 0, February = 1, ..., December = 11.
+- `get()` can also retrieve **YEAR, MONTH, HOUR, MINUTE, SECOND**, etc.
+
+> 📝: `final` keyword is used to declare a variable constant.
+
+- The `get()` fetches current time-date from the OS.
+```java
+    int month = c.get(Calendar.MONTH); // 0 = January, 11 = December
+    int year  = c.get(Calendar.YEAR);  // Current year
+
+    int j = c.get(Calendar.DATE); // Get the current date
+    int k = c.get(Calendar.HOUR); // Get the current hour
+
+    int l = c.get(Calendar.AM_PM); // 0 = AM, 1 = PM
+
+    int n = c.get(Calendar.MONTH); // displays 9 
+    // because months are zero-indexed, so October → 9
+```
+
+> **`TimeZone`** is passed in the `getInstance()`, if we don't pass time, it'll return default time. 
+```java
+import java.util.*;
+class abc{
+    public static void main(String... args) {
+        String arr[] = TimeZone.getAvailableIDs();
+        for(String id : arr){
+            TimeZone tz = TimeZone.getTimeZone(id);
+            Calendar c = Calendar.getInstance(tz);
+            System.out.println(c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + " " + id);
+        }
+    }
+}
+```
+Output:
+```
+ 7:35:10 Asia/Kolkata
+9:05:10 Asia/Tokyo
+23:35:10 America/New_York
+4:35:10 Europe/London
+...
+```
+
+**Explanation:**
+
+1. `TimeZone.getAvailableIDs()`
+→ Returns an array of all valid time zone IDs (like `"Asia/Kolkata"`, `"America/New_York"`, `"Europe/London"`, etc.).
+
+2. `TimeZone tz = TimeZone.getTimeZone(id);`
+→ Gets a `TimeZone` object corresponding to each ID.
+
+3. `Calendar c = Calendar.getInstance(tz);`
+→ Creates a `Calendar` instance for that specific time zone.
+
+4. `c.get(Calendar.HOUR)` etc.
+→ Extracts the hour, minute, and second according to that time zone.
+
+5. `System.out.println(...)`
+→ Prints the time along with the time zone ID.
+
+The exact output depends on:
+- Your system’s clock
+- The time when you run the program
+- The number of available time zones in your Java runtime
+
+▶ **Code to print/calculate the execution time of the program:**
+```java
+long l = System.getCurrentMillSeconds(); // return the current time in milliseconds
+
+long e = System.getCurrentMillSeconds(); // return the current time in milliseconds
+
+// double totalTime = l - e; 
+// System.out.println("Execution time: " + totalTime + " milliseconds");
+System.out.println("Execution time: " + (e - l) + " milliseconds");
+```
+
+### Factory Method
+> 📝: A method which is static, and returns the object of the same class.
+- It is often used to **control object creation**, apply **caching**, or **encapsulate complex instantiation logic**.
+```java  
+class Car {
+    private String model;
+
+    // Private constructor to control object creation
+    private Car(String model) {
+        this.model = model;
+    }
+
+    // Factory method: static method that returns Car objects
+    public static Car createCar(String model) {
+        return new Car(model);
+    }
+
+    public void display() {
+        System.out.println("Car model: " + model);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Using factory method to create objects
+        Car c1 = Car.createCar("BMW");
+        Car c2 = Car.createCar("Audi");
+
+        c1.display();
+        c2.display();
+    }
+}
+```
+Output:
+```
+Car model: BMW
+Car model: Audi
+```
+
+**Key Points:**
+
+- The **constructor can be private** to prevent direct object creation.
+- The **static factory method** controls how objects are created.
+- Can **return cached objects**, **subclass objects**, or objects with **specific configurations**.
+- Helps **encapsulate object creation logic** and can make code cleaner.
