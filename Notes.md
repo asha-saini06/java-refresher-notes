@@ -2853,3 +2853,291 @@ Car model: Audi
 - The **static factory method** controls how objects are created.
 - Can **return cached objects**, **subclass objects**, or objects with **specific configurations**.
 - Helps **encapsulate object creation logic** and can make code cleaner.
+
+## 25. String Handling
+```java
+    String s = "welcome";
+
+    byte arr[] = s.getBytes();
+    // returns byte code of the given String. in other words, it returns sequence of bytes.
+
+    for(int b: arr) // here Implicit Casting is done automatically
+    System.out.println((char)b); // Explicit Casting
+```
+
+```java
+String s = "Welcome";
+String s1 = "Welcome";
+
+System.out.println(s.equals(s1)); // compares String s and s1
+System.out.println(s == s1); // compares the object of s and s1
+```
+Output:
+```
+true
+true
+```
+**Explanation:**
+
+🔹 **`equals()` method**
+
+- In the `String` class, `.equals()` is **overridden** to compare **the actual content** (the sequence of characters).
+
+- So `s.equals(s1)` → compares `"Welcome"` with `"Welcome"`, and returns **true**.
+
+🔹 **`==` operator**
+
+- The `==` operator compares **object references** — i.e., whether both variables refer to the **same object in memory**.
+
+- In Java, **string literals** like `"Welcome"` are **interned** — meaning they are stored in a special pool called the **String Constant Pool (SCP)**.
+
+- If you create two strings with the same literal value, both references point to the **same object** in the SCP.
+
+Hence,
+`System.out.println(s == s1);` → returns true, because both `s` and `s1` refer to the same `"Welcome"` object in the pool.
+
+🧪 **Additional note:**
+
+If you had created the strings using `new`, the result would differ:
+```java
+String s = new String("Welcome");
+String s1 = new String("Welcome");
+
+System.out.println(s.equals(s1)); // true (content is same)
+System.out.println(s == s1);      // false (different memory objects)
+```
+
+Here, `==` returns `false` because both strings are **different objects** even though their contents match. Because new String() explicitly creates **two different objects** in heap memory — even though they hold the same text.
+
+> 📝: **Conclusion:** Use `.equals()` to compare the content of two `String` objects, and use `==` to compare **object references**.
+
+→ **equalsIgnoreCase()**
+
+```java
+String s = "Welcome";
+String s1 = "welcome";
+
+// Compares the content of the strings with case sensitivity.
+System.out.println(s.equals(s1)); // "Welcome" vs "welcome" → the first character 'W' vs 'w' differ.
+
+// Compares the content of the strings ignoring case.
+System.out.println(s.equalsIgnoreCase(s1)); // "Welcome" vs "welcome" → all characters match if you ignore case.
+```
+Output:
+```
+false
+true
+```
+
+→ **contains()**
+
+```java
+String s = "Welcome";
+boolean b = s.conatin("el"); // true
+boolean b = s.conatin("El"); // false
+```
+
+→ **indexOf()**
+if the character isn't present then it returns -1 or else it'll return the index of the character.
+
+- indexOf(ch)
+
+        int j = s.indexOf('e'); // returns 1
+        int j = s.indexOf('E'); // returns -1
+
+- indexOf(ch, int fromIndex)      
+
+        int j = s.indexOf('l', 2); // returns 3
+leave starting 2 indices and then search for that character.
+
+→ **lastIndexOf()**
+
+    int j = s.lastIndexOf('e');    
+
+- Returns the **index of the last occurrence** of the specified character in the string.
+- Indexing in Java strings starts from 0.
+
+| Character | Index |
+| --------- | ----- |
+| W         | 0     |
+| e         | 1     |
+| l         | 2     |
+| c         | 3     |
+| o         | 4     |
+| m         | 5     |
+| e         | 6     |
+
+- The character `'e'` occurs at index `1` and `6`.
+- `lastIndexOf('e')` returns the **last occurrence**, which is **6**.
+
+Output:
+```
+6
+```
+→ **split()**
+splits the string and returns an array of substrings based on the specified delimiter.
+
+```java
+String s = "Welcome to Java";
+String[] arr = s.split(" "); // splits the string into substrings based on spaces.
+```
+Output:
+```
+["Welcome", "to", "Java"]
+```
+
+→ **toUpperCase()** and **toLowerCase()**
+
+```java
+String s = "Welcome";
+String s1 = s.toUpperCase(); 
+String s2 = s.toLowerCase(); 
+```
+Output:
+```
+WELCOME
+welcome
+```
+
+→ **toCharArray()**
+
+    char arr [] = s.toCharArray();
+
+- The method toCharArray() converts the string into a character array.
+
+- Each character in the string becomes an element in the array, in the same order.  
+
+```java
+String s = "Welcome";
+char arr[] = s.toCharArray();
+
+System.out.println(Arrays.toString(arr));
+```
+Output:
+```
+['W', 'e', 'l', 'c', 'o', 'm', 'e']
+```
+- `arr[0]` → `'W'`
+
+- `arr[1]` → `'e'`
+
+- `arr[6]` → `'e'`
+
+This is useful when you want to **manipulate individual characters** of a string.
+
+→ **trim()**
+removes whitespaces from right or left side of the string.
+
+    String s = s.trim();
+
+→ **startsWith()** and **endsWith()**
+
+```java
+String s = "Hello World";
+boolean b = s.startsWith("Hello"); // true
+boolean b = s.endsWith("d"); // true
+```
+→ **isEmpty()**
+
+    boolean b = s.isEmpty();
+
+→ **replace()**
+
+    **replace('original character' , 'new character');**
+
+```java
+String s = "Welcome";
+String s1 = s.replace('e', 'E'); // 'e' will be replaced with 'E'
+```
+Output:
+```
+WelcomE
+```
+
+→ **concat()**
+
+```java
+String s = "Welcome";
+String s1 = " to Java";
+String s2 = s.concat(s1);
+```
+Output:
+```
+Welcome to Java
+```
+
+→ **compareTo()**
+
+compareTo() is a **case-sensitive** method. 
+
+    **int c = s.compareTo(String anotherString);** // returns 0 if equal, <0 if before, >0 if after
+
+It compares strings on the basis of Unicode value of each character in the Strings.
+
+    int s = s1.compareTo(s2);
+
+- if `s1 > s2` → returns 1
+- if `s1 < s2` → returns -1
+- if `s1 == s2` → returns 0
+
+⚙️ **Special Case :  When One String is Empty**
+
+If one of the strings is empty:
+
+- `"abc".compareTo("")` → returns **positive** (equal to the length of `"abc"`)
+
+- `"".compareTo("abc")` → returns **negative** (equal to `-3`)
+
+If you compare string with blank or empty string, it returns length of the string. If second string is empty, result would be poisitive. If the first string is empty, result would be negative.
+
+```java
+class abc{
+    public static void main(String[] args) {
+        String s1 = "Hibino";
+        String s2 = "";
+        String s3 = "Kafka";
+        System.out.println(s1.compareTo(s2));
+        System.out.println(s2.compareTo(s3));
+    }
+}
+```
+Output:
+```
+6
+-5
+```
+
+**Explanation:**
+
+1. s1.compareTo(s2) → "Hibino".compareTo("")
+    - Since s2 is empty, the result = length of s1 = 6 → +6
+
+2. s2.compareTo(s3) → "".compareTo("Kafka")
+    - Since s2 is empty, the result = -length of s3 = -5
+
+→ **split()** 
+The mthod `split()` is used for splitting a String into its substrings based on the given delimiter/regular expression(regex).
+
+```java
+class SplitExample{
+    public static void main(String[] args) {
+        String s1 = "Java string split method";
+        String[] words = s1.split("\\s"); // splits the string into substrings based on whitespaces.
+        for(String w : words) {
+            System.out.println(w);
+        }
+    }
+}
+```
+Output:
+```
+Java
+string
+split
+method
+```
+---
+> `indexOf()` method returns index of given character value or substring. If it is not found, it returns -1. The index counter starts from 0.
+
+> `lastIndexOf()` method returns index of last occurrence of given character value or substring. If it is not found, it returns -1. The index counter starts from 0.
+
