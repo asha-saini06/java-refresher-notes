@@ -3141,3 +3141,24 @@ method
 
 > `lastIndexOf()` method returns index of last occurrence of given character value or substring. If it is not found, it returns -1. The index counter starts from 0.
 
+## 26. Typecasting
+
+Assigning a value of one data type to a variable of another data type is called **Typecasting**.
+In Java, type casting is classified into two types:
+1. Widening Casting (Implicit)
+    - Also known as automatic type conversion.
+    - Occurs when a smaller data type is converted to a larger data type.
+    - No explicit casting is required.
+
+Conversion order:
+
+    byte → short → int → long → float → double
+
+2. Narrowing Casting (Explicitly done)
+
+    - Must be done manually by the programmer.
+    - May lead to data loss or precision loss.
+
+Conversion order:
+
+    double → float → long → int → short → byte
