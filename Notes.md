@@ -3146,7 +3146,7 @@ method
 Assigning a value of one data type to a variable of another data type is called **Typecasting**.
 In Java, type casting is classified into two types:
 1. Widening Casting (Implicit)
-    - Also known as automatic type conversion.
+    - Also known as **automatic type conversion**.
     - Occurs when a smaller data type is converted to a larger data type.
     - No explicit casting is required.
 
@@ -3157,8 +3157,102 @@ Conversion order:
 2. Narrowing Casting (Explicitly done)
 
     - Must be done manually by the programmer.
-    - May lead to data loss or precision loss.
+    - May lead to **data loss** or **precision loss**.
 
 Conversion order:
 
     double → float → long → int → short → byte
+
+## 27. Java Scanner Class    
+The `Scanner` class is used to get user input, and it is found in the `java.util` package.
+
+The Java `Scanner` class breaks the input into tokens using a delimiter that is whitespace by default. It provides many mthods to read and parse various primitve values.
+
+    Scanner sc = new Scanner(System.in);
+
+- String `next()` → returns the next token in the input as a string.
+- String `nextLine()` → it moves the scanner position to the next line and returns the value as a string.
+- byte `nextByte()` → it scans the next token in the input as a byte.
+- short `nextShort()` → it scans the next token in the input as a short.
+
+Similarly, we have following functions:
+- int `nextInt()`
+- long `nextLong()`
+- float `nextFloat()`
+- double `nextDouble()`
+
+➡ **to get input from console**
+```java
+import java.util.Scanner;
+class ScannerTest1{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in); // create a Scanner object
+        System.out.println("Enter your age : ");
+        int age = sc.nextInt();
+        System.out.println("Enter your name : ");
+        String name = sc.nextLine();
+        System.out.println("Enter your fee : ");
+        double fee = sc.nextDouble();
+        System.out.println("Age : " + age + "\nName : " + name + "\nFee : " + fee);
+        sc.close(); // close the scanner
+    }
+}
+```
+Output:
+```
+Enter your age : 
+25
+Enter your name : 
+Mikasa
+Enter your fee : 
+5000.0
+Age : 25
+Name : Mikasa
+Fee : 5000.0
+```
+
+➡ **Scanner class with delimiter:** 
+The `\s` represents whitespace.
+
+```java
+import java.util.*;
+class ScannerTest2{
+    public static void main(String... args) {
+        String input = "10 tea 20 coffee 30 tea biscuits";
+        Scanner sc = new Scanner(input).useDelimiter("\\s");
+        System.out.println(s.nextInt());
+        System.out.println(s.next());
+        System.out.println(s.nextInt());
+        System.out.println(s.next());
+        s.close();
+    }
+}
+```
+Output:
+```
+10
+tea
+20
+coffee
+```
+
+### join
+In JDK 8, there's a new function `join()` introduced. 
+It is a **static function** which is called as `String.join()` (using the classname)
+
+    String.join(String delimiter, String... elements)
+
+```java
+class JoinExample{
+    public static void main(String[] args) {
+        String ss = String.join(" ", "Java", "is", "great");
+        System.out.println(ss); 
+    }
+}
+```
+Output:
+```
+Java is great
+```
+
+The `java.lang.String.join()` method concatenates the given elements with the given delimiter and returns the concatenated string.
