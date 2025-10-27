@@ -6,7 +6,7 @@
 - Use `var` (Java 10+) for type inference.
 - Java is a compiled language, so you must compile your code before you can run it.
 
-## Features:
+## Features
 
 - Simple
 - Platform Independent
@@ -22,8 +22,8 @@
 - Dynamic
 - Interpreted
 
-* Java is everywhere
-* Write Once, Run Anywhere **(WORA)**
+- Java is everywhere
+- Write Once, Run Anywhere **(WORA)**
 
 **Sun Microsystems**
 
@@ -164,7 +164,7 @@ class Demo{
 - To compile: `javac Demo.java`
 - To run: `java Demo`
 
-### Parameters used:
+### Parameters used
 
 - `class` keyword is used to declare a class in java.
 - `public` keyword is an access modifier which represets visibility, it means it is visible to all.
@@ -316,11 +316,11 @@ Object-oriented programming has several advantages over procedural programming:
 
 - OOP is faster and easier to execute
 
-* OOP provides a clear structure for the programs
+- OOP provides a clear structure for the programs
 
 - OOP helps to keep the Java code DRY "Don't Repeat Yourself", and makes the code easier to maintain, modify and debug
 
-* OOP makes it possible to create full reusable applications with less code and shorter development time
+- OOP makes it possible to create full reusable applications with less code and shorter development time
 
 > 📝: The "**Don't Repeat Yourself**" (DRY) principle is about reducing the repetition of code. You should extract out the codes that are common for the application, and place them at a single place and reuse them instead of repeating it.
 
@@ -400,7 +400,7 @@ class abc {
 ✅ **In summary:**  
 Command-line input always comes in as text. `String[] args` ensures Java can accept any kind of input, and the program can later parse those strings into numbers or other data types as needed.
 
-## 6. Variables in Java:
+## 6. Variables in Java
 
 Variables are containers to store data in memory. Each variable has a name, type and value. It is the basic unit of storage in a program. Java has 4 types of variables.
 
@@ -738,6 +738,7 @@ Default values:
 - ArrayList → Dynamic size, only holds objects (wrapper classes needed for primitives).
 
 ### Array Operations: Reversing and Summing Arrays
+
 ```java
 // Class to perform array operations
 class Arr {
@@ -841,7 +842,6 @@ Example:
         c[i] = a[i] + a1[i];
     }
 
-
 🧩 **Concept Used**:
 - Iteration over arrays using `for` loop
 - Element-wise operation
@@ -852,7 +852,7 @@ Example:
 Arrays can be returned just like **primitive data types**.
 
 - Example:
-        
+
         int[] rev(int a[]) { ... return a; }
 
 - The returned array holds changes because **arrays are passed by reference** (not by value).
@@ -899,8 +899,6 @@ Arrays can be returned just like **primitive data types**.
 📝: Arrays are faster than ArrayList.
 
 📝: Wrapper classes are faster than primitive data types.
-
-
 
 ## 9. Functions (methods)
 
@@ -1034,6 +1032,7 @@ Example: `add(int a, int b)` is the method signature.
 > 📝: **Method overriding** allows a subclass to provide a different implementation for a method that is already defined in the superclass.
 
 ### Returning Object from a Method
+
 A function can return any data type, including class objects.
 
 ```java
@@ -1076,8 +1075,8 @@ Output:
 e.g., `static xyz getObj()` → must return a `xyz` object.
 
 📝: You can either:
- - **store the returned object in a variable**, or
- - **use it directly in a chained method call** (`abc.getObj().sum(10, 20)`).
+- **store the returned object in a variable**, or
+- **use it directly in a chained method call** (`abc.getObj().sum(10, 20)`).
 
 📝: Static methods can return objects even though they belong to the class (not an instance).
 
@@ -1122,7 +1121,8 @@ Output:
 > 📝: Static variable retains the previous value of the recent object.
 > 📝: Instance variables can't be declared in local scope.
 
-#### 💬 Key Takeaways: 
+#### 💬 Key Takeaways
+
 - **Static variable** → shared by all objects; retains last updated value.
 - **Instance variable** → unique for each object; requires an object to access.
 - **Static variable / method** → can be accessed using class name (`ClassName.var` or `ClassName.method()`).
@@ -1550,7 +1550,8 @@ Now the compiler can distinguish between the two methods because the **parameter
 
 > Return type is not part of the method signature.
 
-## 17. To print an array element by element 
+## 17. To print an array element by element
+
 When you print an array directly in Java (e.g., `System.out.println(arr);`),
 it doesn’t print the elements — instead, it prints the **memory address** (like `[C@15db9742`).
 This is because arrays in Java are **objects**, not primitive values.
@@ -1593,7 +1594,6 @@ o
 - You can return an array from a method just like any other object.
 - `for (char p : am)` is a for-each loop, introduced in Java 5, ideal for reading array elements sequentially.
 
-
 - The method `charAt(int index)` returns the character at the specified index.
 The index value should lie between `0` and `length() - 1` (the length of the string minus 1).
 
@@ -1609,11 +1609,12 @@ Example:
 int len = str.length();
 ```
 
-This distinction avoids confusion between Strings and Arrays — both have “length,” but one uses a *method* and the other a *field*.
+This distinction avoids confusion between Strings and Arrays — both have “length,” but one uses a _method_ and the other a _field_.
 
 > 📝: If you want to **print an array without loops** (for debugging), use: `System.out.println(Arrays.toString(am));` (but remember to `import java.util.Arrays;`)
 
 ## 18. Passing Objects as arguments
+
 In Java, you can **pass objects as parameters** to methods just like variables.
 
 When you pass an object to a method, its **reference** (memory address) is passed, not the actual copy of the object.
@@ -1669,13 +1670,13 @@ one existing object (`kk` of `xyz`) and one anonymous object (`new pqr()`).
 - Inside `output(xyz x1, pqr p1)`:
 → The parameters `x1` and `p1` now refer to the **same memory** locations as the objects `kk` and `new pqr()` created in `main()`.
 - Inside the method:
-    - `this.x1 = x1;` → assigns the `xyz` object reference to instance variable x1.
-    - `this.p1 = p1;` → assigns the `pqr` object reference to instance variable p1.
-    - Then `x1.sum()` prints "Hello" and `p1.sum()` prints "World".
+  - `this.x1 = x1;` → assigns the `xyz` object reference to instance variable x1.
+  - `this.p1 = p1;` → assigns the `pqr` object reference to instance variable p1.
+  - Then `x1.sum()` prints "Hello" and `p1.sum()` prints "World".
 
  💬 **Important Concepts:**
-- Java is **pass-by-value**, even for objects — but the *value passed* is the **reference** to the object.
-So both caller and callee refer to the *same* object in memory.
+- Java is **pass-by-value**, even for objects — but the _value passed_ is the **reference** to the object.
+So both caller and callee refer to the _same_ object in memory.
 
 - This means that **modifying an object inside a method** will reflect in the calling method,
 because both point to the same memory address.
@@ -1684,15 +1685,15 @@ because both point to the same memory address.
 
 - When an **object** is passed to a method, Java passes the **reference value** (address in memory).
 This means:
-    - The method can call the object’s methods.
-    - The method can modify the object’s fields.
+  - The method can call the object’s methods.
+  - The method can modify the object’s fields.
 
-- **Objects are never passed by value** (*copy of the object*) —
+- **Objects are never passed by value** (_copy of the object_) —
 only the reference is copied and passed.
 
 - You can pass:
-    - Pre-created objects (`kk`), or
-    - Anonymous objects (`new pqr()`).
+  - Pre-created objects (`kk`), or
+  - Anonymous objects (`new pqr()`).
 
 📘 **Key Takeaways:**
 
@@ -1705,6 +1706,7 @@ only the reference is copied and passed.
 📝 If you modify the object inside the method, the change reflects outside too — since both refer to the same object in the heap.
 
 ## 19. String
+
 String is basically an object that represents sequence of char values.
 
 ```java
@@ -1733,7 +1735,7 @@ Explanation:
 - String is a **class** that represents a sequence of characters.
 - Strings are **immutable**, which means they cannot be changed once created.
 - String objects are created using double quotes.
-- String concatenation is done using the `+` operator. The `+` operator concatenates strings.   
+- String concatenation is done using the `+` operator. The `+` operator concatenates strings.
 
 ```java
 String str = "hello";
@@ -1757,7 +1759,7 @@ System.out.println("Character at index 3: " + ch);
 
 - The valid index range is `0` to `length() - 1`.
 
-```java 
+```java
 String st = "Welcome";
 for(int i=0; i < st.length(); i++) // length() returns the length of the string
 {
@@ -1774,7 +1776,7 @@ c
 o
 m
 e
-``` 
+```
 
 ```java
 String st = "Welcome";
@@ -1827,7 +1829,7 @@ As static methods don't require objects for their invokation and instance variab
 
 📝: Instance variables can be accessed directly by calling the variable name inside the class. However, within static menthods (when instance variables are given accessibility), they should be called using the fully qualified name. `ObjectReference.VariableName`
 
-📝: `substring(int beginIndex)` returns a new string that is a substring of this string. 
+📝: `substring(int beginIndex)` returns a new string that is a substring of this string.
 `substring(int beginIndex, int endIndex)` returns a new string that is a substring of this string. The substring includes the characters at the specified beginIndex and excludes the character at endIndex. Thus, the length of the returned substring is `endIndex - beginIndex`.
 
 ```java
@@ -1843,14 +1845,16 @@ class abc{
 ```
 
 ### String Concatenation  
+
 In Java, string concatenation forms a new string that is combination of multiple strings.
-There are two ways to concatenate strings in Java: 
+There are two ways to concatenate strings in Java:
 - `+` operator
 - `concat()` method
 
-* After a string literal, all the `+` will be treated as string concatenation operator.
+- After a string literal, all the `+` will be treated as string concatenation operator.
 
 ### To print a string character by character
+
 You can use a `for loop` with `charAt()` method.
 
 ```java
@@ -1904,6 +1908,7 @@ a
 ```
 
 ## 20. Wrapper Class
+
 A wrapper class is a class whose object **wraps** or contains a primitive data types.
 When we create an 'object' to a wrapper class, it contains a field and in this field, we can store a primitive data type.
 In other words, we can wrap a primitve value into a wrapper class.
@@ -1925,12 +1930,10 @@ Automatic conversion of a primitive to its wrapper class.
 
         Integer num = 5;  // int → Integer automatically
 
-
 - **Unboxing:**
 Automatic conversion of a wrapper object back to its primitive.
 
         int x = num;  // Integer → int automatically
-
 
 - **All wrapper classes are immutable** — once created, their value cannot be changed.
 
@@ -1952,6 +1955,7 @@ Automatic conversion of a wrapper object back to its primitive.
 ## 21. Boxing, Unboxing, Autoboxing
 
 ### Boxing
+
 **Encapsulating value in an object.** Converting primitive data types into object is called boxing, and this is taken care by the compiler. Therefore, while using a wrapper class you just need to pass the value of the primitive data type to the constructor of the wrapper class.
 
 ```java
@@ -1968,15 +1972,14 @@ class Demo {
 
 - `int a;` → **Declares a primitive variable** `a` (but here it’s unused).
 - `Integer b = new Integer(10);` → **Creates a wrapper object** for the primitive value 10.
-    - This is **manual boxing** (before Java 5).
+  - This is **manual boxing** (before Java 5).
 
-    - In modern Java (Java 9+), using new Integer(10) is **deprecated** — use autoboxing instead:
+  - In modern Java (Java 9+), using new Integer(10) is **deprecated** — use autoboxing instead:
 
             `Integer b = 10;`  // autoboxing (preferred)
 
 - `System.out.println(b);` → Prints `10`, since `Integer.toString()` returns the numeric value as a string.
 - `b.intValue()` → Converts (unboxes) the wrapper object `b` back to a primitive `int`.
-
 
 ### Unboxing
 
@@ -2009,8 +2012,8 @@ class Demo {
 
 - Unboxing is the **reverse** of boxing/autoboxing.
 - It happens automatically when:
-    - Assigning a wrapper object to a primitive variable.
-    - Using a wrapper in arithmetic operations.
+  - Assigning a wrapper object to a primitive variable.
+  - Using a wrapper in arithmetic operations.
 
             Integer num = 50;
             int result = num + 10;  // auto-unboxed → 60
@@ -2037,14 +2040,14 @@ For example, converting an `int` to an `Integer`, a `double` to a `Double`, and 
 ```
 `valueOf()` method is used to convert a primitive type to a wrapper object. It is a static method of the `Integer` class.
 
-```java 
+```java
     // String to primitive type
     String s = "20";
     int i = Integer.parseInt(s);
 ```
 `parseInt()` method is used to convert a string to a primitive integer value.
 
-```java 
+```java
     String s = "20.5";
     double d = Double.parseDouble(s);
 ```
@@ -2058,7 +2061,7 @@ For example, converting an `int` to an `Integer`, a `double` to a `Double`, and 
 The `Integer.parseInt()` method expects a numeric string like `"10"` or `"123"`.
 
 **String to Class Type:**
-```java 
+```java
    class Demo {
     public static void main(String[] args) {
         String s = "123";   // numeric string
@@ -2148,29 +2151,29 @@ Output:
 ```
 Explanation:
 1. `Integer a = new Integer(3);`
- - Creates an **Integer object** `a` wrapping the primitive value `3`.
- - This is manual boxing (explicit object creation).
+- Creates an **Integer object** `a` wrapping the primitive value `3`.
+- This is manual boxing (explicit object creation).
 
 2. `int i = a.intValue();`
- - **Explicit unboxing**: Converts the `Integer` object a to primitive int using intValue() method.
+- **Explicit unboxing**: Converts the `Integer` object a to primitive int using intValue() method.
 
 3. `int j = a;`
- - **Auto-unboxing**: Compiler automatically converts `Integer` to `int` behind the scenes (`a.intValue()` is called internally).
+- **Auto-unboxing**: Compiler automatically converts `Integer` to `int` behind the scenes (`a.intValue()` is called internally).
 
 4. `System.out.println(a + " " + i + " " + j);`
- - Prints all three values:
+- Prints all three values:
 
-    - `a` → the `Integer` object, automatically converted to string via `toString()`.
-    - `i` → primitive int.
-    - `j` → primitive int from auto-unboxing.
+  - `a` → the `Integer` object, automatically converted to string via `toString()`.
+  - `i` → primitive int.
+  - `j` → primitive int from auto-unboxing.
 
-> 📝: Autoboxing/unboxing lets you mix primitives and wrapper objects seamlessly in expressions.    
+> 📝: Autoboxing/unboxing lets you mix primitives and wrapper objects seamlessly in expressions.
 
 ## 22. String Class
 
 The `String` class in Java is used to create and manipulate sequences of characters. It is one of the most commonly used classes in Java. Objects of the String class are **immutable**, which means they **cannot be changed once created.**
 
-### Key Features of the String Class:
+### Key Features of the String Class
 
 **1. Immutable**
 
@@ -2223,11 +2226,12 @@ The String class in Java implements three important interfaces.
  3. **Serializable**: Allows string objects to be converted into a byte stream
 
 ### String Constructors in Java
+
 In Java, String constructors are used to create new String objects from different sources like character arrays, byte arrays, or another string. Although strings in Java are usually created using string literals, the String class also provides constructors for more control.
 
 Let us check these constructors using a example demonstrating the use of them.
 
-**Example of String Constructor:** 
+**Example of String Constructor:**
 Below is the implementation of string constructors in Java.
 ```java
 import java.io.*;
@@ -2260,9 +2264,10 @@ String from byte array: Hello
 ```
 
 ## 23. Character Class
+
 Java provides a wrapper class `Character` in `java.lang` package. An object of type `Character` contains a single field, whose type is `char`. The Character class offers a number of useful class (i.e., static) methods for manipulating characters. You can create a `Character` object with the `Character` constructor.
 
-**Creating a Character object:** 
+**Creating a Character object:**
 
     Character ch = new Character('a');
 
@@ -2273,11 +2278,12 @@ If we pass a primitive char into a method that expects an object, the compiler a
 > 📝: The **Character class is immutable** like String class i.e once it's object is created, it **cannot be changed**.
 
 ### Methods in Character Class  
+
 The methods of Character class are as follows:
 
 **1. boolean isLetter(char ch)**: This method is used to determine whether the specified char value(ch) is a letter or not. The method will return true if it is letter([A-Z],[a-z]), otherwise return false. In place of character, we can also pass ASCII value as an argument as char to int is implicitly typecasted in java.
 
-**Syntax:** 
+**Syntax:**
 
     boolean isLetter(char ch)
 
@@ -2306,13 +2312,13 @@ true
 false
 ```
 
-**2. boolean isDigit(char ch)**: This method is used to determine whether the specified char value(ch) is a digit or not. Here also we can pass ASCII value as an argument. 
+**2. boolean isDigit(char ch)**: This method is used to determine whether the specified char value(ch) is a digit or not. Here also we can pass ASCII value as an argument.
 
-**Syntax:** 
+**Syntax:**
 
     boolean isDigit(char ch)
 
-**Parameters:** 
+**Parameters:**
 **ch** - a primitive character
 
 **Returns**: It returns true if ch is a digit, otherwise, return false
@@ -2337,13 +2343,13 @@ false
 true
 ```
 
-**3. boolean isWhitespace(char ch)**: It determines whether the specified char value(ch) is white space. Whitespace includes space, tab, or newline. 
+**3. boolean isWhitespace(char ch)**: It determines whether the specified char value(ch) is white space. Whitespace includes space, tab, or newline.
 
-**Syntax:** 
+**Syntax:**
 
     boolean isWhitespace(char ch)
 
-**Parameters:** 
+**Parameters:**
 
 ch - a primitive character
 Returns: It returns true if ch is whitespace, otherwise, returns false.
@@ -2377,13 +2383,13 @@ true
 false
 ```
 
-**4. boolean isUpperCase(char ch)**: It determines whether the specified char value(ch) is uppercase or not. 
+**4. boolean isUpperCase(char ch)**: It determines whether the specified char value(ch) is uppercase or not.
 
-**Syntax:** 
+**Syntax:**
 
     boolean isUpperCase(char ch)
 
-**Parameters:** 
+**Parameters:**
 **ch** - a primitive character
 
 **Returns**: It returns true if ch is upper case, otherwise, returns false.
@@ -2408,13 +2414,13 @@ false
 true
 ```
 
-**5. boolean isLowerCase(char ch)**: It determines whether the specified char value(ch) is lowercase or not. 
+**5. boolean isLowerCase(char ch)**: It determines whether the specified char value(ch) is lowercase or not.
 
-**Syntax:** 
+**Syntax:**
 
     boolean isLowerCase(char ch)
 
-**Parameters**: 
+**Parameters**:
 
 **ch** - a primitive character
 
@@ -2440,9 +2446,9 @@ true
 true
 ```
 
-**6. char toUpperCase(char ch)**: It returns the uppercase of the specified char value(ch). If an ASCII value is passed, then the ASCII value of its uppercase will be returned. 
+**6. char toUpperCase(char ch)**: It returns the uppercase of the specified char value(ch). If an ASCII value is passed, then the ASCII value of its uppercase will be returned.
 
-**Syntax:** 
+**Syntax:**
 
     char toUpperCase(char ch)
 
@@ -2472,9 +2478,9 @@ A
 48
 ```
 
-**7. char toLowerCase(char ch)**: It returns the lowercase of the specified char value(ch). 
+**7. char toLowerCase(char ch)**: It returns the lowercase of the specified char value(ch).
 
-**Syntax**: 
+**Syntax**:
 
     char toLowerCase(char ch)
 
@@ -2504,13 +2510,13 @@ a
 48
 ```
 
-**8. toString(char ch):** It returns a String class object representing the specified character value(ch) i.e a one-character string. Here we cannot pass ASCII value. 
+**8. toString(char ch):** It returns a String class object representing the specified character value(ch) i.e a one-character string. Here we cannot pass ASCII value.
 
-**Syntax:** 
+**Syntax:**
 
     String toString(char ch)
 
-**Parameters:** 
+**Parameters:**
 
 **ch** - a primitive character
 
@@ -2556,7 +2562,7 @@ Y
 
     This method returns the value of this `Integer` as a double.
 
-5. **floatValue()** 
+5. **floatValue()**
     This method returns the value of this `Integer` as a double.
 
 6. **intValue()**
@@ -2565,7 +2571,7 @@ Y
 7. **longValue()**
     This method returns the value of this `Integer` as a long.
 
-❓ **Why Java is not a pure object oriented language?** 
+❓ **Why Java is not a pure object oriented language?**
 
 ▶ Java is not a pure object-oriented language **because it supports primitive data types** such as `int`, `byte`, `short`, `long`, `float`, `double`, `char`, and `boolean`. These are **not objects**, but rather **basic data types** that exist for performance and memory efficiency.
 
@@ -2615,7 +2621,7 @@ Wed Oct 22 13:45:12 IST 2025
 - `new Date()` creates a Date object with the **current system date and time**.
 - Printing a `Date` object directly calls its `toString()` **method**, which shows the date in a human-readable format.
 
-> The class `Date` represents a specific instant in time, with millisecond precision. 
+> The class `Date` represents a specific instant in time, with millisecond precision.
 
 The class **Date** represents a specific instant in time, with millisecond precision. The Date class of `java.util` package implements **Serializable**, **Cloneable** and **Comparable** interface. It provides constructors and methods to deal with date and time with java. Constructors
 
@@ -2650,7 +2656,8 @@ Date represented is Thu Jan 27 12:53:43 IST 1970
 ```
 ⚠️ Note: The `Date(long millis)` constructor interprets the long value as **milliseconds since epoch (Jan 1, 1970)**.
 
-### Important Methods:
+### Important Methods
+
 - **boolean after(Date date)** : Tests if current date is after the given date.
 - **boolean before(Date date)** : Tests if current date is before the given date.
 - **int compareTo(Date date)** : Compares current date with given date. Returns 0 if the argument Date is equal to the Date; a value less than 0 if the Date is before the Date argument; and a value greater than 0 if the Date is after the Date argument.
@@ -2716,6 +2723,7 @@ After setting: Fri Jun 25 21:50:33 UTC 1976
 > 💡 **Modern alternative:** Use `java.time.LocalDate`, `LocalDateTime`, or `Instant` (Java 8+) instead of the deprecated constructors of Date.
 
 ### Calendar Class
+
 - Package: `java.util.Calendar`
 - It’s an **abstract class** used to work with dates and times more flexibly than `Date`.
 - You **cannot instantiate it directly**; you use `Calendar.getInstance()` to get a concrete subclass object (usually `GregorianCalendar`).
@@ -2752,7 +2760,7 @@ After setting: Fri Jun 25 21:50:33 UTC 1976
     // because months are zero-indexed, so October → 9
 ```
 
-> **`TimeZone`** is passed in the `getInstance()`, if we don't pass time, it'll return default time. 
+> **`TimeZone`** is passed in the `getInstance()`, if we don't pass time, it'll return default time.
 ```java
 import java.util.*;
 class abc{
@@ -2809,6 +2817,7 @@ System.out.println("Execution time: " + (e - l) + " milliseconds");
 ```
 
 ### Factory Method
+>
 > 📝: A method which is static, and returns the object of the same class.
 - It is often used to **control object creation**, apply **caching**, or **encapsulate complex instantiation logic**.
 ```java  
@@ -2855,6 +2864,7 @@ Car model: Audi
 - Helps **encapsulate object creation logic** and can make code cleaner.
 
 ## 25. String Handling
+
 ```java
     String s = "welcome";
 
@@ -2945,7 +2955,7 @@ if the character isn't present then it returns -1 or else it'll return the index
         int j = s.indexOf('e'); // returns 1
         int j = s.indexOf('E'); // returns -1
 
-- indexOf(ch, int fromIndex)      
+- indexOf(ch, int fromIndex)
 
         int j = s.indexOf('l', 2); // returns 3
 leave starting 2 indices and then search for that character.
@@ -3068,7 +3078,7 @@ Welcome to Java
 
 → **compareTo()**
 
-compareTo() is a **case-sensitive** method. 
+compareTo() is a **case-sensitive** method.
 
     **int c = s.compareTo(String anotherString);** // returns 0 if equal, <0 if before, >0 if after
 
@@ -3115,7 +3125,7 @@ Output:
 2. s2.compareTo(s3) → "".compareTo("Kafka")
     - Since s2 is empty, the result = -length of s3 = -5
 
-→ **split()** 
+→ **split()**
 The mthod `split()` is used for splitting a String into its substrings based on the given delimiter/regular expression(regex).
 
 ```java
@@ -3163,7 +3173,8 @@ Conversion order:
 
     double → float → long → int → short → byte
 
-## 27. Java Scanner Class    
+## 27. Java Scanner Class
+
 The `Scanner` class is used to get user input, and it is found in the `java.util` package.
 
 The Java `Scanner` class breaks the input into tokens using a delimiter that is whitespace by default. It provides many mthods to read and parse various primitve values.
@@ -3211,7 +3222,7 @@ Name : Mikasa
 Fee : 5000.0
 ```
 
-➡ **Scanner class with delimiter:** 
+➡ **Scanner class with delimiter:**
 The `\s` represents whitespace.
 
 ```java
@@ -3237,7 +3248,8 @@ coffee
 ```
 
 ### join
-In JDK 8, there's a new function `join()` introduced. 
+
+In JDK 8, there's a new function `join()` introduced.
 It is a **static function** which is called as `String.join()` (using the classname)
 
     String.join(String delimiter, String... elements)
@@ -3256,3 +3268,82 @@ Java is great
 ```
 
 The `java.lang.String.join()` method concatenates the given elements with the given delimiter and returns the concatenated string.
+
+## 28. Email Validation
+
+```java
+import java.util.*;
+class EmailValidation {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in); // create Scanner object for user input
+        System.out.println("Enter your email : ");
+        String email = sc.nextLine(); // take email input from user
+
+        // basic checks: does it start or end with '.'
+        boolean b = email.endsWith(".");
+        boolean b1 = email.startsWith(".");
+
+        // find the position of the last '.'
+        int l = email.lastIndexOf(".");
+
+        // count number of '@' symbols
+        int atCount = 0;
+        for (int i = 0; i < email.length(); i++) {
+            if (email.charAt(i) == '@') {
+                atCount++;
+            }
+        }
+
+        // flag to mark invalid cases
+        boolean inValid = false;
+
+        // invalid if contains double dots, ".@" or "@."
+        if (email.contains("..") || email.contains("@.") || email.contains(".@")) {
+            inValid = true;
+        }
+
+        // split email into username and domain using '@'
+        String divs[] = email.split("@");
+        String uN = divs[0]; // username part
+        String dN = divs[1]; // domain name part
+
+        // validation conditions:
+        // - must have exactly one '@'
+        // - username should not end with '.'
+        // - must not contain invalid patterns
+        if ((atCount == 1) && (uN.endsWith(".") == false) && (inValid == false)) {
+            System.out.println("\n'Valid email address'\n");
+        } else {
+            System.out.println("\n'Invalid email address'\n");
+        }
+
+        // display extracted username and domain
+        System.out.println("Username : " + uN);
+        System.out.println("Domain Name : " + dN);
+
+        sc.close(); // close the scanner
+    }
+}
+```
+
+1. `Scanner` class - used for user input from console.
+
+2. **String methods used:**
+
+- `endsWith()`, `startsWith()` → to check beginning/end characters.
+- `contains()` → to check for invalid patterns.
+- `split("@")` → separates username and domain.
+- `charAt()` → used in loop to count `@` symbols.
+
+3. **Logic:**
+
+- Valid emails have **exactly one '@'**.
+- Cannot start or end with `.`.
+- Cannot have sequences like `..`, `@.`, or `.@`.
+- `lastIndexOf(".")` — gives position of last `.` (can be used for checking domain endings if needed).
+
+4. **Potential improvements:**
+
+- Add check to ensure domain contains a `.` (like `gmail.com`).
+- Use regex for more advanced validation later.
