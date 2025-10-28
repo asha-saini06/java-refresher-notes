@@ -308,7 +308,7 @@ System.out.println(b); // 25
 
 ## 5. Java OOP
 
-OOP stands for Object-Oriented Programming.
+OOP stands for **Object-Oriented Programming**.
 
 Procedural programming is about writing procedures or methods that perform operations on the data, while object-oriented programming is about creating objects that contain both data and methods.
 
@@ -323,6 +323,8 @@ Object-oriented programming has several advantages over procedural programming:
 - OOP makes it possible to create full reusable applications with less code and shorter development time
 
 > 📝: The "**Don't Repeat Yourself**" (DRY) principle is about reducing the repetition of code. You should extract out the codes that are common for the application, and place them at a single place and reuse them instead of repeating it.
+
+Object-Oriented Programming is a methodology or paradigm to design a program using classes and objects. It simplifies the software development and maintenance. Main Concepts - **Inheritance**, **Polymorphism**, **Abstraction**, **Encapsulation**.
 
 ### What are Classes and Objects?
 
@@ -1030,6 +1032,197 @@ Example: `add(int a, int b)` is the method signature.
 > 📝: **Constructor overloading** allows a class to have multiple constructors with different parameter lists.
 
 > 📝: **Method overriding** allows a subclass to provide a different implementation for a method that is already defined in the superclass.
+
+### Java Scope
+In Java, variables are only accessible inside the region where they are created. This is called **scope**.
+
+#### Method Scope
+Variables declared directly inside a method are available anywhere in the method following the line of code in which they were declared:
+```java  
+public class Main {
+  public static void main(String[] args) {
+
+    // Code here CANNOT use x
+
+    int x = 100;
+
+    // Code here CAN use x
+    System.out.println(x);
+  }
+}
+```
+
+#### Block Scope
+A block of code refers to all of the code between curly braces `{ }`.
+
+Variables declared inside a block of code are only accessible by the code between the curly braces, and only after the line in which the variable was declared:
+```java
+public class Main {
+  public static void main(String[] args) {
+
+    // Code here CANNOT use x
+
+    { // This is a block
+
+      // Code here CANNOT use x
+
+      int x = 100;
+
+      // Code here CAN use x
+      System.out.println(x);
+
+    } // The block ends here
+
+    // Code here CANNOT use x
+
+  }
+}
+```
+> 📝 : A block of code can stand alone, or be part of an `if`, `while`, or `for` statement. In a `for` loop, the variable declared in the loop header (like `int i = 0`) only exists inside the loop.
+
+#### Loop Scope
+Variables declared inside a for loop only exist inside the loop:
+```java
+public class Main {
+  public static void main(String[] args) {
+
+    for (int i = 0; i < 5; i++) {
+      System.out.println(i); // i is accessible here
+    }
+
+    // i is NOT accessible here
+  }
+}
+```
+- The `for` loop has its own block (`{ ... }`).
+- The variable `i` declared in the loop header (`int i = 0`) is only accessible inside that loop block.
+- Once the loop ends, `i` is destroyed, so you can't use it outside.
+
+Why this matters:
+
+Loop variables are not available outside the loop.
+
+You can safely reuse the same variable name (`i`, `j`, etc.) in different loops in the same method:
+```java
+public class Main {
+  public static void main(String[] args) {
+
+    for (int i = 0; i < 3; i++) {
+      System.out.println("Loop 1: " + i);
+    }
+
+    for (int i = 0; i < 2; i++) {
+      System.out.println("Loop 2: " + i);
+    }
+  }
+}
+```
+#### Class Scope
+Variables declared inside a class but outside any method have class scope (also called fields). These variables can be accessed by all methods in the class:
+```java
+public class Main {
+  int x = 5; // Class variable
+
+  public static void main(String[] args) {
+    Main myObj = new Main();
+    System.out.println(myObj.x); // Accessible here
+  }
+}
+```
+
+### Recursion
+Recursion is the technique of making a function call itself. This technique provides a way to break complicated problems down into simpler problems which are easier to solve.
+
+**Recursion Example**
+Adding two numbers together is easy to do, but adding a range of numbers is more complicated. In the following example, recursion is used to add a range of numbers together by breaking it down into the simple task of adding two numbers:
+```java
+public class Main {
+  public static int sum(int k) {
+    if (k > 0) {
+      return k + sum(k - 1);
+    } else {
+      return 0;
+    }
+  }
+
+  public static void main(String[] args) {
+    int result = sum(10);
+    System.out.println(result);
+  }
+}
+```
+
+When the `sum()` method is called, it adds parameter `k` to the sum of all numbers smaller than `k` and returns the result. When `k` becomes 0, the method just returns 0. When running, the program follows these steps:
+
+10 + sum(9)
+10 + ( 9 + sum(8) )
+10 + ( 9 + ( 8 + sum(7) ) )
+...
+10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1 + sum(0)
+10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1 + 0
+Since the method does not call itself when `k` is 0, the program stops there and returns the result.
+
+**Halting Condition**
+
+Just as loops can run into the problem of infinite looping, recursive methods can run into the problem of infinite recursion. Infinite recursion is when the method never stops calling itself. Every recursive method should have a halting condition, which is the condition where the method stops calling itself. In the previous example, the halting condition is when the parameter `k` becomes 0.
+
+It is helpful to see a variety of different examples to better understand the concept. In this example, the method adds a range of numbers between a start and an end. The halting condition for this recursive method is when **end** is not greater than **start**:
+
+Use recursion to add all numbers from 5 to 10 (5+6+7+8+9+10):
+```java
+public class Main {
+  public static int sum(int start, int end) {
+    if (end > start) {
+      return end + sum(start, end - 1);
+    } else {
+      return end;
+    }
+  }
+
+  public static void main(String[] args) {
+    int result = sum(5, 10);
+    System.out.println(result);
+  }
+}
+```
+> Be careful with recursion: it's easy to accidentally write a method that never stops or uses too much memory. But when written correctly, recursion can be both efficient and elegant.
+
+**Countdown with Recursion:** 
+This example demonstrates how to use recursion to create a countdown function:
+```java
+public class Main {
+  static void countdown(int n) {
+    if (n > 0) {
+      System.out.print(n + " ");
+      countdown(n - 1);
+    }
+  }
+
+  public static void main(String[] args) {
+    countdown(5);
+  }
+}
+```
+The method calls itself with `n - 1` until `n` becomes `0`.
+
+**Calculate Factorial with Recursion**
+This example uses a recursive method to calculate the factorial of 5:
+```java
+public class Main {
+  static int factorial(int n) {
+    if (n > 1) {
+      return n * factorial(n - 1);
+    } else {
+      return 1;
+    }
+  }
+
+  public static void main(String[] args) {
+    System.out.println("Factorial of 5 is " + factorial(5));
+  }
+}
+```
+Factorial means multiplying a number by every number below it, down to 1. For example, the factorial of 5 is: 5 * 4 * 3 * 2 * 1 = 120. By definition, 0! is also 1.
 
 ### Returning Object from a Method
 
@@ -1852,6 +2045,9 @@ There are two ways to concatenate strings in Java:
 - `concat()` method
 
 - After a string literal, all the `+` will be treated as string concatenation operator.
+
+> ⚠ : Java uses the `+` operator for **both addition and concatenation**.
+Numbers are added. Strings are concatenated.
 
 ### To print a string character by character
 
@@ -3247,7 +3443,7 @@ tea
 coffee
 ```
 
-### join
+➡ **join() function**
 
 In JDK 8, there's a new function `join()` introduced.
 It is a **static function** which is called as `String.join()` (using the classname)
@@ -3347,3 +3543,85 @@ class EmailValidation {
 
 - Add check to ensure domain contains a `.` (like `gmail.com`).
 - Use regex for more advanced validation later.
+
+## 29. Switch-Case Statement
+Apart from the if-else blocks, there are also switch cases where you can define multiple cases based on a single switch.
+
+```java
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("What is the first operand? ");
+        int a =scanner.nextInt();
+
+        // consumes the dangling newline character
+        scanner.nextLine();
+
+        System.out.print("What is the second operand? ");
+        int b = scanner.nextInt();
+
+        // consumes the dangling newline character
+        scanner.nextLine();
+
+        System.out.print("What operation would you like to perform? ");
+        String operation = scanner.nextLine();
+
+        switch (operation) {
+            case "sum":
+                System.out.printf("%d + %d = %d", a, b, a+b);
+                break;
+            case "sub":
+                System.out.printf("%d - %d = %d", a, b, a-b);
+                break;
+            case "mul":
+                System.out.printf("%d * %d = %d", a, b, a*b);
+                break;
+            case "div":
+                if (b == 0) {
+                    System.out.print("Can't divide by zero!");
+                } else {
+                    System.out.printf("%d / %d = %d", a, b, a / b);
+                }
+                break;
+            default:
+                System.out.printf("Invalid Operation!");
+        }
+        scanner.close();
+    }
+}
+```
+This is a very simple calculator program. The program prompts the user for two numbers and then asks what operation they would like to perform.
+
+Every switch-case statement will have one switch and multiple cases. When you say `case "sum"`, the program checks whether the value of the switch or the `operation` variable in this is `sum` or not.
+
+If it matches, the case body will execute. If none of the cases match, the `default` case will be executed.
+
+And about that `break` statement. It does what it sounds like: stops the program from going into the next case.
+
+If you remove the `break` statements, all the cases will be executed one after the other until the `default` case has been reached.
+
+## 30. String Buffer Class
+The StringBuffer class in Java represents a sequence of characters that can be modified, which means we can change the content of the StringBuffer without creating a new object every time. It represents a mutable sequence of characters.
+
+**Features of StringBuffer Class:**
+The key features of StringBuffer class are listed below:
+
+- Unlike String, we can modify the content of the StringBuffer without creating a new object.
+- All methods of StringBuffer are synchronized, making it safe to use in multithreaded environments.
+- Ideal for scenarios with frequent modifications like append, insert, delete, or replace operations.
+
+**Advantages of using StringBuffer**
+The advanatages of StringBuffer class are listed below:
+
+- **Mutable**: StringBuffer are mutable it means that we can change the content after the object has been created, on the other hand String are immutable once it created it can not be modified.
+- **Efficient**: Since StringBuffer objects are mutable, it is suitable in scenarios where we need to modify the string multiple times. If we do the same thing with string, everytime a new object is created and the old one is deleted, which is very bad in terms of performance and memory.
+
+> Note: Both String and StringBuffer objects are thread safe, but in different ways.  On the other hand immutable objects like String are thread-safe because their state can not be modified once they are created.
+
+**Disadvantage of StringBuffer**
+- **Slower in single-threaded programs**: It's synchronized, meaning it ensures thread safety by allowing only one thread to access it at a time. However, in single-threaded environments, this synchronization is unnecessary and slows down performance compared to non-synchronized classes like StringBuilder.
+- **Less efficient than StringBuilder**: For non-threaded use cases, StringBuilder is faster and has similar functionality. Also, StringBuffer operations like `append()` or `insert()` make the code longer compared to using simple '`+`' with String.
