@@ -30,24 +30,24 @@ For the complete detailed notes, check out 👉 [Notes.md](./Notes.md)
 16. Returning Value by a Method
 17. Print an array element by element 
 18. Passing Objects as Arguments
-19. String
-20. Types of String
-21. String concatenation 
-22. Wrapper Class
-23. Boxing, Unboxing, Autoboxing
-24. String Class
-25. Character Class
-26. Date Class 
-27. String Handling
-28. Typecasting
-29. Java Scanner Class
-30. Email Validation program
-31. String Buffer Class
-32. String Builder Class
-33. Mutable string
-34. Substring
-35. Constructor
-36. Types of Constructors
+19. String  
+20. Wrapper Class
+21. Boxing, Unboxing, Autoboxing
+22. String Class
+23. Character Class
+24. Date Class 
+25. String Handling
+26. Typecasting
+27. Java Scanner Class
+28. Switch-Case Statement
+29. Email Validation program
+30. String Buffer Class
+31. String Builder Class
+32. Mutable string
+33. Substring
+34. Constructor
+35. Types of Constructors
+36. Access Modifiers
 37. Reverse a String using StringBuilder Class
 38. Constructor Overloading
 39. ASCII
