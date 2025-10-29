@@ -21,7 +21,7 @@ For the complete detailed notes, check out 👉 [Notes.md](./Notes.md)
 7. Loops
 8. Arrays
 9. Functions (methods)
-10. This keyword 
+10. this keyword 
 11. Types of functions 
 12. Method Overloading (Compile time polymorphism)
 13. var args
@@ -39,8 +39,8 @@ For the complete detailed notes, check out 👉 [Notes.md](./Notes.md)
 25. String Handling
 26. Typecasting
 27. Java Scanner Class
-28. Switch-Case Statement
-29. Email Validation program
+28. Email Validation program
+29. Switch-Case Statement
 30. String Buffer Class
 31. String Builder Class
 32. Mutable string
