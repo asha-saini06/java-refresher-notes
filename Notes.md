@@ -3607,14 +3607,118 @@ If you remove the `break` statements, all the cases will be executed one after t
 ## 30. String Buffer Class
 The StringBuffer class in Java represents a sequence of characters that can be modified, which means we can change the content of the StringBuffer without creating a new object every time. It represents a mutable sequence of characters.
 
-**Features of StringBuffer Class:**
+- StringBuffer is a mutable String.
+- StringBuffer is a different class from String class.
+- `java.lang.StringBuffer` extends (or inherits from) `Object` class.
+
+```java
+    StringBuffer b = "hello"; // error
+    StringBuffer b = new StringBuffer("hello");
+```
+- Whenever we initialize an object of StringBuffer, it reserves 
+16 bytes of memory for the object.
+
+```java
+    StringBuffer b = new StringBuffer();
+    System.out.println(b.capacity()); // 16
+```
+- `capacity()` returns the number of characters that the buffer can hold.
+
+```java
+    StringBuffer b = new StringBuffer(100);
+    System.out.println(b.capacity()); // 100
+```
+
+> Note: The default capacity of StringBuffer is 16 characters.
+
+> 📝: Java StringBuffer class is `thread-safe`, i.e., multiple threads cannot access it simultaneously. So, it is safe and will result in an order.
+
+```java
+StringBuffer b = new StringBuffer("hello");
+System.out.println(b.capacity()); // calculates the total allocated capacity // will display 21 (i.e., 16 + 5 bytes of hello)
+System.out.println(b.length()); // returns the number of characters in the buffer
+```
+
+**Explanation:**
+
+1. `capacity()`
+- When you create a StringBuffer with an initial string,
+Java allocates **16 extra characters of space** in addition to the string’s length.
+- Formula:
+
+        capacity = 16 + initialString.length()
+
+- So for `"hello"` → length = 5 → capacity = 16 + 5 = **21**.
+
+2. `length()`
+- Returns the **number of characters currently stored** in the buffer.
+- `"hello"` has 5 characters → b.length() = **5**.
+
+---
+```java
+char a = '\u0024'; // Unicode for $
+
+b.append("World"); // Concatenates String // will display hello World
+
+System.out.println(b.charAt(2)); // returns character at given index
+```
+
+> 📝: `Object` class is the **super class** of all the classes. `toString()` is the function of the **Object** class.
+
+    String ss = b.toString();
+
+`toString()` converts StringBuffer into String class type.
+
+→ `setCharAt(int index)` used to return the character at the given index.
+
+```java
+b.setCharAt(2, 'H'); // will display heHlo (replaced l with H on the index 2)
+```
+
+→ `b.setLength()` used to set the length of the StringBuffer.
+
+```java
+b.setLength(5); // set length of the StringBuffer to 5
+```
+
+→ insert(int offset, String s) insert the specified string with this string at the specified position. The `insert()` method is overloaded like `insert(int, char)`, `insert(int, int)`, `insert(int boolean)`, `insert(int ,float)`, `insert(int, double)`, etc. 
+```java
+    b.insert(3, "hello"); 
+    System.out.println(b); // will display hehhello World
+```
+
+→ `reverse()` used to reverse the StringBuffer.
+→ `capacity()` is used to calculate the total allocated capacity.
+
+```java
+    b.reverse(); // will display dlroW olleh
+    System.out.println(b.capacity()); // will display 21
+```
+→ `ensureCapacity(int minimumCapacity)` used to ensure that the capacity of the StringBuffer is at least the specified minimum capacity.
+
+```java
+    b.ensureCapacity(100); // will ensure that the capacity of the StringBuffer is at least 100
+    System.out.println(b.capacity()); // will display 100
+```
+
+→ `delete(int startIndex, int endIndex)` is used to delete the string from specified startIndex to endIndex.
+The substring begins at the specified start and extends to the character at the index before the end (endIndex-1) or the end of the sequence if no such character exists.
+```java
+    b = new StringBuffer("hehhello");
+    b.delete(2, 5); // will delete the substring from index 2 to index 5
+    System.out.println(b); // will display hehello
+```
+
+### Features of StringBuffer Class:
+
 The key features of StringBuffer class are listed below:
 
 - Unlike String, we can modify the content of the StringBuffer without creating a new object.
 - All methods of StringBuffer are synchronized, making it safe to use in multithreaded environments.
 - Ideal for scenarios with frequent modifications like append, insert, delete, or replace operations.
 
-**Advantages of using StringBuffer**
+### Advantages of using StringBuffer
+
 The advanatages of StringBuffer class are listed below:
 
 - **Mutable**: StringBuffer are mutable it means that we can change the content after the object has been created, on the other hand String are immutable once it created it can not be modified.
@@ -3622,6 +3726,7 @@ The advanatages of StringBuffer class are listed below:
 
 > Note: Both String and StringBuffer objects are thread safe, but in different ways.  On the other hand immutable objects like String are thread-safe because their state can not be modified once they are created.
 
-**Disadvantage of StringBuffer**
+### Disadvantage of StringBuffer
+
 - **Slower in single-threaded programs**: It's synchronized, meaning it ensures thread safety by allowing only one thread to access it at a time. However, in single-threaded environments, this synchronization is unnecessary and slows down performance compared to non-synchronized classes like StringBuilder.
 - **Less efficient than StringBuilder**: For non-threaded use cases, StringBuilder is faster and has similar functionality. Also, StringBuffer operations like `append()` or `insert()` make the code longer compared to using simple '`+`' with String.
