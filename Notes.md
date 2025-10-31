@@ -3604,7 +3604,7 @@ And about that `break` statement. It does what it sounds like: stops the program
 
 If you remove the `break` statements, all the cases will be executed one after the other until the `default` case has been reached.
 
-## 30. String Buffer Class
+## 30. StringBuffer Class
 The StringBuffer class in Java represents a sequence of characters that can be modified, which means we can change the content of the StringBuffer without creating a new object every time. It represents a mutable sequence of characters.
 
 - StringBuffer is a mutable String.
@@ -3653,10 +3653,13 @@ Java allocates **16 extra characters of space** in addition to the string’s le
 2. `length()`
 - Returns the **number of characters currently stored** in the buffer.
 - `"hello"` has 5 characters → b.length() = **5**.
-
 ---
+- Unicode escape sequences in Java always start with \u followed by **4 hexadecimal digits**.
+- These sequences are **replaced before compilation**, meaning they can even appear in identifiers (though that’s not recommended).
+
 ```java
 char a = '\u0024'; // Unicode for $
+char rupee = '\u20B9'; // Unicode for ₹
 
 b.append("World"); // Concatenates String // will display hello World
 
@@ -3709,6 +3712,41 @@ The substring begins at the specified start and extends to the character at the 
     System.out.println(b); // will display hehello
 ```
 
+→ `deleteCharAt(int index)` is used to delete the character at the specified position(index) in the sequence. This sequence is shortened by one `char`.
+```java
+    b = new StringBuffer("hehhello");
+    b.deleteCharAt(2); // will delete the character at index 2
+    System.out.println(b); // will display hehello
+```
+→ `replace(int startIndex, int endIndex, String str)` is used to replace the string from startIndex to endIndex with the specified string.
+
+→ `indexOf(String str)` returns the index within this string of the first occurrence of the specified substring, or -1 if there is no such occurrence.
+```java
+    System.out.println(b.indexOf("h")); // will display 0
+    System.out.println(b.indexOf("l")); // will display 3
+```
+
+→ `lastIndexOf(String str)` returns the index within this string of the last occurrence of the specified substring, or -1 if there is no such occurrence.
+→ `substring(int beginIndex)` returns a new `String` that is a substring of this string beginning at the specified beginIndex.
+→ `substring(int beginIndex, int endIndex)` returns a new `String` that is a substring of this string beginning at the specified beginIndex and ending at the specified endIndex.
+
+```java
+    System.out.println(b.substring(2)); // will display hhello
+    System.out.println(b.substring(2, 5)); // will display hhe
+```
+
+> Note: The `append()` method is used to add a string to the end of the StringBuffer.
+
+```java
+    b.append("World");
+    System.out.println(b); // will display hehhello World
+```
+
+The `java.lang.StringBuffer` class is a **thread-safe**, **mutable** sequence of characters.
+- A StringBuffer is like a String, but it is **mutable**(can be modified).
+- They are safe for use by multiple threads. 
+- Every StringBuffer has a **default capacity of 16 characters**.
+
 ### Features of StringBuffer Class:
 
 The key features of StringBuffer class are listed below:
@@ -3730,3 +3768,40 @@ The advanatages of StringBuffer class are listed below:
 
 - **Slower in single-threaded programs**: It's synchronized, meaning it ensures thread safety by allowing only one thread to access it at a time. However, in single-threaded environments, this synchronization is unnecessary and slows down performance compared to non-synchronized classes like StringBuilder.
 - **Less efficient than StringBuilder**: For non-threaded use cases, StringBuilder is faster and has similar functionality. Also, StringBuffer operations like `append()` or `insert()` make the code longer compared to using simple '`+`' with String.
+
+## 31. StringBuilder Class
+
+StringBuilder class is used to create **mutable (modifiable) string**. It is same as StringBuffer class expect that it is **non-synchronized**. It is faster than StringBuffer class. Is is available since JDK 1.5.
+
+![StringBuilder vs StringBuffer](/resources/StringBuilder.png)
+
+### StringBuilder vs String vs StringBuffer
+![StringBuilder vs String vs StringBuffer](/resources/String%20Comparisons.png)
+
+### When to Use Which one?
+
+- If a string is going to remain constant throughout the program, then use the String class object because a String object is **immutable**.
+- If a string can change (for example: lots of logic and operations in the construction of the string) and will only be accessed from a **single thread**, using a StringBuilder is good enough.
+- If a string **can change** and will be accessed from **multiple threads**, use a StringBuffer because StringBuffer is synchronous, so you have **thread-safety**.
+- If you don't want thread-safety than you can also go with StringBuilder class as it is not synchronized.
+
+**Conclusion:**
+- Objects of String are immutable, and objects of StringBuffer and StringBuilder are mutable.
+- StringBuffer and StringBuilder are similar, but StringBuilder is faster and preferred over StringBuffer for single-threaded program. If thread-safety is needed, then StringBuffer is used.
+
+## 32. Mutable String
+- A mutable string is a string that can be **modified (changed)** after it is created.
+- In Java, the `String` class creates **immutable** objects — meaning once a string object is created, it **cannot be changed**.
+- If you modify it (like concatenating or replacing characters), a **new object** is created in memory, and the old one is discarded.
+- To handle cases where you need to **modify strings frequently**, Java provides two mutable alternatives:
+    - `StringBuffer`
+    - `StringBuilder`
+
+🔹 **Why Mutable Strings?**
+
+Mutable strings are useful when:
+
+- You need to **append**, **insert**, **delete**, or **replace** characters many times.
+- You’re working with **loops** that build long strings (e.g., file I/O, text formatting, JSON building, etc.)
+
+Creating many immutable `String` objects would waste memory and CPU cycles due to constant creation and garbage collection.
