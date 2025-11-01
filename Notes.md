@@ -3805,3 +3805,60 @@ Mutable strings are useful when:
 - You’re working with **loops** that build long strings (e.g., file I/O, text formatting, JSON building, etc.)
 
 Creating many immutable `String` objects would waste memory and CPU cycles due to constant creation and garbage collection.
+
+🔹 Difference Between `String`, `StringBuffer`, and `StringBuilder`
+| Feature       | String                    | StringBuffer                    | StringBuilder                   |
+| ------------- | ------------------------- | ------------------------------- | ------------------------------- |
+| Mutability    | ❌ Immutable               | ✅ Mutable                       | ✅ Mutable                       |
+| Thread Safety | ✅ Thread-safe (immutable) | ✅ Thread-safe (synchronized)    | ❌ Not thread-safe               |
+| Performance   | Slower for concatenation  | Slower (due to synchronization) | Fastest (no synchronization)    |
+| Use Case      | When data won’t change    | When thread safety is needed    | When thread safety isn’t needed |
+
+```java 
+// Immutable String
+String s = "Hello";
+s.concat(" World");
+System.out.println(s); // Output: Hello (not modified)
+
+// Mutable StringBuffer
+StringBuffer sb = new StringBuffer("Hello");
+sb.append(" World");
+System.out.println(sb); // Output: Hello World
+```
+
+- Use `String` when text **does not change often**.
+- Use `StringBuilder` when text changes **frequently and no thread-safety** is required.
+- Use `StringBuffer` when **multiple threads** might access/modify the string concurrently.
+
+## 33. Substring
+A part of a string is called a **substring** — a smaller section or “slice” of the original string.
+In Java, substring extraction is done using the `substring()` method of the `String` class.
+
+A part of String is called **Substring**. In other words, Substring is a subset of another String. In case of substring `startIndex` in inclusive and `endIndex` is exclusive.
+
+You can get substring from the given string object by one of two methods:
+1. `substring(int startIndex)` returns new String object containing the substring of the given String from specified `startIndex`(inclusive).
+2. `substring(int startIndex, int endIndex)` returns new String object containing the substring of the given String from specified `startIndex`(inclusive) to `endIndex`(exclusive).
+
+```java
+String s = "hello";
+System.out.println(0,2); // Output: he
+// 0 → 'h' (included), 2 → 'l' (excluded)
+//  In above substring, 0 points to h but 2 points to e (because endIndex is exclusive). 
+```
+In the above example, the substring method returns a substring of the given String from index 0(inclusive) to index 2(exclusive).
+
+```java
+class TestSubstring{
+    public static void main(String... args){
+        String s = "SachinTendulkar";
+        System.out.println(s.substring(6)); // Tendulkar
+        System.out.println(s.substring(0,6)); // Sachin
+    }
+}
+```
+
+`substring()` is useful in:
+- Parsing filenames or extensions
+- Extracting usernames or domains from emails
+- Tokenizing or pattern-based string operations
