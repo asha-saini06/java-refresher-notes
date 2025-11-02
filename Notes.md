@@ -3862,3 +3862,114 @@ class TestSubstring{
 - Parsing filenames or extensions
 - Extracting usernames or domains from emails
 - Tokenizing or pattern-based string operations
+
+## 34. Constructor
+Constructor is a special method which is used to initialize the object. It is called automatically when object is created.
+- Constructor is always declared with class name.
+    <class_name>() {}
+- Similar to functions, but they have no return type.
+- It is used for object initialization.
+- If you don't create a constructor and create an object; it'll be created by default constructor.
+
+```java
+ABC(){ // default constructor
+    a = 10; 
+}
+```
+> 📝: Everytime an object is created using `new()` keyword, atleast one constructor is called. It is called a **default constructor**.
+
+### Types of Constructors in Java
+There are Four types of constructors in Java
+![constructors](/resources/constructors_in_java.webp)
+
+#### **Default Constructor**
+A default constructor has no parameters. It’s used to assign default values to an object. If no constructor is explicitly defined, Java provides a default constructor.
+
+```java
+class Test{
+    int a;
+    Test(){
+        a = 10;
+    }
+}
+```
+Output:
+```
+Default constructor
+```
+
+> 📝: It is not necessary to write a constructor for a class because the Java compiler automatically creates a default constructor (a constructor with no arguments) if your class doesn’t have any.
+
+> 📝: Default constructor is used to provide the default values to the object like 0, null etc depending on the type.
+
+> Default constructor is also called **no-arg constructor**. 
+
+#### **Parameterized Constructor**
+A constructor that has parameters is known as parameterized constructor. If we want to initialize fields of the class with our own values, then use a parameterized constructor.
+
+```java
+class Test{
+    int a;
+    Test(int a){
+        this.a = a;
+    }
+}
+```
+Output:
+```
+Parameterized constructor
+```
+
+#### **Copy Constructor in Java**
+Unlike other constructors copy constructor is passed with another object which copies the data available from the passed object to the newly created object.
+```java
+class Test{
+    int a;
+    Test(Test t){
+        this.a = t.a;
+    }
+}
+```
+Output:
+```
+Copy constructor
+```
+
+> 📝:  Java does not provide a built-in copy constructor like C++. We can create our own by writing a constructor that takes an object of the same class as a parameter and copies its fields.
+
+#### **Constructor Overloading**
+A private constructor cannot be accessed from outside the class. It is commonly used in:
+
+- **Singleton Pattern**: To ensure only one instance of a class is created.
+- Utility/Helper Classes: To prevent instantiation of a class containing only static methods.
+
+```java
+class GFG {
+
+    // Private constructor
+    private GFG(){
+        
+        System.out.println("Private constructor called");
+    }
+
+    // Static method
+    public static void displayMessage(){
+        
+        System.out.println("Hello from GFG class!");
+    }
+}
+
+class Main{
+    
+    public static void main(String[] args){
+        
+        // GFG u = new GFG(); // Error: constructor is
+        // private
+       GFG.displayMessage();
+    }
+}
+```
+Output:
+```
+Hello from GFG class!
+```
