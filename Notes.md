@@ -4497,3 +4497,118 @@ ABC 1
 > 📝: If you print any object, java compiler internally invokes the `toString()` method on the object.
 
 > By overriding, the `toString()` method of the Object class, we can return values of the object, so we don't need to write much code.
+
+## 39. ASCII (American Standard Code for Information Interchange)
+**ASCII** stands for **American Standard Code for Information Interchange**.
+It is a **character encoding standard** used to represent text (letters, digits, symbols, and control characters) in computers and other digital devices.
+
+The ASCII pronounced 'ask-ee', is strictly a seven-bit code based on the English alphabet. ASCII codes are used to represent alphanumeric data. The code was first published as a standard in `1967`. 
+
+* Each **character** (A–Z, a–z, 0–9, symbols, etc.) is assigned a **unique numeric code** between `0` and `127`.
+* These numbers are stored and processed as **binary values (0s and 1s)** inside the computer.
+* ASCII ensures that computers and devices can **exchange and interpret text** consistently.
+
+💻 **ASCII Range**
+| Type                     | Decimal Range | Characters/Examples                          |
+| ------------------------ | ------------- | -------------------------------------------- |
+| **Control Characters**   | 0 – 31        | `\n` (newline), `\t` (tab), etc              |
+| **Printable Characters** | 32 – 126      | Letters, digits, punctuation                 |
+| **Extended ASCII**       | 128 – 255     | Includes extra symbols, used by some systems |
+
+To summarize, the range of ASCII values for capital letters spans from 65 to 90, while for small letters, it extends from 97 to 122. Allocated in alphabetical sequence, the values for "A" and "Z" are 65 and 90, respectively, in uppercase. Similarly, the values for "a" and "z" in lowercase are 97 and 122, respectively.
+
+![ascii](/resources/ascii.png)
+
+**Examples**
+
+| Character   | ASCII Decimal | ASCII Binary |
+| ----------- | ------------- | ------------ |
+| `A`         | 65            | 01000001     |
+| `a`         | 97            | 01100001     |
+| `0`         | 48            | 00110000     |
+| ` ` (space) | 32            | 00100000     |
+| `!`         | 33            | 00100001     |
+
+🧩 **ASCII in Java**
+
+In Java, every character (`char`) is internally represented as a **Unicode value**,
+but the first 128 Unicode values are **identical to ASCII**.
+
+```java
+class ASCIIExample {
+    public static void main(String[] args) {
+        char ch = 'A';
+        int asciiValue = ch;  // Implicit typecasting char → int
+        System.out.println("Character: " + ch);
+        System.out.println("ASCII value: " + asciiValue);
+    }
+}
+```
+
+**Output:**
+
+```
+Character: A
+ASCII value: 65
+```
+
+🔁 **Reverse Conversion (int → char)**
+
+You can also convert an ASCII code back to its character using **type casting**:
+
+```java
+class ASCIIReverse {
+    public static void main(String[] args) {
+        int code = 97;
+        char ch = (char) code; // Explicit typecasting int → char
+        System.out.println("Character: " + ch);
+    }
+}
+```
+
+**Output:**
+
+```
+Character: a
+```
+
+⚙️ **Practical Uses of ASCII in Java**
+
+1. **Character arithmetic**
+
+   ```java
+   char next = (char) ('A' + 1); // 'B'
+   ```
+2. **Character comparison**
+
+   ```java
+   if ('A' < 'a') System.out.println("Uppercase comes first in ASCII");
+   ```
+3. **Validating input**
+
+   ```java
+   if (ch >= '0' && ch <= '9') System.out.println("Digit detected");
+   ```
+4. **Encoding/decoding** text in communication systems.
+
+🧩 **Key Notes**
+
+* ASCII uses **7 bits** to represent each character (values `0–127`).
+* **Extended ASCII** (used in old systems) uses **8 bits (0–255)**.
+* **Unicode** is a superset of ASCII — includes characters from all languages.
+* Java’s `char` type is **2 bytes (16 bits)**, hence supports Unicode by default.
+
+| Feature             | ASCII                                              |
+| ------------------- | -------------------------------------------------- |
+| Full Form           | American Standard Code for Information Interchange |
+| Bit Length          | 7-bit (128 characters)                             |
+| Character Range     | 0 – 127                                            |
+| Type                | Character Encoding Standard                        |
+| Used In             | English text representation                        |
+| Relation to Unicode | Unicode’s first 128 values = ASCII                 |
+
+📘 **Real-World Analogy**
+
+Think of ASCII as a **translator** that tells computers what each character (like ‘A’ or ‘#’) means in numbers.
+Without ASCII (or Unicode), your computer would not know how to display or interpret letters and symbols.
+
