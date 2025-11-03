@@ -48,7 +48,7 @@ For the complete detailed notes, check out 👉 [Notes.md](./Notes.md)
 34. Constructor
 35. Types of Constructors
 36. Access Modifiers
-37. Reverse a String using StringBuilder Class
+37. Getter and Setter Methods
 38. Constructor Overloading
 39. ASCII
 40. Inheritance 
