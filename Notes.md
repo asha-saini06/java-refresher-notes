@@ -3908,7 +3908,7 @@ ABC(){ // default constructor
 ```
 > 📝: Everytime an object is created using `new()` keyword, atleast one constructor is called. It is called a **default constructor**.
 
-### Types of Constructors in Java
+## 35. Types of Constructors in Java
 There are Four types of constructors in Java
 ![constructors](/resources/constructors_in_java.webp)
 
@@ -4079,7 +4079,277 @@ Copy constructor
 
 > 📝:  Java does not provide a built-in copy constructor like C++. We can create our own by writing a constructor that takes an object of the same class as a parameter and copies its fields.
 
-### **Constructor Overloading**
+## 36. Access Modifiers
+Access Modifiers in Java define the **visibility (scope)** of classes, methods, and variables across different parts of a program.
+They help achieve **encapsulation**, ensuring that sensitive data or methods are protected from unintended access.
+
+There are 4 types of access modifiers available in Java: 
+![Access Modifiers](/resources/access-modifiers.webp)
+
+| Modifier                   | Within Class | Same Package | Subclass (same pkg) | Subclass (different pkg) | Other Packages |
+| -------------------------- | ------------ | ------------ | ------------------- | ------------------------ | -------------- |
+| **private**                | ✅            | ❌            | ❌                   | ❌                        | ❌              |
+| **default** *(no keyword)* | ✅            | ✅            | ✅                   | ❌                        | ❌              |
+| **protected**              | ✅            | ✅            | ✅                   | ✅                        | ❌              |
+| **public**                 | ✅            | ✅            | ✅                   | ✅                        | ✅              |
+
+(✅ = Accessible, ❌ = Not Accessible)
+
+### 1. Private Access Modifier
+
+- Declared using `private` keyword.
+- Accessible **only within the same class**.
+- Cannot be accessed outside the class (even by subclass).
+```java
+class A {
+    private int data = 40;
+    private void msg() { System.out.println("Hello Java"); }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        A obj = new A();
+        // System.out.println(obj.data);  // ❌ Compile-time error
+        // obj.msg();                     // ❌ Compile-time error
+    }
+}
+```
+
+✅ **Use Case**:
+Encapsulation — to protect sensitive data and internal logic from outside interference.
+
+### 2. Default Access Modifier (Package-private)
+
+- If **no access modifier** is specified, it is default.
+- Accessible **within the same package** only.
+```java
+// File: pack1/A.java
+package pack1;
+class A {
+    void msg() { System.out.println("Hello from A"); }
+}
+
+// File: pack1/B.java
+package pack1;
+class B {
+    public static void main(String[] args) {
+        new A().msg(); // ✅ Same package → Accessible
+    }
+}
+```
+
+But if another class tries to access `A` from **another package**,
+it will get ❌ **Compile-time error**.
+
+### 3. Protected Access Modifier
+
+- Declared using `protected` keyword.
+- Accessible **within the same package and in subclasses of other packages (via inheritance)**.
+```java
+package pack1;
+public class A {
+    protected void msg() { System.out.println("Hello from A"); }
+}
+
+package pack2;
+import pack1.A;
+class B extends A {
+    public static void main(String[] args) {
+        B obj = new B();
+        obj.msg(); // ✅ Accessible through inheritance
+    }
+}
+```
+
+✅ **Use Case**:
+When you want subclasses (even in different packages) to access certain members,
+but still keep them hidden from non-subclass outsiders.
+
+### 4. Public Access Modifier
+
+- Declared using `public` keyword.
+- Accessible **from anywhere** in the project.
+```java
+package pack1;
+public class A {
+    public void msg() { System.out.println("Hello from A"); }
+}
+
+package pack2;
+import pack1.A;
+class B {
+    public static void main(String[] args) {
+        A obj = new A();
+        obj.msg(); // ✅ Accessible globally
+    }
+}
+```
+
+✅ Use Case:
+When members/methods are meant to be **shared and reused globally**.
+
+---
+
+Comparison Table of Access Modifiers in Java
+| **Access Level**  | **Modifier** | **Accessible Within**     |
+| ----------------- | ------------ | ------------------------- |
+| Most Restrictive  | `private`    | Same class only           |
+| ↓                 | *default*    | Same package              |
+| ↓                 | `protected`  | Same package + subclasses |
+| Least Restrictive | `public`     | Everywhere                |
+
+![Access-Modifiers](/resources/AccessModifiers.webp)
+
+💡 **Conceptual Notes :**
+- Access modifiers **cannot** be applied to **local variables**.
+- **Top-level classes** can only be declared as:
+    - public
+    - default (no modifier)
+- **Protected** members are visible outside package **only through inheritance**.
+- Proper usage ensures **data hiding, security, and modularity** in code.
+
+### When to Use Each Access Modifier in Real-World Projects
+- **Private**: The idea should be use as restrictive access as possible, so private should be used as much as possible.
+- **Default (Package-Private)**: Often used in package-scoped utilities or helper classes.
+- **Protected**: Commonly used in inheritance-based designs like framework extensions.
+- **Public**: This is used for API endpoints, service classes, or utility methods shared across different parts of an application.
+
+| Modifier      | Scope                | Example Usage                 |
+| ------------- | -------------------- | ----------------------------- |
+| **private**   | Class-only           | Sensitive data like passwords |
+| **default**   | Package-only         | Internal helpers              |
+| **protected** | Package + Subclasses | Base class features           |
+| **public**    | Global               | APIs, library classes         |
+
+## 37. Getter and Setter Methods in Java
+Getter and Setter methods are **used to access and modify private data members** of a class.
+They form the foundation of **Encapsulation**, one of the four pillars of Object-Oriented Programming (OOP).
+
+### Why Use Getters and Setters?
+
+In Java, we make class fields **private** to restrict direct access.
+But sometimes we still need **controlled access** — that’s where getters and setters come in.
+
+✅ **Getter (Accessor)** → retrieves value
+
+✅ **Setter (Mutator)** → updates value safely
+
+
+### **Encapsulation Concept**
+
+Encapsulation = **Data Hiding + Controlled Access**
+
+* Data is kept private.
+* Access is provided via public methods (getters/setters).
+* Allows validation before updating variables.
+
+```java
+class Student {
+    // private data members
+    private String name;
+    private int age;
+
+    // getter method for name
+    public String getName() {
+        return name;
+    }
+
+    // setter method for name
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // getter method for age
+    public int getAge() {
+        return age;
+    }
+
+    // setter method for age with validation
+    public void setAge(int age) {
+        if(age > 0)
+            this.age = age;
+        else
+            System.out.println("Invalid age!");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Student s = new Student();
+        s.setName("Asha");
+        s.setAge(20);
+
+        System.out.println("Name: " + s.getName());
+        System.out.println("Age: " + s.getAge());
+    }
+}
+```
+ **Output**
+
+```
+Name: Ankita
+Age: 22
+```
+🔸 **Key Points**
+
+| Concept               | Description                                       |
+| --------------------- | ------------------------------------------------- |
+| **Encapsulation**     | Wrapping data and methods together.               |
+| **Private Variables** | Hidden from outside classes.                      |
+| **Getters**           | Used to read the private data.                    |
+| **Setters**           | Used to modify private data.                      |
+| **Validation**        | We can add logic to check input before assigning. |
+
+### **Advantages of Using Getters and Setters**
+
+1. **Encapsulation** – hides the internal implementation.
+2. **Control** – you can validate data before setting values.
+3. **Flexibility** – allows changes to implementation without breaking code.
+4. **Readability** – consistent naming conventions (`getX()`, `setX()`).
+
+⚙️ **Java Naming Conventions**
+
+| Type           | Naming Rule          | Example      |
+| -------------- | -------------------- | ------------ |
+| Getter         | `get` + VariableName | `getName()`  |
+| Setter         | `set` + VariableName | `setName()`  |
+| Boolean Getter | `is` + VariableName  | `isActive()` |
+
+**Example: Boolean Field**
+```java
+class Lamp {
+    private boolean isOn;
+
+    public boolean isOn() {   // getter for boolean
+        return isOn;
+    }
+
+    public void setOn(boolean isOn) {
+        this.isOn = isOn;
+    }
+}
+```
+🚀 **Real-World Use**
+
+* Commonly used in **Java Beans**, **POJOs**, and **model classes**.
+* IDEs like Eclipse or IntelliJ can auto-generate them (`Alt + Insert` → Getters/Setters).
+
+📋 **Summary Table**
+
+| **Access Type** | **Purpose**             | **Method Example**                 |
+| --------------- | ----------------------- | ---------------------------------- |
+| **Getter**      | Access private variable | `public String getName()`          |
+| **Setter**      | Modify private variable | `public void setName(String name)` |
+| **Validation**  | Restrict invalid data   | `if(age > 0) this.age = age;`      |
+
+🧩 **In Short**
+
+> “Getters and Setters are the gatekeepers of your private data.”
+
+They protect your fields, control changes, and keep your code safe, modular, and maintainable.
+
+
+## 38. Constructor Overloading
 A private constructor cannot be accessed from outside the class. It is commonly used in:
 
 - **Singleton Pattern**: To ensure only one instance of a class is created.
