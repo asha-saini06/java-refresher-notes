@@ -3789,6 +3789,34 @@ StringBuilder class is used to create **mutable (modifiable) string**. It is sam
 - Objects of String are immutable, and objects of StringBuffer and StringBuilder are mutable.
 - StringBuffer and StringBuilder are similar, but StringBuilder is faster and preferred over StringBuffer for single-threaded program. If thread-safety is needed, then StringBuffer is used.
 
+### Reversing a String using StringBuilder class
+```java
+import java.util.Scanner;
+class ReverseString{
+    public static void main(String[] args) {
+        System.out.println("Enter a string to reverse: ");
+        Scanner read = new Scanner(System.in);
+        String str = read.nextLine();
+        StringBuilder sb = new StringBuilder();
+        for(int i = str.length()-1; i >= 0; i--) {
+            sb.append(str.charAt(i));
+        }
+        System.out.println(sb.toString());
+    }
+}
+```
+**Output:**
+```
+Enter a string to reverse: 
+Hello
+olleH
+```
+ ✨ **Alternate Method:** use `reverse()` of StringBuilder.
+```java 
+StringBuilder sb = new StringBuilder();
+System.out.println(sb.reverse().toString());
+```
+
 ## 32. Mutable String
 - A mutable string is a string that can be **modified (changed)** after it is created.
 - In Java, the `String` class creates **immutable** objects — meaning once a string object is created, it **cannot be changed**.
@@ -3866,7 +3894,9 @@ class TestSubstring{
 ## 34. Constructor
 Constructor is a special method which is used to initialize the object. It is called automatically when object is created.
 - Constructor is always declared with class name.
-    <class_name>() {}
+
+        <class_name>() {}
+
 - Similar to functions, but they have no return type.
 - It is used for object initialization.
 - If you don't create a constructor and create an object; it'll be created by default constructor.
@@ -3882,7 +3912,7 @@ ABC(){ // default constructor
 There are Four types of constructors in Java
 ![constructors](/resources/constructors_in_java.webp)
 
-#### **Default Constructor**
+#### **1. Default Constructor**
 A default constructor has no parameters. It’s used to assign default values to an object. If no constructor is explicitly defined, Java provides a default constructor.
 
 ```java
@@ -3904,23 +3934,135 @@ Default constructor
 
 > Default constructor is also called **no-arg constructor**. 
 
-#### **Parameterized Constructor**
+#### **2. Parameterized Constructor**
 A constructor that has parameters is known as parameterized constructor. If we want to initialize fields of the class with our own values, then use a parameterized constructor.
-
+- used to provide different values to the distinct objects.
 ```java
-class Test{
-    int a;
-    Test(int a){
+class ABC{
+    int a, b;
+    ABC(int a, int b){
         this.a = a;
+        this.b = b;
+    }
+    output(){
+        System.out.println(a + " " + b);
     }
 }
 ```
-Output:
-```
-Parameterized constructor
+
+A **parameterized constructor** allows you to initialize object fields with **specific values at the time of object creation**, rather than using default ones.
+
+```java
+class abc{
+    String on;
+    abc(String on){
+        this.on = on;
+    }
+    String rev(){
+        String m = "";
+        for(int i = on.length()-1; i >= 0; i--){
+            m += on.charAt(i); // obtaining characters of the original String individually from end by using charAt() and concatenating them to a new String by using the "+" operator
+        }
+        return m;
+    }
+    public static void main(String... args){
+        abc a = new abc("Radha");
+        System.out.println(a.rev());
+    }
+}
 ```
 
-#### **Copy Constructor in Java**
+1. **Difference between default and parameterized constructor**
+
+   | Type          | Definition                                                        | Example                       |
+   | ------------- | ----------------------------------------------------------------- | ----------------------------- |
+   | Default       | Provided automatically by Java if no other constructor is defined | `Student() {}`                |
+   | Parameterized | Defined by the user with parameters                               | `Student(String n, int a) {}` |
+
+2. **Using `this` keyword**
+
+   * The `this` keyword differentiates between instance variables and local parameters when they share the same name.
+
+     ```java
+     class Box {
+         int length;
+         Box(int length) {
+             this.length = length;
+         }
+     }
+     ```
+
+3. **Overloading constructors**
+
+   * A class can have **multiple constructors** with different parameter lists.
+
+     ```java
+     class Box {
+         int l, b, h;
+         Box() { l = b = h = 0; }                 // Default
+         Box(int x) { l = b = h = x; }            // Cube
+         Box(int l, int b, int h) {               // Cuboid
+             this.l = l; this.b = b; this.h = h;
+         }
+     }
+     ```
+
+4. **Constructor chaining**
+
+   * One constructor can call another using `this()`.
+
+     ```java
+     class Example {
+         Example() {
+             this(10);
+             System.out.println("Default constructor");
+         }
+         Example(int x) {
+             System.out.println("Parameterized constructor with value: " + x);
+         }
+         public static void main(String[] args) {
+             new Example();
+         }
+     }
+     ```
+
+     **Output:**
+
+     ```
+     Parameterized constructor with value: 10
+     Default constructor
+     ```
+
+5. **No return type**
+
+   * A constructor **never has a return type**, not even `void`.
+   * If you add one, it becomes a **method**, not a constructor.
+
+---
+
+❓: **Can a constructor return a value?**
+   → No, constructors don’t return any value, not even `void`.
+
+❓: **Can we overload constructors in Java?**
+   → Yes, by changing the number or type of parameters.
+
+❓: **What happens if no constructor is defined in a class?**
+   → Java automatically provides a default constructor.
+
+❓: **Can a constructor call another constructor?**
+   → Yes, using `this()` keyword.
+
+❓: **What is the purpose of `this` in parameterized constructors?**
+   → To differentiate between instance variables and parameters.
+
+❓: **Can constructors be `static`, `final`, or `abstract`?**
+   → No, constructors cannot have these modifiers.
+
+❓: **Can a constructor call a method?**
+   → Yes, but it should be used carefully since the object might not be fully constructed yet.
+
+
+#### **3. Copy Constructor in Java**
 Unlike other constructors copy constructor is passed with another object which copies the data available from the passed object to the newly created object.
 ```java
 class Test{
@@ -3937,7 +4079,7 @@ Copy constructor
 
 > 📝:  Java does not provide a built-in copy constructor like C++. We can create our own by writing a constructor that takes an object of the same class as a parameter and copies its fields.
 
-#### **Constructor Overloading**
+### **Constructor Overloading**
 A private constructor cannot be accessed from outside the class. It is commonly used in:
 
 - **Singleton Pattern**: To ensure only one instance of a class is created.
@@ -3963,8 +4105,7 @@ class Main{
     
     public static void main(String[] args){
         
-        // GFG u = new GFG(); // Error: constructor is
-        // private
+        // GFG u = new GFG(); // Error: constructor is private
        GFG.displayMessage();
     }
 }
@@ -3973,3 +4114,116 @@ Output:
 ```
 Hello from GFG class!
 ```
+
+📝:If there is no constructor in a class, compiler automatically creates a default constructor.
+
+```java
+ABC() {} // default constructor
+ABC(int a, int b) {retrun a + b;} // Parameterized constructor
+```
+> If we have defined any parameterized constructor, then compiler will not create default constructor, and vice versa; if we don't define any constructor, the compiler creates the default constructor by default during compilation.
+
+> **Recursive Constructor calling is invalid in Java.**
+
+![constructors](/resources/constructor.png)
+
+Demonstration of **constructor parameterization and method overriding** (`toString()`)
+```java
+class abc{
+    String name;
+    int roll;
+
+     // Parameterized constructor
+    abc(String name, int roll) {
+        this.name = name;
+        this.roll = roll;
+    }
+
+    // Overriding toString() method from Object class
+    public String toString(){ 
+        return name + " " + roll;
+    }
+    public static void main(String[] args) {
+        abc a1 = new abc("ABC", 1);
+        System.out.println(a1); // compiler automatically calls a1.toString()
+    }
+}
+```
+**Concept Breakdown**
+
+🔹 **Parameterized Constructor**
+
+* Accepts parameters to initialize the object directly at creation.
+* The `this` keyword differentiates instance variables from parameters.
+
+```java
+abc(String name, int roll) {
+    this.name = name; // refers to instance variable
+    this.roll = roll;
+}
+```
+
+🔹 **Overriding `toString()`**
+
+* Every Java class implicitly extends `java.lang.Object`.
+
+* The `Object` class has a default `toString()` method that returns:
+
+  ```
+  <ClassName>@<HexadecimalHashCode>
+  ```
+
+  Example: `abc@7a81197d`
+
+* By **overriding `toString()`**, we can define what should be printed when we display an object.
+
+```java
+public String toString() {
+    return name + " " + roll;
+}
+```
+Now, instead of showing the hashcode, it prints the actual object data.
+
+---
+
+Output:
+```
+ABC 1
+```
+---
+* `System.out.println(a1);` automatically calls `a1.toString()`.
+* Overriding `toString()` makes debugging and logging much more readable.
+* Common practice in Java Beans, POJOs, and model classes.
+
+---
+
+⚙️ **Related Concepts:**
+
+* **Default `toString()` Behavior Example:**
+
+  ```java
+  class Student {
+      int id = 1;
+  }
+  public class Test {
+      public static void main(String[] args) {
+          Student s = new Student();
+          System.out.println(s); // prints Student@<hashcode>
+      }
+  }
+  ```
+
+* **Why Override?**
+  * To display meaningful info instead of memory address.
+  * Improves readability and debugging output.
+
+❓ **Why do we override `toString()` in Java?**
+ → To provide a customized string representation of an object that reflects its state, instead of the default memory address.
+
+---
+
+> 📝: If you wnat to represent any object as a string, `toString()` method is used. The `toString()` method returns the string representation of the object.
+
+> 📝: If you print any object, java compiler internally invokes the `toString()` method on the object.
+
+> By overriding, the `toString()` method of the Object class, we can return values of the object, so we don't need to write much code.
