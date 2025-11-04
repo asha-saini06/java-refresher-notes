@@ -4571,6 +4571,50 @@ class ASCIIReverse {
 ```
 Character: a
 ```
+---
+🔸 **char to ASCII**
+```java
+char ch = 'a';
+int asciiValue = (int) ch; // Explicit typecasting char → int
+System.out.println("ASCII value: " + asciiValue); // 97
+```
+
+🔸 **ASCII to char**
+```java
+int code = 65;
+char ch = (char) code; // Explicit typecasting int → char
+System.out.println("Character: " + ch); // A
+```
+
+🔸 **ASCII to String**
+```java
+int num [] = {65,120,98};
+String str = null;
+for(int i: num){
+    str = Character.toString((char)i); // Explicit typecasting int → char
+    System.out.println(str); // A, x, b
+}
+```
+
+🔸 **String to ASCII**
+```java
+String test = "ABCD";
+for(int i=0; i<test.length(); i++){
+    char c = test.charAt(i); // extracting ASCII from string
+    System.out.println(c); // 65, 66, 67, 68
+}
+```
+
+🔸 **Character arithmetic**
+ ```java
+char ch1, ch2;
+ch1 = 88;      // ASCII 88 → 'X'
+ch2 = 'Y';     // ASCII 89
+ch2++;         // Increment character (Y → Z)
+System.out.println(ch1 + " " + ch2); // Character arithmetic example
+```
+✅ Explanation:
+Characters can be incremented since they’re internally numbers (`'Y' + 1 = 'Z'`).
 
 ⚙️ **Practical Uses of ASCII in Java**
 
@@ -4611,4 +4655,70 @@ Character: a
 
 Think of ASCII as a **translator** that tells computers what each character (like ‘A’ or ‘#’) means in numbers.
 Without ASCII (or Unicode), your computer would not know how to display or interpret letters and symbols.
+
+## 40. Inheritance
+- Java supports only 3 types of Inheritance: `Single`, `Mutli-level`, `Hierarchical`.
+- We can't inherit multiple classes because **Java doesn't support multiple inheritance**.
+
+> Inheritance represents the "**is-a**" relationship, also known as **parent-child** relationship.
+
+```java
+class abc{ // parent class (Super Class)
+    void display(){
+        System.out.println("hello");
+    }
+}
+class xyz extends abc{ // child class (Sub Class)
+    void disp(){
+        System.out.println("world");
+    }
+}
+class mno {
+    public static void main(String[] args) {
+        xyz obj = new xyz();
+        obj.display();
+        obj.disp();
+    }
+}
+```
+### Types of Inheritance
+**1. Single Inheritance**
+
+In single inheritance, a sub-class is derived from only one super class. It inherits the properties and behavior of a single-parent class. Sometimes, it is also known as simple inheritance.
+
+![single_inheritance](./resources/single_inheritance.png)
+
+**2. Multilevel Inheritance**
+
+In Multilevel Inheritance, a derived class will be inheriting a base class and as well as the derived class also acts as the base class for other classes.
+
+![multilevel_inheritance](./resources/multilevel_inheritance.png)
+
+**3. Hierarchical Inheritance**
+
+In hierarchical inheritance, more than one subclass is inherited from a single base class. i.e. more than one derived class is created from a single base class. For example, cars and buses both are vehicle
+
+![hierarchical_inheritance](./resources/hierarchical_inheritance.png)
+
+**4. Multiple Inheritance (Through Interfaces)**
+In Multiple inheritances, one class can have more than one superclass and inherit features from all parent classes.
+
+> 📝: that **Java does not support multiple inheritances** with classes. In Java, we can achieve multiple inheritances **only through Interfaces**. 
+
+![multiple_inheritance](./resources/multiple_inheritance.png)
+
+### Upcasting
+    abc obj = new xyz();
+- `obj` → reference of `abc`
+- `xyz` → object of class `xyz`
+
+        obj.display(); // accessing member function of class abc
+        obj.disp(); // error // we can't access member of class xyz
+  When reference variable of **Parent** class refers to the object of **Child** class, it it known as **upcasting**.
+
+  ![upcasting](./resources/upcasting.png)      
+
+### Why use Inheritance in Java
+- For **Method Overriding**  (so that runtime polymorphism can be achieved.)
+- For Code Reusability.
 
