@@ -4991,3 +4991,45 @@ If we don't want a method to be overridden, we declare it as `final`.
 
 - **Overloading** = compile-time polymorphism (method signature differs).
 - **Overriding** = runtime polymorphism (method signature same, object differs).
+
+## 42. `super` keyword
+The `super` keyword in java is a reference variable which is used to refer immediate parent class object. Whenever you create the instance of subclass, an instance of parent class is created implicitly which is referred by `super` reference variable.
+
+It helps access **parent class members** (variables, methods, constructors) that are **hidden or overridden** by the child class.
+
+### Usage of `super` keyword
+1. `super` can be used to refer immediate parent class instance variable.
+2. `super` can be used to invoke immediate parent class method. (it is used if function is overriden.)
+3. `super()` can be used to invoke immediate parent class constructor.
+
+| Purpose                                 | Description                                                                   | Example                                            |
+| --------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------- |
+| 1️⃣ Access parent class **variables**   | When a subclass has a variable with the same name as the parent class         | `super.variableName`                               |
+| 2️⃣ Call parent class **methods**       | When the subclass overrides a method but still wants to call parent’s version | `super.methodName()`                               |
+| 3️⃣ Invoke parent class **constructor** | To initialize parent class fields before executing subclass constructor       | `super()` (must be first statement in constructor) |
+
+> `super()` is added in each class constructor automatically by compiler if there is no `super()` or `this()`.
+
+![super](./resources/super.png)
+
+> 📝: The call to super() must be the **first statement** in the subclass constructor.
+
+As we know well that default constructor is provided by compiler automatically if there is no constructor. But, it also adds `super()` as the first statement.
+
+### **Rules of `super`**
+
+1. `super()` must be **the first statement** in a constructor.
+2. You **cannot** use both `this()` and `super()` in the same constructor.
+3. `super` is **used only within a subclass constructor or method**.
+4. If you don’t call `super()` explicitly, Java automatically calls the **no-argument constructor** of the parent class.
+
+⚙️ Difference Between `this` and `super`
+| Feature          | `this`                                  | `super`                           |
+| ---------------- | --------------------------------------- | --------------------------------- |
+| Refers to        | Current class instance                  | Immediate parent class instance   |
+| Access           | Current class members                   | Parent class members              |
+| Constructor call | Calls another constructor of same class | Calls constructor of parent class |
+| Usage location   | Within the same class                   | Inside subclass only              |
+
+> 📝: `super` improves clarity in inheritance, avoids ambiguity, and supports **constructor chaining** — a core part of OOP design.
+
