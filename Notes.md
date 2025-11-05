@@ -4722,3 +4722,272 @@ In Multiple inheritances, one class can have more than one superclass and inheri
 - For **Method Overriding**  (so that runtime polymorphism can be achieved.)
 - For Code Reusability.
 
+### What Can Be Done in a Subclass?
+In sub-classes we can inherit members as is, replace them, hide them or supplement them with new members: 
+
+- The inherited fields can be used directly, just like any other fields.
+- We can declare new fields in the subclass that are not in the superclass.
+- The inherited methods can be used directly as they are.
+- We can write a new instance method in the subclass that has the same signature as the one in the superclass, thus **overriding** it (as in the example above, toString() method is overridden).
+- We can write a new static method in the subclass that has the same signature as the one in the superclass, thus hiding it.
+- We can declare new methods in the subclass that are not in the superclass.
+- We can write a subclass constructor that invokes the constructor of the superclass, either implicitly or by using the keyword `super`.
+
+### Advantages of Inheritance in Java
+- **Code Reusability**: Inheritance allows for code reuse and reduces the amount of code that needs to be written. The subclass can reuse the properties and methods of the superclass, reducing duplication of code.
+- **Abstraction**: Inheritance allows for the creation of abstract classes that define a common interface for a group of related classes. This promotes abstraction and encapsulation, making the code easier to maintain and extend.
+- **Class Hierarchy**: Inheritance allows for the creation of a class hierarchy, which can be used to model real-world objects and their relationships.
+- **Polymorphism**: Inheritance allows for polymorphism, which is the ability of an object to take on multiple forms. Subclasses can override the methods of the superclass, which allows them to change their behavior in different ways.
+
+### Disadvantages of Inheritance in Java
+- **Complexity**: Inheritance can make the code more complex and harder to understand. This is especially true if the inheritance hierarchy is deep or if multiple inheritances is used.
+- **Tight Coupling**: Inheritance creates a tight coupling between the superclass and subclass, making it difficult to make changes to the superclass without affecting the subclass.
+
+## 41. Polymorphism  (Method Overriding - Runtime Polymorphism)
+Polymorphism means "**many forms**", and it occurs when we have many classes that are related to each other by inheritance.
+
+It works hand-in-hand with inheritance:
+- Inheritance lets one class derive attributes & methods from another.
+- Polymorphism lets those methods perform differently for different subclasses.
+
+**Inheritance** lets us inherit attributes and methods from another class. **Polymorphism** uses those methods to perform different tasks. This allows us to perform a single action in different ways.
+
+**Why And When To Use "Inheritance" and "Polymorphism"?**
+✨ It is useful for code reusability: reuse attributes and methods of an existing class when you create a new class.
+
+![polymorphism](./resources/polymorphism_in_java.png)
+
+### Types of Polymorphism
+Polymorphism in Java is mainly of 2 types as mentioned below: 
+1. **Method Overloading**: Also, known as compile-time polymorphism, is the concept of Polymorphism where more than one method share the same name with different signature(Parameters) in a class. The return type of these methods can or cannot be same.
+
+2. **Method Overriding**: Also, known as run-time polymorphism, is the concept of Polymorphism where method in the child class has the same name, return-type and parameters as in parent class. The child class provides the implementation in the method already written.
+
+Below is the implementation of both the concepts:
+```java
+// Parent Class
+class Parent {
+    // Overloaded method (compile-time polymorphism)
+    public void func() {
+        System.out.println("Parent.func()");
+    }
+
+    // Overloaded method (same name, different parameter)
+    public void func(int a) {
+        System.out.println("Parent.func(int): " + a);
+    }
+}
+
+// Child Class
+class Child extends Parent {
+    // Overrides Parent.func(int) — runtime polymorphism
+    @Override
+    public void func(int a) {
+        System.out.println("Child.func(int): " + a);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Parent parent = new Parent();
+        Child child = new Child();
+        Parent polymorphicObj = new Child();  // Upcasting
+
+        // Method Overloading (compile-time)
+        parent.func();        // Parent.func()
+        parent.func(10);      // Parent.func(int): 10
+
+        // Method Overriding (runtime)
+        child.func(20);       // Child.func(int): 20
+
+        // Polymorphism in action (runtime binding)
+        polymorphicObj.func(30);  // Child.func(int): 30
+    }
+}
+```
+Output:
+```
+Parent.func()
+Parent.func(int): 10
+Child.func(int): 20
+Child.func(int): 30
+```
+
+| Type                          | Timing          | Achieved By        | Example                                    |
+| ----------------------------- | --------------- | ------------------ | ------------------------------------------ |
+| **Compile-time Polymorphism** | At compile time | Method Overloading | Same method name, different parameter list |
+| **Runtime Polymorphism**      | At runtime      | Method Overriding  | Subclass redefines parent method           |
+
+
+### Method Overriding - Runtime Polymorphism
+If we have two methods both in parent & child class of same name, second method is overridden. This is called **Method Overriding**.
+
+- Even if we use upcasting, same name functions will be overrided. (cz the display() of `abc` class doesn't exist now).
+- Works during runtime via dynamic method dispatch.
+- The object type, not the reference type, determines which method runs.
+- Static methods cannot be overridden — only hidden.
+- Data members can't be overriden.
+```java
+class abc{
+    int a =10;
+}
+class xyz extends abc{
+    int a =20;
+}
+class mno{
+    public static void main(String[] args) {
+        abc a1 = new xyz(); // upcasting
+        System.out.println(a1.a); // prints 10
+    }
+}
+```
+✅ **Explanation**: Variables depend on reference type, not object type.
+
+> ⚙️ **Static Methods Are Not Overridden**
+They are bound at **compile time**.
+Defining another static method in a subclass **hides** the parent method.
+
+#### Rules for Java Method Overriding
+1. Same method **name and parameter list**.
+2. Must exist an **IS-A relationship** (inheritance).
+3. Return type must be the **same or covariant** (a subclass of parent return type).
+4. Static and private methods **cannot be overridden**.
+5. Constructors are **not inherited**, hence cannot be overridden.
+
+> 📝: In Java, we can't inherit multiple classes because **Java doesn't support multiple inheritance**.
+
+-  picks which method to run at run time, based on the actual object type, not just the reference variable type.
+- The `@Override` annotation catches mistakes like typos in method names.
+
+#### Usage of Java Method Overriding
+- Method overriding is used to provide a specific implementation of a method in a subclass that differs from the implementation in the superclass.
+- Method overriding is used to achieve **runtime polymorphism**.
+
+> 📝: Method overriding is not allowed in Java if the method in the child class has a different return type from the method in the parent class.
+
+```java
+class Animal {
+    void move() {
+        System.out.println("Animal is moving.");
+    }
+    void eat() {
+        System.out.println("Animal is eating.");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void move() { // overridden method
+        System.out.println("Dog is running.");
+    }
+    void bark() {
+        System.out.println("Dog is barking.");
+    }
+}
+
+public class Geeks {
+    public static void main(String[] args) {
+        Dog d = new Dog();
+        d.move();  // calls overridden move()
+        d.eat();   // calls inherited method
+        d.bark();  // own method
+    }
+}
+```
+Output:
+```
+Dog is running.
+Animal is eating.
+Dog is barking.
+```
+**Explanation**: 
+- `move()` is overridden in `Dog`.
+- `eat()` is inherited unchanged.
+- `bark()` is Dog’s own method.
+
+The Animal class defines base functionalities like move() and eat(). The Dog class inherits from Animal and overrides the move() method to provide a specific behavior Dog is running. Both classes can access their own methods. When creating a Dog object, calling move() executes the overridden method.
+
+![method_overriding](./resources/Overriding-in-Java.png)
+
+> 📝: Constructors are not member methods, and so are not inherited by subclasses. However, the constructor of the superclass is called when the subclass is instantiated.
+
+They’re not methods; but a subclass must call a superclass constructor (implicitly or explicitly).
+```java
+class ABC{
+    int a, b;
+    ABC(int a, int b){
+        this.a = a;
+        this.b = b;
+    }
+    int sum(){
+        return a + b;
+    }
+}
+class XYZ extends ABC{
+    XYZ(int a, int b){
+        super(a, b); // calls parent constructor
+    }
+}
+class mno{
+    public static void main(){
+        XYZ x1 = new XYZ(10, 20);
+        System.out.println(x1.sum()); // Output: 30
+    }
+}
+```
+
+💡 **Accessing Parent Class Members**
+We can also access member function or variables of parent class using `super` keyword.
+```java
+super.display(); // Calls parent class method
+super();         // Calls parent class constructor
+```
+
+### Special Cases in Overriding
+**1. Calling Parent Method Using super**
+
+The `super` keyword can invoke the parent class method from the overriding method.
+
+**2. Final Methods Cannot Be Overridden**
+
+If we don't want a method to be overridden, we declare it as `final`.
+
+**3. Static Methods**
+- Static methods cannot be overridden; defining a static method in a subclass with the same signature as in the superclass hides the superclass method.
+- Instance methods can be overridden, but a subclass cannot override a superclass static method.
+- A static method in a subclass with the same signature as a superclass static method hides the original method.
+
+**4. Private Methods**
+- Private methods cannot be overridden because they are not visible to subclasses.
+- A subclass method with the same name is treated as a new, independent method, unrelated to the parent class.
+
+**5. Covariant Return Types**
+- In method overriding, the return type of the overriding method can be a subclass of the return type of the overridden method.
+- This feature is known as covariant return type and allows more specific return types in the subclass.
+
+| Case                       | Description                                                           |
+| -------------------------- | --------------------------------------------------------------------- |
+| **`super` keyword**        | Used to call parent method or constructor.                            |
+| **`final` methods**        | Cannot be overridden.                                                 |
+| **Static methods**         | Cannot be overridden; only hidden.                                    |
+| **Private methods**        | Not visible to child classes, hence not overridden.                   |
+| **Covariant return types** | Overriding method can return a subclass type of parent’s return type. |
+
+
+### Why Do We Use Method Overriding?
+- To change or enhance the behavior of an existing method in a subclass.
+- To achieve runtime polymorphism — method calls depend on the actual object type.
+- To reuse method names logically, reducing redundancy.
+
+📋 **Summary : Overloading vs Overriding in Java**
+
+| Concept                | Compile-time / Runtime            | Description                                                                                                                 | Example                                                           |
+| ---------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Method Overloading** | **Compile-time**                  | Same method name but **different parameter lists** (type, number, or order). Determined at compile time.                    | `void show(int a)` and `void show(String b)`                      |
+| **Method Overriding**  | **Runtime**                       | Subclass redefines a **method with the same signature** as in parent class. Decided by **object type**, not reference type. | `class A { void display() } class B extends A { void display() }` |
+| **Data Members**       | **Compile-time (not overridden)** | Variables are **not polymorphic**. Access depends on **reference type**, not object type.                                   | `A obj = new B(); System.out.println(obj.x);` — uses `A`’s `x`    |
+| **Static Methods**     | **Compile-time (hidden)**         | Can’t be overridden; they are **method-hidden**, chosen based on reference type.                                            | `A.show()` vs `B.show()`                                          |
+| **Private Methods**    | **Compile-time (inaccessible)**   | Not inherited, hence can’t be overridden. Subclass may define a method with same name, but it’s **completely separate**.    | `private void display()` in both parent and child are unrelated   |
+
+- **Overloading** = compile-time polymorphism (method signature differs).
+- **Overriding** = runtime polymorphism (method signature same, object differs).
