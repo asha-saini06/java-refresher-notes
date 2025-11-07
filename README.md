@@ -56,7 +56,7 @@ For the complete detailed notes, check out 👉 [Notes.md](./Notes.md)
 42. super keyword
 43. Abstraction 
 44. Anonymous Class
-45. Abstract Class
+45. Encapsulation
 46. Interface
 47. Abstract Class vs. Interface
 48. Exception Handling
