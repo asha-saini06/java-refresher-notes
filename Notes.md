@@ -326,6 +326,15 @@ Object-oriented programming has several advantages over procedural programming:
 
 Object-Oriented Programming is a methodology or paradigm to design a program using classes and objects. It simplifies the software development and maintenance. Main Concepts - **Inheritance**, **Polymorphism**, **Abstraction**, **Encapsulation**.
 
+![OOP](./resources/OOPsConcept.gif)
+
+### Key Features of OOP in Java:
+- Structures code into logical units (classes and objects)
+- Keeps related data and methods together (encapsulation)
+- Makes code modular, reusable and scalable
+- Prevents unauthorized access to data
+- Follows the DRY (Don’t Repeat Yourself) principle
+
 ### What are Classes and Objects?
 
 Classes and objects are the two main aspects of object-oriented programming.
@@ -401,6 +410,19 @@ class abc {
 
 ✅ **In summary:**  
 Command-line input always comes in as text. `String[] args` ensures Java can accept any kind of input, and the program can later parse those strings into numbers or other data types as needed.
+
+### Advantage of OOPs over Procedure-Oriented Programming Language
+Object-oriented programming (OOP) offers several key advantages over procedural programming:
+- By using objects and classes, you can create reusable components, leading to less duplication and more efficient development.
+- It provides a clear and logical structure, making the code easier to understand, maintain, and debug.
+- OOP supports the DRY (Don't Repeat Yourself) principle.This principle encourages minimizing code repetition, leading to cleaner, more maintainable code. Common functionalities are placed in a single location and reused, reducing redundancy.
+- By reusing existing code and creating modular components, OOP allows for quicker and more efficient application development
+
+### Disadvantages of OOPs
+- OOP has concepts like classes, objects, inheritance etc. For beginners, this can be confusing and takes time to learn.
+- If we write a small program, using OOP can feel too heavy. We might have to write more code than needed just to follow the OOP structure.
+- The code is divided into different classes and layers, so in this, finding and fixing bugs can sometimes take more time.
+- OOP creates a lot of objects, so it can use more memory compared to simple programs written in a procedural way.
 
 ## 6. Variables in Java
 
@@ -5081,9 +5103,25 @@ class mno exteds XYZ{
     }
 }
 ```
-
 - **Rule 1:** If there is any abstract method in a class, the class must be declared as abstract.
 - **Rule 2:** If you are extending any abstract class that have abstract method, you must either provide the implementation of the method or make the class abstract.
+
+### Key Features of Abstraction
+1. An abstract class has no use until unless it is extended by some other class.
+2. If you declare an abstract method in a class then you must declare the class abstract as well. You can't have abstract method in a concrete class. Its vice versa is not always true: If a class is not having any abstract method then also it can be marked as abstract.
+3. Abstract method has no body.
+4. It must be overidden. An abstract class must be extended and in a same way abstract method must be overriden.
+5. The class which is extending abstract class must override all the abstract methods.
+
+> **Defining `main()` in an abstract class :**
+```java
+abstract class abc{
+    public static void main(String... args){
+        System.out.println("Hello");
+    }
+}
+```
+`main()` isn't called by an object nor we can define its object. Therefore, adhering the property of abstract class. As abstract class cannot be instantiated.
 
 ### Advantages of Abstraction
 - Abstraction makes complex systems easier to understand by hiding the implementation details.
@@ -5125,6 +5163,8 @@ Similarly, you can only create an object from a **concrete subclass**, not from 
 | **7. Abstract classes are the same as interfaces.**                | ❌ False. Abstract classes can have **state (fields)** and **implemented methods**, while interfaces define **pure contracts** (methods without state).                                                                              |
 
 > Abstract classes act as **partially implemented blueprints**, combining both concrete behavior and abstract structure - bridging the gap between a simple class and a pure interface.
+
+
 
 ## 44. Anonymous Class
 It is an inner class without a name and for which only a single object is created.
@@ -5343,3 +5383,41 @@ Thread running via anonymous class
 
 **In short:**
 > An *anonymous class* is perfect when you need a **one-off** subclass or interface implementation that won’t be reused — clean, quick, and concise. 
+
+## 45. Encapsulation
+Encapsulation is defined as the **process of wrapping data (variables) and the methods into a single unit**, typically a **class**. It is the mechanism that binds together the code and the data. It manipulates. Another way to think about encapsulation is that it is a protective shield that prevents the data from being accessed by the code outside this shield. 
+
+- Technically, in encapsulation, the variables or the data in a class is hidden from any other class and can be accessed only through any member function of the class in which they are declared.
+- In encapsulation, the data in a class is hidden from other classes, which is similar to what data-hiding does. So, the terms "encapsulation" and "data-hiding" are used interchangeably.
+- Encapsulation can be achieved by declaring all the variables in a class as private and writing public methods in the class to set and get the values of the variables.
+
+![Encapsulation](/resources/encapsulation.png)
+
+### Implementation of Encapsulation in Java
+- **Declare data as private**: Hide the class data so it cannot be accessed directly from outside the class.
+- **Use getters and setters**: Keep variables private and provide public getter and setter methods for controlled access and safe modification, often with validation.
+- **Apply proper access modifiers**: Use private for data hiding and public for methods that provide access.
+
+### Best Practices for Encapsulation
+- Always give the most restrictive access level that still allows the code to work. This helps hide implementation details and reduces coupling.
+- Expose data through methods (getters/setters) rather than making fields public. This gives more control (validation, lazy initialization, invariants, etc.).
+- Use validation logic inside setters to ensure correct data.
+- Avoid unnecessary setters if data should not be modified externally (e.g., IDs).
+
+### Advantages of Encapsulation
+- **Data Hiding**: Encapsulation restricts direct access to class variables, protecting sensitive data from unauthorized access.
+- **Improved Maintainability**: Changes to internal implementation can be made without affecting external code that uses the class.
+- **Enhanced Security**: Encapsulation allows validation and control over data, preventing invalid or harmful values from being set.
+- **Code Reusability**: Encapsulated classes can be reused in different programs without exposing internal logic.
+- **Better Modularity**: Encapsulation promotes organized, modular code by keeping data and methods together within a class.
+
+### Disadvantages of Encapsulation
+- **Increased Code Complexity**: Writing getter and setter methods for every variable can make the code longer and slightly more complex.
+- **Performance Overhead**: Accessing data through methods instead of directly can introduce a minor performance cost, especially in performance-critical applications.
+- **Less Flexibility in Some Cases**: Over-restricting access to class members may limit the ability of other classes to extend or use the class efficiently.
+
+### Why Encapsulation?
+- Better control of class attributes and methods
+- Class attributes can be made **read-only** (if you only use the `get` method), or **write-only** (if you only use the `set` method)
+- Flexible: the programmer can change one part of the code without affecting other parts
+- Increased security of data
