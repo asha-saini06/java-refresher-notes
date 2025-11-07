@@ -5106,3 +5106,240 @@ The common mistakes that can occur and we should avoid when working with Abstrac
 
 ❓ **Why And When To Use Abstract Classes and Methods?**
 ▶ To achieve security - hide certain details and only show the important details of an object.
+
+❓ **Why can't we create the object of abstract class?**
+▶ Because these classes are incomplete, they have abstract methods that have no body so if Java allows you to create object of this class then if someone calls the abstract method using that object then *what* would happen? There would be no actual implementation of the method to invoke. Also, becuase an object is concrete. An abstract class is like a template, so you have to extend it and build on it before you can use it.
+
+🧩 **Analogy**: Think of an abstract class as an **architectural plan** - you can’t live in a plan; you can only live in a **house built from that plan**.
+Similarly, you can only create an object from a **concrete subclass**, not from the abstract class itself.
+
+⚠️ **Common Misconceptions about Abstract Classes**
+| ❓ **Misconception**                                                | ✅ **Clarification / Truth**                                                                                                                                                                                                         |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. Abstract classes cannot have constructors.**                  | ❌ False. Abstract classes **can have constructors**, and they are often used to **initialize common fields** when a subclass object is created. The constructor of an abstract class is called **when a subclass is instantiated**. |
+| **2. All methods in an abstract class must be abstract.**          | ❌ False. An abstract class can have **both abstract and non-abstract (concrete)** methods. This allows defining **shared functionality** along with **enforced structure**.                                                         |
+| **3. Abstract classes cannot have variables or data members.**     | ❌ False. They can have **instance variables**, **static variables**, and **final variables** — just like any other class.                                                                                                           |
+| **4. Abstract classes cannot extend other classes.**               | ❌ False. An abstract class **can extend** another **abstract or concrete** class and **can also implement interfaces**.                                                                                                             |
+| **5. You cannot create references of an abstract class.**          | ❌ False. You **can declare a reference variable** of an abstract class type — you just **cannot instantiate** it directly. This is essential for **polymorphism**.                                                                  |
+| **6. Abstract classes must contain at least one abstract method.** | ❌ False. A class can be declared abstract **even without any abstract methods**, often used to **prevent direct instantiation**.                                                                                                    |
+| **7. Abstract classes are the same as interfaces.**                | ❌ False. Abstract classes can have **state (fields)** and **implemented methods**, while interfaces define **pure contracts** (methods without state).                                                                              |
+
+> Abstract classes act as **partially implemented blueprints**, combining both concrete behavior and abstract structure - bridging the gap between a simple class and a pure interface.
+
+## 44. Anonymous Class
+It is an inner class without a name and for which only a single object is created.
+
+It should be used if you have to override method of class or interface.
+Java Anonymous inner class can be created by two ways:
+- Class (may be abstract or concrete)
+- Interface
+
+An **anonymous class** in Java is a **local inner class without a name**, used to create a **one-time object** with a custom implementation.
+It is typically used when you need to **override a method** of a class or interface without formally declaring a subclass.
+
+### Internal working of Anonymous Class
+✅ **Key Features**
+
+* Declared and instantiated **at the same time**.
+* Has **no name** (defined within an expression).
+* Used when a **single instance** of a class is required.
+* Commonly used in **GUI applications**, **event handling**, and **thread creation**.
+
+### **Syntax**
+The syntax of an anonymous class expression is like the invocation of a constructor, except that there is a class definition contained in a block of code. 
+```java
+ParentType ref = new ParentType() {
+    // body of anonymous class
+    @Override
+    public void someMethod() {
+        // overridden method logic
+    }
+};
+```
+
+### Difference between regular class(normal classes) and Anonymous Inner class
+
+- A normal class can implement any number of interfaces but the anonymous inner class can implement only one interface at a time.
+- A regular class can extend a class and implement any number of interfaces simultaneously. But anonymous Inner class can extend a class or can implement an interface but not both at a time.
+- For regular/normal class, we can write any number of constructors but we can't write any constructor for anonymous Inner class because the anonymous class does not have any name and while defining constructor class name and constructor name must be same.
+
+### **Internal Working of Anonymous Class**
+
+1. The compiler **creates a separate class file** (e.g., `Main$1.class`) for the anonymous class.
+2. This class **extends** the given superclass (or **implements** the given interface).
+3. The object of this compiler-generated class is **assigned** to the reference variable.
+
+```java
+abstract class pqr{
+    abstract void di();
+}
+abstract class XYZ {
+    abstract void display();
+    void disp(){
+        System.out.println("Hello");
+    }
+}
+class mno {
+    public static void main(String... args){
+        XYZ x1 = new XYZ() { // anonymous class
+            void display(){
+                System.out.println("Hi");
+            }
+        }
+        x1.display();
+
+        pqr p1 = new pqr(){
+            void di(){
+                System.out.println("Hey");
+            }
+        };
+        p1.di();
+    }
+}
+```
+- A class is created but its name is decided by the compiler which extends the `XYZ` class and provides the implementation of the `display()` method.
+- An object of **Anonymous class** is created that is referred by `x1` reference variable of `XYZ` type.
+
+### When to Use Anonymous Classes?
+Use anonymous classes when:
+* You need a **one-time** subclass or interface implementation.
+* You want to **override methods quickly** without defining a new named class.
+* You’re writing **short, localized behavior**, especially:
+
+  * Event listeners (`ActionListener`, `MouseListener`)
+  * Runnable threads
+  * Callback implementations
+
+**Example 1 – Anonymous Class Extending an Abstract Class**
+```java
+abstract class XYZ {
+    abstract void display();
+    void disp() {
+        System.out.println("Hello from XYZ");
+    }
+}
+
+public class Demo {
+    public static void main(String[] args) {
+        XYZ obj = new XYZ() { // Anonymous inner class
+            void display() {
+                System.out.println("Hi from Anonymous Class");
+            }
+        };
+        obj.display();  // calls overridden method
+        obj.disp();     // inherited method
+    }
+}
+```
+
+**Output:**
+```
+Hi from Anonymous Class
+Hello from XYZ
+```
+
+---
+**Example 2 – Anonymous Class Implementing an Interface**
+```java
+interface Greet {
+    void sayHello();
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Greet g = new Greet() {
+            public void sayHello() {
+                System.out.println("Hello, World!");
+            }
+        };
+        g.sayHello();
+    }
+}
+```
+
+**Output:**
+```
+Hello, World!
+```
+
+---
+**Example 3 – Anonymous Class with a Concrete Class**
+```java
+class Parent {
+    void show() {
+        System.out.println("Parent show()");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Parent p = new Parent() {
+            void show() {
+                System.out.println("Overridden show() in Anonymous class");
+            }
+        };
+        p.show();
+    }
+}
+```
+
+**Output:**
+```
+Overridden show() in Anonymous class
+```
+Use anonymous classes when you need to create a short class for one-time use. For example:
+- Overriding a method without creating a new subclass
+- Implementing an interface quickly
+- Passing small pieces of behavior as objects
+
+### **Rules and Limitations**
+
+1. Anonymous classes **cannot have constructors** (since they don’t have a name).
+2. They can **access final or effectively final variables** from the enclosing scope.
+3. They **cannot define static members** (except static final constants).
+4. **Only one anonymous class** can be created per expression.
+
+---
+
+### Advantages
+* Concise and clean syntax for one-time subclasses.
+* Reduces boilerplate code.
+* Improves readability for short-lived logic.
+
+### Disadvantages
+* Cannot be reused elsewhere.
+* Harder to debug due to lack of name.
+* Makes the code less readable if overused.
+
+---
+
+### Real-World Example: Runnable Thread
+
+```java
+public class ThreadDemo {
+    public static void main(String[] args) {
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                System.out.println("Thread running via anonymous class");
+            }
+        });
+        t.start();
+    }
+}
+```
+
+**Output:**
+
+```
+Thread running via anonymous class
+```
+
+| Use Case                  | Extends / Implements | Purpose                         | Can Have Constructor? | Example Use Case               |
+| ------------------------- | -------------------- | ------------------------------- | --------------------- | ------------------------------ |
+| Abstract / Concrete Class | `extends`            | To override a method            | ❌ No                  | Custom subclass for 1-time use |
+| Interface                 | `implements`         | To provide quick implementation | ❌ No                  | Runnable, ActionListener etc.  |
+
+---
+
+**In short:**
+> An *anonymous class* is perfect when you need a **one-off** subclass or interface implementation that won’t be reused — clean, quick, and concise. 
