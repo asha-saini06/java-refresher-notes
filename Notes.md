@@ -3798,7 +3798,7 @@ StringBuilder class is used to create **mutable (modifiable) string**. It is sam
 ![StringBuilder vs StringBuffer](/resources/StringBuilder.png)
 
 ### StringBuilder vs String vs StringBuffer
-![StringBuilder vs String vs StringBuffer](/resources/String%20Comparisons.png)
+![StringBuilder vs String vs StringBuffer](/resources/StringComparisons.png)
 
 ### When to Use Which one?
 
@@ -4106,7 +4106,7 @@ Access Modifiers in Java define the **visibility (scope)** of classes, methods, 
 They help achieve **encapsulation**, ensuring that sensitive data or methods are protected from unintended access.
 
 There are 4 types of access modifiers available in Java: 
-![Access Modifiers](/resources/access-modifiers.webp)
+![Access Modifiers](/resources/aAccess-Modifiers.webp)
 
 | Modifier                   | Within Class | Same Package | Subclass (same pkg) | Subclass (different pkg) | Other Packages |
 | -------------------------- | ------------ | ------------ | ------------------- | ------------------------ | -------------- |
@@ -4539,7 +4539,7 @@ The ASCII pronounced 'ask-ee', is strictly a seven-bit code based on the English
 
 To summarize, the range of ASCII values for capital letters spans from 65 to 90, while for small letters, it extends from 97 to 122. Allocated in alphabetical sequence, the values for "A" and "Z" are 65 and 90, respectively, in uppercase. Similarly, the values for "a" and "z" in lowercase are 97 and 122, respectively.
 
-![ascii](/resources/ascii.png)
+![ascii](/resources/ASCII.png)
 
 **Examples**
 
@@ -4714,13 +4714,13 @@ In single inheritance, a sub-class is derived from only one super class. It inhe
 
 In Multilevel Inheritance, a derived class will be inheriting a base class and as well as the derived class also acts as the base class for other classes.
 
-![multilevel_inheritance](./resources/multilevel_inheritance.png)
+![multilevel_inheritance](./resources/Multilevel_Inheritance.png)
 
 **3. Hierarchical Inheritance**
 
 In hierarchical inheritance, more than one subclass is inherited from a single base class. i.e. more than one derived class is created from a single base class. For example, cars and buses both are vehicle
 
-![hierarchical_inheritance](./resources/hierarchical_inheritance.png)
+![hierarchical_inheritance](./resources/Hierarchical_inheritance.png)
 
 **4. Multiple Inheritance (Through Interfaces)**
 In Multiple inheritances, one class can have more than one superclass and inherit features from all parent classes.
@@ -5077,8 +5077,16 @@ Abstraction in Java is the process of hiding internal implementation details and
 - By abstracting functionality, changes in the implementation do not affect the code that depends on the abstraction.
 
 The `abstract` keyword is a non-access modifier, used for classes and methods:
-- **Abstract class**: is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class).
-- **Abstract method**: can only be used in an abstract class, and it does not have a body. The body is provided by the subclass (inherited from).
+1. **Abstract class**: is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class).
+- A class that is declared with `abstract` keyword, is known as **abstract class** in Java. It can have abstract and non-abstract methods (methods with body).
+- It needs to be extended and its method implemented. It cannot be instantiated.
+
+2. **Abstract method**: can only be used in an abstract class, and it does not have a body. The body is provided by the subclass (inherited from).
+- A method that is declared as `abstract` and does not have implementation is known as abstract method.
+- Syntax:
+    ```java
+    abstract void methodName(); // no body in abstract method
+    ```
 
 ### How to Achieve Abstraction in Java?
 Java provides two ways to implement abstraction, which are listed below:
@@ -5391,7 +5399,7 @@ Encapsulation is defined as the **process of wrapping data (variables) and the m
 - In encapsulation, the data in a class is hidden from other classes, which is similar to what data-hiding does. So, the terms "encapsulation" and "data-hiding" are used interchangeably.
 - Encapsulation can be achieved by declaring all the variables in a class as private and writing public methods in the class to set and get the values of the variables.
 
-![Encapsulation](/resources/encapsulation.png)
+![Encapsulation](/resources/Encapsulation.png)
 
 ### Implementation of Encapsulation in Java
 - **Declare data as private**: Hide the class data so it cannot be accessed directly from outside the class.
@@ -5421,3 +5429,404 @@ Encapsulation is defined as the **process of wrapping data (variables) and the m
 - Class attributes can be made **read-only** (if you only use the `get` method), or **write-only** (if you only use the `set` method)
 - Flexible: the programmer can change one part of the code without affecting other parts
 - Increased security of data
+
+## 46. Interface
+- Like a class, an interface can have methods and variables, but the methods declared in interface are by default abstract (only method signature, no today).
+- The members of an interface are `public`, `static` and `final` by nature.
+- Java Interface also represents **IS-A** relationship.
+
+```java
+// Declaring an interface using the 'interface' keyword
+interface abc{ 
+    int a = 10; // 'a' is public, static, and final by default (constant)
+
+    void display(); // Abstract method (no body) – implicitly public and abstract
+}
+
+// Class 'xyz' implements interface 'abc'
+class xyz implements abc{
+
+    // Must provide implementation for all abstract methods in the interface
+    public void display(){
+        System.out.println("hello");
+    }
+
+    public static void main(String... args){
+        // Reference of interface type, object of implementing class
+        abc a1 = new xyz();
+
+        a1.display(); // Calls overridden display() method
+
+        // a1.a = 20; // ❌ Error: Cannot modify 'a' because it’s final (constant)
+        
+        // Accessing interface variable using interface name (recommended way)
+        System.out.println(abc.a); // ✅ Output: 10
+    }
+}
+```
+- A class that implements interface must implement all the methods declared in the interface. To implement interface use `implements` keyword.
+- Since Java doesn't support multiple inheritance in case of class, but by using interface it can achieve multiple inheritance.
+- Interface are used to implement **abstraction**.
+
+❓ **Why use interfaces when we have abstract class?**
+▶ The reason is, abstract classes may contain non-final variables, whereas variables in interface are `final`, `public` and `static`.
+
+### Important points about Interface
+- We can't create instance (interface can't be instantiated) of interface but we can make reference of it that refers to the object of its implementing class.
+- A class can **implement** more than one interface.
+    ![class_implement](/resources/class_interface.png)
+
+- An interface can **extend** another interface or interfaces (more than one interface).
+    ![interface_extends](/resources/interface_extend.png)
+
+- A class that implements interface must implement all the methods in interface.
+- All the methods are `public` and `abstract`. And all the fields are `public`, `static` and `final`.
+- It is used to achieve **multiple inheritance**.
+
+```java
+// Declaring an interface 'Bank'
+interface Bank{
+    int a = 10; // Interface variable — public, static, and final by default
+
+    int getInterest(); // Abstract method — must be implemented by any class that implements this interface
+}
+
+// SBI class implements Bank interface and provides its own implementation
+class SBI implements Bank{
+    public int getInterest(){
+        return 9;  // SBI offers 9% interest
+    }
+}
+
+// PNB class implements Bank interface and provides its own implementation
+class PNB implements Bank{
+    public int getInterest(){
+        return 7; // PNB offers 7% interest
+    }
+}
+class xyz {
+    public static void main(String... args){
+         // Creating a reference variable of type Bank (interface)
+        Bank b = new PNB();  // Object of PNB assigned to Bank reference
+
+        // Calls PNB's implementation of getInterest()
+        System.out.println(b.getInterest());  // Output: 7
+
+        // Reassigning same reference variable to SBI object
+        b = new SBI();
+
+        // Calls SBI's implementation of getInterest()
+        System.out.println(b.getInterest());  // Output: 9
+    }
+}
+```
+**How It Works :**
+- `interface Bank` defines a **contract** — any class implementing it **must** define `getInterest()`.
+- Both `SBI` and `PNB` **implement** the same interface, providing their own method logic.
+- The reference `Bank b` can hold an object of any class that implements `Bank` → demonstrating **runtime polymorphism**.
+- The method executed depends on the **actual object type** (`SBI` or `PNB`), not the reference type (`Bank`).
+---
+
+- Interfaces specify what a class must do and not how. It is the **blueprint of the class**.
+- An Interface is about capabilities like a `Bank` may be an interface and any class implementing `Bank` must be able to (or must implement) `getInterest()`. So it specifies a set of methods that the class has to implement.
+- If a class implements an interface and does not provide method bodies for all functions specified in the interface, then class must be declared `abstract`.
+- We have to override all the members of an Interface.
+
+### Why And When To Use Interfaces?
+1) To achieve security - hide certain details and only show the important details of an object (interface).
+
+2) Java does not support "multiple inheritance" (a class can only inherit from one superclass). However, it can be achieved with interfaces, because the class can implement multiple interfaces. Note: To implement multiple interfaces, separate them with a comma (see example below).
+---
+**Notes**:
+- Private methods can only be called inside default or static methods.
+- Static methods are accessed using the interface name, not via objects.
+- To implement an interface, use the implements keyword.
+* Interfaces define **what** a class should do, not **how** it should do it.
+* All variables in interfaces are constants (`public static final`).
+* All methods are **public and abstract** by default (till Java 7).
+* A class **implements** an interface, not extends it.
+* You can **implement multiple interfaces**, achieving multiple inheritance in Java.
+
+### Relationship Between Class and Interface
+A class can extend another class and similarly, an interface can extend another interface. However, only a class can implement an interface and the reverse (an interface implementing a class) is not allowed.
+
+![class-interface](./resources/Interfaces.png)
+
+### When to Use Class and Interface?
+**Use a Class when:**
+- Use a class when you need to represent a real-world entity with attributes (fields) and behaviors (methods).
+- Use a class when you need to create objects that hold state and perform actions
+- Classes are used for defining templates for objects with specific functionality and properties.
+
+**Use a Interface when:**
+- Use an interface when you need to define a contract for behavior that multiple classes can implement.
+- Interface is ideal for achieving abstraction and multiple inheritance.
+
+> **Implementation**: To implement an interface, we use the keyword `implements`
+
+### Multiple Inheritance in Java Using Interface
+Java does not support multiple inheritance with classes to avoid ambiguity, but it supports multiple inheritance using interfaces.
+
+![multiple_inheritance](./resources/MutlipleInheritance_Interface.png)
+
+```java
+import java.io.*;
+
+// Add interface
+interface Add{
+    int add(int a,int b);
+}
+
+// Sub interface
+interface Sub{
+  	int sub(int a,int b);
+}
+
+// Calculator class implementing Add and Sub 
+class Cal implements Add , Sub
+{
+  	// Method to add two numbers
+  	public int add(int a,int b){
+      	return a+b;
+    }
+  
+  	// Method to sub two numbers
+  	public int sub(int a,int b){
+    	return a-b;
+    }
+}
+class GFG{
+    // Main Method
+    public static void main (String[] args){
+        
+      	// instance of Cal class
+      	Cal x = new Cal();
+      	System.out.println("Addition : " + x.add(2,1));
+      	System.out.println("Substraction : " + x.sub(2,1));
+    }
+}
+```
+Output:
+```
+Addition : 3
+Substraction : 1
+```
+
+---
+- Like **abstract classes**, interfaces **cannot** be used to create objects.
+- Interface methods do not have a body - the body is provided by the "implement" class
+- On implementation of an interface, you must override all of its methods
+- Interface methods are by default `abstract` and `public`
+- Interface attributes are by default `public`, `static` and `final`
+- An interface cannot contain a constructor (as it cannot be used to create objects)
+
+### JDK 8 New Features Added in Interfaces 
+There are certain features added to Interfaces in JDK 8 update mentioned below:
+
+1. **Default Methods**
+- Interfaces can define methods with default implementations.
+- Useful for adding new methods to interfaces without breaking existing implementations.
+
+Prior to JDK 8, interface could not define implementation. We can now add default implementation for interface methods.
+This default implementation has special use and does not affect the intention behind interfaces.
+
+Suppose we need to add a new method in an existing interface. Obviously the old code will not work as the classes have not implemented those new functions. So with the help of default implementation, we will give a deafult body for the newly added functions. Then the old codes will still work.
+```java
+interface in1{
+    final int a = 10;
+    default void display() {
+        System.out.println("hello");
+    }
+}
+class testClass implements in1{
+    public static vod main(String... args) {
+        testClass t = new testClass();
+        t.display();
+    }
+}
+```
+
+2. **Static Methods**
+- Interfaces can now include static methods.
+- These methods are called directly using the interface name and are not inherited by implementing classes.
+
+Another feature that was added in JDK 8 is that we can now define static methods in interfaces that can be called independently without an object. 
+> These methods are not inherited.
+```java
+interface in1{
+    static void display(){
+        System.out.println("Hello");
+    }
+}
+class testClass implements in1 {
+    public static void main(String... args){
+        in1.display();
+    }
+}
+```
+
+> Due to a new upgrade in JDK 8, now we can declare a non-abstract method in an interface, using `default` keyword.
+
+```java
+// Define interface ABC with one abstract method
+interface ABC {
+    void display(); // implicitly public and abstract
+}
+
+// Another interface A with same method signature
+interface A {
+    void display(); // implicitly public and abstract
+}
+
+// Another interface B with same method signature
+interface B {
+    void display(); // implicitly public and abstract
+}
+
+// Interface C extends multiple interfaces (ABC, A, and B)
+// Demonstrates multiple inheritance using interfaces
+interface C extends ABC, A, B {
+    void display(); // still abstract; all parent display() methods merge into one
+}
+
+class XYZ {
+    public static void main(String... args) {
+
+        // Anonymous class implementing interface C
+        // Since C is an interface, we must provide implementation for display()
+        C c1 = new C() {
+            public void display() {
+                System.out.println("Hello");
+            }
+        };
+
+        // Call display() method from anonymous class
+        c1.display(); // Output: Hello
+    }
+}
+```
+- Interfaces in Java can **extend multiple interfaces**, achieving multiple inheritance of type.
+- When multiple parent interfaces define the **same method signature**, they are merged into one — no conflict occurs.
+- You can’t instantiate an interface directly, but you can use an **anonymous class** to provide implementation on the spot.
+
+> A class implements interface but one interface extends another interface.
+
+3. **Functional Interface**
+- Functional interfaces can be used with **lambda expressions** or **method references**.
+- The @FunctionalInterface annotation can be used to indicate that an interface is a functional interface, although it’s optional.
+
+```java
+@FunctionalInterface
+public interface Calculator {
+    int compute(int x, int y); // single abstract method
+}
+```
+
+###  JDK 9 New Features Added in Interfaces
+From Java 9 onwards, interfaces can contain the following also:
+
+**Private Methods**
+- Interface can now include private methods.
+- Private methods are defined within the interface but it cannot be accessed by the implementing classes.
+- Private methods cannot be overridden by implementing classes as they are not inherited.
+
+```java
+interface Vehicle {
+    // Private method for internal use
+    private void startEngine() {
+        System.out.println("Engine started.");
+    }
+    
+    // Default method that uses the private method
+    default void drive() {
+         // Calls the private method
+        startEngine(); 
+        System.out.println("Vehicle is now driving.");
+    }
+}
+
+class Car implements Vehicle {
+    // Car class implements Vehicle interface and inherits the default method 'drive'
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car();
+        // This will call the default method, which in turn calls the private method
+        car.drive();  
+    }
+}
+```
+Output
+```
+Engine started.
+Vehicle is now driving.
+```
+
+### Extending Interfaces
+One interface can inherit another by the use of keyword extends. When a class implements an interface that inherits another interface, it must provide an implementation for all methods required by the interface inheritance chain.
+
+❓: **Multiple inheritance is not supported through class in Java but it is possible by interface, why?**
+▶ Multiple inheritance is not supported in case of class because of ambiguity. But it is supported in case of interface because there is no ambiguity as implementation is provided by the implementation class.
+
+```java
+interface Printable{
+    void print();
+}
+interface Showable{
+    void print();
+}
+
+class TestInterface implements Printable, Showable{
+    public void print(){
+        System.out.println("hello");
+    }
+    public static void main(String... args){
+        TestInterface obj = new TestInterface();
+        obj.print();
+    }
+}
+```
+In the above example,`Printable` and `Showable` interface have same methods but its impleentation is provided by class `TestInterface`, so there is no ambiguity.
+
+### Internal addition by Compiler
+The Java compiler adds `public` and `abstract` keywords before the interface method.
+More, it adds `public`, `static` and `final` keywords before data members.
+
+In other words, Interface fields are `public`, `static` and `final` by default, and methods are **public** and **abstract**.
+
+![interface](./resources/interface_compiler.png)
+
+Although Class and Interface seem the same there are certain differences between Classes and Interface. The major differences between a class and an interface are mentioned below:
+
+| **Feature**          | **Class**                                                            | **Interface**                                                                                                     |
+| -------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **Instantiation**    | You **can create objects** of a class (unless it’s abstract).        | You **cannot create objects** of an interface directly.                                                           |
+| **Variables**        | Can have **instance, static, and final** variables.                  | All variables are **`public static final`** (constants only).                                                     |
+| **Methods**          | Can have **concrete (defined)** and **abstract** methods.            | All methods are **abstract by default** (till Java 7). From Java 8+, can have **default** and **static** methods. |
+| **Inheritance**      | Supports **single inheritance** (a class can extend only one class). | Supports **multiple inheritance** (a class can implement multiple interfaces).                                    |
+| **Constructors**     | Can have **constructors** (for object initialization).               | **No constructors** allowed in interfaces.                                                                        |
+| **Access Modifiers** | Can use **private, protected, public, or default** modifiers.        | All members are **`public` by default**.                                                                          |
+| **Keyword**          | Declared using the `class` keyword.                                  | Declared using the `interface` keyword.                                                                           |
+| **Default Methods**  | ❌ Does **not support** default methods.                              | ✅ Supports **default methods** (introduced in **JDK 8**).                                                         |
+| **Static Methods**   | ✅ Can have **static methods**.                                       | ✅ Supports **static methods** (introduced in **JDK 8**).                                                          |
+| **Private Methods**  | ✅ Can have **private methods**.                                      | ✅ Supports **private methods** (introduced in **JDK 9**).                                                         |
+| **Main Method**      | ✅ Can have `main()` for execution.                                   | ✅ Can have `main()` (since **JDK 8**, via static methods).                                                        |
+
+- A class defines both data and behavior - it’s a blueprint to create objects.
+- An interface defines only behavior (method signatures) - it’s a contract that classes must follow.
+
+## 47. Difference Between Abstract Class and Interface
+| Feature              | Abstract Class                                                      | Interface                                                                                  |
+| -------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Keyword**          | `abstract`                                                          | `interface`                                                                                |
+| **Method Type**      | Can have abstract **and** concrete methods                          | All methods are **abstract** (Java 7); can have **default** & **static** methods (Java 8+) |
+| **Variables**        | Can have instance & static variables                                | All variables are `public static final` (constants)                                        |
+| **Access Modifiers** | Methods can be `public`, `protected`, or `default`                  | All methods are implicitly `public`                                                        |
+| **Inheritance Type** | Supports **single inheritance**                                     | Supports **multiple inheritance**                                                          |
+| **When to Use**      | When you need to share **partial implementation** across subclasses | When you only need to define a **contract or capability**                                  |
+| **Object Creation**  | Cannot be instantiated directly                                     | Cannot be instantiated directly                                                            |
+| **Constructors**     | Can have constructors                                               | Cannot have constructors                                                                   |
+
+- Use **abstract classes** when classes share common behavior.
+- Use **interfaces** when unrelated classes must adhere to a common set of methods (e.g., `Comparable`, `Runnable`, `Cloneable`).
