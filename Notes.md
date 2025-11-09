@@ -5830,3 +5830,47 @@ Although Class and Interface seem the same there are certain differences between
 
 - Use **abstract classes** when classes share common behavior.
 - Use **interfaces** when unrelated classes must adhere to a common set of methods (e.g., `Comparable`, `Runnable`, `Cloneable`).
+
+**Abstraction**: Hiding the internal implementation of the feature and only showing the functionality to the users, i.e., what it works(showing), how it works (hiding). Both abstract class and interface are used for abstraction.
+
+###  When to use what?
+🔸 **Abstract Class**
+- In Java application, there are some related classes that need to share some lines of code then you can put these lines of code within abstract class and this abstract class should be extended by all these related classes.
+- You can define non-static or non-final field(s) in abstract class, so that via a method you can access and modify the state of Object to which they belong.
+- You can except that the classes that extend an abstract class have many common methods or fields, or require access modifiers other than **public** (such as protected and private).
+
+🔸 **Interface**
+- It is **total abstraction**, all methods declared within an interface must be implemented by the class(es) that implements this interface.
+- A class can implement more than one interface. It is called **multiple inheritance**.
+- You want to **specify the behaviour** of particular data type, but not concerned about who implements its behaviour.
+
+---
+🧩 Additional Points to Add
+
+**1. Real-world Analogy**
+
+> An **abstract class** is like a *partially built house*—some rooms (methods) are complete, some are just blueprints.
+> An **interface** is like a *design contract*—it just specifies what rooms must exist, but not how they’re built.
+
+**2. Java 8+ Enhancements in Interfaces**
+Add a line under the table or in a note:
+
+> Since **Java 8**, interfaces can have `default` and `static` methods; since **Java 9**, they can also include `private` methods — bringing them conceptually closer to abstract classes, though still without state or constructors.
+
+**3. Implementation Relationship Summary**
+```
+Class → extends → Abstract Class
+Class → implements → Interface
+Interface → extends → Interface
+```
+
+**4. Key Differences Summary (Quick Glance)**
+
+| Criteria             | Abstract Class                         | Interface                                   |
+| -------------------- | -------------------------------------- | ------------------------------------------- |
+| Nature               | Partial abstraction                    | Full abstraction                            |
+| Code Reuse           | Allows code reuse via concrete methods | No code reuse (till Java 8 default methods) |
+| Multiple Inheritance | Not allowed                            | Allowed                                     |
+| Performance          | Slightly faster (less indirection)     | Slight overhead due to abstraction layer    |
+| Usage                | Common behavior across related classes | Common capability across unrelated classes  |
+
