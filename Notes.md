@@ -5874,3 +5874,76 @@ Interface → extends → Interface
 | Performance          | Slightly faster (less indirection)     | Slight overhead due to abstraction layer    |
 | Usage                | Common behavior across related classes | Common capability across unrelated classes  |
 
+## 48. Exception Handling
+Exception is an event that disrupts the normal flow of the program.
+
+There are mainly two types of exceptions: **Checked** and **Unchecked**; where `error` is considered unchecked exception.
+- **Compile Time** ➡ Checked Exception
+- **Run Time** ➡ Unchecked Exception
+- error
+
+**Runtime Exceptions**:
+- `ArithmeticException`
+- `ArrayIndexOutOfBoundsException`
+- `StringIndexOutOfBoundsException`
+- `ClassCastException`
+- `NullPointerException`
+- `NumberFormatException`
+
+**Checked Exception**:
+- `IOException`
+- `FileNotFoundException`
+- `ClassNotFoundException`
+- `InterruptedException`
+---
+### Exception Handling Keywords
+1. `try`
+2. `catch`
+3. `finally`
+4. `throw`
+5. `throws`
+
+![exception_handling](/resources/exceptionHandling1.png)
+
+![exception_handling](/resources/exceptionHandling2.png)
+
+### `try-catch`
+- `try` block is used to enclose code that might throw an exception. It must be used within the method.
+- The `try` block must be followed by either `catch` or `finally` block.
+
+```java
+try {
+    // code that might throw an exception
+} catch (Exception e) {
+    // handle the exception
+} finally {
+    // code that will be executed regardless of whether an exception occurred or not
+}
+```
+If an error occurs, we can use `try...catch` to catch the error and execute some code to handle it:
+
+```java
+class A{
+    public static void main(String... args){
+        int a = 10;
+        int b = 0;
+        try{
+            int c = a/b;
+            System.out.println(c);
+        } catch(ArithmeticException e){
+            System.out.println(" Error: " + e.getMessage());
+        }
+    }
+}
+```
+
+#### Internal Working of try-catch Block:
+
+- JVM executes code inside the try block.
+- If an exception occurs, remaining try code is skipped and JVM searches for a matching catch block.
+- If found, the catch block executes.
+- Control then moves to the finally block (if present).
+- If no matching catch is found, the exception is handled by JVM’s default handler.
+- The finally block always executes, whether an exception occurs or not.
+
+> 📝: When an exception occurs and is not handled, the program terminates abruptly and the code after it, will never execute.
