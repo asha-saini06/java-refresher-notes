@@ -5936,6 +5936,8 @@ class A{
     }
 }
 ```
+- The try block contains code that might throw an exception,
+- The catch block handles the exception if it occurs.
 
 #### Internal Working of try-catch Block:
 
@@ -5947,3 +5949,70 @@ class A{
 - The finally block always executes, whether an exception occurs or not.
 
 > 📝: When an exception occurs and is not handled, the program terminates abruptly and the code after it, will never execute.
+
+#### How to use command line arguments
+```java
+class A{
+    public static void main(String... args){
+        try{
+            System.out.println(args[0]);
+            System.out.println(args[1]);
+            System.out.println(args[2]);
+        } catch(ArrayIndexOutOfBoundsException e){
+            System.out.println(" Error: " + e.getMessage());
+        }
+    }
+}
+```
+
+> From JDK 7, we can use multiple exceptions in a `catch` block separated by `|` **OR** operator.
+```java
+catch(ArrayIndexOfBoundsException | ArithemeticException e){
+    System.err.print("Exception occurred");
+    // System.err.print("Exception occur " + e.toString());
+}
+```
+- `catch` block is used to handle the exception. It must be used after the `try` block only.
+- You can use multiple `catch` blocks with a single `try`.
+
+```java
+catch(Exception e) {
+    e.printStackTrace();
+}
+```
+
+```java
+catch(Exception e){
+    System.err.println("Exception occurred " + e);
+}
+```
+`Exception` class consists of all the exceptions. So, instead of mentioning exceptions individually, just use class name.
+
+#### Nested try-block
+We can use method nested try-block. Sometimes a situation may arise where a part of a block may causeone error and the entire block itself may cause another error. In such cases, exception handlers have to be nested.
+
+```java
+try {
+    try{
+        int len = atgs.length;
+        int b = 10/len;
+    } catch (ArithmeticException e) {
+        System.out.println(args[0]);
+        System.out.println(args[1]);
+        System.out.println(args[2]);
+    }
+} catch (Exception e){
+    e.printStackTrace();
+}
+catch(Exception ee){
+
+}
+```
+📝: At a time only one Exception is occurred and at a time only one catch block is executed.
+📝: All `catch` blocks must be ordered from most specific to most general, i.e., `catch` for `ArithemeticException` must come before `catch` for Exception.
+
+> 📝: We can't use child class exception below a top class ('Exception') exception.
+```java
+catch (Exception e){}
+catch (ArithemeticException e){} // error
+```
