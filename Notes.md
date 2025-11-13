@@ -5877,6 +5877,13 @@ Interface → extends → Interface
 ## 48. Exception Handling
 Exception is an event that disrupts the normal flow of the program.
 
+It is one of the powerful **mechanism to handle the runtime errors** so that normal flow of the application can be maintained.
+
+### Hierarchy of Java Exception Classes
+
+![exception_hierarchy](/resources/exceptionHierarchy.png)
+
+### Types of Exceptions
 There are mainly two types of exceptions: **Checked** and **Unchecked**; where `error` is considered unchecked exception.
 - **Compile Time** ➡ Checked Exception
 - **Run Time** ➡ Unchecked Exception
@@ -5895,6 +5902,8 @@ There are mainly two types of exceptions: **Checked** and **Unchecked**; where `
 - `FileNotFoundException`
 - `ClassNotFoundException`
 - `InterruptedException`
+
+![exception_types](/resources/Exceptions-in-Java.png)
 ---
 ### Exception Handling Keywords
 1. `try`
@@ -6016,3 +6025,36 @@ catch(Exception ee){
 catch (Exception e){}
 catch (ArithemeticException e){} // error
 ```
+
+### `finally`
+`finally` block is a block that is used to **exceute importent code** such as closing connection, stream.
+
+- `finally` block is always executed, whether an exception occurs or not.
+- `finally` block is used to release resources, such as closing a file or a database connection.
+- `finally` block follows `try-catch` block.
+```java
+try{
+    int len = 10;
+    b = 40/len;
+} catch(ArithmeticException e){
+    System.err.println("Exception occur " + e);
+}
+finally{
+    System.out.println("Exception occurred!!");
+}
+```
+
+❓: **Why use `finally` block?**
+▶ `finally` block in Java can be used to put 'cleanup' code such as closing a file, a database connection, etc. Finally block is always executed, whether an exception occurs or not.
+
+> If you have to perform different tasks at the occurences of different Exceptions, use java mutli-catch blocks.
+
+#### Internal working of finally block
+
+![finally](/resources/finally_block.png)
+
+> If you don'thandle exception, before terminating the program, JVM excutes finally block (if any).
+
+📝: For each `try` block there can be zero or more `catch` blocks, but only one `finally` block.
+
+> The `finally` block will not be executed if program exists (either by calling `System.exit()` or by causing a fatal error that causes the process to `abort()`). 
