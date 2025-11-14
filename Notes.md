@@ -5879,15 +5879,25 @@ Exception is an event that disrupts the normal flow of the program.
 
 It is one of the powerful **mechanism to handle the runtime errors** so that normal flow of the application can be maintained.
 
+The core advantage of exception handling is **to amintain the normal flow of the application**. Exception normally disrupts the normal flow of the application that is why we use exception handling.
+
 ### Hierarchy of Java Exception Classes
 
 ![exception_hierarchy](/resources/exceptionHierarchy.png)
 
 ### Types of Exceptions
 There are mainly two types of exceptions: **Checked** and **Unchecked**; where `error` is considered unchecked exception.
-- **Compile Time** ➡ Checked Exception
-- **Run Time** ➡ Unchecked Exception
-- error
+The SunMicrosystem says there are three types of exceptions:
+
+1. Checked Exception ➡ **Compile Time**
+The classes that extend `Throwable` class except `RuntimeException` and `Error` are known as **checked exception**. eg, `IOException`, `SQLException`, `ClassNotFoundException`.
+
+2. Unchecked Exception ➡ **Run Time**
+The classes that extend `RuntimeException` are known as **unchecked exceptions**. eg, `ArithemeticException`, `NullPointerException`, `ArrayIndexOutOfBoundsException`, etc.
+Unchecked exceptions are not checked at compile-time rather they are checked at runtime.
+
+3. `error`
+Error is irrecoverable. eg, `OutOfMemoryError`, `VirtualMachineError`, `AssertionError`, etc.
 
 **Runtime Exceptions**:
 - `ArithmeticException`
@@ -5958,6 +5968,15 @@ class A{
 - The finally block always executes, whether an exception occurs or not.
 
 > 📝: When an exception occurs and is not handled, the program terminates abruptly and the code after it, will never execute.
+
+![try-catch working](/resources/try-catch_working.png) 
+
+The JVM firstly checks whether the exception is handled or not. If exception is not handled, JVM provides a default exception handler that performs the following tasks:
+- Prints out exception description.
+- Prints the stack trace (hierarchy of methods where the exception occurred).
+- Causes the profram to terminate.
+
+But if exception is handled by the application programmer, normal flow of the application is maintained, i.e., rest of the code is executed.
 
 #### How to use command line arguments
 ```java
@@ -6058,3 +6077,117 @@ finally{
 📝: For each `try` block there can be zero or more `catch` blocks, but only one `finally` block.
 
 > The `finally` block will not be executed if program exists (either by calling `System.exit()` or by causing a fatal error that causes the process to `abort()`). 
+
+### `throw`
+`throw` is used to explicitly throw an exception. We can throw either checked or unchecked exception in java by throw keyword. The `throw` keyword is mainly used to throw custo exception.
+
+**Syntax:** 
+
+    throw exception;
+**Example:**
+```java 
+throw new IOException("Sorry, device error!");
+```    
+
+```java
+class A{
+    public static void main(String... args){
+        int a = 10;
+        if(a > 0){
+            throw new ArithmeticException("Invalid Number.");
+        }
+    }
+}
+```
+
+### `throws`
+`throws` used to declare an exception. It gives an **information to the programmer that there may occur an exception** so it is better for the programmer to provide the exception handling code so that normal flow can be maintained. 
+
+Declares exceptions that a method might throw, informing the caller to handle them. It is mainly used with checked exceptions (explained below). If a method calls another method that throws a checked exception, and it doesn’t catch it, it must declare that exception in its `throws` clause
+
+```java
+import java.io.*;
+
+class Demo {
+    static void readFile(String fileName) throws IOException {   
+        FileReader file = new FileReader(fileName);
+    }
+
+    public static void main(String[] args){
+        try {
+            readFile("test.txt");
+        } catch (IOException e){
+            
+            System.out.println("File not found: " + e.getMessage());
+        }
+    }
+}
+```
+
+❓: **Which exception should be declared?**
+▶ Checked exception only, becuase:
+- Unchecked Exception: under you control so correct your code.
+- error: beyond your control. eg, you are unable to do anything if there occurs `VirtualMachineError` or `StackOverflowError`.
+
+> 📝: If you're calling a method that declares an exception, you must either **caught**(handle exception using try-catch) or **declare**(specifying throws with method) the exception.
+
+```java 
+import java.io.*;
+
+class A{
+    // Checked Exception0
+    public static void main(String... args) throws IOException{ 
+        int a = 10;
+        if(a > 0){
+            throw new IOException("Invalid Number.");
+        }
+    }
+}
+```
+
+### Custom Exceptions (User defined exceptions) : Checked
+```java
+class CustomException extends Exception{
+    CustomException(String message){
+        super(message);
+    }
+    class pqr{
+        int getData(int a) throws Exception {
+            int (a > 0) {
+                throw new CustomException("Error!");
+            }
+            return a;
+        }
+    }
+    class A{
+        public static void main(String... args) throws Exception{
+            pqr p = new pqr();
+            System.out.println(p.getData(10));
+        }
+    }
+}
+```
+
+### How Does JVM Handle an Exception?
+When an Exception occurs, the JVM creates an exception object containing the error name, description and program state. Creating the exception object and handling it in the run-time system is called throwing an exception. There might be a list of the methods that had been called to get to the method where an exception occurred. This ordered list of methods is called call stack. Now the following procedure will happen:
+
+- The run-time system searches the call stack for an exception handler
+- It starts searching from the method where the exception occurred and proceeds backward through the call stack.
+- If a handler is found, the exception is passed to it.
+- If no handler is found, the default exception handler terminates the program and prints the stack trace.
+
+        Exception in thread "abc" Name of Exception : Description
+        // Call Stack
+
+```java 
+class abc{
+    public static void main(String args[])
+    {
+        // Taking an empty string
+        String s = null;
+      
+        // Getting length of a string
+        System.out.println(s.length());
+    }
+}
+```
