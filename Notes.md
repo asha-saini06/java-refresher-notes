@@ -4003,7 +4003,7 @@ class abc{
 
 2. **Using `this` keyword**
 
-   * The `this` keyword differentiates between instance variables and local parameters when they share the same name.
+   - The `this` keyword differentiates between instance variables and local parameters when they share the same name.
 
      ```java
      class Box {
@@ -4016,7 +4016,7 @@ class abc{
 
 3. **Overloading constructors**
 
-   * A class can have **multiple constructors** with different parameter lists.
+   - A class can have **multiple constructors** with different parameter lists.
 
      ```java
      class Box {
@@ -4031,7 +4031,7 @@ class abc{
 
 4. **Constructor chaining**
 
-   * One constructor can call another using `this()`.
+   - One constructor can call another using `this()`.
 
      ```java
      class Example {
@@ -4057,8 +4057,8 @@ class abc{
 
 5. **No return type**
 
-   * A constructor **never has a return type**, not even `void`.
-   * If you add one, it becomes a **method**, not a constructor.
+   - A constructor **never has a return type**, not even `void`.
+   - If you add one, it becomes a **method**, not a constructor.
 
 ---
 
@@ -4261,9 +4261,9 @@ But sometimes we still need **controlled access** — that’s where getters and
 
 Encapsulation = **Data Hiding + Controlled Access**
 
-* Data is kept private.
-* Access is provided via public methods (getters/setters).
-* Allows validation before updating variables.
+- Data is kept private.
+- Access is provided via public methods (getters/setters).
+- Allows validation before updating variables.
 
 ```java
 class Student {
@@ -4353,8 +4353,8 @@ class Lamp {
 ```
 🚀 **Real-World Use**
 
-* Commonly used in **Java Beans**, **POJOs**, and **model classes**.
-* IDEs like Eclipse or IntelliJ can auto-generate them (`Alt + Insert` → Getters/Setters).
+- Commonly used in **Java Beans**, **POJOs**, and **model classes**.
+- IDEs like Eclipse or IntelliJ can auto-generate them (`Alt + Insert` → Getters/Setters).
 
 📋 **Summary Table**
 
@@ -4445,8 +4445,8 @@ class abc{
 
 🔹 **Parameterized Constructor**
 
-* Accepts parameters to initialize the object directly at creation.
-* The `this` keyword differentiates instance variables from parameters.
+- Accepts parameters to initialize the object directly at creation.
+- The `this` keyword differentiates instance variables from parameters.
 
 ```java
 abc(String name, int roll) {
@@ -4457,9 +4457,9 @@ abc(String name, int roll) {
 
 🔹 **Overriding `toString()`**
 
-* Every Java class implicitly extends `java.lang.Object`.
+- Every Java class implicitly extends `java.lang.Object`.
 
-* The `Object` class has a default `toString()` method that returns:
+- The `Object` class has a default `toString()` method that returns:
 
   ```
   <ClassName>@<HexadecimalHashCode>
@@ -4467,7 +4467,7 @@ abc(String name, int roll) {
 
   Example: `abc@7a81197d`
 
-* By **overriding `toString()`**, we can define what should be printed when we display an object.
+- By **overriding `toString()`**, we can define what should be printed when we display an object.
 
 ```java
 public String toString() {
@@ -4483,15 +4483,15 @@ Output:
 ABC 1
 ```
 ---
-* `System.out.println(a1);` automatically calls `a1.toString()`.
-* Overriding `toString()` makes debugging and logging much more readable.
-* Common practice in Java Beans, POJOs, and model classes.
+- `System.out.println(a1);` automatically calls `a1.toString()`.
+- Overriding `toString()` makes debugging and logging much more readable.
+- Common practice in Java Beans, POJOs, and model classes.
 
 ---
 
 ⚙️ **Related Concepts:**
 
-* **Default `toString()` Behavior Example:**
+- **Default `toString()` Behavior Example:**
 
   ```java
   class Student {
@@ -4505,9 +4505,9 @@ ABC 1
   }
   ```
 
-* **Why Override?**
-  * To display meaningful info instead of memory address.
-  * Improves readability and debugging output.
+- **Why Override?**
+  - To display meaningful info instead of memory address.
+  - Improves readability and debugging output.
 
 ❓ **Why do we override `toString()` in Java?**
  → To provide a customized string representation of an object that reflects its state, instead of the default memory address.
@@ -4526,9 +4526,9 @@ It is a **character encoding standard** used to represent text (letters, digits,
 
 The ASCII pronounced 'ask-ee', is strictly a seven-bit code based on the English alphabet. ASCII codes are used to represent alphanumeric data. The code was first published as a standard in `1967`. 
 
-* Each **character** (A–Z, a–z, 0–9, symbols, etc.) is assigned a **unique numeric code** between `0` and `127`.
-* These numbers are stored and processed as **binary values (0s and 1s)** inside the computer.
-* ASCII ensures that computers and devices can **exchange and interpret text** consistently.
+- Each **character** (A–Z, a–z, 0–9, symbols, etc.) is assigned a **unique numeric code** between `0` and `127`.
+- These numbers are stored and processed as **binary values (0s and 1s)** inside the computer.
+- ASCII ensures that computers and devices can **exchange and interpret text** consistently.
 
 💻 **ASCII Range**
 | Type                     | Decimal Range | Characters/Examples                          |
@@ -4659,10 +4659,10 @@ Characters can be incremented since they’re internally numbers (`'Y' + 1 = 'Z'
 
 🧩 **Key Notes**
 
-* ASCII uses **7 bits** to represent each character (values `0–127`).
-* **Extended ASCII** (used in old systems) uses **8 bits (0–255)**.
-* **Unicode** is a superset of ASCII — includes characters from all languages.
-* Java’s `char` type is **2 bytes (16 bits)**, hence supports Unicode by default.
+- ASCII uses **7 bits** to represent each character (values `0–127`).
+- **Extended ASCII** (used in old systems) uses **8 bits (0–255)**.
+- **Unicode** is a superset of ASCII — includes characters from all languages.
+- Java’s `char` type is **2 bytes (16 bits)**, hence supports Unicode by default.
 
 | Feature             | ASCII                                              |
 | ------------------- | -------------------------------------------------- |
@@ -5188,10 +5188,10 @@ It is typically used when you need to **override a method** of a class or interf
 ### Internal working of Anonymous Class
 ✅ **Key Features**
 
-* Declared and instantiated **at the same time**.
-* Has **no name** (defined within an expression).
-* Used when a **single instance** of a class is required.
-* Commonly used in **GUI applications**, **event handling**, and **thread creation**.
+- Declared and instantiated **at the same time**.
+- Has **no name** (defined within an expression).
+- Used when a **single instance** of a class is required.
+- Commonly used in **GUI applications**, **event handling**, and **thread creation**.
 
 ### **Syntax**
 The syntax of an anonymous class expression is like the invocation of a constructor, except that there is a class definition contained in a block of code. 
@@ -5250,13 +5250,13 @@ class mno {
 
 ### When to Use Anonymous Classes?
 Use anonymous classes when:
-* You need a **one-time** subclass or interface implementation.
-* You want to **override methods quickly** without defining a new named class.
-* You’re writing **short, localized behavior**, especially:
+- You need a **one-time** subclass or interface implementation.
+- You want to **override methods quickly** without defining a new named class.
+- You’re writing **short, localized behavior**, especially:
 
-  * Event listeners (`ActionListener`, `MouseListener`)
-  * Runnable threads
-  * Callback implementations
+  - Event listeners (`ActionListener`, `MouseListener`)
+  - Runnable threads
+  - Callback implementations
 
 **Example 1 – Anonymous Class Extending an Abstract Class**
 ```java
@@ -5350,14 +5350,14 @@ Use anonymous classes when you need to create a short class for one-time use. Fo
 ---
 
 ### Advantages
-* Concise and clean syntax for one-time subclasses.
-* Reduces boilerplate code.
-* Improves readability for short-lived logic.
+- Concise and clean syntax for one-time subclasses.
+- Reduces boilerplate code.
+- Improves readability for short-lived logic.
 
 ### Disadvantages
-* Cannot be reused elsewhere.
-* Harder to debug due to lack of name.
-* Makes the code less readable if overused.
+- Cannot be reused elsewhere.
+- Harder to debug due to lack of name.
+- Makes the code less readable if overused.
 
 ---
 
@@ -5541,11 +5541,11 @@ class xyz {
 - Private methods can only be called inside default or static methods.
 - Static methods are accessed using the interface name, not via objects.
 - To implement an interface, use the implements keyword.
-* Interfaces define **what** a class should do, not **how** it should do it.
-* All variables in interfaces are constants (`public static final`).
-* All methods are **public and abstract** by default (till Java 7).
-* A class **implements** an interface, not extends it.
-* You can **implement multiple interfaces**, achieving multiple inheritance in Java.
+- Interfaces define **what** a class should do, not **how** it should do it.
+- All variables in interfaces are constants (`public static final`).
+- All methods are **public and abstract** by default (till Java 7).
+- A class **implements** an interface, not extends it.
+- You can **implement multiple interfaces**, achieving multiple inheritance in Java.
 
 ### Relationship Between Class and Interface
 A class can extend another class and similarly, an interface can extend another interface. However, only a class can implement an interface and the reverse (an interface implementing a class) is not allowed.
@@ -5914,6 +5914,7 @@ Error is irrecoverable. eg, `OutOfMemoryError`, `VirtualMachineError`, `Assertio
 - `InterruptedException`
 
 ![exception_types](/resources/Exceptions-in-Java.png)
+
 ---
 ### Exception Handling Keywords
 1. `try`
@@ -6078,6 +6079,8 @@ finally{
 
 > The `finally` block will not be executed if program exists (either by calling `System.exit()` or by causing a fatal error that causes the process to `abort()`). 
 
+![final vs finally vs finalize](/resources/finalfinallyfinalize.png) 
+
 ### `throw`
 `throw` is used to explicitly throw an exception. We can throw either checked or unchecked exception in java by throw keyword. The `throw` keyword is mainly used to throw custo exception.
 
@@ -6191,3 +6194,316 @@ class abc{
     }
 }
 ```
+
+## 49. Inner Classes (Nested Classes)
+
+An **inner class** is a class **defined inside another class**.
+It helps logically group classes that are only used in one place, improving **encapsulation and readability**.
+
+**Syntax:**
+
+```java
+class Outer {
+    class Inner {
+        // Inner class body
+    }
+}
+```
+- Java inner class or nested class is a class which is declared inside the class or interface. 
+- We use inner classes to logically group classes and interfaces in one place so that it can be more readable and maintainable.
+
+```java
+// Outer class A
+class A {
+    // Static nested class B (inner class inside class A)
+    // Because it's static, it can be accessed without creating an object of A
+    static class B {
+
+        // Static variable inside nested class
+        static int a = 10;
+    }
+}
+
+// Separate class with main() method
+class xyz {
+    public static void main(String... args) {
+        // Accessing static variable 'a' of static nested class B
+        // Syntax: OuterClass.InnerClass.variable
+        System.out.println(A.B.a);
+    }
+}
+```
+- Additionally, it can **access all the members of the outer class** including private data members and methods.
+```java
+// Outer class A
+class A {
+
+    // Non-static inner class B
+    // This inner class can access ALL members of class A (including private)
+    class B {
+        int a;   // Instance variable inside inner class
+    }
+}
+
+class xyz {
+    public static void main(String... args) {
+        // Creating object of outer class A
+        A a1 = new A();
+
+        // Creating object of inner class B using outer class instance
+        // Syntax: outerObject.new InnerClass()
+        A.B b1 = a1.new B();
+
+        // Alternatively:
+        // A.B b1 = new A().new B();
+
+        // Assigning value to inner class variable
+        b1.a = 10;
+
+        // Printing value
+        System.out.println(b1.a);
+    }
+}
+```
+
+> A ➡ B ➡ C
+```java
+A a1 = new A();
+A.B b1 = a1.new B();
+A.B.C c1 = b1.new C();
+```
+
+### **Types of Inner Classes in Java**
+
+| Type                          | Defined As            | Can Access Outer Members?               | Static/Non-static | Typical Use Case                                            |
+| ----------------------------- | --------------------- | --------------------------------------- | ----------------- | ----------------------------------------------------------- |
+| **1. Non-static Inner Class** | Inside another class  | ✅ Yes (even private)                    | Non-static        | Helper classes tightly coupled to outer class               |
+| **2. Static Nested Class**    | With `static` keyword | ❌ Only static members of outer class    | Static            | When inner class doesn’t need outer instance                |
+| **3. Local Inner Class**      | Inside a method       | ✅ Yes (final or effectively final vars) | Non-static        | Used within a specific method only                          |
+| **4. Anonymous Inner Class**  | No name               | ✅ Depends                               | Non-static        | For quick implementation (e.g., interfaces, event handlers) |
+
+---
+
+**1. Non-static Inner Class**
+```java
+class Outer {
+    private String message = "Hello from Outer";
+
+    class Inner {
+        void display() {
+            System.out.println(message); // can access private members
+        }
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        Outer.Inner inner = outer.new Inner(); // creating inner class object
+        inner.display();
+    }
+}
+```
+**Output:**
+```
+Hello from Outer
+```
+---
+**2. Static Nested Class**
+```java
+class Outer {
+    static int data = 50;
+    static class Inner {
+        void msg() {
+            System.out.println("Data: " + data);
+        }
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        Outer.Inner obj = new Outer.Inner(); // no Outer object needed
+        obj.msg();
+    }
+}
+```
+**Output:**
+```
+Data: 50
+```
+---
+
+**3. Local Inner Class**
+```java
+class Outer {
+    void outerMethod() {
+        System.out.println("Inside outerMethod()");
+        class LocalInner {
+            void innerMethod() {
+                System.out.println("Inside local inner class");
+            }
+        }
+        LocalInner obj = new LocalInner();
+        obj.innerMethod();
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        new Outer().outerMethod();
+    }
+}
+```
+**Output:**
+```
+Inside outerMethod()
+Inside local inner class
+```
+---
+**4. Anonymous Inner Class**
+Used when you need to override a method or implement an interface **once**.
+
+```java
+abstract class Animal {
+    abstract void sound();
+}
+public class Test {
+    public static void main(String[] args) {
+        Animal dog = new Animal() {
+            void sound() {
+                System.out.println("Dog barks");
+            }
+        };
+        dog.sound();
+    }
+}
+```
+**Output:**
+```
+Dog barks
+```
+---
+
+| Concept                 | Description                                                          |
+| ----------------------- | -------------------------------------------------------------------- |
+| **Inner Class**         | A class defined within another class.                                |
+| **Static Nested Class** | Does not require outer instance.                                     |
+| **Local Inner Class**   | Defined within a method or block.                                    |
+| **Anonymous Class**     | Declared and instantiated together.                                  |
+| **Encapsulation**       | Inner classes can access outer private data, supporting data hiding. |
+
+---
+### **Advantage of Inner Class**
+
+1. Nested classes represent a special type of relationship that is **it can access all the members (data members and methods) of outer class** including private.
+2. Nested classes are used to develop more readable and maintainable code because it logically group classes and interfaces in one place only.
+3. **Code Optimization**: It requires less code to write.
+
+### **Real-World Example**
+
+Inner classes are heavily used in:
+
+- GUI event handling (`ActionListener`, `MouseAdapter`)
+- Multithreading callbacks
+- Encapsulating helper logic (e.g., `Map.Entry` inside `HashMap`)
+
+---
+
+### **Output Comparison**
+
+| Inner Class Type | Needs Outer Object? | Has Name? | Common Use              |
+| ---------------- | ------------------- | --------- | ----------------------- |
+| Non-static       | ✅ Yes               | ✅ Yes     | Access outer members    |
+| Static           | ❌ No                | ✅ Yes     | Independent logic       |
+| Local            | ✅ Within method     | ✅ Yes     | Method-scoped logic     |
+| Anonymous        | ✅ Yes               | ❌ No      | One-time implementation |
+
+> Inner classes → connect one class logically inside another
+  Together, they strengthen **encapsulation, hierarchy, and modularity** in OOP design.
+
+## 50. File Handling
+- File handling is an important part of any application.
+- Java has several methods for creating, reading, updating, and deleting files.
+- The `File` class from the `java.io` package, allows us to work with files.
+- To use the File class, create an object of the class, and specify the filename or directory name:
+```java
+import java.io.File;  // Import the File class
+File myObj = new File("filename.txt"); // Specify the filename
+```
+
+![file_handling](/resources/file_handling_in_java.png) 
+
+- A stream is a sequence of data. In Java, a stream is composed of bytes.
+- stream (bytecode) 
+    - InputStream : **System.in**
+    - Outputstream : **System.out** , **System.err**
+
+![input_output_stream](/resources/input_output_stream.png)
+
+![stream_hierarchy](/resources/stream_hierarchy.png) 
+
+### Why File Handling is Required?
+- To store data permanently instead of keeping it only in memory.
+- To read and write data from/to files for later use.
+- To share data between different programs or systems.
+- To organize and manage large data efficiently.
+- To support file handling, Java provides the `File` class in the `java.io` package.
+
+### File Class
+File class in Java (from the `java.io` package) is used to represent the name and path of a file or directory. It provides methods to create, delete, and get information about files and directories.
+```java
+// Importing File Class
+import java.io.File;
+class abc{
+    public static void main(String[] args){      
+        // File name specified
+        File obj = new File("myfile.txt");
+        System.out.println("File Created!");
+    }
+}
+```
+Output:
+```
+File Created!
+```
+In Java, I/O streams are used to perform input and output operations on files.
+
+### I/O Streams in Java
+In Java, I/O streams are the fundamental mechanism for handling input and output operations. They provide a uniform way to read data from various sources (files, network, memory) and write data to different destinations.
+
+Java I/O streams are categorized into two main types based on the type of data they handle:
+
+1. **Byte Streams**
+In Java, Byte Streams are used to handle raw binary data such as images, audio files, videos or any non-text file. They work with data in the form of 8-bit bytes.
+
+![Byte Stream](/resources/byte_streams.png) 
+
+The two main abstract classes for byte streams are:
+
+- InputStream: for reading data (input)
+- OutputStream: for writing data (output)
+Since abstract classes cannot be used directly, we use their implementation classes to perform actual I/O operations.
+
+- FileInputStream: reads raw bytes from a file.
+- FileOutputStream: writes raw bytes to a file.
+- BufferedInputStream / BufferedOutputStream: use buffering for faster performance.
+- ByteArrayInputStream: reads data from a byte array as if it were an input stream.
+- ByteArrayOutputStream: writes data into a byte array, which grows automatically.
+
+2. **Character Streams**
+
+In Java, Character Streams are used to handle text data. They work with 16-bit Unicode characters, making them suitable for international text and language support.
+
+![Character Stream](/resources/character_streams.png)
+
+The two main abstract classes for character streams are:
+
+- Reader: Base class for all character-based input streams (reading).
+- Writer: Base class for all character-based output streams (writing).
+Since abstract classes cannot be used directly, we use their implementation classes to perform actual I/O operations.
+
+- FileReader: reads characters from a file.
+- FileWriter: writes characters to a file.
+- BufferedReader: reads text efficiently using buffering; also provides readLine() for reading lines.
+- BufferedWriter: writes text efficiently using buffering.
+- StringReader: reads characters from a string.
+- StringWriter: writes characters into a string buffer.
+
+> Use Byte Streams when working with binary data (images, audio, video, executable files) and use Character Streams when working with text data (characters, strings, text files).
