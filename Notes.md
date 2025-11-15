@@ -6507,3 +6507,72 @@ Since abstract classes cannot be used directly, we use their implementation clas
 - StringWriter: writes characters into a string buffer.
 
 > Use Byte Streams when working with binary data (images, audio, video, executable files) and use Character Streams when working with text data (characters, strings, text files).
+
+- `File` class doesn't works on data, it only works on files.
+
+```java
+import java.io.File;
+class A{
+    public static void main(String... args){
+        // File name specified
+        File obj = new File("f://mm.txt");
+        boolean b = obj.delete(); // returns true if the file is deleted
+        System.out.println(b);
+    }
+}
+```
+- To make a directory `mkdir()` method is used.
+
+```java
+import java.io.*;
+class A extends File{
+    A(String path){
+        super(path);
+    }
+    public static void main(String... args){
+        for (int i = 0; i < 10; i++){
+            A f = new A("f://mm/dir" + i); // code to create multiple directories in a directory named 'mm'
+            f.delete();
+        }
+    }
+}
+```
+
+```java
+import java.io.*;
+class A extends File{
+    A(String path){
+        super(path);
+    }
+    public static void main(String... args) throws Exception{
+        A a1 = new A("f://mm/myfile.pdf");
+        a1.createNewFile();
+    }
+}
+```
+- If a directory contains contents, it won't be deleted, first its contents (files/directories) must be deleted.
+
+**Code to find all the files in a drive:**
+```java
+import java.io.*;
+class A extends File{
+    A(String path){
+        super(path)
+    }
+    public static void main(String... args){
+        A a1 = new A("f://");
+        String arr[] = a1.list();
+        for(String p: arr){
+            System.out.println(p);
+        }
+    }
+}
+```
+
+**Code to calculate free space in a drive:**
+```java
+A a1 = new A("C://");
+double d = ((a1.getFreeSpace()/1024)/1024)/1024;
+System.out.println(d);
+```
+> Function to get/calculate total space of a drive: `getTotalSpace()`.
