@@ -6576,3 +6576,120 @@ double d = ((a1.getFreeSpace()/1024)/1024)/1024;
 System.out.println(d);
 ```
 > Function to get/calculate total space of a drive: `getTotalSpace()`.
+
+## 51. File Class
+The `File` Class is an abstract representation of file and directory pathname.
+The **File** class have several methods for working with directories and files such as creating new directories or files, deleting and renaming directories or files etc.
+
+A directory is a collection of files and subdirectories. A directory inside a directory is known as subdirectory.
+
+```java
+import java.io.File;  // Import the File class
+File f = new File("E://abc.txt");
+f.setWritable(false); // file can't be modified
+```
+
+> 📝: In Java, creating a file object does not mean creating a file. Instead, a file object is an abstract representation of the file or directory pathname (specified in the parenthesis).
+
+### Java File Handling
+
+#### **A) File Operations Overview**
+
+These are the general *tasks* we perform with files.
+
+| Operation               | Method            | Class        | Description                                         |
+| ----------------------- | ----------------- | ------------ | --------------------------------------------------- |
+| Create file             | `createNewFile()` | `File`       | Creates a new empty file if it doesn’t exist.       |
+| Read file               | `read()`          | `FileReader` | Reads file data character-by-character.             |
+| Write file              | `write()`         | `FileWriter` | Writes data into a file.                            |
+| Delete file             | `delete()`        | `File`       | Deletes a file or empty directory.                  |
+| Create directory        | `mkdir()`         | `File`       | Creates a single directory.                         |
+| List directory contents | `list()`          | `File`       | Returns all files/subdirectories as a string array. |
+
+---
+
+#### **B) Java `File` Class Methods**
+
+Below is a complete table of commonly used methods **inside `java.io.File`**.
+
+| Method              | Description                                   |
+| ------------------- | --------------------------------------------- |
+| `getName()`         | Returns the name of file/directory.           |
+| `getAbsolutePath()` | Returns the full absolute path.               |
+| `canRead()`         | Checks if file is readable.                   |
+| `canWrite()`        | Checks if file is writable.                   |
+| `exists()`          | Returns true if file/directory exists.        |
+| `isDirectory()`     | Checks if path refers to a directory.         |
+| `isFile()`          | Checks if path refers to a regular file.      |
+| `length()`          | Returns file size in bytes.                   |
+| `createNewFile()`   | Creates a new empty file.                     |
+| `delete()`          | Deletes file/directory (must be empty).       |
+| `list()`            | Returns names of files/directories in folder. |
+| `mkdir()`           | Creates a directory.                          |
+| `mkdirs()`          | Creates directory including parent folders.   |
+| `getFreeSpace()`    | Returns available disk space (bytes).         |
+| `getTotalSpace()`   | Returns total disk space.                     |
+| `getUsableSpace()`  | Space available to JVM.                       |
+
+---
+
+#### **C) FileReader & FileWriter Methods**
+
+**FileReader (for reading characters)**
+
+| Method         | Description                   |
+| -------------- | ----------------------------- |
+| `read()`       | Reads one character.          |
+| `read(char[])` | Reads into a character array. |
+| `close()`      | Closes the reader.            |
+
+**FileWriter (for writing characters)**
+
+| Method            | Description                |
+| ----------------- | -------------------------- |
+| `write(int c)`    | Writes a single character. |
+| `write(String s)` | Writes a string.           |
+| `write(char[])`   | Writes char array.         |
+| `close()`         | Closes the writer.         |
+| `flush()`         | Forces write to disk.      |
+
+
+Full list of methods available only in `java.io.File` class.
+| **Sr. No.** | **Method**          | **Description**                                                                     |
+| ----------- | ------------------- | ----------------------------------------------------------------------------------- |
+| **1**       | `getName()`         | Returns the name of the file or directory.                                          |
+| **2**       | `getAbsolutePath()` | Returns the absolute (full) path of the file or directory.                          |
+| **3**       | `canRead()`         | Returns **true** if the file exists and can be read by the application.             |
+| **4**       | `canWrite()`        | Returns **true** if the file exists and can be modified (written).                  |
+| **5**       | `exists()`          | Returns **true** if the file or directory actually exists.                          |
+| **6**       | `isDirectory()`     | Returns **true** if the path exists and is a directory.                             |
+| **7**       | `isFile()`          | Returns **true** if the path exists and is a regular file (not a directory).        |
+| **8**       | `length()`          | Returns file size in **bytes**. Returns 0 for directories.                          |
+| **9**       | `createNewFile()`   | Creates a new empty file **if it does not already exist**. Returns true on success. |
+| **10**      | `delete()`          | Deletes the file or empty directory. Returns true on success.                       |
+| **11**      | `list()`            | Returns a **String[]** of names inside a directory (files + directories).           |
+| **12**      | `mkdir()`           | Creates a single directory. Returns true if created successfully.                   |
+| **13**      | `mkdirs()`          | Creates multiple directories. Returns true if created successfully.                 |
+| **14**      | `renameTo()`        | Renames the file or directory. Returns true if renamed successfully.              |
+
+```java
+import java.io.*;
+class A extends File {
+    public static void main(String... args){
+        File f = new File("f://");
+        int hidden = 0;
+        int visible = 0;
+        String path[] = f.list();
+        for(String p:path) {
+            File ff = new File(p);
+            if(ff.isHidden()){
+                hidden++;
+            } else {
+                visible++;
+            }
+        }
+        System.out.println("HIDDEN" + hidden);
+        System.out.println("VISIBLE" + visible);
+    }
+}
+```
