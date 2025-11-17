@@ -6985,3 +6985,45 @@ The important points about BufferedInputStream:
 | **5**                  | Much **faster** due to buffering.                                                                                                                                                                                                          | **Slower** because of frequent disk I/O calls.                                                                          |
 | **6**                  | Example: If reading 256 bytes, it may read 128 bytes at a time → only **2 system calls**.                                                                                                                                                  | If reading 256 bytes, it makes **256 system calls** (1 per byte).<br>Very slow.                                         |
 | **Real-World Analogy** | Like YouTube **buffering** the video → smooth playback.                                                                                                                                                                                    | No buffering → video would hang every second.                                                                           |
+
+---
+
+❓ **Why do we use the `File` class in Java?**
+➡ Because `File` class represents **file or directory paths** and allows us to check properties like *hidden, readable, writable, exists*, etc.
+
+❓ **Can the `File` class read or write data?**
+➡ No. `File` class **cannot** read/write data. It only represents **metadata/path**.
+To read/write, we use streams like **FileInputStream, FileOutputStream**.
+
+ ❓ **How do we count hidden and visible files in a directory?**
+➡ By calling `f.list()` to get all file names and then checking each file with
+`isHidden()` → hidden
+otherwise → visible.
+
+ ❓ **What does `skip()` do in FileInputStream?**
+➡ `skip(n)` moves the cursor forward by **n bytes** without reading them.
+
+ ❓ **How do we merge two files in Java?**
+➡ Use `SequenceInputStream` to combine two input streams and write the result using `FileOutputStream`.
+
+❓ **How do we take input from keyboard and save it to a file?**
+➡ Wrap `System.in` in `BufferedInputStream`, read byte-by-byte, and write into `FileOutputStream`.
+
+❓ **How to append data to an existing file?**
+➡ Create FileOutputStream with **append mode ON**:
+`new FileOutputStream("file.txt", true)`
+
+❓ **What is ByteArrayInputStream?**
+➡ A stream that reads data from a **byte array**, not from a file.
+Useful for testing, converting strings to streams, in-memory data processing.
+
+❓ **Why use ByteArrayInputStream?**
+➡ Because it allows:
+* reading data without actual file
+* fast in-memory operations
+* treating strings/bytes like an InputStream
+
+
+❓ **What does `ByteArrayInputStream(arr, 0, 3)` mean?**
+➡ It creates a stream that reads only a **portion** of array → from index `0` up to `3`.
+
