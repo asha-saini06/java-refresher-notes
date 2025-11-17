@@ -6672,16 +6672,34 @@ Full list of methods available only in `java.io.File` class.
 | **13**      | `mkdirs()`          | Creates multiple directories. Returns true if created successfully.                 |
 | **14**      | `renameTo()`        | Renames the file or directory. Returns true if renamed successfully.              |
 
+---
+
+### Java File I/O (Input/Output Streams)
+
+#### ➡ Counting Hidden & Visible Files in a Directory
 ```java
+// Listing Files & Checking Attributes (isHidden, isDirectory, etc.)
 import java.io.*;
-class A extends File {
+class A extends File { // ❌ NOTE: You should NOT extend File class.
+// File is a final representation; we don’t need inheritance here.
     public static void main(String... args){
-        File f = new File("f://");
+        File f = new File("f://"); // Create File object for the target directory
+
         int hidden = 0;
         int visible = 0;
-        String path[] = f.list();
+
+        String path[] = f.list(); // List the names of all files/folders inside the directory
+
+        // Null check (in case path is empty or drive not found)
+        if(path == null){
+            System.out.println("Directory not found or empty.");
+            return;
+        }
+
+        // Loop through each file/folder
         for(String p:path) {
-            File ff = new File(p);
+            File ff = new File(p); // Create File object for every item
+
             if(ff.isHidden()){
                 hidden++;
             } else {
@@ -6693,3 +6711,277 @@ class A extends File {
     }
 }
 ```
+**Explanation:**
+- `File.list()` returns all file/folder names inside a directory.
+- `isHidden()` checks whether the file is hidden.
+- Counts visible and hidden items.
+
+#### ➡ FileInputStream – Skipping Bytes While Reading a File
+```java
+// FileInputStream: Reading Bytes & Using skip()
+class A{
+    public static void main(String... args) throws IOException{
+        File f = new File("f://tt.txt");
+        FileInputStream fin = new FileInputStream(f);
+        int i;
+        // Read until end of file (-1)
+        while((i = fin.read()) != -1){
+            fin.skip(2); // ❗ Skips 2 bytes after each read
+            System.out.print((char)i); // print current character
+        }
+    }
+}
+```
+**Explanation:**
+- Reads the file one byte at a time.
+- After reading each byte, `skip(2)` jumps forward by 2 bytes.
+- So effectively reads every **3rd character**.
+
+#### ➡ Merge two files (SequenceInputStream) 
+Read the data from two files and writes into another file.
+```java 
+// SequenceInputStream: Merging Multiple Input Streams
+class A{
+    public static void main(String... args) throws IOException{
+        File f = new File("f://mp.mp3");
+        FileInputStream fin = new FileInputStream(f); // Input file 1
+        FileInputStream fin1 = new FileInputStream("f://mp1.mp3"); // Input file 2
+        SequenceInputStream ss = new SequenceInputStream(fin, fin1); // Combines two streams into one
+        FileOutputStream fout = new FileOutputStream("f://Nfile.mp3"); // Output file
+
+        int i;
+        // Reads from merged stream
+        while((i = ss.read()) != -1){
+            fout.write(i); // write into new file
+            System.out.print((char)i);
+        }
+        // Close streams
+        ss.close();
+        fin.close();
+        fin1.close();
+        fout.close();
+
+        System.out.println("Files merged successfully.");
+    }
+}
+```
+**Explanation:**
+- `SequenceInputStream` merges **multiple input streams** into one continuous stream.
+- Reads from `fin` first → then automatically switches to `fin1`.
+- Useful for merging text files, audio, etc.
+
+#### ➡ Taking Keyboard Input (BufferedInputStream) & Writing Into a File
+```java
+import java.io.*;
+class A {
+    public static void main(String... args) throws IOException {
+        FileOutputStream fout = new FileOutputStream("f://tt.txt");
+        // Read input from keyboard via System.in
+        BufferedInputStream bb = new BufferedInputStream(System.in);
+        System.out.println("Enter data (Press 'N' to stop):");
+
+        int i;
+        // Reads until 'N' is typed
+        while((i = bb.read()) != 'N'){
+            fout.write(i);
+        }
+        fout.close();
+    }
+}
+
+```
+Takes the data from the keyboard (console) and stores it in the file.
+
+**Explanation:**
+- Takes input from keyboard byte-by-byte.
+- Stops writing when character `'N'` is entered.
+- Stores typed content into `tt.txt`.
+
+#### ➡ Append Mode in FileOutputStream
+```java
+// Appending Data to a File (FileOutputStream append = true)
+FileOutputStream fout = new FileOutputStream("f://tt.txt", true); // set true for the appendable mode
+String s = "Hello";
+fout.write(s.getBytes()); // convert string → byte[]
+fout.close();
+```
+**Explanation:**
+- Setting `true` enables *append mode* (does not overwrite file).
+- `getBytes()` converts String into byte array.
+
+#### ➡ ByteArrayInputStream – Read Data from Byte Array
+As the name suggests, it can be used to read byte array as input stream.
+
+Java ByteArrayInputStream class contains an internal buffer which is used to read byte array as stream. In this stream, the data is read from a byte array.
+
+The buffer of ByteArrayInputStream automatically grows according to data.
+
+```java
+// ByteArrayInputStream: Reading Bytes from Memory Buffer
+FileOutputStream fout = new FileOutputStream("f://output.txt");
+byte arr[] = "welcome".getBytes();
+ByteArrayInputStream bb = new ByteArrayInputStream(arr);
+int i;
+while((i = bb.read()) != -1){
+    fout.write(i); // write to the file
+    System.out.print((char)i); // print to the console
+}
+
+fout.close();
+bb.close();
+```
+**Explanation:**
+- `ByteArrayInputStream` lets you treat a byte array as a file.
+- Useful for:
+    - Testing I/O
+    - Processing data in memory
+    - Object serialization/deserialization
+
+➡ **Partial Read Using ByteArrayInputStream**
+```java
+// ByteArrayInputStream with Offset & Length
+ByteArrayInputStream by = new ByteArrayInputStream(arr, 0, 3); // reads arr from index 0 to 3
+```
+**Explanation:**
+- Reads only part of the array: from index `0` to `3` (3 bytes).
+- Useful when you want only a portion of data to be processed.
+
+
+#### ➡ PrintStream – Writing Formatted Data to Streams
+PrintStream class provides methods to write data to another stream. The PrintStream class automatically flushes the data so there is no need to call `flush()` method. Moreover, its methods don't throw `IOException`.
+
+PrintStream provides convenient `print()` and `println()` methods to write data to:
+- `console (System.out)`
+- files
+
+It **auto-flushes and never throws `IOException`**.
+
+**Example 1: Printing to Console**
+```java
+PrintStream out = new PrintStream(System.out); // prints data on the screen
+out.print("hi");
+```
+**Example 2: Printing to a File**
+```java
+FileOutputStream f = new FileOutputStream("f://tt.txt");
+PrintStream out = new PrintStream(f); // prints data in file
+out.print("hello");
+```
+#### ➡ FileOutputStream – Writing Raw Bytes to a File
+It is an output stream used for writing data to a file.
+
+`FileOutputStream` is used to write byte data such as:
+- text
+- images
+- audio
+- binary files
+
+▶ **Writing a Single Byte**
+```java
+FileOutputStream fout = new FileOutStream ("D://t.txt");
+fout.write(65); // writes ASCII 65 → 'A'
+// The content of a text file t.txt is set with the data 'A'
+```
+**Result:** File contains the character `A`.
+
+▶ **Writing a String**
+```java 
+FileOutputStream fout = new FileOutputStream("D:\\t.txt");
+String s = "Welcome";
+byte b[] = s.getBytes(); // converting String into byte array 
+fout.write(b); // content of text file tt.txt is set with the data 'Welcome'
+```
+#### ➡ FileInputStream – Reading Raw Bytes from a File
+`FileInputStream` reads byte-oriented data, typically:
+- images, videos, audio
+- binary files
+
+It can read text, but for character data `FileReader` is preferred.
+
+This class obtains input bytes from a file. 
+
+It is used for reading byte-oriented data (streams of raw bytes) such as image data, audio, video, etc.
+
+You can also read character-stream data. But, for reading streams of chracters, it is recommended to use `FileReader` class.
+
+▶ **Read a Single Character**
+```java 
+FileInputStream file = new FileInputStream("D://tt.txt");
+int i = file.read(); // reads a single character  // reads 1 byte
+System.out.println((char)i); // prints the character // convert byte → character
+```
+`tt.txt` File Content: `Welcome`
+After executing the above code, you will get a single character from the file which is `87` (in byte form). To see the text, you need to convert it into character.
+Output: `W`
+
+▶ **Read All Characters**
+```java
+FileInputStream fin = new FileInputStream("D://tt.txt");
+int i = 0;
+while((i = fin.read()) != -1){
+    System.out.print((char)i);
+}
+```
+Output: `Welcome`
+
+#### ➡ SequenceInputStream – Reading Multiple Streams Sequentially
+`SequenceInputStream` combines **two input streams** into one stream.
+It reads the first completely, then the second.
+
+This class is used to read data from multiple streams. It reads data sequentially (one by one).
+
+**Reading t1.txt + t2.txt**
+```java
+import java.io.*;
+class A{
+    public static void main(String... args) throws Exception{
+        FileInputStream input1 = new FileInputStream("f://t1.txt");
+        FileInputStream input2 = new FileInputStream("f://t2.txt");
+        SequenceInputStream inst = new SequenceInputStream(input1, input2);
+        int i;
+        while((i = inst.read()) != -1){
+            System.out.print((char)i);
+        }
+        input.close();
+        input1.close();
+        input2.close();
+    }
+}
+```
+
+let, `t1.txt`: Java IO Programming.
+     `t2.txt`: SequenceInputStream class.
+
+Output:
+```
+Java IO Programming. SequenceInputStream class.
+```
+
+#### ➡ BufferedInputStream – Fast Reading with Internal Buffer
+`BufferedInputStream` improves performance using an internal buffer.
+
+Instead of reading byte-by-byte from disk, it loads data in **chunks**.
+
+This class is used to read information from stream. It internally uses buffer mechanism to make the performance fast.
+
+The important points about BufferedInputStream:
+- When the bytes from the stream are skipped or read, the internal buffer automatically refilled from the contained input stream, many bytes at a time.
+- When a BufferedInputStream is created, an internal buffer array is created.
+
+**Key Points:**
+- Uses internal buffer array.
+- When reading → first checks buffer.
+- If buffer empty → fetches a **bulk batch** of bytes from disk.
+- More efficient than `FileInputStream`.
+
+### BufferInputStream vs FileInputStream
+
+| No.                    | **BufferedInputStream**                                                                                                                                                                                                                    | **FileInputStream**                                                                                                     |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| **1**                  | It is **buffered**.                                                                                                                                                                                                                        | It is **not buffered**.                                                                                                 |
+| **2**                  | Reads bytes from another InputStream (e.g., FileInputStream).<br>It **wraps** another stream. <br><br>`java<br>FileInputStream fis = new FileInputStream("c:/myFile.txt");<br>BufferedInputStream bis = new BufferedInputStream(fis);<br>` | Reads bytes **directly from a file**. <br><br>`java<br>FileInputStream fis = new FileInputStream("c:/myFile.txt");<br>` |
+| **3**                  | `read()` mostly reads data from the **buffer**.<br>If buffer is empty → it fetches a *chunk* of bytes from disk and fills the buffer.                                                                                                      | Each `read()` call directly accesses the **file system**, reading **1 byte at a time** → very slow.                     |
+| **4**                  | Supports **mark()** and **reset()**. <br>An internal buffer array is created and refilled as needed, reading many bytes at once.                                                                                                           | Does **NOT** support mark/reset. <br>Reads bytes one-by-one from disk.                                                  |
+| **5**                  | Much **faster** due to buffering.                                                                                                                                                                                                          | **Slower** because of frequent disk I/O calls.                                                                          |
+| **6**                  | Example: If reading 256 bytes, it may read 128 bytes at a time → only **2 system calls**.                                                                                                                                                  | If reading 256 bytes, it makes **256 system calls** (1 per byte).<br>Very slow.                                         |
+| **Real-World Analogy** | Like YouTube **buffering** the video → smooth playback.                                                                                                                                                                                    | No buffering → video would hang every second.                                                                           |
