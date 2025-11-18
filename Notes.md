@@ -7027,3 +7027,296 @@ Useful for testing, converting strings to streams, in-memory data processing.
 ❓ **What does `ByteArrayInputStream(arr, 0, 3)` mean?**
 ➡ It creates a stream that reads only a **portion** of array → from index `0` up to `3`.
 
+## 52. Multithreading
+Multithreading in Java is a feature that enables a program to run multiple threads simultaneously, allowing tasks to execute in parallel and utilize the CPU more efficiently. A thread is a lightweight, independent unit of execution inside a program (process).
+
+- A process can have multiple threads.
+- Each thread runs independently but shares the same memory.
+
+![java_multithreading](/resources/Java-Multithreading1.png)
+
+### Key Features of Multithreading
+- A thread is the smallest unit of execution in Java.
+- Threads share the same memory space but run independently.
+- Java provides the Thread class and Runnable interface to create threads.
+- Multithreading ensures better CPU utilization by executing tasks simultaneously.
+- Synchronization is needed to prevent data inconsistency when threads share resources.
+
+**Example:** Imagine a restaurant kitchen. Multiple chefs (threads) are preparing different dishes at the same time. This speeds up service and utilizes all available resources (CPU).
+
+![multithreading](/resources/multithreading_example.png)
+
+### Java Threads
+Threads allows a program to operate more efficiently by doing multiple things at the same time.
+
+Threads can be used to perform complicated tasks in the background without interrupting the main program.
+> 📝: In Multithreading, more than one tasks work simultaneously.
+
+![threads](/resources/threads.png)
+
+1. Process-based Thread – **Multitasking**
+- This refers to running multiple processes at the same time.
+- Example: Running Chrome, VS Code, and Spotify simultaneously.
+- Each process has its own memory, and switching between them is multitasking.
+
+2. Thread-based Thread – **Multithreading**
+- This refers to running multiple threads inside the same process.
+- Example: A single program where one thread handles UI, another handles I/O, another handles computation.
+- Threads share the same memory of the process.
+
+> 📝: **Java doesn't support multitasking**. Multitasking is handled by the OS.
+
+🔸 **In Short :**
+- **Multitasking** = multiple processes running together.
+- **Multithreading** = multiple threads within one process running together.
+
+### Thread vs Process
+| **Point**               | **Process**                                          | **Thread**                                                     |
+| ----------------------- | ---------------------------------------------------- | -------------------------------------------------------------- |
+| **Definition**          | A program in execution.                              | A lightweight segment of a process.                            |
+| **Creation Time**       | Takes more time to create.                           | Takes less time to create.                                     |
+| **Termination Time**    | Takes more time to terminate.                        | Takes less time to terminate.                                  |
+| **Context Switching**   | Slow, heavyweight switch.                            | Fast, lightweight switch.                                      |
+| **Memory Usage**        | Has its own memory, PCB, stack, address space.       | Shares parent’s memory, has its own TCB & stack.               |
+| **Communication**       | Less efficient, requires IPC (pipes, sockets, etc.). | Efficient — threads communicate via shared memory.             |
+| **Independence**        | Processes run independently.                         | Threads depend on each other.                                  |
+| **Blocking Behavior**   | One blocked process does not affect others.          | If one user-level thread blocks, all may block.                |
+| **Changes Propagation** | Parent process changes don’t affect child processes. | Changes in main thread may affect all threads (shared memory). |
+| **Weight**              | Heavyweight.                                         | Lightweight.                                                   |
+| **Data Sharing**        | Processes do *not* share data.                       | Threads *share* data.                                          |
+| **Use of System Calls** | Requires system calls for creation.                  | No system call (created via APIs).                             |
+| **Execution Model**     | Used in multiprogramming (multiple processes).       | Used in multithreading (multiple threads in one process).      |
+| **OS Involvement**      | OS must handle process switching.                    | Thread switching may occur without OS involvement.             |
+
+#### ➕ Advantages of Process
+- Processes work independently in their own memory, ensuring no interference and better security.
+- Resources like CPU and memory are allocated effectively to optimize performance.
+- Processes can be prioritized to ensure important tasks get the resources they need.
+
+#### ➖ Disadvantages of Process
+- Frequent switching between processes can slow down the system and reduce speed.
+- Improper resource management can cause deadlocks where processes block each other.
+- Too many processes increase the size of the process table, consuming memory and slowing operations like searching and updating.
+
+#### ➕ Advantages of Thread
+- When there is heavy computation + I/O work, threads enable parallelism and speed up execution.
+- Threads are lightweight, so they are much faster to create and destroy than processes.
+- Threads allow applications to handle multiple tasks at the same time (e.g., browser loading page + playing video + scrolling).
+
+#### ➖ Disadvantages of Thread
+- Threads share memory, so one thread can accidentally overwrite or corrupt data used by another thread.
+- Threads share resources like file handles — one closing a file can break another thread that is using it.
+- Creating too many threads can degrade performance or exhaust system memory.
+
+### Creating a Thread
+![create_thread](/resources/Java-Multithreading2.png)
+
+There are two ways to create a thread, both are defined in `java.lang` package:
+
+1.**Extending the Thread class**
+
+ It can be created by extending the Thread class and overriding its run() method:
+
+```java
+public class Main extends Thread {
+  public void run() {
+    System.out.println("This code is running in a thread");
+  }
+}
+```
+2. **Implementing the Runnable Interface**
+
+Another way to create a thread is to implement the `Runnable` interface:
+
+```java
+public class Main implements Runnable {
+  public void run() {
+    System.out.println("This code is running in a thread");
+  }
+}
+```
+> `run()` method of `Runnable` interface is an **abstract method**, so we have to override it, whenever we use it.
+
+> **Differences between "extending" and "implementing" Threads :**
+ The major difference is that when a class extends the Thread class, you cannot extend any other class, but by implementing the Runnable interface, it is possible to extend from another class as well, like: class `MyClass extends OtherClass implements Runnable`.
+
+**When to Use Which?**
+- **Use extends Thread**: if your class does not extend any other class.
+- **Use implements Runnable**: if your class already extends another class (preferred because Java doesn’t support multiple inheritance).
+
+**Which method is better?**
+
+✔ Use Runnable when:
+- You want to extend another class
+- You want to share the same job among multiple threads
+- Code is cleaner and more flexible
+
+✔ Use Thread when:
+- You want full control by overriding Thread class itself
+- Rarely preferred
+
+> 📝: Java does not support multiple inheritance → so Runnable is usually used.
+
+> A thread can be started **only once**. 
+Calling `start()` again → `IllegalThreadStateException`.
+
+### Thread Class
+Thread is a line of execution within a program. Each program can have multiple associated threads. Each thread has a priority which is used by the thread scheduler to determine which thread must run first. Java provides a thread class that has various method calls to manage the behavior of threads by providing constructors and methods to perform operations on threads. 
+
+A Thread is a program that starts with a method() frequently used in this class only known as the `start()` method. This method looks out for the `run()` method which is also a method of this class and begins executing the body of the `run()` method. Here, keep an eye on the `sleep()` method which will be discussed later below.
+
+> 📝: Every class that is used as a thread must implement `Runnable` interface and override its run method.
+
+**Syntax:**
+```java
+public class Thread extends Object implements Runnable
+```
+
+**Thread Class - Common Methods**
+| Method                                | Description                                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `run()`                               | Entry point of a thread. Contains the code that executes when the thread starts.                  |
+| `start()`                             | Calls the `run()` method internally and starts a new thread of execution.                         |
+| `static sleep(long millis)`           | Makes the **current thread** sleep for the specified milliseconds. Throws `InterruptedException`. |
+| `isAlive()`                           | Returns `true` if the thread is still running; otherwise `false`.                                 |
+| `join()`                              | Causes the current thread to wait until the specified thread finishes execution.                  |
+| `setPriority(int pr)`                 | Changes the priority of the thread.                                                               |
+| `int getPriority()`                   | Returns the priority of the thread.                                                               |
+| `setName(String n)`                   | Sets/changes the name of the thread.                                                              |
+| `String getName()`                    | Returns the name of the thread.                                                                   |
+| `wait()` / `notify()` / `notifyAll()` | Methods of the **Object** class; used for inter-thread communication.                             |
+
+#### Running Threads in Java
+There are two methods used for running Threads in Java:
+- `run()` Method: Contains the code for the thread. Calling it directly behaves like a normal method call.
+- `start()` Method: Launches a new thread and internally calls `run()` concurrently.
+
+#### Thread by extending Thread Class
+```java
+class A extends Thread {
+    public void run() {
+        for(int i = 0; i <= 10; i++) {
+            try {
+                Thread.sleep(1000);  // make child thread sleep for 1 second
+            } catch(InterruptedException e) { }
+            
+            System.out.println("Child Thread " + i);
+        }
+    }
+
+    public static void main(String... args) {
+        A a1 = new A();
+        a1.start();  // start child thread
+
+        for(int i = 0; i <= 10; i++) {
+            try {
+                Thread.sleep(1000);  // main thread sleeps
+            } catch(InterruptedException e) { }
+            
+            System.out.println("Main Thread " + i);
+        }
+    }
+}
+```
+Explanation: 
+- Creates a child thread by extending `Thread`
+- Both **Main Thread** and **Child Thread** run loops simultaneously
+- Each prints numbers 0–10
+- Both sleep for 1 second in each iteration → outputs interleave
+
+> 📝: As you know that at a time only one thread is executed. If you sleep a thread for the specified time, the thread schedular picks up another thread and so on.
+
+> 📝: `Thread` Class extends `Object` class and implements `Runnable` Interface.
+
+```java
+class A extends Thread{
+    static volatile int count = 5;
+    public void run() {
+        while(count > 0) {}
+        System.out.println("Loop terminate");
+    }
+    public static void main(String... args){
+        A a1 = new A();
+        a1.start();
+        try{ Thread.sleep(5000); } // wait for 5 sec
+        catch(Exception e) {}
+        count = -1; // update shared variable
+        System.out.println("Main terminate");
+    }
+}
+```
+
+> 📝: **volatile keyword**: Declaring a volatile variable means: The value of this variable will never be cached thread-locally: all reads and writes will go straight to 'main memory'.
+
+`volatile` is used in multithreading to ensure **visibility** of a variable across all threads.
+
+✔ What it does
+* Value is **never cached** by threads
+* All reads/writes go **directly to main memory**
+* All threads see the **latest** updated value immediately
+
+✔ Good for
+* Flags (`running`, `stop`)
+* Status variables
+* Simple read/write shared variables
+
+❌ What it does NOT do
+* Does **not** provide locking
+* Does **not** make operations atomic
+* Does **not** replace `synchronized`
+
+> ✔ `volatile` = **visibility only**, not atomicity.
+
+```java
+class Worker extends Thread {
+    volatile boolean running = true;
+
+    public void run() {
+        while(running) { }
+    }
+}
+```
+
+### Life Cycle of a Thread (controlled by JVM)
+A thread passes through different states like New, Runnable, Running, Waiting and Terminated. The lifecycle is managed by the JVM and thread scheduler.
+
+![thread_lifecycle](/resources/Java-Multithreading3.png)
+
+1. Initialization (New) State
+2. Runnable state
+3. Running
+4. Blocked (Non-Runnable)
+5. Destroy (Terminated)
+
+### Thread Priorities
+Threads can be assigned priorities to influence scheduling decisions. Higher priority threads are given preference by the thread scheduler.
+
+### Synchronization
+Synchronization ensures that multiple threads do not interfere with each other while accessing shared resources. It helps prevent data inconsistency and race conditions.
+
+### Inter-thread Communication
+Threads can communicate using methods like wait(), notify() and notifyAll(). This enables coordination between multiple threads.
+
+### Deadlock
+Deadlock occurs when two or more threads wait indefinitely for resources locked by each other. Java provides techniques to avoid and resolve deadlocks.
+
+### Thread Safety
+Thread safety ensures correct program execution when multiple threads access shared data. Techniques include synchronized, volatile and ThreadLocal.
+
+### Concurrency Utilities (java.util.concurrent)
+The concurrency package provides tools like Executors, Callable, Future and Thread Pools. These simplify managing multithreaded applications.
+
+### Advantages of Multithreading in Java
+
+![advantages_of_multithreading](/resources/Java-Multithreading4.png)
+
+- **Improved Performance**: Multiple tasks can run simultaneously, reducing execution time.
+- **Efficient CPU Utilization**: Threads keep the CPU busy by running tasks in parallel.
+- **Responsiveness**: Applications (like GUIs) remain responsive while performing background tasks.
+- **Resource Sharing**: Threads within the same process share memory and resources, avoiding duplication.
+- **Better User Experience**: Smooth execution of tasks like file downloads, animations, and real-time updates.
+
+### Real-World Applications
+
+![multithreading_applications](/resources/Java-Multithreading5.png)
+
