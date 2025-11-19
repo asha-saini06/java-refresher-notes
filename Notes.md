@@ -7420,3 +7420,101 @@ class A implements Runnable{
 - You prefer composition over inheritance
 
 > 📝: Runnable is the standard and preferred approach in enterprise applications.
+
+## 54. `isAlive()` Method
+The `isAlive()` method of the `Thread` class is used to check whether a thread is **still running** or **has finished its execution**. 
+It returns **true** if the thread upon which it is invoked is **alive**; otherwise, it returns **false**.
+
+```java
+public final boolean isAlive()
+```
+
+✔ **What it returns**
+
+* **true** → Thread is still running (Runnable/Running state)
+* **false** → Thread has finished execution or has not started yet
+
+## ⭐ Why use `isAlive()`?
+
+It helps to:
+* Check if a thread is still active
+* Confirm if a thread has completed execution
+* Debug or monitor thread behavior
+* Coordinate between threads
+
+**Basic `isAlive()` Usage :**
+```java
+class A implements Runnable{
+    String name;
+    Thread t;
+    int time;
+    A(String name, int time){
+        this.time = time;// sleep time for each thread
+        this.name = name;     // thread name
+
+        t = new Thread(this); // passing Runnable object to Thread
+        t.setName(name);      // assigning thread name
+
+        t.start();            // start the thread → calls run() internally
+    }
+    public void run(){
+        for (int i = 0; i<=10; i++){
+            try{ Thread.sleep(time); // each thread sleeps for its own time
+            } catch(Exception e) {}
+            System.out.println(t.getName()); // print thread name
+        }
+    }
+    public static void main(String... args){
+        // Create 5 threads with different names + sleep times
+        A a1 = new A("One", 1000);
+        A a2 = new A("Two", 200);
+        A a3 = new A("Three", 500);
+        A a4 = new A("Four", 800);
+        A a5 = new A("Five", 900);
+
+        // Main thread prints isAlive() status for each thread
+        for(int i = 0; i <= 10; i++){
+            try{ Thread.sleep(1000); }
+            catch(Exception e) {}
+            System.out.println(a1.t.getName() + "" + a1.t.isAlive());
+            System.out.println(a2.t.getName() + "" + a2.t.isAlive());
+            System.out.println(a3.t.getName() + "" + a3.t.isAlive());
+            System.out.println(a4.t.getName() + "" + a4.t.isAlive());
+            System.out.println(a5.t.getName() + "" + a5.t.isAlive());
+        }
+    }
+}
+```
+**Explanation:**
+- Each object of class `A` creates **its own thread** with custom sleep duration.
+- `isAlive()` returns:
+    - **true** → thread is still running (hasn't completed `run()`)
+    - **false** → thread finished executing
+- Threads with **shorter sleep times** will finish earlier.
+- Main thread continues running independently and monitors thread status.
+---
+`isAlive()` tests if this thread is alive. A thread is alive if it has been started and has not yet died. There is a transitional period from when a thread is running to when a thread is not running. After the `run()` method returns, there is a short period of time before the thread stops. If we want to know if the `start` method of the thread has been called or if thread has been terminated, we must use `isAlive()` method.
+This method is used to find out if a thread has actually been started and has yet not terminated.
+
+* A thread becomes "alive" **only after** calling `start()`.
+* Calling `run()` directly does **NOT** make a thread alive.
+* A thread remains alive until the `run()` method completes.
+* After completion, `isAlive()` always returns `false`.
+---
+`isAlive()` checks whether a thread is **still active**.
+A thread is considered **alive** if:
+
+* It has been **started** using `start()`
+* Its `run()` method **has not finished yet**
+
+There is a brief transitional moment after the `run()` method completes but before the thread fully stops. During this time, the thread may still be considered alive.
+
+`isAlive()` is useful when you want to confirm:
+
+* Whether the thread’s `start()` method has been called
+* Whether the thread has **not yet terminated**
+* Whether the thread has completed its execution or is still running
+
+In short:
+
+> **`isAlive()` helps determine if a thread has actually started and has not yet finished running.**
