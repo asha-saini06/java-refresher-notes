@@ -15,7 +15,7 @@ For the complete detailed notes, check out 👉 [Notes.md](./Notes.md)
 
 1. Intro
 2. Data Type
-3. p.v.s.m() explained
+3. Differences Between JDK, JRE and JVM
 4. Operators
 5. OOPs
 6. Types of Variables
