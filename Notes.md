@@ -7140,10 +7140,6 @@ public class Main implements Runnable {
 > **Differences between "extending" and "implementing" Threads :**
  The major difference is that when a class extends the Thread class, you cannot extend any other class, but by implementing the Runnable interface, it is possible to extend from another class as well, like: class `MyClass extends OtherClass implements Runnable`.
 
-**When to Use Which?**
-- **Use extends Thread**: if your class does not extend any other class.
-- **Use implements Runnable**: if your class already extends another class (preferred because Java doesn’t support multiple inheritance).
-
 **Which method is better?**
 
 ✔ Use Runnable when:
@@ -7320,3 +7316,107 @@ The concurrency package provides tools like Executors, Callable, Future and Thre
 
 ![multithreading_applications](/resources/Java-Multithreading5.png)
 
+## 53. Runnable Interface
+The `Runnable` interface is a functional interface that defines a single method, `run()`, which is used to execute a task in a separate thread.
+
+The `Runnable` interface is a **functional interface** that contains **one abstract method**, run().
+It represents a task that can be executed by a thread.
+
+📝 **Key Idea:**
+- **Runnable** = What to do (task)
+- **Thread** = Who will do it (worker)
+
+A `Thread` object is responsible for scheduling and running the `Runnable` task.
+
+### Why Use Runnable?
+- Java **does not support multiple inheritance**, so if your class extends something else, it cannot extend Thread.
+- Runnable is preferred for **clean separation** of *task* and *execution mechanism*.
+- Allows the **same Runnable task** to be executed by multiple threads.
+
+### Thread by implementing Runnable interface:
+The `Runnable` interface should be implemented by any class whose instances are intended to be executed by a thread.
+Runnable interface have only one method named `run()`.
+
+The class must implement `Runnable` and **override** the `run()` method.
+```java
+class A implements Runnable {
+    A() {
+        Thread t = new Thread(this); // Providing object of class that implements Runnable interface to the Thread class
+        t.start(); // This calls run() in a new thread
+    }
+    public void run() {
+        for(int i = 0; i <= 10; i++) {
+            try {Thread.sleep(1000);}
+            catch(Exception e) {}
+            System.out.println("Child Thread");
+        }
+        public static void main(String... args) {
+            A a1 = new A(); // Runnable object created → Thread starts
+
+            for(int i = 0; i <= 10; i++) {
+                try {Thread.sleep(1000);}
+                catch(Exception e) {}
+                System.out.println("Main Thread");
+            }
+        }
+    }
+}
+```
+- A class implementing `Runnable` **does NOT become a thread**.
+- You must create a **Thread object** and pass the Runnable to it.
+- `new Thread(this)` tells Java: "*Run my run() method inside a new thread.*"
+
+> 📝: If you are not extending the `Thread` class, your class object would not be treated as a thread object. So you need to explicitly create `Thread` class object.
+We are passing the object of your class that implements `Runnable` so that your class `run()` method may execute.
+
+**Example with Thread names (Multiple Threads)**
+```java
+class A implements Runnable{
+    String name;
+    Thread t;
+    A(String name){
+        this.name = name;
+
+        t = new Thread(this);  // associate Runnable with a Thread
+        t.setName(name);       // give thread a name
+        t.start();             // start execution in new thread
+    }
+    public void run(){
+        for(int i=0;i<=10;i++){
+            try { Thread.sleep(1000); }
+            catch(Exception e) {}
+            System.out.println(t.getName()); // prints thread name
+        }
+    }
+    public static void main(String... args){
+        A a1 = new A("One");
+        A a2 = new A("Two");
+        A a3 = new A("Three");
+        A a4 = new A("Four");
+        A a5 = new A("Five");
+        for(int i = 0; i <= 10; i++){
+            try{ Thread.sleep(1000); }
+            catch(Exception e) {}
+            System.out.println("Main Thread");
+        }
+    }
+}
+```
+
+- Threads created using the same `Runnable` share the **same object**, but different threads.
+- Each `Thread` object maintains **its own stack**, but all share the **same heap**.
+- Calling `t.start()` → executes `run()` in **parallel** with the main thread.
+- You must **never** call `run()` directly → it will run like a normal method, not a thread.
+
+### When to Use Which?
+✔ Use extends Thread when:
+- Your class does not extend any other class
+- You want to customize Thread class itself
+
+✔ Use implements Runnable when (recommended) :
+- Your class already extends another class (preferred because Java doesn’t support multiple inheritance)
+- You want cleaner, modular code
+- You want to share the same task among multiple threads
+- You prefer composition over inheritance
+
+> 📝: Runnable is the standard and preferred approach in enterprise applications.
