@@ -76,6 +76,68 @@ Class file -> Class loader -> Byte Code verifier -> Interpreter -> Runtime -> Ha
 > - **CamelCase** : `helloWorld`
 > - **SnakeCase** : `hello_world`
 
+### `public static void main(String[] args)` explained
+
+```java
+class Demo{
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+```
+
+- Save this file as `Demo.java`
+- To compile: `javac Demo.java`
+- To run: `java Demo`
+
+#### Parameters used
+
+- `class` keyword is used to declare a class in java.
+- `public` keyword is an access modifier which represets visibility, it means it is visible to all.
+- `static` is a keyword, if we declare any method as static , it is known as static method. The core advantage of static method is that there is no need to create an object to invoke the static method.
+  The **main** method is executed by the JVM, so it doesn't require to create object to inovke the main method. So it saves memory.
+- `void` keyword is used to declare the return type of the method; it means it doesn't return any value.
+- `main` represents the entry point of the program.
+- `String[] args` is used to accept command-line arguments.
+- `System.out.println()` is used to print the output on the console. `System` is a class in the java.lang package. The `out` is a static variable in the `System` class, and is an insurance of java.io.PrintStream. The `println()` method is used to print the output on the console. The `println` is a method of java.io.PrintStream; this method is overloaded to print message to output destination, which is typically a console or a file.
+
+> ❓ **Difference between print and println**
+> ➡ `print` method doesn't add a new line character at the end of the output, while `println` method adds a new line character at the end of the output.
+> The `println()` method can also be used without parameters, to position the cursor on the next line.
+
+> ❓ **What happens at compile time?**
+> ➡ At compile time, java file is compiled by Java Compiler (it does not interact with OS) and converts java code into bytecode.
+
+    Java Code (Demo.java) →  Compiler  →  Bytecode (Demo.class)
+
+The compiler reads the source code and generates bytecode from it. The bytecode is then stored in a file with the same name as the source file, but with a `.class` extension.
+
+> ❓ **What happens at run time?**
+> ➡ The JVM reads the bytecode and executes it.
+
+> ❓ **Can you save a java source file by other name than the class name?**
+> ➡ Yes, if the class is not public. It is explained by the example below:
+
+```java
+class Demo{
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+```
+
+- Save this file as `Simple.java`
+
+        Simple.java → Compiler  →  Bytecode (Demo.class)
+
+- To compile: `javac Simple.java`
+- To run/execute: `java Demo`
+
+> ❓ **Can you have multiple classes in a java source file?**
+> ➡ Yes.
+
+![Multiple Classes Example](./resources/multiple-classes.png)
+
 ## 2. Data Types
 
 Java has two main categories of data types:
@@ -150,67 +212,78 @@ String myText = "Hi"; // myText is a String
 > ❓ _What is the difference between primitive and reference data types?_
 > ➡ Primitive stores **actual value**. Reference stores **address of the object in heap memory**.
 
-## 3. `public static void main(String[] args)` explained
+## 3. Differences Between JDK, JRE and JVM
+JDK (Java Development Kit) provides tools and libraries to develop Java applications, working with JRE and JVM. JRE (Java Runtime Environment) offers the libraries and JVM needed to run Java programs. JVM (Java Virtual Machine) executes the compiled Java bytecode on the system.
 
-```java
-class Demo{
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
-}
-```
+![JDK, JRE and JVM](/resources/jvm.png)
 
-- Save this file as `Demo.java`
-- To compile: `javac Demo.java`
-- To run: `java Demo`
+> 📝: Java bytecode can run on any machine with a JVM, but JVM implementations are platform-dependent for each operating system.
 
-### Parameters used
+### JDK (Java Development Kit)
+JDK is a software development kit used to build Java applications. It contains the JRE and a set of development tools.
 
-- `class` keyword is used to declare a class in java.
-- `public` keyword is an access modifier which represets visibility, it means it is visible to all.
-- `static` is a keyword, if we declare any method as static , it is known as static method. The core advantage of static method is that there is no need to create an object to invoke the static method.
-  The **main** method is executed by the JVM, so it doesn't require to create object to inovke the main method. So it saves memory.
-- `void` keyword is used to declare the return type of the method; it means it doesn't return any value.
-- `main` represents the entry point of the program.
-- `String[] args` is used to accept command-line arguments.
-- `System.out.println()` is used to print the output on the console. `System` is a class in the java.lang package. The `out` is a static variable in the `System` class, and is an insurance of java.io.PrintStream. The `println()` method is used to print the output on the console. The `println` is a method of java.io.PrintStream; this method is overloaded to print message to output destination, which is typically a console or a file.
+- Includes compiler (javac), debugger, and utilities like jar and javadoc.
+- Provides the JRE, so it also allows running Java programs.
+- Required by developers to write, compile, and debug code.
 
-> ❓ **Difference between print and println**
-> ➡ `print` method doesn't add a new line character at the end of the output, while `println` method adds a new line character at the end of the output.
-> The `println()` method can also be used without parameters, to position the cursor on the next line.
+**Components of JDK:**
 
-> ❓ **What happens at compile time?**
-> ➡ At compile time, java file is compiled by Java Compiler (it does not interact with OS) and converts java code into bytecode.
+- JRE (JVM + libraries)
+- Development tools (compiler, jar, javadoc, debugger)
 
-    Java Code (Demo.java) →  Compiler  →  Bytecode (Demo.class)
+**Note:**
+- JDK is only for development (it is not needed for running Java programs)
+- JDK is platform-dependent (different version for windows, Linux, macOS)
 
-The compiler reads the source code and generates bytecode from it. The bytecode is then stored in a file with the same name as the source file, but with a `.class` extension.
+#### Working of JDK:
+- **Source Code (.java)**: Developer writes a Java program.
+- **Compilation**: The JDK’s compiler (javac) converts the code into bytecode stored in .class files.
+- **Execution**: The JVM executes the bytecode, translating it into native instructions.
 
-> ❓ **What happens at run time?**
-> ➡ The JVM reads the bytecode and executes it.
+### JRE (Java Runtime Environment)
+JRE provides an environment to run Java programs but does not include development tools. It is intended for end-users who only need to execute applications.
 
-> ❓ **Can you save a java source file by other name than the class name?**
-> ➡ Yes, if the class is not public. It is explained by the example below:
+- Contains the JVM and standard class libraries.
+- Provides all runtime requirements for Java applications.
+- Does not support compilation or debugging.
 
-```java
-class Demo{
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
-}
-```
+**Note:**
+- JRE is only for running applications, not for developing them.
+- It is platform-dependent (different builds for different OS).
 
-- Save this file as `Simple.java`
+#### Working of JRE:
+- **Class Loading**: Loads compiled .class files into memory.
+- **Bytecode Verification**: Ensures security and validity of bytecode.
+- **Execution**: Uses the JVM (interpreter + JIT compiler) to execute instructions and make system calls.
 
-        Simple.java → Compiler  →  Bytecode (Demo.class)
+### JVM (Java Virtual Machine)
+JVM is the core execution engine of Java. It is responsible for converting bytecode into machine-specific instructions.
 
-- To compile: `javac Simple.java`
-- To run/execute: `java Demo`
+- Part of both JDK and JRE.
+- Performs memory management and garbage collection.
+- Provides portability by executing the same bytecode on different platforms.
 
-> ❓ **Can you have multiple classes in a java source file?**
-> ➡ Yes.
+**Note:**
+- JVM implementations are platform-dependent.
+- Bytecode is platform-independent and can run on any JVM.
+- Modern JVMs rely heavily on Just-In-Time (JIT) compilation for performance.
 
-![Multiple Classes Example](./resources/multiple-classes.png)
+#### Working of JVM
+
+![jvm_working](/resources/jvm_working.png)
+
+1. **Loading**: Class loader loads bytecode into memory.
+2. **Linking**: Performs verification, preparation, and resolution.
+3. **Initialization**: Executes class constructors and static initializers.
+4. **Execution**: Interprets or compiles bytecode into native code.
+
+### JDK vs JRE vs JVM
+| Aspect              | JDK                                      | JRE                                      | JVM                                                   |
+|---------------------|-------------------------------------------|-------------------------------------------|--------------------------------------------------------|
+| **Purpose**             | Used to develop Java applications         | Used to run Java applications             | Executes Java bytecode                                |
+| **Platform Dependency** | Platform-dependent (OS specific)          | Platform-dependent (OS specific)          | JVM is OS-specific JVM, but bytecode is platform-independent |
+| **Includes**            | JRE + Development tools (javac, debugger, etc.) | JVM + Libraries (e.g., rt.jar)            | ClassLoader, JIT Compiler, Garbage Collector          |
+| **Use Case**            | Writing and compiling Java code           | Running a Java application on a system               | Converts bytecode into native machine code            |
 
 ## 4. Operators
 
@@ -7028,6 +7101,12 @@ Useful for testing, converting strings to streams, in-memory data processing.
 ➡ It creates a stream that reads only a **portion** of array → from index `0` up to `3`.
 
 ## 52. Multithreading
+Process of executing multiple threads simultaneously.
+
+Thread is basically a lightweight sub-process, a smallest unit of processing. Multiprocessing and Multithreading, both are used to achieve **multitasking**.
+
+But we use Multithreading than multiprocessing because threads share a common memmory area. They don't allocate separate memory area so saves memory, and context-switching between the threads takes less time than process.
+
 Multithreading in Java is a feature that enables a program to run multiple threads simultaneously, allowing tasks to execute in parallel and utilize the CPU more efficiently. A thread is a lightweight, independent unit of execution inside a program (process).
 
 - A process can have multiple threads.
@@ -7047,6 +7126,16 @@ Multithreading in Java is a feature that enables a program to run multiple threa
 ![multithreading](/resources/multithreading_example.png)
 
 ### Java Threads
+A thread is a lightweight sub-process, a smallest unit of processing. It is a separate path of execution.
+
+Threads are independent, if there occurs exception in one thread, it doesn't affect other threads. It shares a common memory area.
+
+![thread](/resources/thread.png) 
+
+As shown in the fig, thread is executed inside the process. There is context-switching between the threads. There can be multiple processes inside the OS and one process can have multiple threads.
+
+> 📝: At a time one thread is executed only.
+
 Threads allows a program to operate more efficiently by doing multiple things at the same time.
 
 Threads can be used to perform complicated tasks in the background without interrupting the main program.
@@ -7276,13 +7365,16 @@ class Worker extends Thread {
 ### Life Cycle of a Thread (controlled by JVM)
 A thread passes through different states like New, Runnable, Running, Waiting and Terminated. The lifecycle is managed by the JVM and thread scheduler.
 
+A thread passes through different states like New, Runnable, Running, Waiting and Terminated. The lifecycle is managed by the JVM and thread scheduler.
+
 ![thread_lifecycle](/resources/Java-Multithreading3.png)
 
-1. Initialization (New) State
-2. Runnable state
-3. Running
-4. Blocked (Non-Runnable)
-5. Destroy (Terminated)
+During its thread life cycle, a Java thread transitions through several states from creation to termination.
+- **New**: Thread object is created but not started.
+- **Runnable**: Thread is ready to run and waiting for CPU allocation.
+- **Running**: Thread is executing its run() method.
+- **Waiting/Blocked**: Thread waits for a resource or another thread.
+- **Terminated**: Thread completes execution or is stopped.
 
 ### Thread Priorities
 Threads can be assigned priorities to influence scheduling decisions. Higher priority threads are given preference by the thread scheduler.
@@ -7303,6 +7395,9 @@ Thread safety ensures correct program execution when multiple threads access sha
 The concurrency package provides tools like Executors, Callable, Future and Thread Pools. These simplify managing multithreaded applications.
 
 ### Advantages of Multithreading in Java
+1. It doesn't block the user because threads are independent and you can perform multiple operations at same time.
+2. You can perform many operations together so it saves time.
+3. Threads are independent so it doesn't affect other threads if exception occur in a single thread. 
 
 ![advantages_of_multithreading](/resources/Java-Multithreading4.png)
 
@@ -7409,11 +7504,11 @@ class A implements Runnable{
 - You must **never** call `run()` directly → it will run like a normal method, not a thread.
 
 ### When to Use Which?
-✔ Use extends Thread when:
+✔ Use **extends Thread** when:
 - Your class does not extend any other class
 - You want to customize Thread class itself
 
-✔ Use implements Runnable when (recommended) :
+✔ Use **implements Runnable** when (recommended) :
 - Your class already extends another class (preferred because Java doesn’t support multiple inheritance)
 - You want cleaner, modular code
 - You want to share the same task among multiple threads
@@ -7434,7 +7529,7 @@ public final boolean isAlive()
 * **true** → Thread is still running (Runnable/Running state)
 * **false** → Thread has finished execution or has not started yet
 
-## ⭐ Why use `isAlive()`?
+### Why use `isAlive()`?
 
 It helps to:
 * Check if a thread is still active
@@ -7496,11 +7591,6 @@ class A implements Runnable{
 `isAlive()` tests if this thread is alive. A thread is alive if it has been started and has not yet died. There is a transitional period from when a thread is running to when a thread is not running. After the `run()` method returns, there is a short period of time before the thread stops. If we want to know if the `start` method of the thread has been called or if thread has been terminated, we must use `isAlive()` method.
 This method is used to find out if a thread has actually been started and has yet not terminated.
 
-* A thread becomes "alive" **only after** calling `start()`.
-* Calling `run()` directly does **NOT** make a thread alive.
-* A thread remains alive until the `run()` method completes.
-* After completion, `isAlive()` always returns `false`.
----
 `isAlive()` checks whether a thread is **still active**.
 A thread is considered **alive** if:
 
@@ -7518,3 +7608,33 @@ There is a brief transitional moment after the `run()` method completes but befo
 In short:
 
 > **`isAlive()` helps determine if a thread has actually started and has not yet finished running.**
+---
+* A thread becomes "alive" **only after** calling `start()`.
+* Calling `run()` directly does **NOT** make a thread alive.
+* A thread remains alive until the `run()` method completes.
+* After completion, `isAlive()` always returns `false`.
+
+## 53. Life Cycle of a Thread - Thread States (controlled by JVM)
+The lifecycle of the thread in Java is controlled by JVM.
+
+![thread_lifecycle](/resources/thread_lifecycle.png)
+
+1. **New**: The thread is in new state if you create an instance of `Thread` class but before the invocation of `start()` method.
+2. **Runnable**: The thread is in `Runnable` state after the invocation of `start()` method, but the thread schedular has not selected it to be the running thread.
+3. **Running**: The thread is in running state if the thread schedular has selected it.
+4. **Non-Runnable (Blocked)**: This is the state when the thread is still alive, but is currently not eligible to run.
+5. **Terminated**: A thread is in terminated or dead state when its `run()` method exists.
+
+### Thread Schedular in Java
+- It is the part of the JVM that decides which thread should run.
+- There is no guarantee that which runnable thread will be chosen to run by the thread schedular.
+- Only one thread at a time can run in a single process.
+- The thread schedular mainly uses preemptive or time-slicing scheduling to schedule the threads.
+
+### Starting a thread:
+`start()` method of `Thread` class is used to start a newly created thread. It performs following tasks:
+- A new thread starts (with new callstack).
+- The thread moves from **New** state to **Runnable** state.
+- When the thread gets a  chance to execute, its target `run()` method will run.
+
+> 📝: `start()` methods only schedules the thread for execution and not actually begins the execution of the thread. The execution of the thread is started when the JVM calls the `run()` method of the thread once the CPU Schedular picks this scheduled thread for execution.
