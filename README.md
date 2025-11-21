@@ -14,15 +14,15 @@ For the complete detailed notes, check out 👉 [Notes.md](./Notes.md)
 ## 📂 Contents  
 
 1. Intro
-2. Data Type
-3. Differences Between JDK, JRE and JVM
+2. Differences Between JDK, JRE and JVM
+3. Data Type
 4. Operators
-5. OOPs
-6. Types of Variables
+5. OOPs (Object Oriented Programming)
+6. Variables
 7. Loops
 8. Arrays
 9. Functions (methods)
-10. this keyword
+10. `this` keyword
 11. Types of functions
 12. Method Overloading (Compile time polymorphism)
 13. var args
@@ -66,7 +66,7 @@ For the complete detailed notes, check out 👉 [Notes.md](./Notes.md)
 51. File class
 52. Multithreading
 53. Runnable Interface
-54. isAlive()
+54. `isAlive()`
 55. Lifecycle of a Thread
 56. Synchronization
 57. Inter-Thread communication
