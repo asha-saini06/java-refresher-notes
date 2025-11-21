@@ -138,7 +138,80 @@ class Demo{
 
 ![Multiple Classes Example](./resources/multiple-classes.png)
 
-## 2. Data Types
+## 2. Differences Between JDK, JRE and JVM
+JDK (Java Development Kit) provides tools and libraries to develop Java applications, working with JRE and JVM. JRE (Java Runtime Environment) offers the libraries and JVM needed to run Java programs. JVM (Java Virtual Machine) executes the compiled Java bytecode on the system.
+
+![JDK, JRE and JVM](/resources/jvm.png)
+
+> 📝: Java bytecode can run on any machine with a JVM, but JVM implementations are platform-dependent for each operating system.
+
+### JDK (Java Development Kit)
+JDK is a software development kit used to build Java applications. It contains the JRE and a set of development tools.
+
+- Includes compiler (javac), debugger, and utilities like jar and javadoc.
+- Provides the JRE, so it also allows running Java programs.
+- Required by developers to write, compile, and debug code.
+
+**Components of JDK:**
+
+- JRE (JVM + libraries)
+- Development tools (compiler, jar, javadoc, debugger)
+
+**Note:**
+- JDK is only for development (it is not needed for running Java programs)
+- JDK is platform-dependent (different version for windows, Linux, macOS)
+
+#### Working of JDK:
+- **Source Code (.java)**: Developer writes a Java program.
+- **Compilation**: The JDK’s compiler (javac) converts the code into bytecode stored in .class files.
+- **Execution**: The JVM executes the bytecode, translating it into native instructions.
+
+### JRE (Java Runtime Environment)
+JRE provides an environment to run Java programs but does not include development tools. It is intended for end-users who only need to execute applications.
+
+- Contains the JVM and standard class libraries.
+- Provides all runtime requirements for Java applications.
+- Does not support compilation or debugging.
+
+**Note:**
+- JRE is only for running applications, not for developing them.
+- It is platform-dependent (different builds for different OS).
+
+#### Working of JRE:
+- **Class Loading**: Loads compiled .class files into memory.
+- **Bytecode Verification**: Ensures security and validity of bytecode.
+- **Execution**: Uses the JVM (interpreter + JIT compiler) to execute instructions and make system calls.
+
+### JVM (Java Virtual Machine)
+JVM is the core execution engine of Java. It is responsible for converting bytecode into machine-specific instructions.
+
+- Part of both JDK and JRE.
+- Performs memory management and garbage collection.
+- Provides portability by executing the same bytecode on different platforms.
+
+**Note:**
+- JVM implementations are platform-dependent.
+- Bytecode is platform-independent and can run on any JVM.
+- Modern JVMs rely heavily on Just-In-Time (JIT) compilation for performance.
+
+#### Working of JVM
+
+![jvm_working](/resources/jvm_working.png)
+
+1. **Loading**: Class loader loads bytecode into memory.
+2. **Linking**: Performs verification, preparation, and resolution.
+3. **Initialization**: Executes class constructors and static initializers.
+4. **Execution**: Interprets or compiles bytecode into native code.
+
+### JDK vs JRE vs JVM
+| Aspect              | JDK                                      | JRE                                      | JVM                                                   |
+|---------------------|-------------------------------------------|-------------------------------------------|--------------------------------------------------------|
+| **Purpose**             | Used to develop Java applications         | Used to run Java applications             | Executes Java bytecode                                |
+| **Platform Dependency** | Platform-dependent (OS specific)          | Platform-dependent (OS specific)          | JVM is OS-specific JVM, but bytecode is platform-independent |
+| **Includes**            | JRE + Development tools (javac, debugger, etc.) | JVM + Libraries (e.g., rt.jar)            | ClassLoader, JIT Compiler, Garbage Collector          |
+| **Use Case**            | Writing and compiling Java code           | Running a Java application on a system               | Converts bytecode into native machine code            |
+
+## 3. Data Types
 
 Java has two main categories of data types:
 
@@ -211,79 +284,6 @@ String myText = "Hi"; // myText is a String
 
 > ❓ _What is the difference between primitive and reference data types?_
 > ➡ Primitive stores **actual value**. Reference stores **address of the object in heap memory**.
-
-## 3. Differences Between JDK, JRE and JVM
-JDK (Java Development Kit) provides tools and libraries to develop Java applications, working with JRE and JVM. JRE (Java Runtime Environment) offers the libraries and JVM needed to run Java programs. JVM (Java Virtual Machine) executes the compiled Java bytecode on the system.
-
-![JDK, JRE and JVM](/resources/jvm.png)
-
-> 📝: Java bytecode can run on any machine with a JVM, but JVM implementations are platform-dependent for each operating system.
-
-### JDK (Java Development Kit)
-JDK is a software development kit used to build Java applications. It contains the JRE and a set of development tools.
-
-- Includes compiler (javac), debugger, and utilities like jar and javadoc.
-- Provides the JRE, so it also allows running Java programs.
-- Required by developers to write, compile, and debug code.
-
-**Components of JDK:**
-
-- JRE (JVM + libraries)
-- Development tools (compiler, jar, javadoc, debugger)
-
-**Note:**
-- JDK is only for development (it is not needed for running Java programs)
-- JDK is platform-dependent (different version for windows, Linux, macOS)
-
-#### Working of JDK:
-- **Source Code (.java)**: Developer writes a Java program.
-- **Compilation**: The JDK’s compiler (javac) converts the code into bytecode stored in .class files.
-- **Execution**: The JVM executes the bytecode, translating it into native instructions.
-
-### JRE (Java Runtime Environment)
-JRE provides an environment to run Java programs but does not include development tools. It is intended for end-users who only need to execute applications.
-
-- Contains the JVM and standard class libraries.
-- Provides all runtime requirements for Java applications.
-- Does not support compilation or debugging.
-
-**Note:**
-- JRE is only for running applications, not for developing them.
-- It is platform-dependent (different builds for different OS).
-
-#### Working of JRE:
-- **Class Loading**: Loads compiled .class files into memory.
-- **Bytecode Verification**: Ensures security and validity of bytecode.
-- **Execution**: Uses the JVM (interpreter + JIT compiler) to execute instructions and make system calls.
-
-### JVM (Java Virtual Machine)
-JVM is the core execution engine of Java. It is responsible for converting bytecode into machine-specific instructions.
-
-- Part of both JDK and JRE.
-- Performs memory management and garbage collection.
-- Provides portability by executing the same bytecode on different platforms.
-
-**Note:**
-- JVM implementations are platform-dependent.
-- Bytecode is platform-independent and can run on any JVM.
-- Modern JVMs rely heavily on Just-In-Time (JIT) compilation for performance.
-
-#### Working of JVM
-
-![jvm_working](/resources/jvm_working.png)
-
-1. **Loading**: Class loader loads bytecode into memory.
-2. **Linking**: Performs verification, preparation, and resolution.
-3. **Initialization**: Executes class constructors and static initializers.
-4. **Execution**: Interprets or compiles bytecode into native code.
-
-### JDK vs JRE vs JVM
-| Aspect              | JDK                                      | JRE                                      | JVM                                                   |
-|---------------------|-------------------------------------------|-------------------------------------------|--------------------------------------------------------|
-| **Purpose**             | Used to develop Java applications         | Used to run Java applications             | Executes Java bytecode                                |
-| **Platform Dependency** | Platform-dependent (OS specific)          | Platform-dependent (OS specific)          | JVM is OS-specific JVM, but bytecode is platform-independent |
-| **Includes**            | JRE + Development tools (javac, debugger, etc.) | JVM + Libraries (e.g., rt.jar)            | ClassLoader, JIT Compiler, Garbage Collector          |
-| **Use Case**            | Writing and compiling Java code           | Running a Java application on a system               | Converts bytecode into native machine code            |
 
 ## 4. Operators
 
@@ -7608,7 +7608,7 @@ There is a brief transitional moment after the `run()` method completes but befo
 In short:
 
 > **`isAlive()` helps determine if a thread has actually started and has not yet finished running.**
----
+
 * A thread becomes "alive" **only after** calling `start()`.
 * Calling `run()` directly does **NOT** make a thread alive.
 * A thread remains alive until the `run()` method completes.
@@ -7631,10 +7631,146 @@ The lifecycle of the thread in Java is controlled by JVM.
 - Only one thread at a time can run in a single process.
 - The thread schedular mainly uses preemptive or time-slicing scheduling to schedule the threads.
 
-### Starting a thread:
+### Starting a thread
 `start()` method of `Thread` class is used to start a newly created thread. It performs following tasks:
 - A new thread starts (with new callstack).
 - The thread moves from **New** state to **Runnable** state.
 - When the thread gets a  chance to execute, its target `run()` method will run.
 
 > 📝: `start()` methods only schedules the thread for execution and not actually begins the execution of the thread. The execution of the thread is started when the JVM calls the `run()` method of the thread once the CPU Schedular picks this scheduled thread for execution.
+
+## 54. Synchronization
+Synchronization in Java is a mechanism that ensures that **only one thread** can access a shared resource (like a variable, object, or method) at a time. It prevents concurrent threads from interfering with each other while modifying shared data.
+
+The capibility to control the access of multiple threads to nay shared resource.
+
+Java Synchronization is better option where we want to allow only one thread to access the shared resource.
+
+**Syntax :**
+```java
+synchronized (object reference expression){
+    // code block
+}
+```
+✔ **What Synchronization Does**
+
+Synchronization works by **locking** the object on which the synchronized method or block is executed.
+
+Only one thread can hold the lock at a time.
+```java
+synchronized void output(String s, int time)  // synchronized method
+```
+Synchronization ensures that only one thread at a time can access a shared resource by locking the object on which the synchronized method is called.
+
+It prevents inconsistent results when multiple threads modify shared data simultaneously.
+
+✔ **Capability**: Control access of multiple threads to any shared resource.
+
+✔ **Goal**: Prevent thread interference and data inconsistency.
+```java
+class A{
+    synchronized void output(String s, int time) // synchronized method
+    {
+        System.out.println("[");
+        try{ Thread.sleep(time);}
+        catch(InterruptedException e) {}
+
+        System.out.println(s);
+        
+        try{ Thread.sleep(time);}
+        catch(InterruptedException e) {}
+        System.out.println("]");
+    }
+}
+class B implements Runnable{
+    A a1;
+    Thread t1;
+    int time;
+    String s;
+    B(String s, int time, A a1){
+        this.time = time;
+        this.s = s;
+        this.a1 = a1;
+
+        t = new Thread(this);
+        t.start();
+    }
+    public void run(){
+        a1.output(s.time); // calling synchronized method
+    }
+}
+class C{
+    public static void main(String... args){
+        A a1 = new A(); // ONE shared object
+
+        B b1 = new B("hi hello", 700, a1);
+        B b2 = new B("hi welcome", 300, a1);
+        B b3 = new B("hi ABC", 500, a1);
+    }
+}
+```
+- When multiple threads call the same **synchronized method**, only **one** thread can execute it at a time.
+- All other threads **wait** until the lock is released.
+- The lock belongs to the **object**, not the method.
+
+> 📝: When a thread invokes a synchronized method, it automatically acquires the lock for that object and releases it when the thread completes its task.
+
+**Synchronization block**
+Use when only a **small portion** of code needs synchronization.
+```java
+public void run(){
+    synchronized(a1) // locking a1 object
+    { a1.output(s.time); }
+}
+```
+Synchronized blocks in Java are marked with the `synchronized` keyword.
+A synchronized block in Java is synchronized on some object. All synchronized blocks synchronized on the same object can only have one thread executing inside them at the same time.
+All other threads attempting to enter the synchronized block are blocked until the thread inside the synchronized block exists the block.
+
+### Why use Synchronization
+The synchronization is mainly used to:
+- To prevent thread interference.
+- To prevent consistency problem.
+
+### Concept of Lock (Monitor)
+Every Java object has one **monitor lock**.
+
+A thread must:
+1. **Acquire the lock**
+2. Execute synchronized code
+3. **Release the lock**
+
+Other threads wait until the lock is free.
+
+Synchronization is built around an internal entity known as the lock or monitor. Every object has an lock associated with it.
+
+By convention, a thread that needs consistent access to an object's fields has to acquire the object's lock before accessing them, and then release the lock when it's done with them.
+
+### Synchronized block
+Synchrnoized block can be used to perform synchronization on any specific resource  of the method.
+
+Suppose you have 50 lines of code in your method, but you want to synchronize only 5 lines, you can use **synchronized block**.
+
+If you put all the codes of the method in the synchronized block, it will work same as the synchronized method.
+
+#### Why use synchronized blocks
+- Prevents locking the entire method
+- Increases performance
+- Allows fine-grained control over critical sections
+
+> ✔ **Only the code inside the synchronized block is locked.**
+
+#### Points to remember for Synchronization block
+* Used to lock **only specific code**, not the entire method.
+* Useful when only a few lines need synchronization.
+* All synchronized blocks synchronized on the **same object** allow only **one thread** at a time.
+- Synchronized block is used to lock an object for any shared resource.
+- Scope of synchronized block is smaller than the method.
+
+| Concept             | Meaning                                     |
+|---------------------|----------------------------------------------|
+| Synchronized Method | Locks the entire method                      |
+| Synchronized Block  | Locks only a specific part of the code       |
+| Lock / Monitor      | Every object has one intrinsic lock (monitor)|
+| Purpose             | Prevent thread interference & inconsistency  |
+| Limitation          | Can reduce performance due to locking        |
