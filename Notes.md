@@ -7732,6 +7732,26 @@ The synchronization is mainly used to:
 - To prevent thread interference.
 - To prevent consistency problem.
 
+### Ways to Achieve Synchronization
+![synchronization](/resources/synchronization.png)
+
+1. **Synchronized Methods :**
+A synchronized method ensures that only one thread can execute it at a time on the same object instance
+2. **Synchronized Blocks :**
+Instead of synchronizing an entire method, Java allows synchronization on specific blocks of code. This improves performance by locking only the necessary section.
+3. **Static Synchronization :**
+Static synchronization is used to synchronize static methods. In this case, the lock is placed on the class object rather than the instance.
+
+### Types of Synchronization
+There are two type of synchronizations in Java which are listed below:
+
+1. **Process Synchronization :**
+Process Synchronization is a technique used to coordinate the execution of multiple processes. It ensures that the shared resources are safe and in order.
+2. **Thread Synchronization in Java :**
+Thread Synchronization is used to coordinate and ordering of the execution of the threads in a multi-threaded program. There are two types of thread synchronization are mentioned below:
+    - Mutual Exclusive
+    - Cooperation (Inter-thread communication in Java)
+
 ### Concept of Lock (Monitor)
 Every Java object has one **monitor lock**.
 
@@ -7774,3 +7794,213 @@ If you put all the codes of the method in the synchronized block, it will work s
 | Lock / Monitor      | Every object has one intrinsic lock (monitor)|
 | Purpose             | Prevent thread interference & inconsistency  |
 | Limitation          | Can reduce performance due to locking        |
+
+### Volatile Keyword
+The volatile keyword in Java ensures that all threads have a consistent view of a variable's value. It prevents caching of the variable's value by threads, ensuring that updates to the variable are immediately visible to other threads.
+
+#### Working of Volatile Modifier
+- It applies only to variables.
+- volatile guarantees visibility i.e. any write to a volatile variable is immediately visible to other threads.
+- It does not guarantee atomicity, meaning operations like count++ (read-modify-write operations) can still result in inconsistent values
+
+#### Volatile vs Synchronized
+| **Feature**        | **Synchronized**                                     | **Volatile**                                               |
+|----------------|--------------------------------------------------|--------------------------------------------------------|
+| **Applies to**     | It applies only to blocks or methods.                                | It applies to variables only.                                         |
+| **Purpose**        | It ensures *mutual exclusion* and visibility     | It ensures *visibility* of changes to variables across threads |
+| **Performance**    | Performance is *relatively low* compared to volatile because of the acquisition and release of the lock.         | Performance is *relatively high* (Faster - no locking mechanism involved) compared to synchronized Keyword.                  |
+
+## 55. Inter-Thread Communication (ITC)
+> Always use in **Synchronization**
+
+Inter-Thread Communication in Java allows **multiple threads to communicate and cooperate with each other**, especially when they share resources.
+It prevents problems like **busy waiting**, where a thread keeps checking a condition repeatedly and wastes CPU time.
+
+Inter-thread communication in Java is a mechanism in which a thread is paused from running in its critical section, and another thread is allowed to enter (or lock) the same critical section to be executed.
+
+> 📝: Inter-thread communication is also known as **Cooperation** in Java.
+
+**Problem with Polling:**
+- This wastes many CPU cycles and makes the implementation inefficient. 
+- This slows down the execution, and it keeps on checking the condition repeatedly.
+
+**How does Java Multi-Threading Tackle this problem?** 
+
+To avoid polling, Java uses three methods, namely, `wait()`, `notify()`, and `notifyAll()`. All these methods belong to the object class, so all classes have them. They must be used within a synchronized block only. 
+
+- **`wait()`** : It tells the calling thread to give up the lock and go to sleep until some other thread enters the same monitor and calls `notify()`.
+- **`notify()`** : It wakes up one single thread called `wait()` on the same object. It should be noted that calling `notify()` does not give up a lock on a resource.
+- **`notifyAll()`** : It wakes up all the threads called `wait()` on the same object.
+
+> 📝 These methods belong to **Object class**, not Thread class, because **every object in Java has a lock (monitor)**.
+
+```java
+class C {
+    int amount = 10000;
+
+    // Withdraw money (THREAD-1)
+    synchronized void withMoney(int am) {
+        System.out.println("Trying to withdraw: " + am);
+
+        // If balance is insufficient, wait for deposit
+        if (am > amount) {
+            System.out.println("Amount insufficient... waiting for deposit...");
+
+            try {
+                wait();   // Thread releases lock & waits
+            } catch (Exception e) {}
+
+            // After notify(), lock is re-acquired and execution continues
+        }
+        amount = amount - am;
+        System.out.println("Withdrawal successful. Total amount = " + amount);
+    }
+
+    // Add money (THREAD-2)
+    synchronized void addMoney(int am) {
+        amount = amount + am;
+        System.out.println("Amount added successfully: " + am);
+
+        notify();  // Wakes up one waiting thread
+        // notifyAll();  // (Use this if multiple threads are waiting)
+    }
+
+    public static void main(String... args) {
+        C c1 = new C();
+
+        // Thread for withdrawing money
+        new Thread(new Runnable() {
+            public void run() {
+                c1.withMoney(30000);
+            }
+        }).start();
+
+        // Thread for adding money
+        new Thread(new Runnable() {
+            public void run() {
+                try { Thread.sleep(2000); } catch(Exception e) {}
+                c1.addMoney(50000);
+            }
+        }).start();
+    }
+}
+```
+Inter-Thread Communication happen via objects. Once the thread is accessing the object any other thread has to wait until this thread release the object. The accessing thread notifies all the waiting thread via `notify()` or `notifyAll()` method defined in **Object** class.
+
+Inter-Thread Communication or **'Co-operation'** is aall about allowing synchronized threads to communicate with each other.
+
+**Co-operation** is a mechanism in  which a thread is paused running in its critical section and another thread is allowed to enter (or lock) in the same critical section to be executed. It is implemented by following methods of **Object** class:
+
+**1. `wait()`**
+
+causes current thread to release the lock and wait until either another thread invokes the `notify()` method or the `notifyAll()` method for this object, or a specified amount of time has elapsed.
+
+The current thread must own this object's monitor, so it must be called from the synchronized method only otherwise it will throw exception.
+```java
+public final void wait() throws InterruptedException // waits until object is notified
+```
+```java
+public final void wait (long timeeout) throws InterruptedException // waits for the specified amount of time 
+```
+
+**2. `notify()`**
+wakes up a single thread that is waiting on this object's  monitor. If any threads are waiting on this object, one of them is chosen to be awakened. The choice is arbitrary and occurs at the discretion of the implementation.
+
+**Syntax :**
+
+    public final void notify()
+
+**3. `notifyAll()`**
+wakes up all threads that are waiting on this object's monitor.
+
+**Syntax :**
+
+    public final void notifyAll()
+
+### Understanding the process of Inter-Thread Communication
+The image below demonstrates the concept of **Thread Synchronization** and **Inter-Thread Communication in Java**:
+
+![ICT](./resources/ICT.png)
+
+The point to point explanation of the above diagram as follows:
+
+1. **Threads try to acquire the object lock.**
+2. One thread enters the synchronized method and acquires the lock.
+3. If the thread calls `wait()`:
+
+   * It **releases the lock**
+   * Moves to **WAITING** state
+4. When another thread calls `notify()` / `notifyAll()`:
+
+   * Waiting thread moves to **RUNNABLE (Notified)** state
+5. Thread again tries to acquire the lock
+
+   * Only then it continues execution
+6. After `run()` completes, the thread releases the lock and exits monitor.
+
+### Why Inter-Thread Communication?
+
+To allow threads to **coordinate** when they depend on each other.
+
+Examples:
+* Producer thread waits for space to produce
+* Consumer thread waits for items to consume
+* One thread waits while another completes a task
+
+ITC helps achieve:
+* Efficient waiting (no CPU wastage)
+* Proper sequencing of tasks
+* Smooth cooperation between threads
+
+### **Methods Used for ITC**
+
+**1. `wait()`**
+
+* Causes the calling thread to **release the lock** and **enter waiting state**.
+* It waits until another thread calls `notify()` or `notifyAll()` on the **same object**.
+
+**2. `notify()`**
+
+* Wakes **one** waiting thread (chosen randomly) that is waiting on the same object's monitor.
+
+**3. `notifyAll()`**
+
+* Wakes **all** waiting threads on that object.
+* Only one will acquire the lock first and continue.
+
+### Important Rules
+
+* Must be used **inside synchronized block or method**.
+* Thread must hold the object’s **monitor lock** to call them.
+* These methods are for **communication**, not locking.
+
+Example:
+
+```java
+synchronized(obj) {
+    obj.wait();
+}
+```
+
+### ✔ How It Works
+
+| Scenario                | Action                       |
+| ----------------------- | ---------------------------- |
+| Producer produces value | Consumer must wait           |
+| Consumer consumes value | Producer must wait           |
+| `wait()` used           | Thread releases lock & waits |
+| `notify()`              | Wakes a waiting thread       |
+| `notifyAll()`           | Wakes all waiting threads    |
+
+### Purpose of Inter-Thread Communication
+
+* Avoid **polling** (busy-loop checking)
+* Save **CPU time**
+* Proper **synchronization** between dependent threads
+* Create coordinated workflows
+
+---
+* ITC helps threads **cooperate** using `wait()`, `notify()`, and `notifyAll()`.
+* Must be used in **synchronized** context.
+* Designed to avoid unnecessary CPU usage and ensure proper communication.
+* Essential for producer-consumer, task pipelines, and sequential multithreading.
