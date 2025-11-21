@@ -8004,3 +8004,94 @@ synchronized(obj) {
 * Must be used in **synchronized** context.
 * Designed to avoid unnecessary CPU usage and ensure proper communication.
 * Essential for producer-consumer, task pipelines, and sequential multithreading.
+
+## 56. API (Application Programming Interface)
+It is a document that contains description of all the features of a product or software. It represents classes and interfaces that software programs can follow to communicate with each other. An API can be created for applications, libraries, operating systems, etc.
+
+> 📝: An API is a set of routines, protocols, and tools for building software applications.
+An API expresses a software component in terms of its operations, inputs, outputs, and underlying types.
+
+Java API is a list of all classes that are part of the JDK. It includes all Java packages, classes, and interfaces, laong with their methods, fields and constructors. These pre-written classes provide a tremendous amount of functionality to a programmer.
+
+APIs, or Application Programming Interfaces, are the invisible backbone of modern software development. They enable different applications, platforms, or systems to communicate and exchange data seamlessly, powering everything from your weather app to your favorite e-commerce checkout.
+
+Imagine you’re at a restaurant:
+
+- You (the client) place an order with the waiter.
+- The waiter (the API) conveys your request to the chef (the server).
+- The chef prepares the food (processes the request) and gives it to the waiter.
+- The waiter delivers it back to your table (response).
+
+This is exactly how APIs work in software the API takes a request, sends it to the server, retrieves the data, and returns the response.
+
+![API](./resources/API.png)
+
+### Why Do We Need APIs?
+APIs are critical to building scalable, flexible, and connected systems. Here’s why developers rely on them:
+
+- **Reusability**: Avoid reinventing the wheel by leveraging existing APIs (e.g., Google Maps API, Stripe Payments API).
+- **Efficiency**: Save development time by integrating ready made functionalities.
+- **Scalability**: Enable modular, distributed systems that can grow easily.
+- **Integration**: Connect multiple platforms web, mobile, IoT, or analytics.
+- **Automation**: APIs allow machines to talk to machines without manual input.
+
+Example:
+If you want to show weather updates in your app, instead of building a weather system, you can simply use the `OpenWeatherMap API` to fetch the data instantly.
+
+### How Do APIs Work?
+APIs operate through a request response cycle between a client and a server
+
+- **Request**: The client sends a request to an API endpoint (URI).
+- **Processing**: The API forwards the request to the server.
+- **Response**: The server processes and sends back the requested data.
+- **Delivery**: The API returns the server’s response to the client.
+
+This communication happens over the HTTP/HTTPS protocol, with additional security via headers, tokens, or cookies.
+
+### Types of API Architectures:
+1. **REST (Representational State Transfer) :**
+- A simple, flexible API architecture that uses HTTP methods (GET, POST, PUT, DELETE) for communication.
+- Data Format: JSON, XML.
+
+2. **SOAP (Simple Object Access Protocol) :**
+- A more rigid protocol that requires XML based messaging for communication. Strict and secure protocol using XML for structured messaging.
+- Data Format: XML
+
+3. **GraphQL:**
+- Modern query language that lets clients fetch only the data they need.
+- Data Format: JSON
+
+4. **gRPC:**
+- High performance framework using Protocol Buffers (Protobuf).
+- Data Format: Binary
+
+#### What are REST APIs?
+REST stands for **Representational State Transfer**, and follows the constraints of REST architecture allowing interaction with RESTful web services. It defines a set of functions (GET, PUT, POST, DELETE) that clients use to access server data. The functions used are:
+
+- GET (retrieve a record)
+- PUT (update a record)
+- POST (create a record)
+- DELETE (delete the record)
+
+Its main feature is that REST API is stateless, i.e., the servers do not save clients' data between requests.
+
+### API Integration
+API Integration connects two or more systems so they can exchange data automatically.
+For example:
+- Connecting your e-commerce store to a payment gateway (Stripe API).
+- Syncing CRM software (like Salesforce) with a marketing platform.
+
+In today’s cloud driven ecosystem, API integrations are the backbone of automation and interoperability.
+
+### Advantages of APIs
+- **Efficiency**: Enable faster development using reusable components.
+- **Integration**: Seamlessly connect different systems and services.
+- **Automation**: Reduce manual effort by automating workflows.
+- **Scalability**: Simplify distributed and modular system design.
+- **Innovation**: Unlock new functionalities and integrations.
+
+### Disadvantages of APIs
+- **High Cost**: Developing and maintaining APIs requires expertise.
+- **Security Risks**: Exposed endpoints can be vulnerable to attacks.
+- **Versioning Challenges**: Managing updates without breaking compatibility.
+- **Dependency Risk**: Relying on third-party APIs introduces failure points.
