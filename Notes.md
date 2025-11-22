@@ -8050,20 +8050,20 @@ This communication happens over the HTTP/HTTPS protocol, with additional securit
 
 ### Types of API Architectures:
 1. **REST (Representational State Transfer) :**
-- A simple, flexible API architecture that uses HTTP methods (GET, POST, PUT, DELETE) for communication.
-- Data Format: JSON, XML.
+    - A simple, flexible API architecture that uses HTTP methods (GET, POST, PUT, DELETE) for communication.
+    - Data Format: JSON, XML.
 
 2. **SOAP (Simple Object Access Protocol) :**
-- A more rigid protocol that requires XML based messaging for communication. Strict and secure protocol using XML for structured messaging.
-- Data Format: XML
+    - A more rigid protocol that requires XML based messaging for communication. Strict and secure protocol using XML for structured messaging.
+    - Data Format: XML
 
 3. **GraphQL:**
-- Modern query language that lets clients fetch only the data they need.
-- Data Format: JSON
+    - Modern query language that lets clients fetch only the data they need.
+    - Data Format: JSON
 
 4. **gRPC:**
-- High performance framework using Protocol Buffers (Protobuf).
-- Data Format: Binary
+    - High performance framework using Protocol Buffers (Protobuf).
+    - Data Format: Binary
 
 #### What are REST APIs?
 REST stands for **Representational State Transfer**, and follows the constraints of REST architecture allowing interaction with RESTful web services. It defines a set of functions (GET, PUT, POST, DELETE) that clients use to access server data. The functions used are:
@@ -8095,3 +8095,221 @@ In today’s cloud driven ecosystem, API integrations are the backbone of automa
 - **Security Risks**: Exposed endpoints can be vulnerable to attacks.
 - **Versioning Challenges**: Managing updates without breaking compatibility.
 - **Dependency Risk**: Relying on third-party APIs introduces failure points.
+
+## 57. JDBC (Java Database Connectivity)
+JDBC (Java Database Connectivity) is an application programming interface (API) for the programming language Java, which defines how a client may access a database. It is a Java-based access technology used for Java Databse Connectivity.
+
+![JDBC](./resources/JDBC.png)
+
+Java JDBC is a Java API to connect and execute query with the database. JDBC API uses JDBC Drivers to connect with the database.
+We can use JDBC API to access tabular data stored into any relational database.
+
+### Features of JDBC
+- **Platform Independent**: Write once, run anywhere (Java-based).
+- **Database Independent**: Works with any relational database using drivers.
+- **Standard API**: Provides a standard set of interfaces (Connection, Statement, ResultSet, etc.).
+- **Secure**: Uses Java security model and exception handling.
+- **Easy to Use**: Simplifies database connectivity with simple method calls.
+- **Supports SQL**: Can execute SQL queries directly from Java code.
+
+❓: **Why should we use JDBC?**
+▶ We can use JDBC API to handle database using Java programs and can perform following activities:
+1. Connect to the database.
+2. Execute queries and update statements to the database.
+3. Retrieve the result recieved from the database.
+
+###  JDBC Architecture
+JDBC Architecture defines how Java applications interact with databases through drivers using a standard API.
+
+![JDBC Architecture](./resources/JDBC_Architecture.png)
+
+JDBC architecture consists of two main layers
+1. **JDBC API** (Application Layer)
+    - Provides Java applications with the interface to interact with databases.
+    - Contains classes and interfaces in the java.sql and javax.sql packages.
+    - Example interfaces: Connection, Statement, PreparedStatement, ResultSet.
+
+2. **JDBC Driver API** (Driver Layer)
+    - Acts as a bridge between JDBC API calls and the actual database.
+    - Converts Java method calls into database-specific calls.
+
+### JDBC Classes and Interfaces
+Java Database Connectivity (JDBC) is a Java API that enables communication between a Java application and a database. It provides a standard set of classes and interfaces to interact with different database systems. Establishing database connectivity is essential for applications that require data storage and retrieval.
+
+Some popular interfaces of JDBC API are listed below:
+- **Driver interface**: Handles communication between Java application and the database.
+- **Connection interface**: Represents a session/connection with a specific database.
+- **Statement interface**: Used to execute simple SQL queries without parameters.
+- **PreparedStatement interface**: Used to execute precompiled parameterized SQL queries.
+- **CallableStatement interface**: Used to call stored procedures in the database.
+- **ResultSet interface**: Represents the data retrieved from a SELECT query.
+- **ResultSetMetaData interface**: Provides information about columns of a ResultSet.
+- **DatabaseMetaData interface**: Provides information about the database (tables, drivers, etc.).
+- **RowSet interface**: A scrollable and updatable version of ResultSet.
+
+Some important Classes of JDBC API are listed below:
+- **DriverManager class**: Manages and loads database drivers to establish connections.
+- **Blob class**: Represents binary large objects (e.g., images, audio, video).
+- **Clob class**: Represents character large objects (e.g., text files, large strings).
+- **Types class**: Defines constants for SQL data types.
+
+### DB Connectivity Steps
+There are 5 steps to connect any Java application with the database using JDBC:
+
+#### Step 1: Register the Driver Class
+The `forName()` method of `Class` class is used to register the driver class. This method is used to dynamically load the driver class.
+
+Syntax of `forName()` :
+```java
+public static void forName(String className) throws ClassNotFoundException;
+```
+Example:
+```java
+// Register the driver class
+Class.forName("com.mysql.jdbc.Driver");
+```
+When you call `Class.forName(String className)`, following happens:
+'A call to `forName("X")` causes the class named `X` to be initialized'. where initialization involves code in static block to be executed.
+
+- `Class.forName()` actually loads a given Java class in JVM, it has to exist in your classpath for the same.
+- when you load a JDBC driver class that way, driver would have same JDBC specific settings to be executed as a very first step of Java Database Access Logic, it is also known as **driver registration**.
+- To do so each and every Driver Class has one STATIC code block where such logic register a driver in current JVM is executed.
+- Static code blocks are executed automatically the moment the driver class is loaded into JVM memory (during class initialization).
+- Hence, it is important to register the driver class before actually connecting to the database.
+
+> 📝: Since JDBC 4.0 (Java 6+), drivers are auto-loaded if present in the classpath, so manual loading is usually unnecessary.
+
+#### Step 2: Create the `Connection` object
+The `getConnection()` method of `DriverManager` class is used to establish connection with the database.
+
+Syntax for `getConnection()` :
+```java
+public static Connection getConnection(String url, String name, String password) throws SQLException
+```
+
+Example:
+```java
+// Establish a connection to the database
+Connection con = null;
+con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ATM", "root", "");
+```
+In the above example, we are creating a connection to a MySQL database running on the local machine. The URL specifies the protocol ("`jdbc:mysql://`"), the hostname ("`localhost`"), the port number (`3306`), and the database name ("ATM").
+
+The `DriverManager.getConnection()` method establishes the connection based on the provided URL, username, and password. If the connection is successful, a connection object named "con" is created.
+
+Ensure that the necessary JDBC driver JAR file is available in the project's classpath. Different databases require different JDBC drivers, so make sure to include the appropriate driver for the specific database system.
+
+Once the connection is established, proceed to the next steps of creating statements, executing queries, and interacting with the database.
+
+#### Step 3: Create the `Statement` object
+The `createStatement()` method of `Connection` interface is used to create statement. The object of statement is responsible to execute queries with the database.
+
+Syntax of `createStatement()` method:
+```java
+public Statement createStatement() throws SQLException
+```
+Example:
+```java
+// Create a Statement object
+Statement stmt = con.createStatement();
+```
+In the above example, the `createStatement()` method is called on the connection object to create a `Statement` object named stmt. This statement object acts as a channel for sending SQL commands to the database.
+
+Execute queries, retrieve results, and perform database operations with the statement object created. The statement object offers methods such as executeQuery() to execute SELECT queries and executeUpdate() for other types of queries that modify the data.
+
+Remember to handle exceptions that may occur during the execution of statements, using try-catch blocks or throwing the exceptions as needed.
+
+> 📝: In real-world application, it is recommended to use `PreparedStatement` or `CallableStatement` instead of `Statement` for executing SQL queries.
+
+#### Step 4: Execute the query
+The `executeQuery()` method of `Statement` interface is used to execute queries to the database. This method returns the object of `ResultSet` that can be used to get all the records of a table.
+
+Syntax of `executeQuery()`:
+```java
+public ResultSet executeQuery(String sql) throws SQLException
+```
+
+Example:
+```java
+// Execute a SELECT query 
+String query = "SELECT * from emp";
+ResultSet rs = stmt.executeQuery(query);
+
+// Process the results
+while(rs.next()){
+    // Retrieve data from the result set
+    int age = rs.getInt("age");
+    String name = rs.getString("name");
+
+    // Do something with the retrived data
+    System.out.println("Name: " + name + "Age: " + age );
+
+    // alternate way: 
+    //System.out.println(rs.getInt(1) + " " + rs.getString(2)); 
+}
+```
+In the above example, we are executing a SELECT query to retrieve data from a table named "emp". The `executeQuery()` method is called on the statement object with the SQL query as the parameter. It returns a `ResultSet` object named `rs` that holds the result of the query.
+
+We can then iterate over the `rs` using the `next()` method to access each row of the result. Using the appropriate getter methods (`getString()`, `getInt()`, etc.), we can retrieve the values of specific columns from the current row. In this example, we retrieve the "name" and "age" columns and print them.
+
+Remember to handle any exceptions that may occur during query execution or result processing.
+
+By executing queries, companies can retrieve data from the database and perform various operations on it. JDBC provides flexibility in working with different types of queries, allowing developers to interact with the database effectively.
+
+#### Step 5: Close the `Connection` object
+After executing the queries and processing the results, it is important to close the database connection to release the resources and ensure proper cleanup. Closing the connection is necessary to free up system resources, close any open database connections, and avoid potential memory leaks.
+
+By closing `Connection` object statement and `ResultStatement` will be closed automatically. The `close()`method of `Connection` interface is used to close the connection.
+
+Syntax of `close()`:
+```java
+public void close() throws SQLException
+```
+
+Example:
+```java
+// Close the connection and release resources
+rs.close();
+stmt.close();
+con.close();
+```
+In the example above, the `close()` method is called on the `rs`, `stmt`, and `con` objects in that order. When you close the ResultSet, Statement, and Connection objects in the opposite order of how they were created, you make sure that all of the resources they use are released correctly.
+
+If someone retrieved data from the database, they need to close the Result Set object. It is important to close the Statement object so that any database locks and resources tied to executing statements can be released. Lastly, closing the Connection object makes sure that the database connection is closed, which frees up system resources.
+
+Ensuring the orderly termination of a database connection is a critical aspect of effective database management and good programming practice, particularly in a Java-based application utilizing the JDBC API. The explicit closure of a database connection, even if the application's lifecycle is nearing its conclusion, guarantees the proper release of system resources, thereby avoiding potential memory leaks or resource saturation.
+
+Additionally, closing connections diligently helps maintain an efficient connection pool. Connection pooling is a well-known strategy to manage the number of open connections to a database, enhancing the overall performance and scalability of the application. By effectively closing connections when they are no longer needed, the application prevents unnecessary resource usage and ensures that connections are readily available in the pool for future database interactions.
+
+With the advent of Java 7, the introduction of the try-with-resources construct has considerably streamlined the handling of resources such as Connection, ResultSet, and Statement in JDBC.
+
+In this approach, the resource is declared in the try statement itself, which ensures that the resource is always closed at the end of the statement, whether the try block executes successfully or an exception is thrown. This greatly simplifies the task of resource management, and eliminates the need for explicit invocation of the close() method in a finally block.
+
+This construct ensures the correct closure of resources and adds an additional layer of resilience to the application. Incase of an exception or error, it guarantees the safe and orderly termination of the resource, thereby mitigating the risk of resource leakage or saturation.
+
+> 📝: It is recommended to use try-with-resources to automatically close resource like Connection, Statement and ResultSet.
+
+### Establishing JDBC Connection
+
+![JDBC_Connection](./resources/Establishing-JDBC-Connection-in-Java.png)
+
+To perform database operations using JDBC, follow these standard steps:
+
+1. **Import JDBC package**: Include `java.sql` classes for database operations.
+2. **Load and register driver**: Load the JDBC driver class to enable communication using `forname()` method
+3. **Establish connection**: Use `DriverManager` to connect to the database.
+4. **Create statement**: Create `Statement` or `PreparedStatement` to send SQL queries.
+5. **Execute query**: Run SQL commands like SELECT, INSERT, UPDATE or DELETE using `executeQuery()`, `executeUpdate()`, or `execute()` methods of `Statement` / `PreparedStatement`.
+6. **Process results**: Retrieve and handle data from `ResultSet`.
+7. **Close resources**: Release database connections and objects.
+
+### Prerequisites for MySQL JDBC Connection
+Before writing JDBC code, make sure you have:
+
+1. Database Installed and Running:
+- Install a relational database (e.g., PostgreSQL, MySQL).
+- Create a database and a user.
+
+2. JDBC Driver (Connector JAR):
+- JDBC requires a driver to connect with the database.
+- Download the JAR or add Maven dependency.
