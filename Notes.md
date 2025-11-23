@@ -8113,6 +8113,7 @@ We can use JDBC API to access tabular data stored into any relational database.
 - **Supports SQL**: Can execute SQL queries directly from Java code.
 
 ❓: **Why should we use JDBC?**
+
 ▶ We can use JDBC API to handle database using Java programs and can perform following activities:
 1. Connect to the database.
 2. Execute queries and update statements to the database.
@@ -8303,6 +8304,44 @@ To perform database operations using JDBC, follow these standard steps:
 6. **Process results**: Retrieve and handle data from `ResultSet`.
 7. **Close resources**: Release database connections and objects.
 
+```java
+import java.sql.*;
+
+public class JDBCDemo {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/school";
+        String user = "root";
+        String password = "your_password";
+
+        try {
+            // 1. Load Driver (Optional for newer JDBC versions)
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // 2. Establish Connection
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            // 3. Create Statement
+            Statement stmt = con.createStatement();
+
+            // 4. Execute Query
+            ResultSet rs = stmt.executeQuery("SELECT * FROM students");
+
+            // 5. Process Results
+            while (rs.next()) {
+                System.out.println(rs.getInt("id") + " " + rs.getString("name") + " " + rs.getInt("age"));
+            }
+
+            // 6. Close resources
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
 ### Prerequisites for MySQL JDBC Connection
 Before writing JDBC code, make sure you have:
 
@@ -8313,3 +8352,102 @@ Before writing JDBC code, make sure you have:
 2. JDBC Driver (Connector JAR):
 - JDBC requires a driver to connect with the database.
 - Download the JAR or add Maven dependency.
+
+## 58. DriverManager Class
+The `DriverManager` Class acts as an interface between user and drivers. It keeps track of the drivers that are available and handles establishing a connection between a database and the appropriate driver. The `DriverManager` class maintained a list of driver classes that have registered themselves by calling the method `DriverManager.registerDriver()`.
+```java
+public static Connection getConnection(String url);
+```
+method of `DriverManager` class is used to establish the connection with the specified url.
+
+`DriverManager` is a core JDBC class used to **manage JDBC drivers** and **establish database connections**. It works as a mediator between the Java application and the database drivers.
+
+### **Purpose of DriverManager**
+
+* Maintains a **list of registered JDBC drivers**
+* Selects the **appropriate driver** based on the database URL
+* Establishes a **connection** with the target database
+* Provides **logging/tracing** support for debugging
+
+### **Driver Registration**
+
+JDBC drivers register themselves automatically when their class is loaded into the JVM.
+
+This happens inside the driver’s **static block**:
+
+```java
+static {
+    DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+}
+```
+
+#### JDBC 4.0+ (Java 6 onwards)
+
+Manual registration using `Class.forName()` is **usually NOT required** because drivers auto-register using:
+
+```
+META-INF/services/java.sql.Driver
+```
+
+Still, you may see this in old code:
+
+```java
+Class.forName("com.mysql.jdbc.Driver"); // optional in modern apps
+```
+
+### **Establishing a Connection**
+
+`DriverManager` provides overloaded `getConnection()` methods:
+
+```java
+public static Connection getConnection(String url);
+public static Connection getConnection(String url, String user, String password);
+public static Connection getConnection(String url, Properties info);
+```
+
+Example:
+
+```java
+Connection con = DriverManager.getConnection(
+    "jdbc:mysql://localhost:3306/ATM", "root", ""
+);
+```
+
+- ✔ Returns a `Connection` object
+- ✔ Chooses the appropriate driver based on URL prefix (e.g., `jdbc:mysql://`)
+- ✔ Throws `SQLException` if connection fails
+
+### **Login Timeout (Useful in Real Apps)**
+
+```java
+DriverManager.setLoginTimeout(10); // seconds
+```
+
+Sets max waiting time for establishing a DB connection.
+
+### **Logging**
+
+```java
+DriverManager.println("Connection attempt started...");
+```
+
+Used mostly for debugging JDBC operations.
+
+### **DriverManager vs DataSource**
+
+| DriverManager                                | DataSource                      |
+| -------------------------------------------- | ------------------------------- |
+| Simple, easy to use                          | Used in enterprise applications |
+| No connection pooling                        | Supports connection pooling     |
+| Every call creates new connection → **slow** | Reuses connections → **fast**   |
+| Suitable for small apps/testing              | Preferred for production        |
+
+> 📝 **DataSource is recommended** for real-world applications because it improves performance and scalability.
+
+---
+
+**Summary**
+* `DriverManager` loads and manages JDBC drivers.
+* Provides multiple `getConnection()` methods to create DB connections.
+* Since JDBC 4.0, drivers auto-register (manual `Class.forName()` rarely needed).
+* `DataSource` is preferred over `DriverManager` in enterprise applications.
