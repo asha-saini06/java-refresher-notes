@@ -8941,3 +8941,130 @@ while(rs.next()) {
 - Supports forward-only, scrollable, read-only, or updatable modes.
 - Must be closed properly to release DB resources.
 - Closing Connection automatically closes ResultSet & Statement.
+
+## 62. PreparedStatement Interface
+
+The **`PreparedStatement`** interface is a sub-interface of `Statement` used to execute **parameterized**, **precompiled**, and **secure** SQL queries.
+
+A `PreparedStatement` improves:
+* **Performance** → SQL is compiled once and reused.
+* **Security** → Prevents **SQL Injection**.
+* **Readability** → No string concatenation.
+* **Maintainability** → Parameters are set using setter methods.
+
+### What is a Parameterized Query?
+
+```sql
+INSERT INTO emp VALUES (?, ?, ?)
+```
+
+Each **?** is a placeholder whose value is provided at runtime using setter methods such as:
+
+```java
+ps.setInt(1, 101);
+ps.setString(2, "Asha");
+ps.setDouble(3, 55000);
+```
+
+❓: **Why Use PreparedStatement?**
+▶ Improves Performance: The performance of the application will be faster if you use `PreparedStatement` interface because query is compiled only once.
+
+| Feature            | Statement                 | PreparedStatement |
+| ------------------ | ------------------------- | ----------------- |
+| SQL Precompilation | ❌ No                      | ✔ Yes             |
+| Security           | ❌ SQL Injection risk      | ✔ Safe            |
+| Performance        | Slow for repeated queries | Fast & cached     |
+| Parameters         | ❌ String concatenation    | ✔ Setter methods  |
+| Readability        | Low                       | High              |
+
+❓: **How to Obtain a PreparedStatement?**
+
+Use `Connection.prepareStatement()`:
+
+```java
+PreparedStatement ps = con.prepareStatement("INSERT INTO emp VALUES (?, ?, ?)");
+```
+
+## Methods of PreparedStatement Interface
+
+**1. Setter Methods (setXxx)**
+
+Used to bind values to parameters (`?` placeholders):
+
+```java
+ps.setInt(1, 101);
+ps.setString(2, "Asha");
+ps.setDouble(3, 50000.50);
+ps.setDate(4, new java.sql.Date(System.currentTimeMillis()));
+```
+
+Common methods:
+
+```java
+setInt()
+setString()
+setDouble()
+setFloat()
+setBoolean()
+setDate()
+setLong()
+setObject()
+```
+
+**2. Execution Methods**
+
+```java
+int executeUpdate()       // For INSERT, UPDATE, DELETE
+ResultSet executeQuery()  // For SELECT
+boolean execute()         // For any SQL query
+```
+
+Examples:
+
+```java
+int rows = ps.executeUpdate();
+ResultSet rs = ps.executeQuery();
+```
+
+**3. Batch Methods**
+
+PreparedStatements fully support batch execution:
+
+```java
+ps.addBatch();
+int[] results = ps.executeBatch();
+```
+
+Efficient for bulk inserts.
+
+**4. Clear Parameter Methods**
+
+```java
+ps.clearParameters();
+```
+
+Resets all `?` values (useful in loops).
+
+### Advantages of PreparedStatement
+
+1. Precompiled SQL → Faster Execution
+2. Prevents SQL Injection
+3. Cleaner Code (no string concatenation)
+4. Reusability
+5. Supports batch updates
+6. Automatically escapes special characters
+
+### Limitations of PreparedStatement
+
+* SQL cannot be changed dynamically (only parameters can).
+* Not suited for building dynamic table/column names.
+* Need a new PreparedStatement for each SQL structure.
+
+---
+* `PreparedStatement` is used for **parameterized SQL**.
+* Prevents **SQL Injection**.
+* Query compiled only once → **high performance**.
+* Use `setXxx()` methods to bind values.
+* `executeQuery()` → SELECT
+* `executeUpdate()` → INSERT/UPDATE/DELETE
+* Preferred over `Statement` for real applications.
