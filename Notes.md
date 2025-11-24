@@ -8770,8 +8770,174 @@ class FetchRecord {
 * `executeBatch()` → multiple commands
 * Not safe for user input → use PreparedStatement
 * Closing Connection closes Statement automatically
+- Statement is used for executing **simple (non-parameterized)** SQL.
+- Provides methods to run queries and receive results.
+- Vulnerable to SQL Injection → not ideal for dynamic input.
+- `PreparedStatement` is preferred for security and performance.
+
+## 61. ResultSet Interface
+The **`ResultSet`** interface represents the result of a **SELECT** query in JDBC. It provides methods to iterate through rows and retrieve column values.
+
+Whenever we execute:
+```java
+ResultSet rs = stmt.executeQuery("SELECT * FROM table");
+```
+the database returns the rows inside a `ResultSet` object.
+
+A `ResultSet` object is returned by:
+```java
+Statement.executeQuery()
+PreparedStatement.executeQuery()
+CallableStatement.executeQuery()
+```
+
+### What is ResultSet?
+- A `ResultSet` contains **tabular data** returned by the database.
+- It is a **cursor** that points to rows returned by a database query.
+- Cursor initially points **before the first row**.
+- You use `next()` to move to the next row.
+- Data is accessed via **getXxx()** methods (`getInt()`, `getString()`, etc.).
+
+### Cursor Movement in ResultSet
+
+**Default behavior**: Forward-only, read-only cursor.
+
+```java
+rs.next();     // moves to next row  
+rs.previous(); // only if scrollable ResultSet  
+rs.first();  
+rs.last();  
+rs.absolute(5); // moves to 5th row  
+```
+
+These require **scrollable ResultSet**:
+
+```java
+Statement stmt = con.createStatement(
+     ResultSet.TYPE_SCROLL_INSENSITIVE,
+     ResultSet.CONCUR_READ_ONLY
+);
+```
+
+### **Types of ResultSet**
+
+**1. Based on Cursor Movement**
+| Type                      | Meaning                                        |
+| ------------------------- | ---------------------------------------------- |
+| `TYPE_FORWARD_ONLY`       | moves only forward                             |
+| `TYPE_SCROLL_INSENSITIVE` | scrollable cursor; does NOT reflect DB changes |
+| `TYPE_SCROLL_SENSITIVE`   | scrollable cursor; DOES reflect DB changes     |
+
+**2. Based on Concurrency**
+| Constant           | Description                                    |
+| ------------------ | ---------------------------------------------- |
+| `CONCUR_READ_ONLY` | ResultSet is read-only                         |
+| `CONCUR_UPDATABLE` | Allows modifying DB directly through ResultSet |
+
+Example:
+
+```java
+Statement stmt = con.createStatement(
+    ResultSet.TYPE_SCROLL_SENSITIVE,
+    ResultSet.CONCUR_UPDATABLE
+);
+```
+
+### **ResultSet Methods**
+
+**1. Cursor Navigation Methods**
+
+```java
+boolean next()
+boolean previous()
+boolean first()
+boolean last()
+boolean absolute(int row)
+boolean relative(int rows)
+int getRow()
+```
+
+**2. Data Retrieval Methods (getXxx)**
+
+```java
+int getInt(int columnIndex)
+int getInt(String columnLabel)
+
+String getString(int columnIndex)
+String getString(String columnLabel)
+
+double getDouble()
+float getFloat()
+boolean getBoolean()
+Date getDate()
+```
+
+Columns can be fetched using **index** (1-based) or **column name**.
+
+**3. Update Methods (updatable ResultSet)**
+
+```java
+updateInt()
+updateString()
+updateRow()
+insertRow()
+deleteRow()
+```
+
+**4. Metadata Methods**
+
+```java
+ResultSetMetaData getMetaData()
+```
+
+This allows reading:
+
+* number of columns
+* column names
+* column types
+
 ---
-* Statement is used for executing **simple (non-parameterized)** SQL.
-* Provides methods to run queries and receive results.
-* Vulnerable to SQL Injection → not ideal for dynamic input.
-* `PreparedStatement` is preferred for security and performance.
+
+### Basic ResultSet Usage
+
+```java
+Statement stmt = con.createStatement();
+ResultSet rs = stmt.executeQuery("SELECT id, name, salary FROM emp");
+
+while(rs.next()) {
+    int id = rs.getInt("id");
+    String name = rs.getString("name");
+    int salary = rs.getInt("salary");
+
+    System.out.println(id + " | " + name + " | " + salary);
+}
+```
+
+### ResultSet Key Points
+* Column indexing starts from **1**, not 0.
+* Always close `ResultSet` after use (or rely on try-with-resources).
+* Closing a `Connection` closes its `Statement` and `ResultSet` automatically.
+* Use column names for readability, but indexes are faster.
+* ResultSet points *before* the first row until `next()` is called.
+
+### **Limitations of ResultSet**
+
+* Not thread-safe
+* Cannot move backward unless scrollable
+* Updatable ResultSet support depends on the driver
+* Large results may consume memory
+
+---
+* `next()` → moves cursor to next row (returns false at end)
+* Two ways to retrieve data: by index or column label
+* Default ResultSet = **forward-only + read-only**
+* You can make it scrollable using: `createStatement(type, concurrency)`
+* Updatable ResultSet supports `updateRow()`, `insertRow()`, `deleteRow()`
+* `ResultSetMetaData` used to get structure information
+* Cursor starts **before first row**
+- `ResultSet` is used to fetch and navigate data returned by SELECT queries.
+- Provides cursor movement and **getXxx()** methods.
+- `absolute()`, `relative()`, `previous()` → work only on scrollable ResultSet.
+- Supports forward-only, scrollable, read-only, or updatable modes.
+- Must be closed properly to release DB resources.
+- Closing Connection automatically closes ResultSet & Statement.
