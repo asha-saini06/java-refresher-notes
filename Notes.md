@@ -9068,3 +9068,18 @@ Resets all `?` values (useful in loops).
 * `executeQuery()` → SELECT
 * `executeUpdate()` → INSERT/UPDATE/DELETE
 * Preferred over `Statement` for real applications.
+
+### Statement vs PreparedStatement - Comparison Table
+| Feature / Aspect       | **Statement**                       | **PreparedStatement**                                      |
+| ---------------------- | ----------------------------------- | ---------------------------------------------------------- |
+| **Type of SQL**        | Static SQL (fixed query)            | Parameterized SQL (uses `?` placeholders)                  |
+| **Compilation**        | Compiled every time                 | Precompiled once & reused                                  |
+| **Performance**        | Slower for repeated queries         | Faster (compiled + cached by DB)                           |
+| **Security**           | ❌ Vulnerable to SQL Injection       | ✔ Safe — prevents SQL Injection                            |
+| **Parameter Handling** | Requires string concatenation       | Uses setter methods (`setInt()`, `setString()`, etc.)      |
+| **Readability**        | Lower (messy concatenation)         | High (cleaner and structured)                              |
+| **Dynamic SQL**        | SQL structure can change at runtime | SQL structure is fixed; only parameters change             |
+| **Batch Support**      | Supports batch operations           | More efficient batch operations                            |
+| **Use Case**           | Simple, static queries              | Repeated, secure, parameterized queries                    |
+| **Reusability**        | Not reusable for different values   | Reusable for multiple executions with different parameters |
+| **Recommended For**    | Rare, simple statements             | Real-world applications; secure & efficient operations     |
