@@ -8666,3 +8666,112 @@ try (Connection con = DriverManager.getConnection(url, user, pass)) {
 
 > 📝: **One connection → many statements** 
 You do NOT need a new connection for every query.
+
+## 60. Statement interface
+The `Statement` interface is used to execute static SQL queries (queries without parameters).
+It acts as a factory for `ResultSet`, meaning it returns `ResultSet` objects for SELECT queries.
+
+A `Statement` object is created using a `Connection`:
+```java
+Statement stmt = con.createStatement();
+```
+### Responsibilities of Statement
+
+* Executing SQL queries (SELECT, INSERT, UPDATE, DELETE)
+* Returning results (`ResultSet`)
+* Executing DDL commands (CREATE, DROP, ALTER)
+* Supporting batch execution
+* Providing simple SQL execution without parameters
+
+> 📝 **Statement is NOT safe for user input**.
+Because it uses string concatenation → **SQL Injection risk** (PreparedStatement solves this.)
+
+### **Methods of Statement Interface** 
+
+**1. `executeQuery(String sql)`** 
+
+Executes **SELECT** queries only.
+Returns a `ResultSet`.
+
+```java
+ResultSet rs = stmt.executeQuery("SELECT * FROM employees");
+```
+
+**2. `executeUpdate(String sql)`**
+
+Executes **INSERT, UPDATE, DELETE**, and **DDL** statements.
+Returns an integer → number of rows affected.
+
+```java
+int rows = stmt.executeUpdate("DELETE FROM emp WHERE id = 5");
+```
+
+**3. `execute(String sql)`** 
+
+Executes **any** SQL statement (useful when you don’t know the type of result).
+
+Returns:
+
+* **true** → query returned a ResultSet
+* **false** → query returned an update count
+
+```java
+boolean result = stmt.execute("CREATE TABLE test(id INT)");
+```
+
+**4. `addBatch()` & `executeBatch()`** 
+
+Used to execute a batch of SQL commands.
+
+```java
+stmt.addBatch("INSERT INTO emp VALUES(1,'Asha')");
+stmt.addBatch("INSERT INTO emp VALUES(2,'Ankita')");
+int[] results = stmt.executeBatch();
+```
+
+> ✔ Improves performance by reducing round trips to the database.
+
+### Limitations of Statement
+
+* **Not parameterized** → prone to **SQL Injection**
+* Slower performance when executing repeated queries
+* Requires creating SQL strings manually
+* Harder to maintain and debug
+
+> 📝 **Because of these limitations, `PreparedStatement` is preferred over `Statement` in real-world applications.**
+
+```java
+import java.sql.*;
+
+class FetchRecord {
+    public static void main(String... args) throws Exception {
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/PROJECT_NAME",
+            "root", ""
+        );
+
+        Statement stmt = con.createStatement();
+
+        // Example: DELETE query
+        int result = stmt.executeUpdate("DELETE FROM emp75 WHERE id = 13");
+        System.out.println(result + " record(s) affected.");
+
+        con.close();  // closes Statement & ResultSet automatically
+    }
+}
+```
+
+* `Statement` → used for static SQL
+* `executeQuery()` → SELECT only
+* `executeUpdate()` → DML + DDL
+* `execute()` → returns true/false
+* `executeBatch()` → multiple commands
+* Not safe for user input → use PreparedStatement
+* Closing Connection closes Statement automatically
+---
+* Statement is used for executing **simple (non-parameterized)** SQL.
+* Provides methods to run queries and receive results.
+* Vulnerable to SQL Injection → not ideal for dynamic input.
+* `PreparedStatement` is preferred for security and performance.
