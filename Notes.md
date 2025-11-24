@@ -8353,6 +8353,54 @@ Before writing JDBC code, make sure you have:
 - JDBC requires a driver to connect with the database.
 - Download the JAR or add Maven dependency.
 
+### Crud Operation with JDBC
+CRUD stands for Create, Read, Update, Delete, which are the four basic operations performed on a database using JDBC.
+
+- **Create**: Used to insert new records into the database (INSERT query).
+- **Read**: Used to fetch records from the database (SELECT query).
+- **Update**: Used to modify existing records in the database (UPDATE query).
+- **Delete**: Used to remove records from the database (DELETE query).
+
+### JDBC Exception Handling
+When we communicate  with databases,some problems occur like:
+
+- Invalid SQL syntax bad query
+- Connection time out problem 
+- Wrong data types mentioned
+- miss  database drivers
+
+To handle these issues gracefully, JDBC provides exception handling mechanisms
+
+Example:
+```java
+catch (SQLException e) {
+    System.out.println("Error: " + e.getMessage());
+    System.out.println("SQL State: " + e.getSQLState());
+    System.out.println("Error Code: " + e.getErrorCode());
+}
+```
+
+### Transactions in JDBC
+A transaction is a sequence of SQL operations that are executed as a single unit of work. Transactions help maintain data consistency and integrity in applications. By default, JDBC runs in auto-commit mode (each SQL statement is committed immediately). To manage transactions manually:
+
+- `setAutoCommit(false)`: disables auto-commit.
+- `commit()`: permanently saves changes.
+- `rollback()`: undoes changes since last commit.
+
+Example:
+```java
+con.setAutoCommit(false);
+
+PreparedStatement ps1 = con.prepareStatement("UPDATE accounts SET balance=balance-100 WHERE id=1");
+PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET balance=balance+100 WHERE id=2");
+
+ps1.executeUpdate();
+ps2.executeUpdate();
+
+con.commit();  // commit if both succeed
+con.rollback(); // rollback if error
+```
+
 ## 58. DriverManager Class
 The `DriverManager` Class acts as an interface between user and drivers. It keeps track of the drivers that are available and handles establishing a connection between a database and the appropriate driver. The `DriverManager` class maintained a list of driver classes that have registered themselves by calling the method `DriverManager.registerDriver()`.
 ```java
@@ -8451,3 +8499,170 @@ Used mostly for debugging JDBC operations.
 * Provides multiple `getConnection()` methods to create DB connections.
 * Since JDBC 4.0, drivers auto-register (manual `Class.forName()` rarely needed).
 * `DataSource` is preferred over `DriverManager` in enterprise applications.
+
+## 59. Connection interface
+The **`Connection`** interface represents a **session** between a Java application and a database.
+Once a connection is created, SQL queries can be executed, transactions can be managed, and database metadata can be accessed.
+
+A `Connection` object acts as a **factory** for:
+* `Statement`
+* `PreparedStatement`
+* `CallableStatement`
+* `DatabaseMetaData`
+
+A `Connection` is obtained using:
+```java
+Connection con = DriverManager.getConnection(url, user, password);
+```
+> 📝 **By default, a Connection is in auto-commit mode**, meaning each SQL statement is committed immediately after execution.
+
+> To perform manual transaction control, auto-commit must be set to **false**.
+
+### Connection URL Format
+
+Every DB vendor has a specific URL format.
+
+**General format:**
+```java
+jdbc:subprotocol:subname
+```
+
+**Example for MySQL:**
+```java
+jdbc:mysql://hostname:port/dbname
+
+jdbc:mysql://localhost:3306/dbname
+```
+
+### Responsibilities of the Connection Interface
+
+A `Connection` object is responsible for:
+1. Establish communication with the database
+2. Creating statement objects (`Statement`, `PreparedStatement`, `CallableStatement`)
+3. Managing database transactions (`commit()`, `rollback()`, `setAutoCommit()`)
+4. Provide metadata about database/schema (`DatabaseMetaData`)
+5. Managing session-level settings (isolation level, read-only mode)
+6. Release database resources when closed
+
+### What Happens When a Connection is Created
+
+A Connection object:
+- User authentication occurs
+- A session is created on the database server
+- Isolation level and auto-commit settings are initialized
+- Memory/resources are allocated
+
+❓: **Does closing a Connection close its Statements and ResultSets?** 
+▶ Yes. Closing a Connection **automatically closes all** Statements and ResultSets created from it.
+
+> Direct connections are slow. Real apps use **DataSource with connection pooling** (HikariCP, Apache DBCP).
+For enterprise applications, `Connection` objects are usually obtained from a connection pool (DataSource), not from `DriverManager`.
+
+### Connection Methods
+
+**1. Create Statement Objects**
+
+```java
+Statement createStatement()
+Statement createStatement(int resultSetType, int resultSetConcurrency)
+PreparedStatement prepareStatement(String sql)
+CallableStatement prepareCall(String sql)
+```
+These methods create different types of SQL-executing objects.
+
+**2. Transaction Management**
+
+```java
+void setAutoCommit(boolean autoCommit)
+void commit()
+void rollback() // drops all changes made since the previous commit/rollback
+```
+
+* **Auto-commit (default: true)** means each query runs as a separate transaction.
+* Turning auto-commit **OFF** allows grouping multiple queries into one transaction.
+
+**3. Savepoint Management**
+
+Connections support savepoints.
+```java
+Savepoint setSavepoint()
+Savepoint setSavepoint(String name)
+void rollback(Savepoint savepoint)
+void releaseSavepoint(Savepoint savepoint)
+```
+Useful for partial rollbacks within a transaction.
+
+**4. Isolation Levels (Prevent Dirty Reads, etc.)**
+
+```java
+void setTransactionIsolation(int level) // Sets transaction isolation level.
+int getTransactionIsolation() // Returns current isolation level.
+```
+
+JDBC Levels:
+* `TRANSACTION_NONE`
+* `TRANSACTION_READ_UNCOMMITTED`
+* `TRANSACTION_READ_COMMITTED`
+* `TRANSACTION_REPEATABLE_READ`
+* `TRANSACTION_SERIALIZABLE` (highest)
+
+> Used to prevent issues like dirty read, non-repeatable read, phantom read.
+
+**5. Metadata Access**
+
+```java
+DatabaseMetaData getMetaData()
+```
+
+Used to get information about:
+
+* Tables
+* Columns
+* Primary keys
+* Drivers
+* DB capabilities
+
+**6. Connection Close**
+
+```java
+void close()
+boolean isClosed()
+```
+
+Releases:
+- Database session
+- JDBC resources
+- All Statements & ResultSets created by this connection
+
+**7. Other Useful Methods**
+
+```java
+boolean isReadOnly()
+void setReadOnly(boolean readOnly)
+
+String getCatalog()
+void setCatalog(String catalog)
+
+void setHoldability(int holdability)
+int getHoldability()
+```
+---
+
+* `Connection` is the central object for interacting with a database.
+* Used to create SQL statements and manage transactions.
+* Supports rollback, commit, savepoints, and isolation levels.
+* Must be **closed** after use (or use try-with-resources).
+
+> 📝: A Connection is **expensive** to create
+That’s why **Connection Pooling** (`DataSource`) is used in real applications.
+
+📝: Connection should always be closed.
+Even inside a `finally` block or using **try-with-resources**:
+```java
+try (Connection con = DriverManager.getConnection(url, user, pass)) {
+    // DB operations
+}
+```
+
+> 📝: **One connection → many statements** 
+You do NOT need a new connection for every query.
