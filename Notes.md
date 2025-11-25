@@ -8985,7 +8985,7 @@ Use `Connection.prepareStatement()`:
 PreparedStatement ps = con.prepareStatement("INSERT INTO emp VALUES (?, ?, ?)");
 ```
 
-## Methods of PreparedStatement Interface
+### Methods of PreparedStatement Interface
 
 **1. Setter Methods (setXxx)**
 
@@ -9068,6 +9068,139 @@ Resets all `?` values (useful in loops).
 * `executeQuery()` → SELECT
 * `executeUpdate()` → INSERT/UPDATE/DELETE
 * Preferred over `Statement` for real applications.
+---
+
+Let's create a table as given below:
+```sql
+CREATE TABLE emp(
+    id NUMBER(10),
+    name VARCHAR2(50),
+    salary NUMBER(10)
+);
+```
+
+**1. insert records**
+```java
+import java.sql.*;
+
+class InsertPrepared{
+    public static void main(String... args){
+        try{
+            // Load and register Oracle JDBC driver
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+
+            // Create Connection object
+            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
+
+            /* 
+               PreparedStatement with parameter placeholders (?)
+               SQL is precompiled → faster execution.
+            */
+            PreparedStatement stmt = con.prepareStatement("insert into emp values(?, ?, ?)");
+
+            // Setting values for each ? parameter
+            stmt.setInt(1, 101);          // 1 → first ?
+            stmt.setString(2, "Shaurya"); // 2 → second ?
+            stmt.setFloat(3, 55000);      // 3 → salary column
+
+            int i = stmt.executeUpdate(); // Executes INSERT statement
+            System.out.println(i + " records inserted.");
+
+            con.close(); // Always close connection
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+```
+- SQL is compiled once → reused by DB → **high performance**
+- `?` placeholders prevent SQL injection
+- `executeUpdate()` → used for INSERT/UPDATE/DELETE
+
+**2. update record**
+```java
+PreparedStatement stmt = con.prepareStatement("update emp set name=? where id=?");
+stmt.setString(1, "Dhairya"); // new name
+stmt.setInt(2, 101);           // WHERE id = ?
+int i = stmt.executeUpdate();
+System.out.println(i + " records updated.");
+```
+- Order of `?` matters.
+- Changing **only values**, not SQL structure → prepared statements are reusable.
+
+**3. delete record**
+```java
+PreparedStatement stmt = con.prepareStatement("delete from emp where id=?");
+stmt.setInt(1, 101);
+int i = stmt.executeUpdate();
+System.out.println(i + " records deleted.");
+```
+Use DELETE with conditions; always avoid deleting without WHERE.
+
+**4. retrieve record**
+```java
+PreparedStatement stmt = con.prepareStatement("select * from emp");
+ResultSet rs = stmt.executeQuery();
+while(rs.next()){
+    // Retrieve using column index or column name
+    System.out.println(rs.getInt(1) + " " + rs.getString(2));
+}
+```
+- `executeQuery()` returns a ResultSet.
+- Cursor starts **before** first row.
+- Use `next()` to iterate row-by-row.
+
+**5. insert records until user press n**
+```java
+import java.sql.*;
+import java.io.*;
+
+class RS{
+    public static void main(String... args){
+        // Load driver
+        Class.forName("oracle..jdbc.driver.OracleDriver");
+
+        // Establish connection
+        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
+        // Prepared SQL with 3 parameters
+        PreparedStatement ps = con.prepareStatement("insert into emp values(?, ?, ?)");
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        do{
+            // Reading employee details from console
+            System.out.println("Enter id: ");
+            int id = Integer.parseInt(br.readLine());
+            System.out.println("Enter name: ");
+            String name = br.readLine();
+            System.out.println("Enter salary: ");
+            float salary = Float.parseFloat(br.readLine());
+
+            // Setting data into prepared statement
+            ps.setInt(1, id);
+            ps.setString(2, name);
+            ps.setFloat(3, salary);
+
+            // Execute insert
+            int i = ps.executeUpdate();
+            System.out.println(i + " records affected.");
+
+            System.out.println("Do you want to continue (Y/N)? ");
+            String s = br.readLine();
+
+            //if (s.startsWith("n") || s.startsWith("N")) { break; }
+            if (s.equalsIgnoreCase("n")) {
+                break;
+            }
+        } while(true);
+        con.close(); // important: close connection
+    }
+}
+```
+- `PreparedStatement` can be reused in a loop.
+- Only values change, SQL stays same → major performance advantage.
+- `clearParameters()` can be used if needed.
+- Always close Connection.
 
 ### Statement vs PreparedStatement - Comparison Table
 | Feature / Aspect       | **Statement**                       | **PreparedStatement**                                      |
@@ -9075,7 +9208,7 @@ Resets all `?` values (useful in loops).
 | **Type of SQL**        | Static SQL (fixed query)            | Parameterized SQL (uses `?` placeholders)                  |
 | **Compilation**        | Compiled every time                 | Precompiled once & reused                                  |
 | **Performance**        | Slower for repeated queries         | Faster (compiled + cached by DB)                           |
-| **Security**           | ❌ Vulnerable to SQL Injection       | ✔ Safe — prevents SQL Injection                            |
+| **Security**           | ❌ Vulnerable to SQL Injection       | ✔ Safe - prevents SQL Injection                            |
 | **Parameter Handling** | Requires string concatenation       | Uses setter methods (`setInt()`, `setString()`, etc.)      |
 | **Readability**        | Lower (messy concatenation)         | High (cleaner and structured)                              |
 | **Dynamic SQL**        | SQL structure can change at runtime | SQL structure is fixed; only parameters change             |
@@ -9083,3 +9216,14 @@ Resets all `?` values (useful in loops).
 | **Use Case**           | Simple, static queries              | Repeated, secure, parameterized queries                    |
 | **Reusability**        | Not reusable for different values   | Reusable for multiple executions with different parameters |
 | **Recommended For**    | Rare, simple statements             | Real-world applications; secure & efficient operations     |
+
+❓: **Why PreparedStatement is Better?**
+- Prevents SQL Injection
+- Precompiled → faster
+- Clean code (no string concatenation)
+- Supports batch operations
+- Type-safe (setInt, setString, setFloat, etc.)
+
+❓: **Real-world usage?**
+`PreparedStatement` is used **90%** of the time in enterprise apps.
+`Statement` is rarely used except for DDL or simple queries.
