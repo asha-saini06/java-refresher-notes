@@ -9068,8 +9068,8 @@ Resets all `?` values (useful in loops).
 * `executeQuery()` → SELECT
 * `executeUpdate()` → INSERT/UPDATE/DELETE
 * Preferred over `Statement` for real applications.
----
 
+### CRUD Operations Using PreparedStatement
 Let's create a table as given below:
 ```sql
 CREATE TABLE emp(
