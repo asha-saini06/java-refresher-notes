@@ -379,7 +379,7 @@ System.out.println(a); // 8
 System.out.println(b); // 25
 ```
 
-## 5. Java OOP
+## 5. OOPs (Object Oriented Programming)
 
 OOP stands for **Object-Oriented Programming**.
 
@@ -1838,7 +1838,7 @@ Now the compiler can distinguish between the two methods because the **parameter
 
 > Return type is not part of the method signature.
 
-## 17. To print an array element by element
+## 17. Print an array element by element
 
 When you print an array directly in Java (e.g., `System.out.println(arr);`),
 it doesn’t print the elements — instead, it prints the **memory address** (like `[C@15db9742`).
@@ -4003,7 +4003,7 @@ ABC(){ // default constructor
 ```
 > 📝: Everytime an object is created using `new()` keyword, atleast one constructor is called. It is called a **default constructor**.
 
-## 35. Types of Constructors in Java
+## 35. Types of Constructors
 There are Four types of constructors in Java
 ![constructors](/resources/constructors_in_java.webp)
 
@@ -4179,7 +4179,7 @@ Access Modifiers in Java define the **visibility (scope)** of classes, methods, 
 They help achieve **encapsulation**, ensuring that sensitive data or methods are protected from unintended access.
 
 There are 4 types of access modifiers available in Java: 
-![Access Modifiers](/resources/aAccess-Modifiers.webp)
+![Access Modifiers](/resources/Access-Modifiers.webp)
 
 | Modifier                   | Within Class | Same Package | Subclass (same pkg) | Subclass (different pkg) | Other Packages |
 | -------------------------- | ------------ | ------------ | ------------------- | ------------------------ | -------------- |
@@ -4316,7 +4316,7 @@ Comparison Table of Access Modifiers in Java
 | **protected** | Package + Subclasses | Base class features           |
 | **public**    | Global               | APIs, library classes         |
 
-## 37. Getter and Setter Methods in Java
+## 37. Getter and Setter Methods
 Getter and Setter methods are **used to access and modify private data members** of a class.
 They form the foundation of **Encapsulation**, one of the four pillars of Object-Oriented Programming (OOP).
 
@@ -5889,7 +5889,7 @@ Although Class and Interface seem the same there are certain differences between
 - A class defines both data and behavior - it’s a blueprint to create objects.
 - An interface defines only behavior (method signatures) - it’s a contract that classes must follow.
 
-## 47. Difference Between Abstract Class and Interface
+## 47. Abstract Class vs. Interface
 | Feature              | Abstract Class                                                      | Interface                                                                                  |
 | -------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | **Keyword**          | `abstract`                                                          | `interface`                                                                                |
@@ -6269,7 +6269,6 @@ class abc{
 ```
 
 ## 49. Inner Classes (Nested Classes)
-
 An **inner class** is a class **defined inside another class**.
 It helps logically group classes that are only used in one place, improving **encapsulation and readability**.
 
@@ -7614,7 +7613,7 @@ In short:
 * A thread remains alive until the `run()` method completes.
 * After completion, `isAlive()` always returns `false`.
 
-## 53. Life Cycle of a Thread - Thread States (controlled by JVM)
+## 55. Life Cycle of a Thread (Thread States controlled by JVM)
 The lifecycle of the thread in Java is controlled by JVM.
 
 ![thread_lifecycle](/resources/thread_lifecycle.png)
@@ -7639,7 +7638,7 @@ The lifecycle of the thread in Java is controlled by JVM.
 
 > 📝: `start()` methods only schedules the thread for execution and not actually begins the execution of the thread. The execution of the thread is started when the JVM calls the `run()` method of the thread once the CPU Schedular picks this scheduled thread for execution.
 
-## 54. Synchronization
+## 56. Synchronization
 Synchronization in Java is a mechanism that ensures that **only one thread** can access a shared resource (like a variable, object, or method) at a time. It prevents concurrent threads from interfering with each other while modifying shared data.
 
 The capibility to control the access of multiple threads to nay shared resource.
@@ -7810,7 +7809,7 @@ The volatile keyword in Java ensures that all threads have a consistent view of 
 | **Purpose**        | It ensures *mutual exclusion* and visibility     | It ensures *visibility* of changes to variables across threads |
 | **Performance**    | Performance is *relatively low* compared to volatile because of the acquisition and release of the lock.         | Performance is *relatively high* (Faster - no locking mechanism involved) compared to synchronized Keyword.                  |
 
-## 55. Inter-Thread Communication (ITC)
+## 57. Inter-Thread Communication (ITC)
 > Always use in **Synchronization**
 
 Inter-Thread Communication in Java allows **multiple threads to communicate and cooperate with each other**, especially when they share resources.
@@ -8005,7 +8004,7 @@ synchronized(obj) {
 * Designed to avoid unnecessary CPU usage and ensure proper communication.
 * Essential for producer-consumer, task pipelines, and sequential multithreading.
 
-## 56. API (Application Programming Interface)
+## 58. API (Application Programming Interface)
 It is a document that contains description of all the features of a product or software. It represents classes and interfaces that software programs can follow to communicate with each other. An API can be created for applications, libraries, operating systems, etc.
 
 > 📝: An API is a set of routines, protocols, and tools for building software applications.
@@ -8096,7 +8095,7 @@ In today’s cloud driven ecosystem, API integrations are the backbone of automa
 - **Versioning Challenges**: Managing updates without breaking compatibility.
 - **Dependency Risk**: Relying on third-party APIs introduces failure points.
 
-## 57. JDBC (Java Database Connectivity)
+## 59. JDBC (Java Database Connectivity)
 JDBC (Java Database Connectivity) is an application programming interface (API) for the programming language Java, which defines how a client may access a database. It is a Java-based access technology used for Java Databse Connectivity.
 
 ![JDBC](./resources/JDBC.png)
@@ -8401,7 +8400,7 @@ con.commit();  // commit if both succeed
 con.rollback(); // rollback if error
 ```
 
-## 58. DriverManager Class
+## 60. DriverManager Class
 The `DriverManager` Class acts as an interface between user and drivers. It keeps track of the drivers that are available and handles establishing a connection between a database and the appropriate driver. The `DriverManager` class maintained a list of driver classes that have registered themselves by calling the method `DriverManager.registerDriver()`.
 ```java
 public static Connection getConnection(String url);
@@ -8500,7 +8499,7 @@ Used mostly for debugging JDBC operations.
 * Since JDBC 4.0, drivers auto-register (manual `Class.forName()` rarely needed).
 * `DataSource` is preferred over `DriverManager` in enterprise applications.
 
-## 59. Connection interface
+## 61. Connection interface
 The **`Connection`** interface represents a **session** between a Java application and a database.
 Once a connection is created, SQL queries can be executed, transactions can be managed, and database metadata can be accessed.
 
@@ -8667,7 +8666,7 @@ try (Connection con = DriverManager.getConnection(url, user, pass)) {
 > 📝: **One connection → many statements** 
 You do NOT need a new connection for every query.
 
-## 60. Statement interface
+## 62. Statement interface
 The `Statement` interface is used to execute static SQL queries (queries without parameters).
 It acts as a factory for `ResultSet`, meaning it returns `ResultSet` objects for SELECT queries.
 
@@ -8775,7 +8774,7 @@ class FetchRecord {
 - Vulnerable to SQL Injection → not ideal for dynamic input.
 - `PreparedStatement` is preferred for security and performance.
 
-## 61. ResultSet Interface
+## 63. ResultSet Interface
 The **`ResultSet`** interface represents the result of a **SELECT** query in JDBC. It provides methods to iterate through rows and retrieve column values.
 
 Whenever we execute:
@@ -8942,7 +8941,7 @@ while(rs.next()) {
 - Must be closed properly to release DB resources.
 - Closing Connection automatically closes ResultSet & Statement.
 
-## 62. PreparedStatement Interface
+## 64. PreparedStatement Interface
 
 The **`PreparedStatement`** interface is a sub-interface of `Statement` used to execute **parameterized**, **precompiled**, and **secure** SQL queries.
 
@@ -9227,3 +9226,10 @@ class RS{
 ❓: **Real-world usage?**
 `PreparedStatement` is used **90%** of the time in enterprise apps.
 `Statement` is rarely used except for DDL or simple queries.
+
+## 65. Collections
+Java Collection Framework (JCF) is a set of classes and interfaces that provide ready-made data structures to store and manipulate groups of objects efficiently.
+
+- Java provides built-in collection classes like `List`, `Set`, `Map` and `Queue`, so developers don’t need to write their own data management algorithms.
+- The Collection Framework improves productivity by making code more reusable, maintainable and faster to develop.
+
