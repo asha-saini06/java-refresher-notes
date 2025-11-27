@@ -9223,13 +9223,71 @@ class RS{
 - Supports batch operations
 - Type-safe (setInt, setString, setFloat, etc.)
 
-❓: **Real-world usage?**
+❓: **Real-world usage of PreparedStatement?**
 `PreparedStatement` is used **90%** of the time in enterprise apps.
 `Statement` is rarely used except for DDL or simple queries.
 
 ## 65. Collections
+The `Collection` in Java is a framework that provides an architecture to store and manipulate the group of objects.
+
+All the operations that you perform on a data such as searching, sorting, insertion, manipulation, deletion, etc., can be achieved by Java Collections.
+
+Java Collection means a single unit of objects. Java Collection Framework provides many interfaces (`Set`, `List`, `Queue`, `Deque`, etc.) and classes (`ArrayList`, `Vector`, `LinkedList`, `PriorityQueue`, `HashSet`, `TreeSet`, `LinkedHashSet`, etc).
+
+> A Collection represents a single unit of objects, i.e., a group.
+
 Java Collection Framework (JCF) is a set of classes and interfaces that provide ready-made data structures to store and manipulate groups of objects efficiently.
 
 - Java provides built-in collection classes like `List`, `Set`, `Map` and `Queue`, so developers don’t need to write their own data management algorithms.
 - The Collection Framework improves productivity by making code more reusable, maintainable and faster to develop.
 
+### What is a framework in Java
+- It provides readymade architecture.
+- It represents a set of classes and imterfaces.
+- It is optional
+
+### What is Collection Framework
+The Collection framework represents a unified architecture for storing and manipulating a group of objects. It has:
+- Interfaces and its implementations, i.e., Classes
+- Algorithm
+
+![Collection Framework](./resources/JCF.png)
+
+### Features of Java Collection Framework
+- Provides ready-to-use data structures (e.g., `ArrayList`, `HashSet`, `HashMap`).
+- Offers interfaces (`Collection`, `List`, `Set`, `Map`, `Queue`) to define standard behaviors.
+- Supports dynamic resizing, unlike arrays with a fixed size.
+- Includes algorithms (sorting, searching, iteration) via the Collections utility class.
+- Improves code reusability and performance by reducing boilerplate code.
+
+### Hierarchy of Collection Framework
+
+![Collection Framework](./resources/JCF2.png)
+
+```java
+Collection
+├── List
+│   ├── ArrayList
+│   ├── LinkedList
+│   ├── Vector
+│   └── Stack
+├── Set
+│   ├── HashSet
+│   ├── LinkedHashSet
+│   ├── TreeSet
+│   └── EnumSet
+├── Map
+│   ├── HashMap
+│   ├── LinkedHashMap
+│   ├── TreeMap
+│   └── EnumMap
+└── Queue
+    ├── ArrayDeque
+    ├── LinkedList
+    └── PriorityQueue
+```
+
+### Real World Example
+Suppose you are managing a library where thousands of books need to be stored, searched and retrieved. Instead of arranging them manually in different shelves every time, you use a catalog system. Similarly, the Java Collection Framework acts as a catalog that organizes and manages objects efficiently.
+
+![JCF7](./resources/JCF7.png)
