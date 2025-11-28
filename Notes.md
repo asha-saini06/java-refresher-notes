@@ -6748,7 +6748,7 @@ Full list of methods available only in `java.io.File` class.
 
 ### Java File I/O (Input/Output Streams)
 
-#### ➡ Counting Hidden & Visible Files in a Directory
+#### Counting Hidden & Visible Files in a Directory
 ```java
 // Listing Files & Checking Attributes (isHidden, isDirectory, etc.)
 import java.io.*;
@@ -6788,7 +6788,7 @@ class A extends File { // ❌ NOTE: You should NOT extend File class.
 - `isHidden()` checks whether the file is hidden.
 - Counts visible and hidden items.
 
-#### ➡ FileInputStream – Skipping Bytes While Reading a File
+#### FileInputStream – Skipping Bytes While Reading a File
 ```java
 // FileInputStream: Reading Bytes & Using skip()
 class A{
@@ -6809,7 +6809,7 @@ class A{
 - After reading each byte, `skip(2)` jumps forward by 2 bytes.
 - So effectively reads every **3rd character**.
 
-#### ➡ Merge two files (SequenceInputStream) 
+#### Merge two files (SequenceInputStream) 
 Read the data from two files and writes into another file.
 ```java 
 // SequenceInputStream: Merging Multiple Input Streams
@@ -6842,7 +6842,7 @@ class A{
 - Reads from `fin` first → then automatically switches to `fin1`.
 - Useful for merging text files, audio, etc.
 
-#### ➡ Taking Keyboard Input (BufferedInputStream) & Writing Into a File
+#### Taking Keyboard Input (BufferedInputStream) & Writing Into a File
 ```java
 import java.io.*;
 class A {
@@ -6869,7 +6869,7 @@ Takes the data from the keyboard (console) and stores it in the file.
 - Stops writing when character `'N'` is entered.
 - Stores typed content into `tt.txt`.
 
-#### ➡ Append Mode in FileOutputStream
+#### Append Mode in FileOutputStream
 ```java
 // Appending Data to a File (FileOutputStream append = true)
 FileOutputStream fout = new FileOutputStream("f://tt.txt", true); // set true for the appendable mode
@@ -6881,7 +6881,7 @@ fout.close();
 - Setting `true` enables *append mode* (does not overwrite file).
 - `getBytes()` converts String into byte array.
 
-#### ➡ ByteArrayInputStream – Read Data from Byte Array
+#### ByteArrayInputStream – Read Data from Byte Array
 As the name suggests, it can be used to read byte array as input stream.
 
 Java ByteArrayInputStream class contains an internal buffer which is used to read byte array as stream. In this stream, the data is read from a byte array.
@@ -6919,7 +6919,7 @@ ByteArrayInputStream by = new ByteArrayInputStream(arr, 0, 3); // reads arr from
 - Useful when you want only a portion of data to be processed.
 
 
-#### ➡ PrintStream – Writing Formatted Data to Streams
+#### PrintStream – Writing Formatted Data to Streams
 PrintStream class provides methods to write data to another stream. The PrintStream class automatically flushes the data so there is no need to call `flush()` method. Moreover, its methods don't throw `IOException`.
 
 PrintStream provides convenient `print()` and `println()` methods to write data to:
@@ -6939,7 +6939,8 @@ FileOutputStream f = new FileOutputStream("f://tt.txt");
 PrintStream out = new PrintStream(f); // prints data in file
 out.print("hello");
 ```
-#### ➡ FileOutputStream – Writing Raw Bytes to a File
+
+#### FileOutputStream – Writing Raw Bytes to a File
 It is an output stream used for writing data to a file.
 
 `FileOutputStream` is used to write byte data such as:
@@ -6963,7 +6964,8 @@ String s = "Welcome";
 byte b[] = s.getBytes(); // converting String into byte array 
 fout.write(b); // content of text file tt.txt is set with the data 'Welcome'
 ```
-#### ➡ FileInputStream – Reading Raw Bytes from a File
+
+#### FileInputStream – Reading Raw Bytes from a File
 `FileInputStream` reads byte-oriented data, typically:
 - images, videos, audio
 - binary files
@@ -6996,7 +6998,7 @@ while((i = fin.read()) != -1){
 ```
 Output: `Welcome`
 
-#### ➡ SequenceInputStream – Reading Multiple Streams Sequentially
+#### SequenceInputStream – Reading Multiple Streams Sequentially
 `SequenceInputStream` combines **two input streams** into one stream.
 It reads the first completely, then the second.
 
@@ -7029,7 +7031,7 @@ Output:
 Java IO Programming. SequenceInputStream class.
 ```
 
-#### ➡ BufferedInputStream – Fast Reading with Internal Buffer
+#### BufferedInputStream – Fast Reading with Internal Buffer
 `BufferedInputStream` improves performance using an internal buffer.
 
 Instead of reading byte-by-byte from disk, it loads data in **chunks**.
@@ -7981,7 +7983,7 @@ synchronized(obj) {
 }
 ```
 
-### ✔ How It Works
+### How It Works
 
 | Scenario                | Action                       |
 | ----------------------- | ---------------------------- |
@@ -9228,23 +9230,17 @@ class RS{
 `Statement` is rarely used except for DDL or simple queries.
 
 ## 65. Collections
-The `Collection` in Java is a framework that provides an architecture to store and manipulate the group of objects.
+The **Collection Framework** in Java is a unified architecture to **store, retrieve, manipulate, and aggregate** groups of objects efficiently.
 
-All the operations that you perform on a data such as searching, sorting, insertion, manipulation, deletion, etc., can be achieved by Java Collections.
+Java Collections support operations like **searching, sorting, insertion, deletion, iteration**, etc., through well-defined interfaces and ready-made implementations.
 
-Java Collection means a single unit of objects. Java Collection Framework provides many interfaces (`Set`, `List`, `Queue`, `Deque`, etc.) and classes (`ArrayList`, `Vector`, `LinkedList`, `PriorityQueue`, `HashSet`, `TreeSet`, `LinkedHashSet`, etc).
-
-> A Collection represents a single unit of objects, i.e., a group.
-
-Java Collection Framework (JCF) is a set of classes and interfaces that provide ready-made data structures to store and manipulate groups of objects efficiently.
-
-- Java provides built-in collection classes like `List`, `Set`, `Map` and `Queue`, so developers don’t need to write their own data management algorithms.
-- The Collection Framework improves productivity by making code more reusable, maintainable and faster to develop.
+> A **Collection** represents a **single unit of objects** (a group).
 
 ### What is a framework in Java
-- It provides readymade architecture.
-- It represents a set of classes and imterfaces.
-- It is optional
+A *framework* is:
+* A **ready-made architecture**
+* A set of **classes and interfaces**
+* **Optional**, but makes development faster and standardized
 
 ### What is Collection Framework
 The Collection framework represents a unified architecture for storing and manipulating a group of objects. It has:
@@ -9253,14 +9249,36 @@ The Collection framework represents a unified architecture for storing and manip
 
 ![Collection Framework](./resources/JCF.png)
 
+The Collection Framework represents a **unified architecture** for storing and manipulating a group of objects. It contains:
+
+* **Interfaces**
+* **Classes (Implementations)**
+* **Algorithms** (sorting, searching, etc.)
+
+#### **Root Interfaces**
+Java Collection Framework has two main roots:
+| Root Interface | Package     | Represents                                                         |
+| -------------- | ----------- | ------------------------------------------------------------------ |
+| `Collection`   | `java.util` | Group of individual objects                                        |
+| `Map`          | `java.util` | Key–value pairs (not part of Collection hierarchy but part of JCF) |
+
 ### Features of Java Collection Framework
 - Provides ready-to-use data structures (e.g., `ArrayList`, `HashSet`, `HashMap`).
 - Offers interfaces (`Collection`, `List`, `Set`, `Map`, `Queue`) to define standard behaviors.
-- Supports dynamic resizing, unlike arrays with a fixed size.
-- Includes algorithms (sorting, searching, iteration) via the Collections utility class.
-- Improves code reusability and performance by reducing boilerplate code.
+- Supports **dynamic resizing**, unlike arrays with a fixed size.
+- Includes algorithms (sorting, searching, iteration) via the **Collections utility class**.
+- Improves **code reusability**, **performance** and **maintainability** by reducing boilerplate code.
+- Enables **easy iteration** using Iterator and for-each loop
 
 ### Hierarchy of Collection Framework
+A Collection is a group of objects treated as a single unit.
+
+Java provides a powerful Collection Framework supporting interfaces like:
+* **List**
+* **Set**
+* **Queue**
+* **Deque**
+* **Map** (separate hierarchy)
 
 ![Collection Framework](./resources/JCF2.png)
 
@@ -9287,7 +9305,117 @@ Collection
     └── PriorityQueue
 ```
 
+### Need for Collection Framework
+Before JDK 1.2:
+
+* Developers used **Arrays**, **Vectors**, and **HashTables**
+* No common interface
+* Different syntax for similar operations (iteration, adding elements)
+* Vectors had many **final methods**, making extension impossible
+* No standard mechanisms for searching, sorting, or dynamic resizing
+
+To solve these problems, Java introduced the **Collection Framework**, providing standard APIs and powerful data structures.
+
 ### Real World Example
-Suppose you are managing a library where thousands of books need to be stored, searched and retrieved. Instead of arranging them manually in different shelves every time, you use a catalog system. Similarly, the Java Collection Framework acts as a catalog that organizes and manages objects efficiently.
+Managing a library with thousands of books:
+
+* Without a framework → manual storing, searching, sorting
+* With a framework → use a catalog system to instantly search, add, or remove books
+
+Similarly, the Collection Framework acts like a **catalog** for managing objects.
 
 ![JCF7](./resources/JCF7.png)
+
+### Advantages of Collection Framework
+**1. Consistent API :**
+The API has a basic set of interfaces like `Collection`, `Set`, `List` or `Map`. All classes (`ArrayList`, `LinkedList`, `Vector`, etc) that implement these interfaces have some common set of methods.
+
+**2. Reduces programming effort :**
+A programmer doesn't have to worry about the design of `Collection`, and he can focus on its best use in his program.
+
+**3. Increases program speed and quality :**
+Increases performance by providing high performance implementations of useful data structures (Dynamic arrays, Linked lists, Hash tables, Balanced trees, Queues and deques) and algorithms.
+
+**4. Reusability**
+Standard interfaces ensure code is easy to reuse and maintain.
+
+**5. Algorithm Support**
+Class **`Collections`** provides:
+* `sort()`
+* `binarySearch()`
+* `shuffle()`
+* `reverse()`
+* `min()`
+* `max()`
+* `frequency()`
+
+### Key Interfaces in the Collection Framework
+
+#### List Interface (`java.util.List`)
+The **List** interface represents an **ordered**, **index-based**, and **duplicate-allowed** collection.
+
+It preserves the insertion order and allows positional access using indexes (0, 1, 2…).
+
+* Ordered collection
+* Allows duplicate elements
+* Supports index-based operations (add, get, remove by index)
+
+✔ Implementations: `ArrayList`, `LinkedList`, `Vector`, `Stack`
+
+![JCF3](./resources/JCF3.png)
+
+#### Set Interface (`java.util.Set`)
+The **Set** interface represents a collection that **does not allow duplicate elements**.
+
+It models the mathematical set abstraction and may or may not maintain order depending on the implementation.
+
+* No duplicate elements allowed
+* Ordering depends on implementation
+
+  * `HashSet` → No order
+  * `LinkedHashSet` → Insertion order
+  * `TreeSet` → Sorted order
+
+✔ Implementations: `HashSet`, `LinkedHashSet`, `TreeSet`, `EnumSet`
+
+![JCF4](./resources/JCF4.png)
+
+#### Map Interface (`java.util.Map`)
+The **Map** interface represents a structure that maps **keys to values**.
+Each key must be **unique**, but values may be duplicated.
+Not a child of `Collection` but a major part of JCF.
+
+* Stores data in **key-value pairs**
+* Keys are unique
+* Values can be duplicated
+
+✔ Implementations: `HashMap`, `LinkedHashMap`, `TreeMap`, `Hashtable`, `EnumMap`
+
+![JCF6](./resources/JCF6.png)
+
+#### Queue / Deque Interface (`java.util.Queue`, `java.util.Deque`)
+**Queue Interface**
+
+The **Queue** interface represents a collection designed for **FIFO (First-In-First-Out)** order.
+
+Used for task scheduling, buffering, and asynchronous data transfer.
+
+* FIFO order by default
+* Used for waiting lines, processing tasks
+* Supports methods like `offer()`, `poll()`, `peek()`
+
+✔ Implementations: `LinkedList`, `PriorityQueue`, `ArrayDeque`
+
+**Deque Interface**
+
+A **Deque** (Double Ended Queue) allows insertion and deletion at **both ends**.
+
+It can work as either a **Queue** (FIFO) or **Stack** (LIFO).
+
+* Insert/remove from both ends
+* More flexible than Queue
+* Preferred over `Stack` (legacy class)
+
+✔ Implementations: `ArrayDeque`, `LinkedList`
+
+![JCF5](./resources/JCF5.png)
