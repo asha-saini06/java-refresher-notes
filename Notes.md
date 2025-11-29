@@ -9419,3 +9419,380 @@ It can work as either a **Queue** (FIFO) or **Stack** (LIFO).
 ✔ Implementations: `ArrayDeque`, `LinkedList`
 
 ![JCF5](./resources/JCF5.png)
+
+## 66. List Interface
+List is an dynamic array which is implemented by `ArrayList` (dynamic array based) and `LinkedList` (static array).
+
+The `List` interface in Java extends the `Collection` interface and is part of the `java.util` package. It is used to store ordered collections where duplicates are allowed and elements can be accessed by their index.
+
+### Key Characteristics of List Interface
+
+- ✔ Ordered collection → preserves insertion order
+- ✔ Allows duplicates
+- ✔ Allows null values
+- ✔ Index-based access (`get(int index)`)
+- ✔ Supports positional insertion & deletion (`add(index, element)`, `remove(index)`)
+- ✔ Provides ListIterator for **bidirectional traversal**
+- ✔ `java.util.List` is a child interface of `Collection`.
+
+### List Interface Declaration
+
+> 📝: After the introduction of **Generics** in Java 1.5, it is possible to restrict the type of object that can be stored in the `List`.
+```java
+List <Obj> list = new List<Obj>();
+```
+
+> 📝: `List` Interface is the subinterface of Collection. It contains methods to insert and delete elements in index basis. It is a factory of `ListIterator` interface.
+Declaration:
+```java
+public interface List<E> extends Collection <E>
+```
+
+> `ListIterator` interface is used to traverse the element in backward and forward direction. `ListIterator` is a child interface of `Iterator`.
+
+### Important List Implementations
+
+| Implementation | Underlying Structure         | Performance                   | Features                |
+| -------------- | ---------------------------- | ----------------------------- | ----------------------- |
+| **ArrayList**  | Dynamic array                | Fast read, slow insert/delete | Most used               |
+| **LinkedList** | Doubly linked list           | Fast insert/delete, slow read | Implements List & Queue |
+| **Vector**     | Dynamic array (synchronized) | Slower due to synchronization | Legacy                  |
+| **Stack**      | Vector-based                 | LIFO operations               | Legacy                  |
+
+![List](./resources/List.png)
+
+- `List` interface is predefined and extends Collection interface. Collection interface externs iterable interface.
+- `Set` interface accepts unique elements.
+- **Sorted Set**: handles sorted set. Inherits `Set` interface.
+
+```java
+import java.util.*;
+
+// POJO (Plain Old Java Object) class representing a Student
+class Student {
+    String name;
+    int roll;
+
+    // Setter for name
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Getter for name
+    public String getName() {
+        return this.name;
+    }
+
+    // Setter for roll number
+    public void setRoll(int roll) {
+        this.roll = roll;
+    }
+
+    // Getter for roll number
+    public int getRoll() {
+        return this.roll;
+    }
+}
+
+class abc {
+    public static void main(String... args) {
+
+        // Creating Student Object 1
+        Student s1 = new Student();
+        s1.setName("Shaurya");
+        s1.setRoll(2);
+
+        // Creating Student Object 2
+        Student s2 = new Student();
+        s2.setName("Dhairya");
+        s2.setRoll(13);
+
+        // Creating a generic ArrayList that can store ANY data type (NOT recommended)
+        ArrayList<Student> a1 = new ArrayList<Student>();  
+        // This restricts ArrayList to store ONLY Student type objects
+
+        a1.add(s1);   // Adding Student object at index 0
+        a1.add(s2);   // Adding Student object at index 1
+
+        // ❌ ERROR: You CANNOT add non-Student objects into ArrayList<Student>
+        // a1.add(6);     // Integer → Not allowed
+        // a1.add("Karuna"); // String → Not allowed
+        // a1.add(null);  // Null is technically allowed but avoided
+
+        // Correct way: remove type restrictions OR use raw ArrayList
+        // ArrayList a1 = new ArrayList();  // (raw type) → allows everything
+
+        // Printing size of ArrayList (should be 2)
+        System.out.println(a1.size());  
+
+        // Printing details of Student at index 0
+        System.out.println(a1.get(0).getName() + " " + a1.get(0).getRoll());
+
+        // Using RAW ArrayList (no generics)
+        ArrayList m = new ArrayList();
+        m.add(20);   // Integer
+        m.add(40);   // Integer
+        m.add(a1);   // Adding ArrayList<Student> inside m
+
+        // Retrieving the inner list stored at index 2
+        List ll = (List) m.get(2);  
+        // Now ll = a1 (which contains Student objects)
+
+        // Casting the object at index 0 from ll into a Student
+        Student s = (Student) ll.get(0);
+
+        System.out.println(s.getName());  // Prints name of first student
+
+        // ❌ m.get(2).get(0).getName() → Not allowed directly because m.get(2) returns Object
+        // ✔ Correct way:
+        Student s3 = (Student) ((List)m.get(2)).get(0);
+        System.out.println(s3.getName());
+    }
+}
+```
+
+**1. Raw vs Generic ArrayList**
+```java
+ArrayList<Student> a1 = new ArrayList<>();
+```
+- ✔ Only allows **Student objects**
+- ✔ Type-safe
+- ✔ No ClassCastException
+- ❌ Cannot add other data types
+
+```java
+ArrayList m = new ArrayList();
+```
+- ✔ Allows ANY data type
+- ❌ Runtime errors
+- ❌ No type safety
+- ❌ Needs casting
+
+**2. Why We Need Casting?**
+
+Because raw ArrayList returns **Object**, e.g.:
+
+```java
+Object obj = m.get(2); 
+```
+To use inner list methods, we must convert it:
+
+```java
+List ll = (List) obj;
+Student s = (Student) ll.get(0);
+```
+
+**3. Why Generics Are Better?**
+
+Because:
+- Prevent wrong data types
+- No casting needed
+- Compile-time safety
+
+---
+**Rewritten Code (100% Type-Safe, Using Generics Properly)**
+```java
+import java.util.*;
+
+// A simple POJO (Plain Old Java Object)
+class Student {
+    private String name;
+    private int roll;
+
+    // setters
+    public void setName(String name) { this.name = name; }
+    public void setRoll(int roll) { this.roll = roll; }
+
+    // getters
+    public String getName() { return this.name; }
+    public int getRoll() { return this.roll; }
+
+    @Override
+    public String toString() {
+        return name + " (" + roll + ")";
+    }
+}
+
+class Main {
+    public static void main(String... args) {
+
+        // Creating Student objects
+        Student s1 = new Student();
+        s1.setName("Shaurya");
+        s1.setRoll(2);
+
+        Student s2 = new Student();
+        s2.setName("Dhairya");
+        s2.setRoll(13);
+
+        // -------------------------------
+        // 1. A type-safe ArrayList<Student>
+        // -------------------------------
+        ArrayList<Student> students = new ArrayList<>();
+        students.add(s1);
+        students.add(s2);
+
+        System.out.println("Total students = " + students.size());
+        System.out.println(students.get(0).getName() + " " + students.get(0).getRoll());
+
+        // ---------------------------------------------
+        // 2. A type-safe List<List<Student>>
+        //    (instead of mixing integers, strings etc.)
+        // ---------------------------------------------
+        List<List<Student>> masterList = new ArrayList<>();
+        masterList.add(students);
+
+        // Directly accessing student without casting
+        Student s = masterList.get(0).get(0);
+
+        System.out.println(s.getName());
+        System.out.println(masterList.get(0).get(0).getName());
+    }
+}
+```
+**What Changed & Why It’s Better Now**
+
+✔ **1. No raw types**
+
+earlier code had:
+
+```java
+ArrayList m = new ArrayList();
+```
+That allows *any type* → unsafe.
+
+Now:
+
+```java
+List<List<Student>> masterList = new ArrayList<>();
+```
+➡ Type-safe, compiler-checked.
+
+✔ **2. No need for casting**
+
+Earlier you had:
+
+```java
+List ll = (List) m.get(2);
+Student s = (Student) ll.get(0);
+```
+Casting = unsafe + error-prone.
+
+Now:
+
+```java
+Student s = masterList.get(0).get(0);
+```
+
+➡ Zero casting.
+
+✔ **3. Proper generics everywhere**
+
+Mixed data types were removed:
+
+Your old code:
+
+```java
+a1.add(6);
+a1.add("Karuna");
+a1.add(null);
+```
+A `List<Student>` **must not** contain integers/strings.
+
+Now:
+
+```java
+ArrayList<Student> students = new ArrayList<>();
+```
+➡ Only `Student` objects allowed.
+
+✔ **4. Added `toString()` for better debugging**
+
+So printing a Student automatically displays readable info.
+
+✔ **5. Clean structure + meaningful variable names**
+
+- `a1` ➝ `students`
+- `m` ➝ `masterList`
+- `ll` ➝ removed
+
+Readable code = maintainable code.
+
+### ListIterator (Travelling Forward & Backward)
+
+`ListIterator` extends `Iterator` and provides more functionality:
+
+```java
+ListIterator<E> listIterator()
+```
+
+**Features:**
+* Traverse **forward** and **backward**
+* Add elements while iterating
+* Replace elements while iterating
+
+```java
+ListIterator<String> it = list.listIterator();
+
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+
+while (it.hasPrevious()) {
+    System.out.println(it.previous());
+}
+```
+
+### ArrayList vs LinkedList
+
+| Feature       | ArrayList       | LinkedList             |
+| ------------- | --------------- | ---------------------- |
+| Structure     | Dynamic array   | Doubly linked list     |
+| Access Speed  | Fast (O(1))     | Slow (O(n))            |
+| Insert/Delete | Slow (shifting) | Fast (change pointers) |
+| Memory        | Less            | More                   |
+
+### Why Use Generics in List?
+Generics prevent storing wrong data types:
+
+```java
+List<Student> list = new ArrayList<>();  // type-safe
+```
+
+Benefits:
+* No need for casting
+* Compile-time checking
+* Avoids ClassCastException
+
+### When to Use Which List?
+
+* **Use ArrayList** → when access speed is important
+* **Use LinkedList** → when frequent add/remove operations
+* **Use Vector/Stack** → NOT recommended (legacy, synchronized)
+
+### Real-World Example of List
+
+```java
+List<String> shoppingList = new ArrayList<>();
+shoppingList.add("Milk");
+shoppingList.add("Bread");
+shoppingList.add("Eggs");
+
+System.out.println(shoppingList);
+```
+
+### List is NOT Thread-Safe
+
+To make a List thread-safe:
+
+```java
+List<Integer> safeList = Collections.synchronizedList(new ArrayList<>());
+```
+---
+
+* List allows duplicates, Set does not
+* List is ordered, Set is not (except LinkedHashSet)
+* ArrayList = Random Access, LinkedList = Node Access
+* ListIterator supports bidirectional traversal, Iterator does not
+* Use generics for type safety
+
