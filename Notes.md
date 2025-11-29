@@ -9427,13 +9427,14 @@ The `List` interface in Java extends the `Collection` interface and is part of t
 
 ### Key Characteristics of List Interface
 
-- ✔ Ordered collection → preserves insertion order
-- ✔ Allows duplicates
-- ✔ Allows null values
-- ✔ Index-based access (`get(int index)`)
-- ✔ Supports positional insertion & deletion (`add(index, element)`, `remove(index)`)
-- ✔ Provides ListIterator for **bidirectional traversal**
-- ✔ `java.util.List` is a child interface of `Collection`.
+- Ordered collection → preserves insertion order
+- Allows duplicates → you can add the same value multiple times.
+- Allows null values
+- Index-based access (`get(int index)`)
+- Supports positional insertion & deletion (`add(index, element)`, `remove(index)`)
+- Supports **random access** (fast in ArrayList) and **sequential access** (fast in LinkedList).
+- Provides ListIterator for **bidirectional traversal**
+- `java.util.List` is a child interface of `Collection`.
 
 ### List Interface Declaration
 
@@ -9770,8 +9771,20 @@ Benefits:
 * **Use LinkedList** → when frequent add/remove operations
 * **Use Vector/Stack** → NOT recommended (legacy, synchronized)
 
-### Real-World Example of List
+### List is NOT Thread-Safe
 
+To make a List thread-safe:
+
+```java
+List<Integer> safeList = Collections.synchronizedList(new ArrayList<>());
+```
+
+### Real-World Example of List
+List is like a playlist where:
+- Songs have positions (indexes)
+- You can add duplicate songs
+- You can reorder them
+- You can insert at any position
 ```java
 List<String> shoppingList = new ArrayList<>();
 shoppingList.add("Milk");
@@ -9779,14 +9792,6 @@ shoppingList.add("Bread");
 shoppingList.add("Eggs");
 
 System.out.println(shoppingList);
-```
-
-### List is NOT Thread-Safe
-
-To make a List thread-safe:
-
-```java
-List<Integer> safeList = Collections.synchronizedList(new ArrayList<>());
 ```
 ---
 
@@ -9796,3 +9801,307 @@ List<Integer> safeList = Collections.synchronizedList(new ArrayList<>());
 * ListIterator supports bidirectional traversal, Iterator does not
 * Use generics for type safety
 
+## 67. ArrayList Class
+An ArrayList in Java is a **resizable** (or dynamic) array from the `java.util.ArrayList` package that can grow or shrink automatically as elements are added or removed, unlike regular arrays with a fixed size. It inherits `AbstractList` class and implements `List` interface.
+
+- **Indexed Access**: Elements can be accessed using their index, just like arrays.
+- **Allows Duplicates**: Duplicate elements are allowed.
+- **Maintains Insertion Order**: Elements are stored in the order they are inserted.
+- **Not Synchronized**: ArrayList is not thread-safe. To make it thread-safe, you must wrap it manually using `Collections.synchronizedList()`.
+- In Java ArrayList class, **manipulation is slow** because a lot of shifting needs to be occurred if any element is removed from the ArrayList.
+
+### Why ArrayList?
+
+The normal array in Java has a fixed size.
+ArrayList solves this limitation by providing a dynamic array that grows and shrinks automatically.
+
+### Features of ArrayList
+- Dynamic resizing (grows automatically)
+- Duplicates allowed
+- Null values allowed
+- Maintains insertion order
+- Random access (fast get() using index)
+- Heterogeneous objects allowed (only if raw type is used — NOT recommended)
+- Implements List Interface
+
+### Hierarchy of ArrayList class
+It implements `List` Interface which is a sub-interface of `Collection` Interface.
+
+![ArrayList](./resources/ArrayList.png)
+
+Java `ArrayList` class extends `AbstractList` class which implements `List` interface. The `List` interface extends `Collection` & `Iterable` interfaces in hierarchical order.
+
+### ArrayList class declaration
+```java
+public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAccess, Cloneable, Serializable
+```
+
+- **Non-generic** (raw type) – NOT recommended
+```java
+ArrayList list = new ArrayList();
+```
+
+- **Generic** (type-safe) – Recommended
+```java
+ArrayList<String> names = new ArrayList<>();
+ArrayList<Integer> nums = new ArrayList<>();
+ArrayList<Student> students = new ArrayList<>();
+```
+
+### ArrayList Constructors in Java
+Java provides multiple constructors to create an ArrayList based on different requirements:
+
+**1. ArrayList()**
+
+Creates an empty ArrayList with default initial capacity.
+```java
+ArrayList<Integer> arr = new ArrayList<>();
+```
+**2. ArrayList(Collection<? extends E> c)**
+
+Creates an ArrayList initialized with elements from the specified collection.
+```java
+ArrayList<String> arr = new ArrayList<>(collection); 
+```
+**3. ArrayList(int initialCapacity)**
+
+This constructor is used to build an array list with the initial capacity being specified.
+```java
+ArrayList<Double> arr = new ArrayList<>(20);
+```
+
+### **Methods of ArrayList**
+**1. Add elements**
+
+```java
+add(E e)
+add(int index, E e)
+addAll(Collection c)
+```
+**2. Access elements**
+
+```java
+get(int index)
+set(int index, E value)
+```
+**3. Remove elements**
+
+```java
+remove(int index)
+remove(Object o)
+clear()
+```
+**4. Searching**
+
+```java
+contains(Object o)
+indexOf(Object o)
+lastIndexOf(Object o)
+```
+**5. Size and Capacity**
+
+```java
+size()
+isEmpty()
+ensureCapacity(int minCapacity)
+trimToSize()
+```
+
+### ArrayList Iteration Methods**
+
+**1. Normal for-loop**
+```java
+for (int i = 0; i < list.size(); i++)
+    System.out.println(list.get(i));
+```
+
+**2. Enhanced for-loop**
+```java
+for (String s : list)
+    System.out.println(s);
+```
+
+**3. Iterator**
+```java
+Iterator<String> it = list.iterator();
+while(it.hasNext())
+    System.out.println(it.next());
+```
+
+**4. ListIterator (forward & backward)**
+```java
+ListIterator<String> it = list.listIterator();
+while(it.hasNext())      // forward
+    System.out.println(it.next());
+
+while(it.hasPrevious())  // backward
+    System.out.println(it.previous());
+```
+
+### Internal Working
+
+ArrayList is internally backed by:
+
+```java
+Object[] elementData;
+```
+
+**When capacity is full:**
+* A **new array** is created with **1.5x old size**
+* Old data is copied into the new array
+* New element is added
+
+This makes insertion sometimes costly → **O(n)**
+
+But element access is very fast → **O(1)**
+
+### Advantages of ArrayList
+
+* Fast random access (`O(1)`)
+* Dynamic resizing
+* Easy to use
+* Supports index-based operations
+* Good for frequent **read** operations
+
+### Disadvantages of ArrayList
+
+* Slower insert/delete in the **middle** (shifting happens)
+* Not synchronized → not thread-safe
+* Frequent resizing may reduce performance
+
+### When to use ArrayList?
+
+✔ When fast access is needed
+✔ When insertion happens mostly at the **end**
+✔ When dynamic resizing is required
+✔ When ordered data with duplicates is needed
+
+### When NOT to use ArrayList?
+
+Use **LinkedList** instead when:
+
+* Frequent insertion/deletion in the **middle**
+* Memory fragmentation is not a concern
+* Need a real queue or deque behavior
+
+### ArrayList vs LinkedList
+
+| Feature              | ArrayList             | LinkedList                     |
+| -------------------- | --------------------- | ------------------------------ |
+| Structure            | Dynamic Array         | Doubly Linked List             |
+| Access Speed         | **Fast** (`O(1)`)     | Slow (`O(n)`)                  |
+| Insert/Delete Middle | Slow (`O(n)`)         | Fast (`O(1)`)                  |
+| Memory Usage         | Less                  | More                           |
+| Best For             | Read-heavy operations | Insert/delete-heavy operations |
+
+
+### Complexity of Java ArrayList
+
+Understanding the **time and space complexity** of ArrayList operations helps in writing efficient programs. Since `ArrayList` is internally backed by a **dynamic array (`Object[]`)**, most operations depend on how arrays behave.
+
+**Time & Space Complexity of ArrayList Operations**
+
+| **Operation**                  | **Time Complexity** | **Space Complexity** | **Explanation**                                                                  |
+| ------------------------------ | ------------------- | -------------------- | -------------------------------------------------------------------------------- |
+| **Creation**                   | O(1)                | O(n)                 | Creating an empty ArrayList is constant-time; space grows as elements are added. |
+| **Access (get/set)**           | O(1)                | O(1)                 | Direct index-based access, just like normal arrays.                              |
+| **Insertion at end**           | O(1) amortized      | O(1)                 | Usually constant; resizing happens occasionally when capacity is full.           |
+| **Insertion at start/middle**  | O(n)                | O(1)                 | Elements must be shifted to make space.                                          |
+| **Removal from end**           | O(1)                | O(1)                 | No shifting required.                                                            |
+| **Removal from start/middle**  | O(n)                | O(1)                 | Remaining elements must be shifted left.                                         |
+| **Search (contains, indexOf)** | O(n)                | O(1)                 | Linear search (no binary search because ArrayList is not sorted by default).     |
+| **size(), isEmpty()**          | O(1)                | O(1)                 | Stored as a private field → constant-time access.                                |
+| **clear()**                    | O(n)                | O(1)                 | All elements are set to `null` so they can be garbage-collected.                 |
+| **Iterator creation**          | O(1)                | O(1)                 | Creates a lightweight Iterator object; no data copying.                          |
+| **Iterator next()/hasNext()**  | O(1)                | O(1)                 | Moves pointer/index; constant-time.                                              |
+| **SubList() (view)**           | O(1)                | O(1)                 | Returns a **view**, not a copy.                                                  |
+| **Sorting**                    | O(n log n)          | O(1)                 | Uses optimized sorting algorithm (`TimSort`).                                    |
+| **toString()**                 | O(n)                | O(n)                 | Needs to traverse every element to build the final string.                       |
+
+#### **Why Some Operations Are O(1) and Others Are O(n)?**
+
+**O(1) operations**
+
+* Accessing by index (`get`, `set`)
+  → Direct jump to memory location
+* Insert/remove at end (usually)
+  → No shifting needed
+* size(), isEmpty()
+  → Just return a field
+
+**O(n) operations**
+
+* Insert/remove at start or middle
+  → MUST shift elements
+* Searching (`contains`, `indexOf`)
+  → No sorted order → linear scan
+* clear() and toString()
+  → Must visit every element
+
+- **Meaning of “O(1)”**
+Constant time → operation does not depend on size of ArrayList.
+
+- **Meaning of “O(N)”**
+Linear time → operation grows proportionally with number of elements.
+
+- **Meaning of "Amortized O(1)"**
+Most operations are O(1), but rarely (during resizing) an O(N) operation happens.
+
+---
+* Access = O(1)
+* Insert/Delete at end = O(1) amortized
+* Insert/Delete in middle = O(n)
+* Search = O(n)
+* Sorting = O(n log n)
+---
+
+* ArrayList grows by **50%** when full
+* Initial capacity = **10**
+* Allows duplicates & null
+* Index-based operations
+* Backed by **Object[]**
+* Not synchronized → Use `Collections.synchronizedList()`
+
+```java
+List list = Collections.synchronizedList(new ArrayList<>());
+```
+
+### Non-generic Vs Generic Collection
+Java Collection Framework was non-generic before JDK 1.5. Since 1.5, it is **generic**.
+Java new generic Collection allows you to have only one type of object in Collection.  Now it is **type-safe**, so typecasting is not required at runtime.
+
+```java 
+ArrayList al = new ArrayList(); // creating old non-generic ArrayList
+
+ArrayList<String> al = new ArrayList<String>(); // creating new generic ArrayList
+```
+
+In Generic Collection, we specify the type in angular braces. Now ArrayList is forced to have only specified type of objects in it. If you try to add another type of objects, it gives **compile-time error**.
+
+> There are two ways to traverse Collection elements:
+> 1. By `Iterator` interface
+> 2. By `for-each` loop
+
+---
+### `toArray()`
+**Syntax:**
+```java
+public Object[] toArray()
+```
+
+Example:
+```java
+Student mm[] = new Student[10];
+mm = toArray();
+```
+- 
+- It is specified by `toArray()` in interface `Collection` and interface `List`.
+- It overrides `toArray()` in class `AbstractCollection`.
+- It returns an array containing all of the elements in this list in the correct order.
+
+> The `toArray()` method returns an array of type **Object** (`Object[]`). We need to typecast it to Integer before using as Integer objects. If we do not typecast, we get a compilation error (incompatible types).
+>
+> It is therefore recommended to create an array into which elements of `List` need to be stored and pass it as an argument in `toArray()` method to store elements if it is big enough. Otherwise, a new array of the same type is allocated for this purpose.
+
+- Use `toArray()` → returns `Object[]`, requires explicit typecasting.
+- Use `toArray(T[] array)` → returns `T[]`, no manual typecasting needed if the array type matches.​
