@@ -10327,3 +10327,46 @@ LinkedList: [Aishani, Pranav, Ishani, Rudra]
 > **ArrayList = best for fast reads**
 
 > **LinkedList = best for fast structural modifications**
+
+## 70. Garbage Collection
+In Java, Garbage means unreferenced objects.
+Garbage collection in Java is an automatic memory management process that helps Java programs run efficiently.
+
+- Objects are created on the heap area.
+- Eventually, some objects will no longer be needed.
+- Garbage collection is an automatic process that removes unused objects from heap.
+
+Garbage Collection is a process of reclaiming the runtime unused memory automatically. In other words, it is a way to destroy the unused objects.
+
+To do so, we were using `free()` function in **C** language and `delete()` in **C++**. But in Java, it is performed automatically. So, Java provides better memory management.
+
+### Working of Garbage Collection
+- It identifies which objects are still in use (referenced) and which are not in use (unreferenced).
+- It removes the objects that are unreachable (no longer referenced).
+- The programmer does not need to mark objects to be deleted explicitly. - Garbage collection is implemented within the JVM.
+
+❓: **How can an object be unreferenced?**
+▶ There are many ways: 
+1. By nulling the references
+```java
+Employee e = new Employee();
+e = null;
+```
+
+2. By assigning a reference to another
+```java
+Employee e1 = new Employee();
+Employee e2 = new Employee();
+e1 = e2; // now the first object referred by e1 is available for Garbage collection.
+```
+
+3. By anonymous object etc.
+```java
+new Employee();
+```
+
+### Advantages of Garbage Collection
+The advantages of Garbage Collection in Java are:
+- It makes java memory-efficient because the garbage collector removes the unreferenced objects from heap memory.
+- It is automatically done by the garbage collector (a part of JVM), so we don't need extra effort.
+
