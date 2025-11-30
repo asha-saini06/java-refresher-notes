@@ -10204,3 +10204,126 @@ public class LinkedList<E>
 | Best For             | Read-heavy operations      | Insert/Delete heavy operations |
 | Implements           | List                       | List + Deque (queue + stack)   |
 
+
+## 69. Difference between ArrayList and LinkedList
+`ArrayList` and `LinkedList` are two commonly used implementations of the `List` interface in Java. Both store ordered elements and allow duplicates, but they differ **internally**, resulting in different **performance characteristics**.
+Both are **non-synchronized** classes.
+
+ ArrayList                      | LinkedList                                                 |
+ ------------------------------ | ---------------------------------------------------------- |
+ **Dynamic Array** (`Object[]`) | **Doubly Linked List** (nodes with `prev`, `next`, `data`) |
+ ArrayList internally uses dynamic array to store the elements.                     |  LinkedList internally uses doubly linked list to store the elements.                            |
+ Manipulation with ArrayList is slow bcz it internally uses array. If any element is removed from the array, all the bits are shifted in memory.                        | Manipulation with LinkedList is faster than ArrayList bcz it uses doubly linked list so no bit-shifting is required in memory.                           |
+ ArrayList class can act as a list only bcz it implements List only.                        | LinkedList class can act as a list and queue both bcz it implements List and Deque interfaces.                             |
+ArrayList is better for storing and accessing data.                       | LinkedList is better for manipulating data.                             |
+
+#### **Performance Comparison**
+
+🔸 **Accessing Elements (get/set)**
+
+* **ArrayList → O(1)**
+  Direct index-based access.
+
+* **LinkedList → O(n)**
+  Must traverse nodes from start/end.
+
+🔸 **Insertion**
+
+* **At End**
+  * ArrayList → O(1) *amortized*
+    (May resize occasionally)
+  * LinkedList → O(1)
+
+* **At Middle / Beginning**
+  * ArrayList → **O(n)** (shifting required)
+  * LinkedList → **O(n)** traversal + **O(1)** insertion
+    Effective time ≈ O(n)
+
+🔸 **Removal**
+
+* **From End**
+  * ArrayList → O(1)
+  * LinkedList → O(1)
+
+* **From Middle / Beginning**
+  * ArrayList → **O(n)** (elements shift)
+  * LinkedList → **O(n)** traversal + **O(1)** deletion
+
+🔸 **Search (contains, indexOf)**
+* ArrayList → O(n)
+* LinkedList → O(n)
+
+#### **When to Use What?**
+
+**Use ArrayList when:**
+
+- You need **fast access** using indexes
+- Insertions happen mostly at the **end**
+- Memory efficiency matters
+- You want better CPU cache locality (arrays are contiguous)
+
+**Use LinkedList when:**
+
+- You need frequent insertions/deletions in **middle or beginning**
+- You need a real **queue/deque** implementation
+- You don’t need fast random access
+
+#### Summary Table
+
+| Feature                 | ArrayList             | LinkedList                       |
+| ----------------------- | --------------------- | -------------------------------- |
+| Access speed            | **Fast (O(1))**       | Slow (O(n))                      |
+| Insert/delete at end    | Fast (O(1) amortized) | Fast (O(1))                      |
+| Insert/delete in middle | Slow (O(n))           | Medium (O(n)) → traversal + O(1) |
+| Memory usage            | Low                   | High (extra pointers)            |
+| Internal structure      | Dynamic Array         | Doubly Linked List               |
+| Best for                | Read-heavy workloads  | Insert/delete-heavy workloads    |
+| Supports random access  | ✔ Yes                 | ✘ No                             |
+
+```java
+import java.util.*;
+
+class TestArrayLinked {
+    public static void main(String... args){
+
+        // -------------------------------
+        // Creating an ArrayList
+        // -------------------------------
+        // ArrayList uses a dynamic array internally.
+        // - Fast for accessing elements (O(1))
+        // - Slower for insertion/deletion in the middle (requires shifting)
+        List<String> al = new ArrayList<String>();
+
+        al.add("Shaurya"); // Adding elements to ArrayList
+        al.add("Dhairya");
+        al.add("Anika");
+        al.add("Kshama");
+
+        // -------------------------------
+        // Creating a LinkedList
+        // -------------------------------
+        // LinkedList uses a doubly linked list internally.
+        // - Fast insertion/deletion at beginning/middle (O(1) after pointer move)
+        // - Slower access (O(n)) because it must traverse nodes
+        List<String> al2 = new LinkedList<String>();
+
+        al2.add("Aishani"); // Adding elements to LinkedList
+        al2.add("Pranav");
+        al2.add("Ishani");
+        al2.add("Rudra");
+
+        // Printing both lists
+        System.out.println("ArrayList: " + al);
+        System.out.println("LinkedList: " + al2);
+    }
+}
+```
+Output:
+```
+ArrayList: [Shaurya, Dhairya, Anika, Kshama]
+LinkedList: [Aishani, Pranav, Ishani, Rudra]
+```
+
+> **ArrayList = best for fast reads**
+
+> **LinkedList = best for fast structural modifications**
