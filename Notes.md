@@ -9971,10 +9971,10 @@ But element access is very fast → **O(1)**
 
 ### When to use ArrayList?
 
-✔ When fast access is needed
-✔ When insertion happens mostly at the **end**
-✔ When dynamic resizing is required
-✔ When ordered data with duplicates is needed
+- When fast access is needed
+- When insertion happens mostly at the **end**
+- When dynamic resizing is required
+- When ordered data with duplicates is needed
 
 ### When NOT to use ArrayList?
 
@@ -10105,3 +10105,102 @@ mm = toArray();
 
 - Use `toArray()` → returns `Object[]`, requires explicit typecasting.
 - Use `toArray(T[] array)` → returns `T[]`, no manual typecasting needed if the array type matches.​
+
+## 68. LinkedList Class
+LinkedList is a part of the Java Collection Framework and is present in the `java.util package`. It implements a **doubly-linked list data structure** where elements are not stored in contiguous memory. 
+
+Each node contains:
+1. Data
+2. Pointer to next node
+3. Pointer to previous node
+
+Because of this structure:
+* ✔ Insertion/deletion is faster
+* ✘ Random access (get by index) is slower
+
+### Key Features of LinkedList
+- **Dynamic Size**: LinkedList grows or shrinks dynamically at runtime.
+- **Maintains Insertion Order**: Elements are stored in the order they are added.
+- **Allows Duplicates**: Duplicate elements are allowed.
+- **Not Synchronized**: By default, LinkedList is not thread-safe. To make Thread-safe use of `Collections.synchronizedList()`.
+```java
+List list = Collections.synchronizedList(new LinkedList<>());
+```
+- **Efficient Insertion/Deletion**: Adding or removing elements at the beginning or middle is faster compared to ArrayList.
+* In Java LinkedList class, manipulation is fast because no shifting needs to be done.
+* LinkedList class can be used as a **List** (FIFO), **Queue** (FIFO) or a **Stack** (LIFO).
+
+```java
+import java.util.LinkedList;
+
+public class LinkedListExample {
+
+    public static void main(String[] args){       
+        // Creating a LinkedList
+        LinkedList<String> l = new LinkedList<String>();
+
+        // Adding elements to the LinkedList using add() method
+        l.add("One");
+        l.add("Two");
+        l.add("Three");
+        l.add("Four");
+        l.add("Five");
+
+        System.out.println(l);
+    }
+}
+```
+**Output**:
+```
+[One, Two, Three, Four, Five]
+```
+**Explanation**:
+- Creates an empty LinkedList of Strings.
+- Adds elements "One" to "Five" using the `add()` method.
+- Prints the LinkedList showing elements in insertion order: [One, Two, Three, Four, Five].
+
+> **Note**: `LinkedList` nodes cannot be accessed directly by index; elements must be accessed by traversing from the head.
+
+### Internal Structure: Doubly Linked List
+```kotlin
+null <- [prev | data | next] <-> [prev | data | next] <-> ... -> null
+```
+
+Every node is connected in both forward and backward directions.
+
+### Hierarchy of LinkedList
+It implements the `List` (ordered list of elements) and `Deque` (double-ended queue → allows insertion/removal at both ends) interfaces, both of which are sub-interfaces of the `Collection` Interface.
+
+![LinkedList](./resources/LinkedList.png)
+
+`LinkedList` class extends `AbstractSequentialList` class and implements `List` & `Deque` interface.
+
+### LinkedList declaration
+```java
+public class LinkedList<E>
+    extends AbstractSequentialList<E>
+    implements List<E>, Deque<E>, Cloneable, Serializable
+```
+
+### When to Use LinkedList?
+
+- Frequent insertions/deletions in middle or beginning
+- Implementing queues, deques, task schedulers
+- When memory fragmentation isn't a concern
+- When element traversal order matters
+
+### When NOT to Use LinkedList?
+
+- When fast random access (get by index) is required → use ArrayList
+- For cache-friendly operations
+- When memory use must be minimal (LinkedList has overhead per node)
+
+| Feature              | ArrayList                  | LinkedList                     |
+| -------------------- | -------------------------- | ------------------------------ |
+| Underlying Structure | Dynamic Array (`Object[]`) | Doubly Linked List (nodes)     |
+| Access Speed         | **Fast** O(1)              | **Slow** O(n)                  |
+| Insert/Delete Middle | Slow (shifting)            | Fast (pointer change)          |
+| Memory Usage         | Less                       | More (extra pointers)          |
+| Best For             | Read-heavy operations      | Insert/Delete heavy operations |
+| Implements           | List                       | List + Deque (queue + stack)   |
+
