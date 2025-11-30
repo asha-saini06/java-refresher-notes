@@ -75,12 +75,12 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 64. [PreparedStatement Interface](Notes.md#64-preparedstatement-interface)
 65. [Collections](Notes.md#65-collections)
 66. [List Interface](Notes.md#66-list-interface)
-67. ArrayList Class
-68. LinkedList Class
-69. Difference between ArrayList and LinkedList
-70. Finalize method
-71. Garbage Collection
-72. Serialization
+67. [ArrayList Class](Notes.md#67-arraylist-class)
+68. [LinkedList Class](Notes.md#68-linkedlist-class)
+69. [Difference between ArrayList and LinkedList](Notes.md#69-difference-between-arraylist-and-linkedlist)
+70. [Garbage Collection](Notes.md#70-garbage-collection)
+71. [Finalize method](Notes.md#71-finalize-method)
+72. [Serialization](Notes.md#72-serialization)
 73. Web application - J2EE
 74. Server, DNS, Protocol, HTTP, HTTP Requests
 75. Servlet, Lifecycle of a Servlet, Servlet Architecture
