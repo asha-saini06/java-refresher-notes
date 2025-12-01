@@ -10340,10 +10340,18 @@ Garbage Collection is a process of reclaiming the runtime unused memory automati
 
 To do so, we were using `free()` function in **C** language and `delete()` in **C++**. But in Java, it is performed automatically. So, Java provides better memory management.
 
+Garbage Collection improves memory efficiency and prevents memory leaks.
+
 ### Working of Garbage Collection
 - It identifies which objects are still in use (referenced) and which are not in use (unreferenced).
 - It removes the objects that are unreachable (no longer referenced).
 - The programmer does not need to mark objects to be deleted explicitly. - Garbage collection is implemented within the JVM.
+
+Garbage Collector identifies:
+- **Reachable objects** → still referenced → **kept**
+- **Unreachable objects** → no reference pointing to them → **eligible for GC**
+
+GC runs automatically inside the JVM (not manually controlled by the programmer).
 
 ❓: **How can an object be unreferenced?**
 ▶ There are many ways: 
@@ -10357,7 +10365,7 @@ e = null;
 ```java
 Employee e1 = new Employee();
 Employee e2 = new Employee();
-e1 = e2; // now the first object referred by e1 is available for Garbage collection.
+e1 = e2; // now the first object referred by e1 is available for Garbage collection. // First object becomes unreachable
 ```
 
 3. By anonymous object etc.
@@ -10365,8 +10373,166 @@ e1 = e2; // now the first object referred by e1 is available for Garbage collect
 new Employee();
 ```
 
+4. Island of Isolation
+Two objects referencing each other but not referenced by any live object:
+```java
+A a = new A();
+B b = new B();
+a.b = b;
+b.a = a;
+
+a = null;
+b = null; // both objects eligible for GC
+```
+
+### Types of Activities in Java Garbage Collection
+Java heap is divided into generations:
+
+- **Young Generation** 
+    - Where new objects are created.
+    - Most objects die here quickly.
+    - Minor GC cleans this area frequently.
+- **Old (Tenured) Generation**
+    - Contains long-lived objects.
+    - Major GC (Full GC) cleans this area.
+    - Happens less frequently but takes longer.
+
+Two types of garbage collection activities usually happen in Java. These are:
+- **Minor or Incremental Garbage Collection (GC)**: This occurs when unreachable objects in the Young Generation heap memory are removed.
+    - Cleans **Young Generation**.
+    - Very fast.
+
+- **Major or Full Garbage Collection (GC)**: This happens when objects that survived minor garbage collection are removed from the Old Generation heap memory. It occurs less frequently than minor garbage collection.
+    - Cleans **Old Generation** + sometimes entire heap.
+    - Slower and more expensive.
+
+### Key Concepts on Garbage Collection
+**1. Unreachable Objects**
+
+An object becomes unreachable if it does not contain any reference to it.
+```java 
+Integer i = new Integer(4); 
+// the new Integer object is reachable  via the reference in 'i'  
+i = null; 
+// the Integer object is no longer reachable. 
+```
+
+**2. Making Objects Eligible for GC**
+
+An object is said to be eligible for garbage collection if it is unreachable. After i = null, integer object 4 in the heap area is suitable for garbage collection in the above image.
+
+**How to Make an Object Eligible for Garbage Collection?**
+
+Even though the programmer is not responsible for destroying useless objects but it is highly recommended to make an object unreachable(thus eligible for GC) if it is no longer required. There are generally four ways to make an object eligible for garbage collection.
+
+- Nullifying the reference variable (`obj = null`).
+- Re-assigning the reference variable (`obj = new Object()`).
+- An object created inside the method (eligible after method execution).
+- Island of Isolation (Objects that are isolated and not referenced by any reachable objects).
+
+**3. Requesting Garbage Collection**
+
+- Once an object is eligible for garbage collection, it may not be destroyed immediately.The garbage collector runs at the JVM's discretion and you cannot predict when it will occur.
+- We can also request JVM to run Garbage Collector. There are two ways to do it. fiest using `System.gc()` and second using `Runtime.getRuntime().gc()`:
+    - Using `System.gc()`: This static method requests the JVM to perform garbage collection.
+    - Using `Runtime.getRuntime().gc()`: This method also requests garbage collection through the Runtime class.
+
+Programmers can **request**, but not force, GC.
+    ```java
+    System.gc();  
+    // OR  
+    Runtime.getRuntime().gc();  
+    ```
+> ❗ JVM may ignore the request. GC timing is NOT guaranteed.    
+
+**4. The `finalize()` Method (Deprecated in Java 9+)**
+Before destroying an object, the garbage collector calls the `finalize()` method to perform cleanup activities. The method is defined in the **Object class** as follows:
+```java
+@Override  
+protected void finalize() throws Throwable {  
+System.out.println("GC cleaning up...");  
+}  
+```
+
+The `finalize` method is invoked each time before the object is garbage collected. This method can be used to perform cleaup processing.
+
+> 📝: The Garbage Collector of JVM collects only those objects that are created by `new` keyword. So, if you have created any object without `new`, you can use `finalize` method to perform cleanup processing (destroying remaining objects).
+
+> 📝: `finalize()` method is deprecated since Java 9 because it is unpredictable and can cause performance issues.
+
+> Alternatives like **try-with-resources** or **explicit cleanup** methods are preferred.
+
+> The garbage collector calls `finalize()` at most once per object.
+
+> **Exceptions thrown in finalize() are ignored**.
+
+- Deprecated since **Java 9**
+- Removed in **Java 18**
+- Not reliable → **may never run**
+- Exceptions inside finalize() are ignored
+- Called **at most once per object**
+
+✔ **Modern Alternatives**
+- try-with-resources
+- AutoCloseable
+- Explicit close() methods
+
+---
+✔ **Stop-the-world pauses**
+
+During GC, JVM may pause all application threads temporarily.
+These pauses are small for minor GC, larger for major GC.
+
+✔ **Reference Types Affect GC**
+
+Java has:
+* **Strong Reference** (default) → not GC’ed until unreachable
+* **Soft Reference** → cleared before OutOfMemoryError
+* **Weak Reference** → cleared in next GC cycle
+* **Phantom Reference** → used for more controlled cleanup
+
+✔ **GC Algorithms Used by JVM**
+
+Modern JVM uses:
+* **Parallel GC**
+* **G1 (Garbage First) GC** → default in Java 9+
+* **ZGC** → ultra-low pause GC
+* **Shenandoah GC** → low-latency GC
+
+### `gc()` method
+The `gc()` method is used to invoke the Garbage Collector to perform cleanup processing. The `gc()` is found in System and Runtime classes.
+```java
+public static void gc() {}
+```
+
+> 📝: Garbage Collection is performed by a **daemon thread** called Garbage Collector (GC). This thread calls the `finalize()` method before object is Garbage collected.
+
+```java
+public class TestGarbage{
+    public void finalize(){ 
+        System.out.println("Object is Garbage Collected.");
+    }
+    public static void main(String... args){
+        TestGarbage s1 = new TestGarbage();
+        TestGarbage s2 = new TestGarbage();
+        s1 = null;
+        s2 = null;
+        System.gc();
+    }
+}
+```
+Output:
+```
+Object is Garbage Collected.
+Object is Garbage Collected.
+
+```
+
+> 📝: Neither finalization nor Garbage collection is guaranteed.
+
 ### Advantages of Garbage Collection
 The advantages of Garbage Collection in Java are:
 - It makes java memory-efficient because the garbage collector removes the unreferenced objects from heap memory.
 - It is automatically done by the garbage collector (a part of JVM), so we don't need extra effort.
-
+- Makes Java memory-safe and developer-friendly
+- Frees heap space efficiently
