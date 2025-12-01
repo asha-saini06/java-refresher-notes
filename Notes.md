@@ -10536,3 +10536,149 @@ The advantages of Garbage Collection in Java are:
 - It is automatically done by the garbage collector (a part of JVM), so we don't need extra effort.
 - Makes Java memory-safe and developer-friendly
 - Frees heap space efficiently
+
+## 71. `finalize` method
+`finalize()` was a special method in Java used for **cleanup operations** before an object was destroyed by the Garbage Collector (GC). It belonged to the **Object class**, so every class inherited it.
+
+However, **`finalize()` is deprecated since Java 9 and removed in Java 18**, because it was **unpredictable, unsafe, slow**, and caused performance/memory problems.
+
+`finalize()` was called **once** by the Garbage Collector *before* deleting an object, giving a chance to release resources.
+
+**Syntax:**
+
+```java
+@Override
+protected void finalize() throws Throwable {
+    System.out.println("Object is being garbage collected");
+}
+```
+
+**Key Characteristics:**
+
+* Called **at most once** by GC.
+* GC decides **when** (or even *if*) it will run.
+* Exceptions inside `finalize()` are ignored.
+* Unpredictable → may cause memory leaks.
+
+### Why Was `finalize()` Deprecated
+
+Because it caused several issues:
+
+**1. Unpredictable Execution :**
+GC does NOT guarantee when or if `finalize()` will run.
+
+**2. Performance Overhead :**
+Objects with `finalize()` go through an extra GC cycle, slowing down memory cleanup.
+
+**3. Security Problems :**
+Attackers could resurrect objects (by reassigning `this`), bypassing cleanup.
+
+**4. Encourages Bad Design :**
+Cleanup responsibility should be explicit, not left to GC.
+
+### Modern Alternatives to `finalize()`
+Today Java recommends **explicit and reliable cleanup mechanisms**:
+
+**1. try-with-resources (Recommended)**
+
+Used for closing resources automatically like:
+- Files
+- Streams
+- Sockets
+- Database connections
+
+Introduced in Java 7, it works with any class implementing the `AutoCloseable` interface.
+
+```java
+try (FileInputStream fis = new FileInputStream("file.txt")) {
+    // use file
+} 
+// automatically closed
+```
+
+- Predictable
+- Automatic
+- No GC involvement
+
+**2. Implement `AutoCloseable` Yourself**
+
+For custom cleanup logic:
+
+```java
+class MyResource implements AutoCloseable {
+    public void use() {
+        System.out.println("Using resource...");
+    }
+
+    @Override
+    public void close() {
+        System.out.println("Cleaning up resource...");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        try (MyResource r = new MyResource()) {
+            r.use();
+        }
+    }
+}
+```
+
+- Cleaner alternative to finalize
+- Controlled cleanup logic
+
+**3. Cleaner API (Java 9+)**
+
+`java.lang.ref.Cleaner` gives controlled, explicit cleanup.
+
+```java
+Cleaner cleaner = Cleaner.create();
+
+class MyObject {
+    private static final Cleaner.Cleanable cleanable;
+
+    static {
+        MyObject obj = new MyObject();
+        cleanable = cleaner.register(obj, () -> System.out.println("Cleaning up..."));
+    }
+}
+```
+
+- Scheduled cleanup
+- No resurrection problems
+- More predictable than finalize
+
+**4. Phantom References**
+
+For advanced, controlled post-mortem cleanup.
+
+```java
+PhantomReference<Object> pr = new PhantomReference<>(obj, refQueue);
+```
+
+- Used in frameworks & JVM-level tools
+- Most powerful but complex
+
+### Which Technique Should You Use
+| Use Case                       | Recommended Alternative     |
+| ------------------------------ | --------------------------- |
+| Files, streams, connections    | **Try-with-resources**      |
+| Class needs manual cleanup     | **Explicit close() method** |
+| Want finalize()-like cleanup   | **Cleaner API**             |
+| Advanced/native memory cleanup | **PhantomReference**        |
+
+> **When Should finalize() Be Used Today?**
+>
+>❌ Never in modern Java
+It’s only kept for backward compatibility.
+
+---
+
+* `finalize()` → **Deprecated in Java 9**, **Removed in Java 18**
+* Unpredictable → GC may *never* call it
+* Not reliable for releasing resources
+* Alternatives: **try-with-resources**, **AutoCloseable**, **Cleaner API**
+* GC calls `finalize()` **once** at most
+* Exceptions inside finalize are ignored
+
