@@ -11215,8 +11215,9 @@ Data Layer (Persistence Layer)
 * Containers (web/app) provide infrastructure support — lifecycle, pooling, security, transactions — enabling developers to focus on business logic.
 
 ## 74. Web Architecture and Network Basics
+A Web Application is software that runs on a server and is accessed through a web browser. Advanced Java technologies such as Servlets, JSP, JDBC, Spring MVC, Hibernate, and Spring Boot are widely used to develop secure and scalable web applications.
 
-### **1. Server–Client Architecture**
+### **Server–Client Architecture**
 
 The **Client–Server model** is the foundation of web applications.
 
@@ -11237,7 +11238,12 @@ Client (Browser) → Request → Server
 Server → Response → Client
 ```
 
-### **2. DNS (Domain Name System)**
+#### Web Clients and Servers
+- **Web Client**: A browser or app that sends a request.
+- **Web Server**: A server (e.g., Apache Tomcat, Jetty) that processes the request and sends back a response.
+- Communication uses the HTTP protocol over TCP/IP.
+
+### **DNS (Domain Name System)**
 
 DNS converts **human-readable domain names** into **IP addresses**.
 
@@ -11255,7 +11261,7 @@ You type the domain → DNS resolves it → browser connects to the server's IP.
 4. Returns IP to browser
 5. Browser connects to that IP using HTTP/HTTPS
 
-### **3. Protocol**
+### **Protocol**
 
 A **Protocol** defines a set of rules for communication between two devices.
 
@@ -11275,7 +11281,7 @@ Protocols ensure that:
 * Both parties understand each other
 * Data is transmitted correctly
 
-### **4. HTTP (HyperText Transfer Protocol)**
+### **HTTP (HyperText Transfer Protocol)**
 
 HTTP is an **application-level protocol** used by browsers and servers.
 
@@ -11285,6 +11291,16 @@ HTTP is an **application-level protocol** used by browsers and servers.
 * Runs on port **80** (HTTP) and **443** (HTTPS)
 * Used for requesting HTML pages, CSS, JS, JSON, images, etc.
 
+#### HTTP Protocol in Web Applications
+The HTTP protocol defines how requests and responses are exchanged in web applications. Common methods include:
+
+- **GET**: Used to request data or resources from the server (e.g., fetching a web page).
+- **POST**: Sends data to the server, typically used in form submissions.
+- **PUT**: Updates existing resources on the server.
+- **DELETE**: Removes specific resources.
+
+These methods form the backbone of web-based communication and RESTful services.
+
 **HTTPS**
 
     HTTPS = HTTP + SSL/TLS
@@ -11292,7 +11308,7 @@ HTTP is an **application-level protocol** used by browsers and servers.
 → Provides encryption, authentication, and data integrity.
 
 
-### **5. HTTP Requests**
+### **HTTP Requests**
 
 HTTP requests are sent by the client to the server.
 Each request contains:
@@ -11327,7 +11343,7 @@ Content-Type: text/html
 <body>Welcome</body>
 ```
 
-### **6. CGI (Common Gateway Interface)**
+### **CGI (Common Gateway Interface)**
 
 Before servlets, CGI was used to generate dynamic web pages.
 
@@ -11346,12 +11362,15 @@ Before servlets, CGI was used to generate dynamic web pages.
 **Servlets replaced CGI**
 
 Servlets run inside the **JVM** and inside a **web container**, making them:
-
 * Faster
 * More efficient
 * More scalable
 
-### **7. URL Patterns**
+- Java classes that process client requests and return dynamic responses.
+- Lifecycle managed by a Servlet Container (e.g., Tomcat).
+- Support session tracking, cookies, and request-response handling.
+
+### **URL Patterns**
 
 URL Pattern = how a URL maps to a servlet.
 
@@ -11381,7 +11400,7 @@ public class LoginServlet extends HttpServlet {}
 
 ---
 
-### **8. Container (Servlet Container / Web Container)**
+### **Container (Servlet Container / Web Container)**
 
 A **Container** is the part of the server that manages the lifecycle of servlets.
 
@@ -11421,3 +11440,30 @@ A **Container** is the part of the server that manages the lifecycle of servlets
 | CGI           | Old dynamic page technology             |
 | URL Pattern   | Maps URL to servlet                     |
 | Container     | Runs servlets and manages web app       |
+
+### JavaServer Pages (JSP)
+- JSP allows developers to embed Java code inside HTML pages for creating dynamic web content.
+- It is built on top of Servlets and automatically converted into Servlet code at runtime.
+- JSP makes it easier to separate business logic from the presentation layer, improving maintainability of applications.
+
+### Frameworks in Advanced Java
+- **Spring MVC**: Implements the Model-View-Controller pattern for structured web applications.
+- **Hibernate**: ORM framework that maps Java objects to database tables.
+- **JSF (JavaServer Faces)**: Component-based UI framework for Java web apps.
+
+### MVC Architecture in Java Web Apps
+- **Model**: Business logic and database layer.
+- **View**: Presentation layer (JSP, HTML, or frontend frameworks).
+- **Controller**: Handles user requests and directs them to the right resources.
+
+### Spring Boot (Modern Java Web Development)
+Spring Boot is a framework built on top of the Spring ecosystem that simplifies web application development.
+
+**Key Features:**
+
+- **Auto-configuration**: Reduces boilerplate setup.
+- **Embedded Servers**: Comes with Tomcat, Jetty, or Undertow, so no manual server setup is needed.
+- **Production-ready**: Includes monitoring, health checks, and metrics.
+- **Microservices support**: Ideal for cloud-native applications.
+
+Spring Boot allows developers to quickly create RESTful APIs, MVC-based web apps, and enterprise applications with minimal configuration.
