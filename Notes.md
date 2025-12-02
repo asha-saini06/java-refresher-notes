@@ -10598,6 +10598,7 @@ try (FileInputStream fis = new FileInputStream("file.txt")) {
 
 - Predictable
 - Automatic
+- No memory leak
 - No GC involvement
 
 **2. Implement `AutoCloseable` Yourself**
@@ -10630,33 +10631,53 @@ public class Test {
 
 **3. Cleaner API (Java 9+)**
 
-`java.lang.ref.Cleaner` gives controlled, explicit cleanup.
+The `java.lang.ref.Cleaner` class is the official alternative to `finalize()`.
+
+- More efficient
+- More predictable
+- Runs cleanup in a background thread
+- Does not delay garbage collection
 
 ```java
-Cleaner cleaner = Cleaner.create();
+import java.lang.ref.Cleaner;
 
-class MyObject {
-    private static final Cleaner.Cleanable cleanable;
+class Resource {
+    private static final Cleaner cleaner = Cleaner.create();
 
-    static {
-        MyObject obj = new MyObject();
-        cleanable = cleaner.register(obj, () -> System.out.println("Cleaning up..."));
+    private final Cleaner.Cleanable cleanable;
+
+    Resource() {
+        cleanable = cleaner.register(this, new Task());
+    }
+
+    static class Task implements Runnable {
+        public void run() {
+            System.out.println("Cleaning resources safely...");
+        }
     }
 }
 ```
-
-- Scheduled cleanup
-- No resurrection problems
-- More predictable than finalize
+The `Cleaner` cleanup is:
+- Always asynchronous
+- Never blocks GC
+- Safer than finalize()
 
 **4. Phantom References**
 
-For advanced, controlled post-mortem cleanup.
+For very complex cleanup scenarios, Java provides:
+- `PhantomReference`
+- `ReferenceQueue`
+
+Used in:
+- Memory-sensitive libraries
+- Native memory management (e.g., `DirectByteBuffer`)
 
 ```java
 PhantomReference<Object> pr = new PhantomReference<>(obj, refQueue);
 ```
 
+- Allows post-mortem cleanup
+- Does NOT resurrect objects (unlike finalize())
 - Used in frameworks & JVM-level tools
 - Most powerful but complex
 
@@ -10682,3 +10703,354 @@ It’s only kept for backward compatibility.
 * GC calls `finalize()` **once** at most
 * Exceptions inside finalize are ignored
 
+## 72. Serialization
+**Serialization** in Java is the process of **converting an object into a byte stream**, so it can be:
+
+- Saved to a file
+- Sent over a network
+- Stored in a database
+- Deep-copied
+
+The reverse process—converting the byte stream back into an object is called **Deserialization**.
+
+Java achieves Serialization through the `Serializable` interface.
+```plaintext
+Object  →  Byte Stream  (Serialization)
+Byte Stream → Object    (Deserialization)
+```
+
+In Java, serialization plays a very important role it's something that we use a lot in our real life, even if we do not always notice it. Serialization helps us to save the current state of an object so that we can use it further and share complex data between different systems.
+
+### Important Points of Serialisation:
+
+- **Platform-Independent**: In Java, the serialization is a platform-independent process. It means that if we serialize an object using a byte stream on one platform can be easily deserialized on different platforms.
+- **Serializable Interface**: If we want to make a class serializable, then it must implement the Serializable interface. This interface does not contain any methods or variables ( marker interface), but it gives a signal that the class is ready for serialization.
+
+#### Why Serialization
+
+Serialization is used when objects need to be:
+- Persisted (saved on disk)
+- Transferred between JVMs
+- Cached
+- Sent via sockets / RMI / messaging systems
+
+**Example**: sending a Student object to a server.
+
+#### `java.io.Serializable` interface
+Serializable is a **arker interface** (has no data member and method). It is used to "mark" Java classes so that objects of these classes may get the certain capability. The **Cloneable** and **Remote** are also *marker interfaces*.
+
+It must be implemented by the class whose object you want to persist.
+
+The String class and all the wrapper classes implement the `java.io.Serializable` interface by default.
+
+A class must implement the **marker interface** `java.io.Serializable`.
+```java
+import java.io.Serializable;
+
+class Student implements Serializable {
+    int id;
+    String name;
+
+    Student(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
+}
+```
+In the above example, Student class implements Serializable interface. Now its object can be converted into stream.
+
+Serializable interface has **no methods** → it is only used to "mark" a class.
+
+#### ObjectOutputStream class
+This class is used to primitive data types, and Java objects to an OutputStream. Only objects that support the `java.io.Serializable` interface can be written to streams.
+
+- `public final void writeObject(Object obj) throws IOException` writes the specified object to the ObjectOutputStream.
+
+- `public void flush() throws IOException{}` flushes the current output stream.
+
+- `public void close() throws IOException{}` closees the current output stream.
+
+In the given example, we are going to serialize the object of Student class. The `writeObject()` method of `ObjectOutputStream` class provides the functionality to serialize the object. We are saving the state of the object in the file named `f.txt`.
+
+```java
+import java.io.*;
+
+class Persist{
+    public static void main(String... args) throws Exception{
+        Student s1 = new Student(7, "Ankita");
+
+        FileOutputStream fout = new FileOutputStream("f.txt");
+        ObjectOutputStream out = new ObjectOutputStream(fout);
+
+        out.writeObject(s1);
+        out.flush();
+        System.out.println("Success");
+    }
+}
+```
+Output:
+```
+Success
+```
+
+### Advantages of Serialization: 
+It is mainly used to travel object's state on the network (which is known as **marshalling**).
+- **Persistence**: The serialization allows us to save and persist the state of an object to a file or database. 
+- **Network Communication**: Serialization is often used to transfer objects across a network, enabling the communication between different components and or systems.
+- Easy storage and retrieval of object state
+- Enables distributed systems & socket communication
+- Supports deep cloning using byte streams
+- Works with RMI, caching, messaging APIs
+
+### Disadvantages of Serialization: 
+- Not secure (unless encrypted)
+- Not suitable for large objects
+- Breaks if class structure changes drastically
+- Slow compared to plain text formats (JSON/ProtoBuf)
+
+### Modern Alternatives to Serialization
+Serialization is older and less preferred today. Modern applications use:
+- **JSON Serialization**
+via Jackson/Gson
+
+- **XML Serialization**
+via JAXB
+
+- **Protocol Buffers (Google Protobuf)**
+for high-performance APIs
+
+- **Kryo Serialization**
+for very fast serialization in large systems (e.g., Apache Spark)
+
+These are faster, safer, and more interoperable across languages.
+
+### Deserialization in Java
+Deserialization is the reverse process where the byte stream is used to recreate the actual Java object in memory. This mechanism is used to persist the object.
+
+Deserialization is the process of reconstructing the object from the serialized state. It is the reverse operation of Serialization.
+
+#### OutputInputStream class
+This class deserializes objects and primitive data written using an ObjectOutputStream.
+
+- `public final Object readObject() throws IOException, ClassNotFoundException{}` reads the next object from the ObjectInputStream.
+
+- `public void close() throws IOException{}` closes ObjectInputStream.
+
+```java
+import java.io.*;
+
+class Depersist{
+    public static void main(String... args) throws Exception{
+        ObjectInputStream in = new ObjectInputStream (new FileInptStream("f.txt"));
+
+        Student s = (Student)in.readObject();
+        System.out.println(s.id + " " + s.name);
+
+        in.close();
+    }
+}
+```
+Output:
+```
+7 Ankita
+```
+
+#### Important Points of Deserialization:
+
+- **Rebuilds Objects**: Deserialization takes the byte stream and turns it back into the original object with the same state as before.
+- **Platform-Independent**: Deserialization works well with different platforms without any issues.
+- **Class Must Be Available**: When we deserialize an object, it is necessary that the class definition be present in the program.
+
+![Deserialization](./resources/deserialization.jpg)
+
+#### Advantages of Deserialization
+
+- It turns saved data back into the original objects, so everything works just like before.
+- It helps different programs or systems share information easily by rebuilding objects from the saved data.
+
+#### Disadvantages of Deserialization
+1. Security Vulnerabilities (MOST IMPORTANT)
+
+Java deserialization is **not safe** by default.
+If you deserialize data from an untrusted source, an attacker can craft malicious byte streams that cause:
+- Arbitrary code execution
+- Remote code execution (RCE)
+- Denial of Service (DoS)
+- Instantiation of unexpected classes
+
+This is known as the **Java Deserialization Vulnerability**, one of the biggest security issues in Java’s history.
+
+**2. Requires Serial Version Compatibility**
+
+During deserialization, JVM checks:
+```java
+serialVersionUID
+```
+If the class has changed since it was serialized:
+```java
+java.io.InvalidClassException
+```
+So deserialization is fragile if:
+- Fields are added/removed
+- Class structure changes
+- serialVersionUID is not defined manually
+
+**3. Performance Overhead**
+
+Deserialization is slower because:
+- It uses reflection internally
+- Requires object creation + verification
+- Reads a byte stream and reconstructs the object graph
+
+In applications with high throughput, deserialization becomes a **bottleneck**.
+
+**4. Breaks Encapsulation**
+
+Deserialization allows JVM to:
+- Create objects **without calling constructors**
+- Modify private fields directly
+
+This violates core OOP principles and allows inconsistencies.
+
+Example: constructor validation is bypassed during deserialization.
+
+**5. The Serialized Form Is Not Human-Readable**
+
+Binary `.ser` data:
+- Cannot be easily debugged
+- Cannot be edited manually
+- Is not cross-language compatible
+(Only Java understands it)
+
+**6. Platform and Version Dependency**
+
+Java serialization:
+- Works only in Java ecosystem
+- May break across JVM versions
+- Requires the same package/class structure for deserialization
+
+Not good for distributed systems.
+
+**7. Large Serialized Data Size**
+Java’s default serialization is:
+- Verbose (extra metadata included)
+- Significantly larger than JSON / protobuf
+
+This impacts:
+- Network bandwidth
+- Storage
+- Memory usage
+
+**8. Not Suitable for APIs or Databases**
+
+Most modern systems use:
+- JSON
+- XML
+- Protocol Buffers
+- Avro
+- Kryo
+
+Because they are:
+
+✔ safer
+✔ language-independent
+✔ smaller
+✔ faster
+
+Java’s built-in deserialization is discouraged in microservices and distributed systems.
+
+### Visual Representation of Serialization and Deserialization Process
+The image below demonstrates the process of serialization and deserialization.
+
+![serialize-deserialize-java](./resources/serialize-deserialize-java.png)
+
+**Serialization Process**: The byte stream created is platform independent. So, the object serialized on one platform can be deserialized on a different platform. To make a Java object serializable we implement the `java.io.Serializable` interface. The ObjectOutputStream class contains `writeObject()` method for serializing an Object.
+```java
+public final void writeObject(Object obj)
+                       throws IOException
+```
+
+**Deserialization Process**: The ObjectInputStream class contains readObject() method for deserializing an object. 
+```java 
+public final Object readObject()
+        throws IOException,
+        ClassNotFoundException
+```               
+
+### Points to remember while using Serialization:
+
+- **Parent-Child Serialization**: If a parent class has implemented Serializable interface then child class doesn't need to implement it but vice-versa is not true.
+- **Non-static Data Members**: Only non-static data members are saved via Serialization process. Static variable are not serialized becaue they are not associated with any specific instance. 
+- **Transient Data Members**: Static data members and transient data members are not saved via Serialization process. So, if you don't want to save value of a non-static data member then make it transient.
+- **Constructor Calling**: Constructor of object is never called when an object is deserialized. 
+- **Associated Objects**: Associated objects must be implementing Serializable interface.
+
+**Example:**
+
+class A implements Serializable{
+// B also implements Serializable
+// interface.
+B ob=new B();  
+}
+
+### SerialVersionUID
+The Serialization runtime associates a version number with each Serializable class called a SerialVersionUID, which is used during Deserialization to verify that sender and receiver of a serialized object have loaded classes for that object which are compatible with respect to serialization. If the receiver has loaded a class for the object that has different UID than that of corresponding sender's class, the Deserialization will result in an **InvalidClassException**. 
+
+Syntax:
+```java
+private static final long serialVersionUID = 3L;
+```
+
+**Why needed?**
+
+- Prevents **InvalidClassException** if class structure changes
+- Helps JVM verify compatibility of serialized data
+
+If not provided, JVM generates one automatically (not recommended).
+
+### `transient` Keyword
+
+Some fields should not be serialized, such as:
+
+- passwords
+- sensitive data
+- derived values
+- temporary fields
+
+Mark them transient:
+```java
+class Employee implements Serializable {
+    String name;
+    transient String password; // will NOT be serialized
+}
+```
+
+During deserialization → transient fields become **null / 0 / false**.
+
+- **In case of transient variables**: A variable defined with transient keyword is not serialized during serialization process.This variable will be initialized with default value during deserialization. (e.g: for objects it is null, for int it is 0). 
+- **In case of static Variables**: A variable defined with static keyword is not serialized during serialization process.This variable will be loaded with current value defined in the class during deserialization. 
+Transient Vs Final
+The main difference between Transient and Final is listed below:
+
+- Final variables are serialized by their value directly.
+- Declaring a final variable as transient has no use because the compiler replaces final variables with their literal values in the bytecode.
+
+### Serialization in Inheritance
+
+👉 If a parent class is Serializable → child becomes Serializable automatically
+
+👉 If parent is NOT Serializable:
+- Parent fields will NOT be serialized
+- But child fields will be
+
+To handle this, parent must provide a **no-arg constructor**.
+
+### Serialization and static fields
+
+Static fields **are NOT serialized** because they belong to the class, not the instance.
+
+### Serialization vs Deserialization in Java
+The main difference between serialization and deserialization is:
+
+- Serialization is the process of converting object to byte stream.
+- Deserialization is the process of converting byte stream to object.
