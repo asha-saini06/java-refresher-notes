@@ -11054,3 +11054,163 @@ The main difference between serialization and deserialization is:
 
 - Serialization is the process of converting object to byte stream.
 - Deserialization is the process of converting byte stream to object.
+
+## 73. Web application - J2EE
+A **Web Application** is an application that runs on a server and is accessed through a web browser.
+In Java, web applications are commonly built using **J2EE (Java 2 Enterprise Edition)**, now known as **Jakarta EE**.
+
+J2EE provides a **set of specifications, APIs, and tools** for developing large-scale, distributed, secure, and scalable enterprise applications.
+
+**J2EE (now Jakarta EE)** is a platform/framework for building *enterprise-level applications* such as:
+- Web applications
+- REST APIs
+- E-commerce portals
+- Banking systems
+- Distributed applications
+- Multi-tiered applications
+
+It extends standard Java (JSE) by adding powerful APIs for:
+- Web development
+- Server-side programming
+- Databases (JDBC)
+- Enterprise components (EJB)
+- Security
+- Messaging (JMS)
+- XML/JSON processing
+- Cloud-ready enterprise services
+
+### Why Use J2EE?
+
+Because it provides a standardized architecture that is:
+- **Portable** — runs on any Java-based application server
+- **Secure** — built-in authentication & authorization
+- **Scalable** — suitable for large applications
+- **Robust** — managed by the JVM
+- **Multi-tiered** — separation of layers: UI, business logic, data
+
+### Components of a Java (J2EE) Web Application
+
+A typical Web Application contains:
+
+1. Client Layer (Presentation Layer)
+- Browser (Chrome, Firefox…)
+- Sends HTTP requests
+- Receives responses (HTML, JSON, XML)
+
+2. Web Layer (Servlets + JSP)
+- Servlets → Java programs handling HTTP requests
+- JSP → Dynamic web pages
+- Filters → Pre-processing (authentication, logging)
+
+3. Business Layer (Service Layer/EJB)
+- Contains business logic
+- EJB (older)
+- Spring Services (modern alternative)
+
+4. Data Layer
+- JDBC
+- JPA / Hibernate
+- Database (MySQL, Oracle, PostgreSQL, etc.)
+
+### J2EE Architecture (3-Tier / Multi-Tier)
+```java
+Client (Browser)
+       |
+       v
+Web Server (Servlet / JSP / Filters)
+       |
+       v
+Application Server (EJB / Services)
+       |
+       v
+Database (MySQL / Oracle / MongoDB)
+```
+
+### J2EE Technologies Used in Web Applications
+| Layer        | Technology                                 | Description                |
+| ------------ | ------------------------------------------ | -------------------------- |
+| Presentation | **JSP**, **HTML**, **CSS**, **JavaScript** | UI components              |
+| Server       | **Servlets**, **Filters**                  | Handles HTTP requests      |
+| Business     | **EJB**, **Spring (modern)**               | Business logic             |
+| Data         | **JDBC**, **JPA**, **Hibernate**           | Database connectivity      |
+| Web Services | **REST / JAX-RS**, **SOAP / JAX-WS**       | API development            |
+| Messaging    | **JMS**                                    | Asynchronous communication |
+| Deployment   | **WAR**, **EAR**                           | Packaging formats          |
+
+### How a Web Application Works (Flow)
+1. User clicks a link / submits a form
+2. Browser sends HTTP Request
+3. Request reaches Tomcat (or another server)
+4. Servlet processes request
+5. Servlet interacts with:
+    - DB (through JDBC/Hibernate)
+    - Business layer
+6. Servlet prepares data
+7. Data forwarded to JSP
+8. JSP generates dynamic HTML
+9. Browser displays response
+
+**Servlet + JSP Example (Simple Flow)**
+```sql
+index.html  →  Servlet  →  Database  →  JSP (response)
+```
+
+### Advantages of J2EE
+- Platform-independent
+- Standardized, mature ecosystem
+- Secure & scalable
+- Supports multi-tier architecture
+- Compatible with large enterprise systems
+
+### J2EE Multi-Tier Architecture (Multi-Layer Structure)
+
+Modern Java web applications follow a **multi-tier architecture** to cleanly separate concerns and make applications scalable, maintainable, and modular.
+
+```
+Client (Browser / Mobile App / API Client)
+        │
+        ▼
+Web Layer (Web-Container)
+  └→ Servlets / JSP / Filters / REST Controllers
+        │
+        ▼
+Business Layer (Application-Container or Service Layer)
+  └→ EJB / Spring Services / Business Logic
+        │
+        ▼
+Data Layer (Persistence Layer)
+  └→ JDBC / JPA / Hibernate / ORM / Database
+```
+
+### Layers Explained
+
+![N TIER MULTITIER ARCHITECTURE](./resources/Amia-Web-Tier-EJB-Tier.png)
+
+| Layer              | Responsibility / Components                                                                  | Example Technologies                                                     |
+| ------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **Client Layer**   | UI or client-side that interacts with user — sends HTTP / API requests and renders responses | Browsers, Mobile Apps, API Clients (Postman, etc.)                       |
+| **Web Layer**      | Handles HTTP requests & responses, user sessions, request routing, filters (auth, logging)   | Servlets, JSP, Filters, REST controllers (Servlet container e.g. Tomcat) |
+| **Business Layer** | Contains business logic, rules, transaction handling, service orchestration, data processing | EJB, Spring Services, Business-Service Classes                           |
+| **Data Layer**     | Manages data persistence, ORM, database connections, queries, transactions                   | JDBC, JPA, Hibernate, SQL / NoSQL databases                              |
+
+### Why Multi-Tier Architecture?
+
+* **Separation of Concerns** — UI, business logic, and data logic stay independent.
+* **Scalability** — Each layer can be deployed, scaled, or optimized independently.
+* **Maintainability** — Easier to modify or replace one layer without impacting others.
+* **Reusability** — Services in business layer can be reused across different clients (web, mobile, API).
+* **Security & Transaction Management** — Business layer can enforce security, validation, transactions before data layer access.
+
+### Role of Containers
+
+* **Web Container** — manages servlets, JSP, filters, sessions, request lifecycle.
+* **Application / EJB Container** — manages business services, transactions, dependency injection, pooling, lifecycle.
+* **Data & Persistence** — managed by persistence frameworks (JPA/Hibernate) / JDBC; optionally by a connection pool provider.
+
+### Key Takeaways for J2EE Web Applications
+
+* A well-architected J2EE application separates UI, business logic, and data access.
+* Using a multi-tier approach improves modularity, testability, and performance.
+* Technologies like Servlets, JSP, JDBC, ORM (Hibernate/JPA), and business services work together based on this architecture.
+* Containers (web/app) provide infrastructure support — lifecycle, pooling, security, transactions — enabling developers to focus on business logic.
+

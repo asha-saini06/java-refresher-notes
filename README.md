@@ -84,7 +84,7 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 73. Web application - J2EE
 74. Server, DNS, Protocol, HTTP, HTTP Requests
 75. Servlet, Lifecycle of a Servlet, Servlet Architecture
-76. MVC
+76. MVC (Model–view–controller)
 77. Servlet Interface functions
 78. Content type, MIME (Multipurpose Internet Mail Extension)
 79. Servlet API
