@@ -11055,7 +11055,7 @@ The main difference between serialization and deserialization is:
 - Serialization is the process of converting object to byte stream.
 - Deserialization is the process of converting byte stream to object.
 
-## 73. Web application - J2EE
+## 73. J2EE Web application
 A **Web Application** is an application that runs on a server and is accessed through a web browser.
 In Java, web applications are commonly built using **J2EE (Java 2 Enterprise Edition)**, now known as **Jakarta EE**.
 
@@ -11214,3 +11214,210 @@ Data Layer (Persistence Layer)
 * Technologies like Servlets, JSP, JDBC, ORM (Hibernate/JPA), and business services work together based on this architecture.
 * Containers (web/app) provide infrastructure support — lifecycle, pooling, security, transactions — enabling developers to focus on business logic.
 
+## 74. Web Architecture and Network Basics
+
+### **1. Server–Client Architecture**
+
+The **Client–Server model** is the foundation of web applications.
+
+**Client (Browser / App)**
+* Sends requests to a server
+* Requests webpages, images, API data, etc.
+* Examples: Chrome, Firefox, mobile apps, Postman
+
+**Server**
+* Receives client requests
+* Processes them (business logic)
+* Sends back the response (HTML, JSON, files, etc.)
+* Examples: Apache Tomcat, JBoss/WildFly, GlassFish
+
+**Communication Flow**
+```
+Client (Browser) → Request → Server
+Server → Response → Client
+```
+
+### **2. DNS (Domain Name System)**
+
+DNS converts **human-readable domain names** into **IP addresses**.
+
+**Example:**
+```
+www.google.com  →  142.250.182.206
+```
+You type the domain → DNS resolves it → browser connects to the server's IP.
+
+**How DNS Works (Simplified)**
+
+1. Client sends DNS query
+2. DNS Resolver contacts various DNS servers
+3. Finds IP address of requested domain
+4. Returns IP to browser
+5. Browser connects to that IP using HTTP/HTTPS
+
+### **3. Protocol**
+
+A **Protocol** defines a set of rules for communication between two devices.
+
+**Common Internet Protocols:**
+
+| Protocol  | Purpose                   |
+| --------- | ------------------------- |
+| **HTTP**  | Web communication         |
+| **HTTPS** | Secure HTTP using SSL/TLS |
+| **TCP**   | Reliable data transfer    |
+| **UDP**   | Fast, connectionless data |
+| **FTP**   | File transfer             |
+| **SMTP**  | Email sending             |
+
+Protocols ensure that:
+
+* Both parties understand each other
+* Data is transmitted correctly
+
+### **4. HTTP (HyperText Transfer Protocol)**
+
+HTTP is an **application-level protocol** used by browsers and servers.
+
+**Key Features:**
+* Stateless
+* Text-based
+* Runs on port **80** (HTTP) and **443** (HTTPS)
+* Used for requesting HTML pages, CSS, JS, JSON, images, etc.
+
+**HTTPS**
+
+    HTTPS = HTTP + SSL/TLS
+
+→ Provides encryption, authentication, and data integrity.
+
+
+### **5. HTTP Requests**
+
+HTTP requests are sent by the client to the server.
+Each request contains:
+
+* **URL**
+* **Request Method**
+* **Headers**
+* **Body** (optional)
+
+**Common HTTP Methods:**
+
+| Method     | Description                        |
+| ---------- | ---------------------------------- |
+| **GET**    | Retrieve data                      |
+| **POST**   | Send data (forms, login, JSON)     |
+| **PUT**    | Update entire resource             |
+| **PATCH**  | Update part of a resource          |
+| **DELETE** | Remove resource                    |
+| **HEAD**   | Like GET but without response body |
+
+**Example HTTP Request:**
+```
+GET /login HTTP/1.1
+Host: example.com
+User-Agent: Chrome
+```
+
+**Example HTTP Response:**
+```
+HTTP/1.1 200 OK
+Content-Type: text/html
+<body>Welcome</body>
+```
+
+### **6. CGI (Common Gateway Interface)**
+
+Before servlets, CGI was used to generate dynamic web pages.
+
+**How CGI Worked:**
+
+* Browser sends request to server
+* Server executes a program (C, Perl, Python, etc.)
+* Program generates output (HTML) and returns it
+
+**Problems with CGI:**
+
+* **Slow** (creates new OS process for each request)
+* High memory usage
+* Not suitable for high traffic
+
+**Servlets replaced CGI**
+
+Servlets run inside the **JVM** and inside a **web container**, making them:
+
+* Faster
+* More efficient
+* More scalable
+
+### **7. URL Patterns**
+
+URL Pattern = how a URL maps to a servlet.
+
+Defined in:
+
+**web.xml example**
+
+```xml
+<servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
+</servlet-mapping>
+```
+
+**Annotation example**
+
+```java
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {}
+```
+
+#### Types of URL Patterns:
+1. **Exact match** → `/login`
+2. **Directory-based** → `/user/*`
+3. **Extension-based** → `*.do`, `*.action`
+4. **Default servlet** → `/`
+
+---
+
+### **8. Container (Servlet Container / Web Container)**
+
+A **Container** is the part of the server that manages the lifecycle of servlets.
+
+**Popular Containers:**
+* Apache Tomcat
+* Jetty
+* WildFly (JBoss)
+* GlassFish
+
+#### Responsibilities of a Servlet Container:
+
+| Responsibility                | Description                  |
+| ----------------------------- | ---------------------------- |
+| **Servlet lifecycle**         | init(), service(), destroy() |
+| **Request/Response handling** | HTTP request parsing         |
+| **Multi-threading**           | Creates a thread per request |
+| **Security**                  | Authentication, SSL          |
+| **Memory management**         | Object pooling, GC           |
+| **Deployment**                | Deploy WAR files             |
+
+#### Lifecycle of a Servlet:
+
+1. **Loading and instantiation**
+2. `init()`
+3. `service()` → handles GET/POST
+4. `destroy()`
+
+---
+
+| Concept       | Meaning                                 |
+| ------------- | --------------------------------------- |
+| Server–Client | Client sends requests → Server responds |
+| DNS           | Converts domain name to IP              |
+| Protocol      | Communication rules                     |
+| HTTP          | Web communication protocol              |
+| HTTP Requests | Methods like GET/POST                   |
+| CGI           | Old dynamic page technology             |
+| URL Pattern   | Maps URL to servlet                     |
+| Container     | Runs servlets and manages web app       |
