@@ -11232,6 +11232,8 @@ The **Client–Server model** is the foundation of web applications.
 * Sends back the response (HTML, JSON, files, etc.)
 * Examples: Apache Tomcat, JBoss/WildFly, GlassFish
 
+> A **Server** is a computer program or device that provides functionality for other programs or devices, called '**clients**'.
+
 **Communication Flow**
 ```
 Client (Browser) → Request → Server
@@ -11253,6 +11255,8 @@ www.google.com  →  142.250.182.206
 ```
 You type the domain → DNS resolves it → browser connects to the server's IP.
 
+Domain Name System (DNS) is an internet service that translates domain names into IP addresses. Because domain names are alphabetic, they're easier to remember.
+
 **How DNS Works (Simplified)**
 
 1. Client sends DNS query
@@ -11264,6 +11268,9 @@ You type the domain → DNS resolves it → browser connects to the server's IP.
 ### **Protocol**
 
 A **Protocol** defines a set of rules for communication between two devices.
+
+A protocol is the special set of rules that end points in a telecommunication connection use when they communicate.
+Protocols specify the standards for communication and provide detailed information on processes involved in data transmission.
 
 **Common Internet Protocols:**
 
@@ -11291,6 +11298,8 @@ HTTP is an **application-level protocol** used by browsers and servers.
 * Runs on port **80** (HTTP) and **443** (HTTPS)
 * Used for requesting HTML pages, CSS, JS, JSON, images, etc.
 
+HTTP is an application-layer protocol used primarily on the www. HTTP is a protocol which allows the fetching of resources, such as HTML documents.
+
 #### HTTP Protocol in Web Applications
 The HTTP protocol defines how requests and responses are exchanged in web applications. Common methods include:
 
@@ -11307,6 +11316,7 @@ These methods form the backbone of web-based communication and RESTful services.
 
 → Provides encryption, authentication, and data integrity.
 
+It is the foundation of any data exchange on the web and a client-server protocol, which means requests are initiated by the recipient, usually the web browser.
 
 ### **HTTP Requests**
 
@@ -11317,6 +11327,8 @@ Each request contains:
 * **Request Method**
 * **Headers**
 * **Body** (optional)
+
+It is the request send by the computer to a web server that contains all sorts of potentially intresting information.
 
 **Common HTTP Methods:**
 
@@ -11343,9 +11355,13 @@ Content-Type: text/html
 <body>Welcome</body>
 ```
 
+![HTTP Request-Response Cycle](./resources/HTTPRequestResponse.png)
+
 ### **CGI (Common Gateway Interface)**
 
 Before servlets, CGI was used to generate dynamic web pages.
+
+The Common Gateway Interface (CGI) is a standard that facilitates communication between web servers and external databases or information sources. It acts as middleware, allowing web servers to interact with applications that process data and send back responses.
 
 **How CGI Worked:**
 
@@ -11370,6 +11386,15 @@ Servlets run inside the **JVM** and inside a **web container**, making them:
 - Lifecycle managed by a Servlet Container (e.g., Tomcat).
 - Support session tracking, cookies, and request-response handling.
 
+| Servlet                                   | CGI (Common Gateway Interface)          |
+|-------------------------------------------|------------------------------------------|
+| Servlets are portable and efficient.      | CGI is not portable.                     |
+| Sharing data between components is easy.  | Sharing data is not possible.            |
+| Servlets can directly communicate with the webserver. | CGI cannot directly communicate with the webserver. |
+| Servlets are less expensive (lightweight, no process creation). | CGI is more expensive (creates new process per request). |
+| Servlets can handle cookies.              | CGI cannot handle cookies.               |
+
+
 ### **URL Patterns**
 
 URL Pattern = how a URL maps to a servlet.
@@ -11392,13 +11417,11 @@ Defined in:
 public class LoginServlet extends HttpServlet {}
 ```
 
-#### Types of URL Patterns:
+#### Types of URL Patterns
 1. **Exact match** → `/login`
 2. **Directory-based** → `/user/*`
 3. **Extension-based** → `*.do`, `*.action`
 4. **Default servlet** → `/`
-
----
 
 ### **Container (Servlet Container / Web Container)**
 
@@ -11421,13 +11444,14 @@ A **Container** is the part of the server that manages the lifecycle of servlets
 | **Memory management**         | Object pooling, GC           |
 | **Deployment**                | Deploy WAR files             |
 
-#### Lifecycle of a Servlet:
+#### Lifecycle of a Servlet
 
 1. **Loading and instantiation**
 2. `init()`
 3. `service()` → handles GET/POST
 4. `destroy()`
 
+![Lifecycle of a Servlet](./resources/Life-Cycle-of-Servlet.png)
 ---
 
 | Concept       | Meaning                                 |
@@ -11446,6 +11470,30 @@ A **Container** is the part of the server that manages the lifecycle of servlets
 - It is built on top of Servlets and automatically converted into Servlet code at runtime.
 - JSP makes it easier to separate business logic from the presentation layer, improving maintainability of applications.
 
+![JSP](./resources/JSP.png)
+
+#### When to Use Servlet or JSP
+- **Servlet**: When you need to handle business logic, form processing, and request management.
+- **JSP**: When you need to build dynamic web pages with UI elements and embed minimal Java logic.
+
+| **Servlet**                                                             | **JSP**                                                                                   |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Servlet is written mostly in **Java code**.                             | JSP is written mostly in **HTML with embedded Java**.                                     |
+| Writing code is harder because you mix HTML inside Java.                | Easier to write because Java is embedded inside HTML.                                     |
+| Acts as the **Controller** in MVC architecture.                         | Acts as the **View** in MVC architecture (UI).                                            |
+| **Faster** than JSP (no translation step).                              | **Slower** than Servlet because JSP is first translated into a Servlet and then compiled. |
+| Can accept **all protocol** requests.                                   | Accepts **only HTTP** protocol requests.                                                  |
+| Supports overriding the `service()` method.                             | Cannot override the `service()` method.                                                   |
+| Session management is **not enabled by default**.                       | Session management is **enabled by default**.                                             |
+| Both business logic and presentation logic may end up in the same file. | Business logic is separated from presentation using **JavaBeans / JSTL**.                 |
+| Modification requires recompilation, redeployment, and server restart.  | Updating a JSP is faster—just refresh the page.                                           |
+| Does **not provide implicit objects**.                                  | Provides many **implicit objects** (request, response, session, out, etc.).               |
+| Cannot directly run JavaScript on the client side.                      | Can run JavaScript easily for client-side validation.                                     |
+| Packages must be imported at the top of the file.                       | Packages can be imported anywhere in the JSP using `<%@ page import="..." %>`.            |
+| Good for **heavy data processing**.                                     | Not suitable for heavy data processing.                                                   |
+| No support for writing custom tags.                                     | Supports **JSP Custom Tags** and **JSTL**.                                                |
+| Servlets are hosted and executed directly on web servers.               | JSP is first converted into a Servlet, then executed like any servlet.                    |
+
 ### Frameworks in Advanced Java
 - **Spring MVC**: Implements the Model-View-Controller pattern for structured web applications.
 - **Hibernate**: ORM framework that maps Java objects to database tables.
@@ -11455,6 +11503,8 @@ A **Container** is the part of the server that manages the lifecycle of servlets
 - **Model**: Business logic and database layer.
 - **View**: Presentation layer (JSP, HTML, or frontend frameworks).
 - **Controller**: Handles user requests and directs them to the right resources.
+
+![MVC](./resources/mvc.png)
 
 ### Spring Boot (Modern Java Web Development)
 Spring Boot is a framework built on top of the Spring ecosystem that simplifies web application development.
@@ -11467,3 +11517,221 @@ Spring Boot is a framework built on top of the Spring ecosystem that simplifies 
 - **Microservices support**: Ideal for cloud-native applications.
 
 Spring Boot allows developers to quickly create RESTful APIs, MVC-based web apps, and enterprise applications with minimal configuration.
+
+## 75. Servlet Fundamentals and Lifecycle
+A **Servlet** is a Java program that runs on a **server** and handles **HTTP requests and responses**.
+Servlets are the core technology of **Java Web Development** and are used to build dynamic web applications.
+
+They run inside a special environment called a **Servlet Container** (e.g., Apache Tomcat).
+
+A Servlet is:
+- A server-side Java class
+- Used to handle web requests (HTTP)
+- Used to generate dynamic responses (HTML, JSON, XML)
+- Managed by a Servlet Container (Tomcat, Jetty, WildFly, GlassFish)
+
+### Servlet Class
+
+Every servlet must extend `HttpServlet` and override methods like:
+- `doGet()`
+- `doPost()`
+- `doPut()`
+- `doDelete()`
+- `service()`
+
+### Features of Java Servlets
+- Work on the server-side.
+- Efficiently handle complex client requests.
+- Generate dynamic responses.
+- Provide better performance compared to older technologies like CGI.
+- Highly scalable in enterprise-level web applications.
+
+### Java Servlets Architecture
+Java servlets container play a very important role. It is responsible for handling important tasks like load balancing, session management and resource allocation, it make sure that all the requests are process efficiently under high traffic. The container distribute requests accross multiple instances, which helps improve the system performance.
+
+Servlet Architecture can be depicted from the image itself as provided below as follows: 
+
+![Servlet Architecture](./resources/Servlet-Architecture.png)
+
+### Servlet Architecture Workflow:
+Execution of Servlets basically involves Six basic steps: 
+
+- The Clients send the request to the Web Server.
+- The Web Server receives the request.
+- The Web Server passes the request to the corresponding servlet.
+- The Servlet processes the request and generates the response in the form of output.
+- The Servlet sends the response back to the webserver.
+- The Web Server sends the response back to the client and the client browser displays it on the screen.
+
+#### Need of Server-Side Extensions
+- Server-side extensions allow dynamic web page generation by running programs on the server.
+- Web servers provide APIs to help developers build these applications.
+- Java Servlets (part of Jakarta EE) are a key API for Java-based web development.
+
+### Lifecycle of a Servlet
+
+Servlet lifecycle is managed entirely by the **Servlet Container**.
+
+```
+           Container Loads Servlet
+                    ↓
+             init() method
+                    ↓
+       service() called per request
+                    ↓
+             destroy() method
+                    ↓
+           Servlet removed from memory
+```
+
+**1. Loading and Instantiation**
+
+* Container loads the servlet class into memory
+* Creates an instance of the servlet (only once)
+
+**2. init()**
+
+Called **only once** when the servlet is first created.
+
+Used for initialization:
+
+```java
+public void init() throws ServletException {
+    // Initialize DB connections, resources
+}
+```
+
+**3. service()**
+
+Called for **every request**.
+
+* Determines request type (GET/POST/etc.)
+* Calls the appropriate method:
+
+  * `doGet()`
+  * `doPost()`
+  * `doPut()`
+  * `doDelete()`
+
+Example:
+
+```java
+protected void doGet(HttpServletRequest req, HttpServletResponse res)
+```
+
+**4. destroy()**
+
+Called only **once** before servlet is removed.
+
+Used for cleanup:
+
+```java
+public void destroy() {
+    // Close DB connections, release resources
+}
+```
+
+### Servlet Architecture**
+
+Servlet architecture is based on the request–response model.
+
+**Servlet Architecture Flow**
+
+```
+Browser → HTTP Request → Servlet Container → Servlet → Response → Browser
+```
+
+**Components**
+
+1. **Client** – browser sending HTTP request
+2. **Web Server** – receives request
+3. **Servlet Container** – runs servlet
+4. **Servlet** – processes logic
+5. **Response** – HTML/JSON/XML sent back
+
+### Types of Servlets
+
+**1. Generic Servlet**
+
+* Protocol-independent
+* Extends `GenericServlet`
+
+**2. HTTP Servlet**
+
+* Most commonly used
+* Extends `HttpServlet`
+* Designed specifically for HTTP
+
+### Servlet Program Example
+
+**Simple HttpServlet Example**
+
+```java
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class HelloServlet extends HttpServlet {
+
+    public void doGet(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+
+        res.setContentType("text/html");
+        PrintWriter out = res.getWriter();
+
+        out.println("<h2>Hello from Servlet!</h2>");
+    }
+}
+```
+
+**URL Mapping (web.xml example)**
+
+```xml
+<servlet>
+    <servlet-name>HelloServlet</servlet-name>
+    <servlet-class>HelloServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>HelloServlet</servlet-name>
+    <url-pattern>/hello</url-pattern>
+</servlet-mapping>
+```
+
+### Advantages of Servlets
+
+| Advantage     | Description                                     |
+| ------------- | ----------------------------------------------- |
+| **Fast**      | No new process created per request (unlike CGI) |
+| **Portable**  | Java-based, platform independent                |
+| **Secure**    | Built-in security APIs                          |
+| **Scalable**  | Uses multithreading                             |
+| **Efficient** | Uses fewer resources                            |
+
+### Servlets vs Other Technologies
+
+**Servlet vs CGI**
+
+| Servlet          | CGI                |
+| ---------------- | ------------------ |
+| Multithreaded    | Process-based      |
+| Fast             | Slow               |
+| Memory-efficient | High memory usage  |
+| Supports session | No session support |
+
+**Servlet vs JSP**
+
+| Servlet       | JSP           |
+| ------------- | ------------- |
+| Java code     | HTML + Java   |
+| Harder for UI | Easier for UI |
+| Controller    | View          |
+
+### Where Are Servlets Used?**
+
+* Dynamic websites
+* REST APIs
+* Login systems
+* Admin dashboards
+* E-commerce
+* Session/cookie management
