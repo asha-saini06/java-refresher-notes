@@ -11452,7 +11452,6 @@ A **Container** is the part of the server that manages the lifecycle of servlets
 4. `destroy()`
 
 ![Lifecycle of a Servlet](./resources/Life-Cycle-of-Servlet.png)
----
 
 | Concept       | Meaning                                 |
 | ------------- | --------------------------------------- |
@@ -11631,7 +11630,7 @@ public void destroy() {
 }
 ```
 
-### Servlet Architecture**
+### Servlet Architecture
 
 Servlet architecture is based on the request–response model.
 
@@ -11727,7 +11726,7 @@ public class HelloServlet extends HttpServlet {
 | Harder for UI | Easier for UI |
 | Controller    | View          |
 
-### Where Are Servlets Used?**
+### Where Are Servlets Used
 
 * Dynamic websites
 * REST APIs
@@ -11735,3 +11734,85 @@ public class HelloServlet extends HttpServlet {
 * Admin dashboards
 * E-commerce
 * Session/cookie management
+
+## 76. MVC (Model View Controller)
+MVC stands for Model View and Controller. It is a design pattern that spearates the business logic, presentation logic and data.
+
+MVC stands for **Model–View–Controller**, a design pattern that separates the **business logic**, **presentation logic**, and **application flow**. It helps keep applications **organized, scalable, and easier to maintain**.
+
+![MVC](./resources/MVC-Architecture.png)
+
+### Components of MVC
+
+**1. Model (Data & Business Logic Layer)**
+
+* Represents the **data**, business logic, and application rules.
+* Interacts with the **database**.
+* Does not know anything about UI (View).
+
+**2. View (Presentation Layer)**
+
+* Responsible for displaying the data to the user.
+* Contains UI elements like JSP, HTML, CSS.
+* Receives data from Controller and shows output.
+
+**3. Controller (Request Handling Layer)**
+
+* Acts as a **bridge** between View and Model.
+* Receives user requests, processes them, and updates the Model.
+* Selects the appropriate View to display data.
+
+### MVC Workflow (How MVC Works)
+
+```
+User Request → Controller → Model → Controller → View → Response to User
+```
+
+1. User sends a request to the Controller.
+2. Controller calls the Model for data.
+3. Model returns processed data.
+4. Controller forwards data to the View.
+5. View displays the response back to the user.
+
+### MVC in Java Web Applications
+
+| MVC Part       | Implemented Using                            |
+| -------------- | -------------------------------------------- |
+| **Model**      | Java Classes, Beans, DAO, Hibernate Entities |
+| **View**       | JSP, JSTL, HTML                              |
+| **Controller** | Servlets                                     |
+
+Example MVC Flow (Servlet + JSP):
+
+```java
+User → LoginServlet → UserDAO → LoginServlet → login.jsp
+```
+
+### Benefits of MVC Architecture
+
+* **Enhanced Organization:** Clear separation keeps code clean.
+* **Parallel Development:** Multiple developers can work on M, V, C independently.
+* **Code Reusability:** Model can be reused in multiple views.
+* **Maintainability:** Easy to update and debug.
+* **Testability:** Each layer can be tested separately.
+
+### Disadvantages of MVC
+
+* Too many files (not suitable for small projects).
+* Controller can become complex.
+* Requires a good understanding of architecture.
+* Slower initial setup.
+
+### Where MVC is Used
+
+* Java Web Applications (Servlet + JSP)
+* **Spring MVC**
+* **Spring Boot**
+* Android Architecture (variants like MVVM/MVP)
+* Enterprise applications
+
+### Difference Between MVC vs MVVM vs MVP
+- **MVC** – View gets data through Controller
+- **MVP** – Presenter handles UI logic
+- **MVVM** – ViewModel exposes data for View (used in Android)
+
