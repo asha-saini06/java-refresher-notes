@@ -11816,3 +11816,283 @@ User → LoginServlet → UserDAO → LoginServlet → login.jsp
 - **MVP** – Presenter handles UI logic
 - **MVVM** – ViewModel exposes data for View (used in Android)
 
+## 77. Servlet Interface and Its Functions
+
+The **Servlet Interface** is the *core* interface in Java Servlet API.
+All servlets **must** implement this interface—directly or indirectly.
+
+Most developers extend:
+
+* **`GenericServlet`** (for protocol-independent servlets)
+* **`HttpServlet`** (for HTTP-specific servlets)
+
+But internally, **everything starts from the `Servlet` interface**.
+
+### What is the `Servlet` Interface?
+
+It is the root interface inside the `javax.servlet` package.
+
+```java
+public interface Servlet {
+    void init(ServletConfig config) throws ServletException;
+    ServletConfig getServletConfig();
+    void service(ServletRequest req, ServletResponse res) 
+         throws ServletException, IOException;
+    String getServletInfo();
+    void destroy();
+}
+```
+
+Any servlet must implement these **5 lifecycle methods**.
+
+### **Servlet Interface Methods**
+
+**1. `init(ServletConfig config)`**
+
+Called **once** when servlet is first loaded into memory.
+
+**Purpose:**
+
+* Initialize the servlet
+* Read configuration values (from `web.xml`)
+* Create resources like DB connections
+
+Executed only **once per servlet instance**.
+
+```java
+public void init(ServletConfig config) throws ServletException {
+    System.out.println("Servlet Initialized");
+}
+```
+
+**2. `service(ServletRequest req, ServletResponse res)`**
+
+Called **for every request** by container.
+
+* Handles client request
+* Generates response
+* For HttpServlet, this method internally calls:
+
+  * `doGet()` for GET request
+  * `doPost()` for POST request
+    (and others like PUT, DELETE, etc.)
+
+```java
+public void service(ServletRequest req, ServletResponse res) 
+       throws ServletException, IOException {
+    res.getWriter().println("Processing request...");
+}
+```
+
+**3. `destroy()`**
+
+Called **once before servlet is removed from memory**.
+
+Used for cleanup operations:
+
+* Closing DB connections
+* Releasing resources
+* Stopping background tasks
+
+```java
+public void destroy() {
+    System.out.println("Servlet Destroyed");
+}
+```
+
+**4. `getServletConfig()`**
+
+Returns the **ServletConfig object** created by the container.
+
+Useful to get initialization parameters:
+
+```java
+ServletConfig config = getServletConfig();
+String name = config.getInitParameter("username");
+```
+
+**5. `getServletInfo()`**
+
+Returns metadata about servlet such as:
+
+* Author
+* Version
+* Copyright
+
+```java
+public String getServletInfo() {
+    return "My Servlet v1.0, Created by Asha";
+}
+```
+
+| Method                                             | Purpose                                                                       |
+| -------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `init(ServletConfig config)`                       | Called once when servlet is created (initialization).                         |
+| `service(ServletRequest req, ServletResponse res)` | Called for **every request**. Dispatches to doGet(), doPost() in HttpServlet. |
+| `destroy()`                                        | Called once before servlet is removed (cleanup).                              |
+| `getServletConfig()`                               | Returns configuration object (`ServletConfig`).                               |
+| `getServletInfo()`                                 | Returns servlet description (developer info).                                 |
+
+### Servlet Lifecycle (Using These Methods)
+
+```
+          Client Request
+                 ↓
+        (Servlet Loaded)
+                 ↓
+        init() → called once
+                 ↓
+        service() → called for each request
+                 ↓
+        destroy() → called once when shutting down
+```
+
+Lifecycle managed by the **Servlet Container** (Tomcat, Jetty, GlassFish).
+
+#### Quick Comparison: Servlet Interface vs GenericServlet vs HttpServlet
+
+| Class/Interface         | Purpose                                              |
+| ----------------------- | ---------------------------------------------------- |
+| **Servlet (interface)** | Base interface, defines 5 lifecycle methods          |
+| **GenericServlet**      | Simplifies development for *non-HTTP* protocols      |
+| **HttpServlet**         | Designed specifically for **HTTP** (GET, POST, etc.) |
+
+Most modern Java web apps use **HttpServlet**.
+
+**Example Custom Servlet Implementing `Servlet` Interface**
+
+```java
+import javax.servlet.*;
+import java.io.*;
+
+public class MyServlet implements Servlet {
+    
+    ServletConfig config;
+
+    public void init(ServletConfig config) {
+        this.config = config;
+        System.out.println("Init called");
+    }
+
+    public void service(ServletRequest req, ServletResponse res) 
+           throws IOException {
+        res.setContentType("text/html");
+        PrintWriter out = res.getWriter();
+        out.println("<h2>Hello from MyServlet</h2>");
+    }
+
+    public void destroy() {
+        System.out.println("Destroy called");
+    }
+
+    public ServletConfig getServletConfig() {
+        return config;
+    }
+
+    public String getServletInfo() {
+        return "MyServlet 1.0 by Asha";
+    }
+}
+```
+
+Modern applications prefer:
+
+```java
+public class MyServlet extends HttpServlet { … }
+```
+
+Because it is simpler and supports HTTP methods directly.
+
+| Method                 | Called When               | Purpose                  |
+| ---------------------- | ------------------------- | ------------------------ |
+| **init()**             | Servlet loads into memory | Initialization           |
+| **service()**          | For every request         | Request processing       |
+| **destroy()**          | Before servlet unloads    | Cleanup                  |
+| **getServletConfig()** | Anytime                   | Access config params     |
+| **getServletInfo()**   | Anytime                   | Returns servlet metadata |
+
+### What Happens Internally When Servlet is Loaded
+
+Include these important points:
+- A servlet is loaded **on first request** or **at server startup** (<load-on-startup>).
+- Container:
+    - Loads the class
+    - Creates **single instance**
+    - Calls `init()`
+    - For each request → calls `service()`
+    - On shutdown → calls `destroy()`
+
+### ServletConfig and ServletContext Relation
+
+Mention that `init(ServletConfig config)` gives access to:
+- `ServletConfig` → servlet-specific parameters
+- `ServletContext` → application-wide parameters
+
+### Threading Model (VERY Important in exams)
+
+Servlets are **multi-threaded**:
+- Container creates **one servlet instance**
+- For each request → **new thread** is created
+- Therefore:
+    - Servlets are **not thread-safe**
+    - Avoid using instance variables
+
+You can mention:
+```
+Avoid shared variables because multiple threads may modify them.
+```
+
+### Exception Handling in Servlet Methods
+
+You can note:
+- `service()`, `init()` may throw `ServletException` or `IOException`
+- Container logs exceptions and may show 500 error page
+
+### Difference between `GenericServlet` vs `HttpServlet`
+| GenericServlet            | HttpServlet                |
+| ------------------------- | -------------------------- |
+| Protocol-independent      | HTTP-specific              |
+| Used rarely               | Used in 99% web apps       |
+| Must override `service()` | Override doGet(), doPost() |
+| For any protocol          | For HTTP only              |
+
+### Servlet Loading Options
+
+Important for configuration questions:
+
+**On first request (default)**
+
+Servlet loads only when needed.
+
+**At server startup**
+
+Using **web.xml**:
+```xml
+<load-on-startup>1</load-on-startup>
+```
+**Lower number = higher priority**
+
+### Additional Concepts in Servlet Interface
+
+* Servlets are **multi-threaded**, meaning one servlet instance handles multiple requests simultaneously.
+* Container manages entire servlet lifecycle according to `Servlet` interface.
+* `ServletConfig` is provided during initialization and is specific to each servlet.
+* `ServletContext` provides application-level information and initialization parameters.
+* Developers rarely implement the `Servlet` interface directly; instead, they extend `GenericServlet` or `HttpServlet`.
+* `init()` is called once, whereas `service()` is called for every request.
+* `destroy()` is called once when the servlet is being taken out of service (server shutdown or redeployment).
+* Servlets are **platform and server independent** because the container handles environment differences.
+
+❓: **Why We Don’t Usually Implement Servlet Interface Directly**
+
+▶ Most developers extend **HttpServlet** because:
+- Implementing `Servlet` requires writing all 5 methods manually.
+- `HttpServlet` gives:
+    - doGet()
+    - doPost()
+    - doPut()
+    - doDelete()
+    - doHead()
+    - doOptions()
+    - doTrace()
+
