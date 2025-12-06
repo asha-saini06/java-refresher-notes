@@ -12096,3 +12096,190 @@ Using **web.xml**:
     - doOptions()
     - doTrace()
 
+## 78. Content Types in HTTP and MIME
+
+When a client (browser) or server sends data over HTTP, it must specify **what type of data** is being sent.
+This is done using the **Content-Type header**, also known as the **MIME type**.
+
+MIME = **Multipurpose Internet Mail Extensions**
+It defines a standardized way of representing different kinds of content (text, images, audio, video, binary files, JSON, XML, etc.) on the web.
+
+### Content-Type
+
+`Content-Type` tells the browser **how to interpret the data** in the HTTP request or response.
+
+**Example:**
+
+```
+Content-Type: text/html
+```
+
+This tells the browser, “The following data is HTML.”
+
+### MIME Type
+
+A MIME type consists of **two parts**:
+
+```
+type/subtype
+```
+
+Examples:
+
+* `text/html`
+* `image/png`
+* `application/json`
+
+### Why Content-Type is Important
+
+* Helps browser display content correctly
+* Helps server understand request body
+* Enables file uploads/downloads
+* Prevents incorrect data interpretation
+* Used in API development (JSON/XML)
+
+
+### Common MIME Types
+
+**Text Content Types**
+
+| Content Type      | Description              |
+| ----------------- | ------------------------ |
+| `text/plain`      | Plain text               |
+| `text/html`       | HTML documents           |
+| `text/css`        | Stylesheets              |
+| `text/javascript` | Old JavaScript MIME type |
+
+**Application (Most Important for APIs)**
+
+| Content Type               | Description                    |
+| -------------------------- | ------------------------------ |
+| `application/json`         | JSON data (REST APIs use this) |
+| `application/xml`          | XML data                       |
+| `application/pdf`          | PDF documents                  |
+| `application/octet-stream` | Binary file download           |
+| `application/zip`          | ZIP files                      |
+
+**Images**
+
+| Content Type    | Description |
+| --------------- | ----------- |
+| `image/png`     | PNG image   |
+| `image/jpeg`    | JPEG image  |
+| `image/gif`     | GIF image   |
+| `image/svg+xml` | SVG images  |
+
+**Audio/Video MIME Types**
+
+| Content Type | Description |
+| ------------ | ----------- |
+| `audio/mpeg` | MP3 audio   |
+| `video/mp4`  | MP4 video   |
+
+#### **Form Submission MIME Types (VERY IMPORTANT)**
+
+**1. application/x-www-form-urlencoded**
+
+Default for HTML forms (simple key-value pairs).
+
+```
+username=Shaurya&password=1234
+```
+
+**2. multipart/form-data**
+
+Required for **file uploads**.
+
+Used when `<input type="file">` is present.
+
+**3. text/plain**
+
+Rarely used. Sends form fields without encoding.
+
+### Content-Type in HTTP Request
+
+**Example: JSON Request**
+
+```
+POST /login HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "Shaurya",
+  "password": "1234"
+}
+```
+
+**Example: Form Submission**
+
+```
+POST /register
+Content-Type: application/x-www-form-urlencoded
+
+name=Shaurya&city=Delhi
+```
+
+### Content-Type in HTTP Response
+
+**HTML Response**
+
+```
+Content-Type: text/html
+```
+
+**JSON Response (most common in APIs)**
+
+```
+Content-Type: application/json
+```
+
+**File Download**
+
+```
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename=report.pdf
+```
+
+---
+
+### Accept Header (Client → Server)
+
+Client tells server **what kind of response it can accept**.
+
+Example:
+
+```
+Accept: application/json
+```
+
+Means: “I want the response in JSON.”
+
+### Difference Between Content-Type and Accept Header
+
+| Header       | Direction                          | Meaning                        |
+| ------------ | ---------------------------------- | ------------------------------ |
+| Content-Type | Client → Server OR Server → Client | What I am sending              |
+| Accept       | Client → Server                    | What format I want in response |
+
+### MIME Type Format
+
+```
+type/subtype; charset=UTF-8
+```
+
+Example:
+
+```
+Content-Type: text/html; charset=UTF-8
+```
+
+> charset defines character encoding (UTF-8 recommended).
+
+### Why Developers Must Know MIME Types?
+
+* Writing Servlets/JSP
+* Sending/receiving JSON in REST APIs
+* File uploads & downloads
+* Handling form submissions
+* Writing Spring Boot controllers
+* Working with AJAX/Fetch API
