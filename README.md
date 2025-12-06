@@ -86,10 +86,10 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 75. [Servlet Fundamentals and Lifecycle](Notes.md#75-servlet-fundamentals-and-lifecycle)
 76. [MVC (Model View Controller)](Notes.md#76-mvc-model-view-controller)
 77. [Servlet Interface functions](Notes.md#77-servlet-interface-functions)
-78. Content type, MIME (Multipurpose Internet Mail Extension)
+78. [Content Types in HTTP and MIME](Notes.md#78-content-types-in-http-and-mime)
 79. [Servlet API](Notes.md#79-servlet-api)
 80. [Servlet Interface](Notes.md#80-servlet-interface)
-81. Steps to create a servlet
+81. [Steps to create a servlet](Notes.md#81-steps-to-create-a-servlet)
 82. HttpServlet class
 83. GET vs. POST
 84. GenericServlet Class
