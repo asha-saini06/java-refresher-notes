@@ -12283,3 +12283,293 @@ Content-Type: text/html; charset=UTF-8
 * Handling form submissions
 * Writing Spring Boot controllers
 * Working with AJAX/Fetch API
+
+## 79. Servlet API
+Servlets are the Java programs that run on the Java-enabled web server or application server. They are used to handle the request obtained from the webserver, process the request, produce the response, then send a response back to the webserver. In Java, to create web applications we use Servlets. To create Java Servlets, we need to use **Servlet API** which contains all the necessary interfaces and classes. 
+
+The **Servlet API** is a set of **interfaces and classes** provided by Java (Jakarta EE) that allows developers to create dynamic, server-side web applications.
+It provides the foundation for working with:
+* HTTP requests & responses
+* Servlets
+* Filters
+* Listeners
+* Session handling
+* Web application lifecycle
+
+Servlet API enables communication between the **web server (container)** and **Java program (servlet)**.
+
+### Packages in Servlet API
+
+Servlet API comes under these main packages:
+
+| Package                                       | Description                                               |
+| --------------------------------------------- | --------------------------------------------------------- |
+| `jakarta.servlet` / `javax.servlet`           | Core servlet classes and interfaces                       |
+| `jakarta.servlet.http` / `javax.servlet.http` | HTTP-specific classes (HttpServlet, HttpSession, Cookies) |
+
+> **Note:**
+> As of Jakarta EE 9 → all `javax.servlet.*` moved to `jakarta.servlet.*`.
+
+![Servlet API Hierarchy Diagram](./resources/ServletAPIPackageHierarchy.jpg) 
+
+Servlet API provides all the required interfaces, classes, and methods to develop a web application. we need to add the **servlet-api.jar** file in our web application to use the servlet functionality. We can download this jar file from Maven Repository.
+
+### Key Interfaces and Classes in Servlet API
+
+**1. `Servlet` Interface**
+
+The root interface that every servlet must implement.
+Defines the 5 core methods:
+
+* `init()`
+* `service()`
+* `destroy()`
+* `getServletConfig()`
+* `getServletInfo()`
+
+> Almost all servlets extend `GenericServlet` or `HttpServlet` (not implement `Servlet` directly).
+
+**2. `GenericServlet` (Abstract Class)**
+
+* Provides generic (protocol-independent) servlet functionalities.
+* Implements `Servlet` interface except `service()` method.
+* Used rarely; HTTP applications normally use `HttpServlet`.
+
+![GenericServlet request flow diagram](./resources/GenericServlet.jpg)
+
+**3. `HttpServlet` (Most Important Class)**
+
+A protocol-specific servlet for **HTTP**.
+
+Defines HTTP lifecycle methods:
+
+* `doGet()`
+* `doPost()`
+* `doPut()`
+* `doDelete()`
+* `doHead()`
+* `doOptions()`
+* `doTrace()`
+
+This is what most web developers extend:
+
+```java
+public class MyServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) {
+        // handle request
+    }
+}
+```
+
+![HttpServlet request flow diagram](./resources/HTTPServlet.jpg)
+
+### **Request and Response Handling**
+
+**4. `ServletRequest` Interface**
+
+Used to read incoming request data:
+
+* Request parameters
+* Request headers
+* Input stream
+* Form data
+
+**5. `HttpServletRequest`**
+
+Extends `ServletRequest` with HTTP-specific features:
+
+* `getHeader()`
+* `getCookies()`
+* `getSession()`
+* `getMethod()`
+* `getRequestURI()`
+* `getQueryString()`
+
+**6. `ServletResponse` Interface**
+
+Used to send data back to the client:
+
+* Set content type
+* Write output
+* Set status code
+
+**7. `HttpServletResponse`**
+
+HTTP-specific response features:
+
+* `setStatus()`
+* `sendRedirect()`
+* `addCookie()`
+* `setHeader()`
+* `getWriter()` / `getOutputStream()`
+
+### **Servlet Configuration and Context**
+
+**8. `ServletConfig`**
+
+Used for servlet **initialization parameters** (per-servlet config).
+
+```xml
+<servlet>
+  <servlet-name>DBServlet</servlet-name>
+  <init-param>
+      <param-name>url</param-name>
+      <param-value>jdbc:mysql://localhost/db</param-value>
+  </init-param>
+</servlet>
+```
+
+Retrieve it:
+
+```java
+String url = getServletConfig().getInitParameter("url");
+```
+
+**9. `ServletContext`**
+
+Represents entire web application.
+
+Used for:
+
+* Application-wide parameters
+* Logging
+* Getting file paths
+* Shared resources
+
+```java
+ServletContext ctx = getServletContext();
+ctx.getInitParameter("driver");
+```
+
+### **Filters and Listeners**
+
+**10. `Filter` Interface**
+
+Used to intercept requests:
+
+* Authentication
+* Logging
+* Compression
+* CORS
+* Input validation
+
+Implements:
+
+* `init()`
+* `doFilter()`
+* `destroy()`
+
+### Listeners
+
+Automatically respond to events.
+
+Common listeners:
+
+| Listener                 | Event                                               |
+| ------------------------ | --------------------------------------------------- |
+| `ServletContextListener` | Application start/stop                              |
+| `HttpSessionListener`    | Session creation/destruction                        |
+| `ServletRequestListener` | Each request entering/exiting server                |
+| Attribute listeners      | Track changes to context/session/request attributes |
+
+Listeners help in:
+
+* Logging
+* Analytics
+* Cleanup
+* Session tracking
+
+### Session Management (Servlet API)
+
+#### Using **HttpSession**
+
+```java
+HttpSession session = req.getSession();
+session.setAttribute("user", "Asha");
+```
+
+#### Managing cookies
+
+```java
+Cookie ck = new Cookie("name", "Asha");
+res.addCookie(ck);
+```
+
+Servlet API handles:
+
+* Session ID creation
+* Cookie-based tracking
+* URL rewriting if cookies disabled
+* Session timeout
+
+### Request Dispatching
+
+Servlet API provides two important mechanisms:
+
+**1. `RequestDispatcher` (Forward/Include)**
+
+```java
+RequestDispatcher rd = req.getRequestDispatcher("home.jsp");
+rd.forward(req, res);
+```
+
+**2. Redirect**
+
+```java
+res.sendRedirect("login.jsp");
+```
+
+### File Upload (Servlet 3.0+)
+
+Servlet API supports multipart uploads:
+
+```java
+@MultipartConfig
+public class Upload extends HttpServlet { }
+```
+
+### Error Handling
+
+* Custom error pages via `web.xml`
+* Setting HTTP error codes using:
+
+```java
+res.sendError(404, "Page Not Found");
+```
+
+### Thread Safety in Servlets
+
+Important rule:
+
+> **Servlets are multithreaded—one instance handles many requests concurrently.**
+
+Avoid:
+
+* Instance variables
+* Shared mutable state
+
+### Servlet API Versions
+
+| Java EE        | Package             |     |
+| -------------- | ------------------- | --- |
+| Java EE ≤ 8    | `javax.servlet.*`   | Old |
+| Jakarta EE ≥ 9 | `jakarta.servlet.*` | New |
+
+Modern servers (Tomcat 10+) require **jakarta.servlet** package.
+
+### Summary Table of Servlet API Components
+
+| Component             | Purpose                                |
+| --------------------- | -------------------------------------- |
+| `Servlet`             | Base interface for servlets            |
+| `GenericServlet`      | Protocol-neutral servlet               |
+| `HttpServlet`         | HTTP servlet modern apps use           |
+| `ServletRequest`      | Read request data                      |
+| `HttpServletRequest`  | HTTP-specific request                  |
+| `ServletResponse`     | Write output                           |
+| `HttpServletResponse` | HTTP-specific response                 |
+| `ServletConfig`       | Per-servlet config                     |
+| `ServletContext`      | Application-wide config                |
+| `Filter`              | Pre- & post-processing                 |
+| Listeners             | Event handling (session, request, app) |
+
