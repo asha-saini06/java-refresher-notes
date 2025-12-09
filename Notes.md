@@ -12622,18 +12622,51 @@ Avoid:
 Modern servers (Tomcat 10+) require **jakarta.servlet** package.
 
 ### Summary Table of Servlet API Components
+| Component                                    | Purpose                                 |
+| -------------------------------------------- | --------------------------------------- |
+| **Servlet Interface**                        | Core interface defining lifecycle       |
+| **GenericServlet**                           | Protocol-neutral servlet implementation |
+| **HttpServlet**                              | HTTP-specific servlet class (most used) |
+| **ServletConfig**                            | Per-servlet initialization settings     |
+| **ServletContext**                           | Application-wide settings & metadata    |
+| **ServletRequest**                           | Read client request data                |
+| **ServletResponse**                          | Send response to client                 |
+| **HttpServletRequest / HttpServletResponse** | HTTP-specialized request/response       |
 
-| Component             | Purpose                                |
-| --------------------- | -------------------------------------- |
-| `Servlet`             | Base interface for servlets            |
-| `GenericServlet`      | Protocol-neutral servlet               |
-| `HttpServlet`         | HTTP servlet modern apps use           |
-| `ServletRequest`      | Read request data                      |
-| `HttpServletRequest`  | HTTP-specific request                  |
-| `ServletResponse`     | Write output                           |
-| `HttpServletResponse` | HTTP-specific response                 |
-| `ServletConfig`       | Per-servlet config                     |
-| `ServletContext`      | Application-wide config                |
-| `Filter`              | Pre- & post-processing                 |
-| Listeners             | Event handling (session, request, app) |
+## 80. Steps to create a Servlet
+To create a Servlet application you need to follow the below mentioned steps. These steps are common for all the Web server. 
+
+These steps are as follows:
+1. Create directory structure for your application.
+2. Create a Servlet
+3. Compile the Servlet (load `servlet-api.jar`, in case of Apache Tomcat Server)
+4. Create Deployement Descriptor for your application (`web.xml` file)
+5. Start the server and deploy the application
+
+### Creating a Servlet
+There are three different ways to create a servlet.
+
+- By implementing Servlet interface
+- By extending GenericServlet class
+- By extending HttpServlet class
+
+But mostly a servlet is created by extending **HttpServlet** abstract class. As discussed earlier **HttpServlet** gives the definition of `service()` method of the **Servlet** interface. The servlet class that we will create should not override `service()` method. Our servlet class will override only `doGet()` or `doPost()` method.
+
+When a request comes in for the servlet, the Web Container calls the servlet's `service()` method and depending on the type of request the `service()` method calls either the `doGet()` or `doPost()` method.
+
+> **NOTE**: By default a request is **Get** request.
+
+### Compiling a Servlet
+To compile a Servlet a JAR file is required. Different servers require different JAR files. In Apache Tomcat server `servlet-api.jar` file is required to compile a servlet class.
+
+> **NOTE**: After compiling your Servlet class you will have to paste the class file into WEB-INF/classes/ directory.
+
+### Create Deployment Descriptor
+**Deployment Descriptor(DD)** is an XML document that is used by Web Container to run Servlets and JSP pages. DD is used for several important purposes such as:
+
+- Mapping URL to Servlet class.
+- Initializing parameters.
+- Defining Error page.
+- Security roles.
+- Declaring tag libraries.
 
