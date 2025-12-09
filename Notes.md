@@ -11821,6 +11821,17 @@ User → LoginServlet → UserDAO → LoginServlet → login.jsp
 The **Servlet Interface** is the *core* interface in Java Servlet API.
 All servlets **must** implement this interface—directly or indirectly.
 
+Every servlet in Java (GenericServlet, HttpServlet, custom servlets) is ultimately based on this interface.
+
+It defines the **lifecycle methods** that the servlet container (Tomcat, Jetty, etc.) uses to manage a servlet's lifecycle.
+
+Servlet Interface belongs to:
+
+```
+jakarta.servlet.Servlet     (Jakarta EE 9+)
+javax.servlet.Servlet       (Java EE 8 and earlier)
+```
+
 Most developers extend:
 
 * **`GenericServlet`** (for protocol-independent servlets)
@@ -11831,6 +11842,16 @@ But internally, **everything starts from the `Servlet` interface**.
 ### What is the `Servlet` Interface?
 
 It is the root interface inside the `javax.servlet` package.
+
+The Servlet Interface provides the **basic contract** between a servlet and the servlet container.
+
+It defines **5 abstract methods**, and **every servlet must implement these methods**, either directly or through a parent class like GenericServlet or HttpServlet.
+
+Most developers do **not** implement Servlet directly.
+Instead, they extend:
+
+* `GenericServlet` (protocol-independent)
+* `HttpServlet` (HTTP-specific)
 
 ```java
 public interface Servlet {
@@ -11845,7 +11866,7 @@ public interface Servlet {
 
 Any servlet must implement these **5 lifecycle methods**.
 
-### **Servlet Interface Methods**
+### Methods of Servlet Interface
 
 **1. `init(ServletConfig config)`**
 
@@ -11869,8 +11890,7 @@ public void init(ServletConfig config) throws ServletException {
 
 Called **for every request** by container.
 
-* Handles client request
-* Generates response
+* Handles both **request processing** and **response generation**.
 * For HttpServlet, this method internally calls:
 
   * `doGet()` for GET request
@@ -11900,9 +11920,9 @@ public void destroy() {
 }
 ```
 
-**4. `getServletConfig()`**
+**4. `ServletConfig getServletConfig()`**
 
-Returns the **ServletConfig object** created by the container.
+Returns the **ServletConfig object**, which contains configuration data defined in `web.xml` or via annotations.
 
 Useful to get initialization parameters:
 
@@ -11911,13 +11931,15 @@ ServletConfig config = getServletConfig();
 String name = config.getInitParameter("username");
 ```
 
-**5. `getServletInfo()`**
+**5. `String getServletInfo()`**
 
 Returns metadata about servlet such as:
 
 * Author
 * Version
 * Copyright
+
+Not commonly used.
 
 ```java
 public String getServletInfo() {
@@ -11948,6 +11970,32 @@ public String getServletInfo() {
 ```
 
 Lifecycle managed by the **Servlet Container** (Tomcat, Jetty, GlassFish).
+
+❓ **Why Developers Don’t Implement Servlet Interface Directly?**
+
+▶ Because it requires writing **all 5 methods manually**, which is unnecessary.
+
+Instead:
+
+ ⭐ Extend `GenericServlet`
+* Only implement `service()`
+* Used for non-HTTP protocols (rare)
+
+ ⭐ Extend `HttpServlet` (most common)
+* Implement `doGet()`, `doPost()`, etc.
+* No need to handle `service()`, `init()`, or `destroy()`
+
+### Servlet Interface to HttpServlet
+
+```
+Servlet (Interface)
+      ↑ implements
+GenericServlet (Class)
+      ↑ extends
+HttpServlet (Class)
+```
+
+This hierarchy allows you to override only what you need.
 
 #### Quick Comparison: Servlet Interface vs GenericServlet vs HttpServlet
 
@@ -12083,18 +12131,34 @@ Using **web.xml**:
 * `destroy()` is called once when the servlet is being taken out of service (server shutdown or redeployment).
 * Servlets are **platform and server independent** because the container handles environment differences.
 
-❓: **Why We Don’t Usually Implement Servlet Interface Directly**
+**Example: Implementing Servlet Interface (Not recommended in real apps)**
 
-▶ Most developers extend **HttpServlet** because:
-- Implementing `Servlet` requires writing all 5 methods manually.
-- `HttpServlet` gives:
-    - doGet()
-    - doPost()
-    - doPut()
-    - doDelete()
-    - doHead()
-    - doOptions()
-    - doTrace()
+```java
+public class MyServlet implements Servlet {
+    public void init(ServletConfig config) { }
+    public void service(ServletRequest req, ServletResponse res) { }
+    public void destroy() { }
+    public ServletConfig getServletConfig() { return null; }
+    public String getServletInfo() { return "MyServlet"; }
+}
+```
+
+**Example: Recommended Approach — Extend HttpServlet**
+
+```java
+public class MyHttpServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) {
+        res.getWriter().println("Hello from GET!");
+    }
+}
+```
+---
+
+* Servlet Interface defines the **lifecycle contract**.
+* `init()` → called once
+* `service()` → called for every request
+* `destroy()` → called once before shutdown
+* Developers use **HttpServlet** instead of implementing Servlet directly.
 
 ## 78. Content Types in HTTP and MIME
 
@@ -12572,161 +12636,4 @@ Modern servers (Tomcat 10+) require **jakarta.servlet** package.
 | `ServletContext`      | Application-wide config                |
 | `Filter`              | Pre- & post-processing                 |
 | Listeners             | Event handling (session, request, app) |
-
-## 80. Servlet Interface
-The **Servlet Interface** is the **root interface** in the Servlet API.
-Every servlet in Java (GenericServlet, HttpServlet, custom servlets) is ultimately based on this interface.
-
-It defines the **lifecycle methods** that the servlet container (Tomcat, Jetty, etc.) uses to manage a servlet's lifecycle.
-
-Servlet Interface belongs to:
-
-```
-jakarta.servlet.Servlet     (Jakarta EE 9+)
-javax.servlet.Servlet       (Java EE 8 and earlier)
-```
-
-### **What is the Servlet Interface?**
-
-The Servlet Interface provides the **basic contract** between a servlet and the servlet container.
-
-It defines **5 abstract methods**, and **every servlet must implement these methods**, either directly or through a parent class like GenericServlet or HttpServlet.
-
-Most developers do **not** implement Servlet directly.
-Instead, they extend:
-
-* `GenericServlet` (protocol-independent)
-* `HttpServlet` (HTTP-specific)
-
-### Methods of Servlet Interface
-
-These are the **five core lifecycle methods**:
-
-**1. `void init(ServletConfig config)`**
-
-Called **only once** when the servlet is first loaded.
-
-Used for:
-
-* initialization tasks
-* reading config values
-* allocating resources
-
-```java
-public void init(ServletConfig config) {
-    // initialization code
-}
-```
-
-**2. `void service(ServletRequest req, ServletResponse res)`**
-
-Called **for every request** received by the servlet.
-
-This is the **heart of the servlet**.
-
-* Handles both **request processing** and **response generation**.
-* In HttpServlet, `service()` internally calls `doGet()`, `doPost()`, etc.
-
-```java
-public void service(ServletRequest req, ServletResponse res) {
-    // request processing
-}
-```
-
-**3. `void destroy()`**
-
-Called **once** when the servlet is being removed from memory.
-
-Used to:
-
-* close database connections
-* release resources
-* cleanup work
-
-```java
-public void destroy() {
-    // cleanup code
-}
-```
-
-**4. `ServletConfig getServletConfig()`**
-
-Returns the **ServletConfig object**, which contains configuration data defined in `web.xml` or via annotations.
-
-**5. `String getServletInfo()`**
-
-Returns metadata about the servlet such as:
-
-* author
-* version
-* copyright
-
-Not commonly used.
-
----
-
-### Servlet Lifecycle Summary
-
-```
-Servlet Loaded → init() → service() for each request → destroy()
-```
-
----
-
-❓ **Why Developers Don’t Implement Servlet Interface Directly?**
-
-▶ Because it requires writing **all 5 methods manually**, which is unnecessary.
-
-Instead:
-
- ⭐ Extend `GenericServlet`
-* Only implement `service()`
-* Used for non-HTTP protocols (rare)
-
- ⭐ Extend `HttpServlet` (most common)
-* Implement `doGet()`, `doPost()`, etc.
-* No need to handle `service()`, `init()`, or `destroy()`
-
-
-### Diagram: Servlet Interface to HttpServlet
-
-```
-Servlet (Interface)
-      ↑ implements
-GenericServlet (Class)
-      ↑ extends
-HttpServlet (Class)
-```
-
-This hierarchy allows you to override only what you need.
-
-**Example: Implementing Servlet Interface (Not recommended in real apps)**
-
-```java
-public class MyServlet implements Servlet {
-    public void init(ServletConfig config) { }
-    public void service(ServletRequest req, ServletResponse res) { }
-    public void destroy() { }
-    public ServletConfig getServletConfig() { return null; }
-    public String getServletInfo() { return "MyServlet"; }
-}
-```
-
-**Example: Recommended Approach — Extend HttpServlet**
-
-```java
-public class MyHttpServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) {
-        res.getWriter().println("Hello from GET!");
-    }
-}
-```
-
----
-
-* Servlet Interface defines the **lifecycle contract**.
-* `init()` → called once
-* `service()` → called for every request
-* `destroy()` → called once before shutdown
-* Developers use **HttpServlet** instead of implementing Servlet directly.
 
