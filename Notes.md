@@ -12670,3 +12670,101 @@ To compile a Servlet a JAR file is required. Different servers require different
 - Security roles.
 - Declaring tag libraries.
 
+## 81. Filters & Listeners in Servlet API
+
+### Filters in Servlets
+
+A **Filter** is an object that intercepts incoming requests and outgoing responses **before** they reach the servlet or **after** the servlet processes them.
+
+### Uses of Filters
+
+* Authentication / Authorization
+* Logging & auditing
+* Request validation
+* Compression
+* Image / content optimization
+* CORS handling
+* Character encoding
+
+### Filter Lifecycle
+
+Filter implements these methods:
+
+```java
+init()
+doFilter()
+destroy()
+```
+
+### How a Filter Works
+
+```
+Client → Filter → Servlet → Response → Filter → Client
+```
+
+### Filter Configuration
+
+#### Using web.xml
+
+```xml
+<filter>
+   <filter-name>AuthFilter</filter-name>
+   <filter-class>com.app.AuthFilter</filter-class>
+</filter>
+
+<filter-mapping>
+   <filter-name>AuthFilter</filter-name>
+   <url-pattern>/secure/*</url-pattern>
+</filter-mapping>
+```
+
+#### Using Annotations
+
+```java
+@WebFilter("/secure/*")
+public class AuthFilter implements Filter { }
+```
+
+### Listeners in Servlet API
+
+Listeners allow your application to react to **events** happening in the server environment.
+
+### Types of Listeners
+
+| Listener Type            | Purpose / Triggered When…            |
+| ------------------------ | ------------------------------------ |
+| `ServletContextListener` | App starts or stops                  |
+| `HttpSessionListener`    | Session created / destroyed          |
+| `ServletRequestListener` | Request enters / leaves container    |
+| Attribute Listeners      | Attributes added, removed or changed |
+
+### Common Use Cases
+
+* Count active users (session listener)
+* Load configuration on app start
+* Free resources on shutdown
+* Track request times or logs
+* Maintain statistics
+
+**Example: ServletContextListener**
+
+```java
+public class AppListener implements ServletContextListener {
+    public void contextInitialized(ServletContextEvent e) {
+        System.out.println("App Started");
+    }
+
+    public void contextDestroyed(ServletContextEvent e) {
+        System.out.println("App Stopped");
+    }
+}
+```
+
+### Difference Between Filters & Listeners
+
+| Feature        | Filter                       | Listener                           |
+| -------------- | ---------------------------- | ---------------------------------- |
+| Purpose        | Intercept requests/responses | Respond to events                  |
+| Sequence       | Before/After servlet         | No direct request/response control |
+| Examples       | Auth, logging, encoding      | Session count, app startup         |
+| Controls flow? | Yes (can block request)      | No                                 |
