@@ -12670,7 +12670,7 @@ To compile a Servlet a JAR file is required. Different servers require different
 - Security roles.
 - Declaring tag libraries.
 
-## 81. Filters & Listeners in Servlet API
+## 81. Filters and Listeners in Servlet API
 
 ### Filters in Servlets
 
@@ -12768,3 +12768,171 @@ public class AppListener implements ServletContextListener {
 | Sequence       | Before/After servlet         | No direct request/response control |
 | Examples       | Auth, logging, encoding      | Session count, app startup         |
 | Controls flow? | Yes (can block request)      | No                                 |
+
+## 82. HttpServlet Class
+`HttpServlet` is the most widely used class in the Servlet API. It provides built-in support for handling **HTTP requests** such as GET, POST, PUT, DELETE, etc. Almost every servlet you create in modern web applications extends `HttpServlet`.
+
+`HttpServlet` belongs to the package:
+
+```
+jakarta.servlet.http
+```
+
+It simplifies web development by providing **HTTP-specific methods**, so developers don’t need to manually check request types or implement protocol logic.
+
+### What is HttpServlet
+
+`HttpServlet` is an **abstract class** that extends `GenericServlet` and provides methods to handle HTTP protocol requests.
+
+Most web applications use `HttpServlet` because:
+
+* Browsers communicate using **HTTP/HTTPS**
+* It supports all HTTP methods
+* It provides built-in session, cookie, header, and request handling features
+* It simplifies creating REST-style endpoints
+
+### HttpServlet Class Hierarchy
+
+```
+Object  
+   ↳ GenericServlet  
+        ↳ HttpServlet  
+```
+
+### **Important Methods in HttpServlet**
+**1. `service()`**
+
+Handles every request coming from the client.
+
+Internally, it calls the respective `doXxx()` method based on request type:
+
+| HTTP Method | Called Method |
+| ----------- | ------------- |
+| GET         | `doGet()`     |
+| POST        | `doPost()`    |
+| PUT         | `doPut()`     |
+| DELETE      | `doDelete()`  |
+| HEAD        | `doHead()`    |
+| OPTIONS     | `doOptions()` |
+| TRACE       | `doTrace()`   |
+
+You rarely override `service()` manually.
+
+**2. `doGet()`**
+
+Used to handle **GET** requests.
+Commonly used for:
+
+* Displaying pages
+* Fetching data
+* URL query parameters
+
+Example:
+
+```java
+protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+        throws IOException {
+    resp.getWriter().println("This is GET request");
+}
+```
+**3. `doPost()`**
+
+Used to handle **POST** requests.
+Commonly used for:
+
+* Submitting forms (login, registration)
+* Sending JSON data
+* Posting files
+
+Example:
+
+```java
+protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+        throws IOException {
+    resp.getWriter().println("This is POST request");
+}
+```
+
+**4. `doPut()` and `doDelete()`**
+
+They support REST API behaviors:
+
+* `doPut()` updates a resource
+* `doDelete()` deletes a resource
+
+Used mostly in API development (not JSP/HTML forms).
+
+**5. `doHead()`**
+
+Sends only headers, no response body.
+
+**6. `doOptions()`**
+
+Lists HTTP methods supported by the servlet.
+
+**7. `doTrace()`**
+
+Echoes back the request header.
+(Disabled by default in many servers for security reasons.)
+
+### **Lifecycle of HttpServlet**
+
+| Phase                | Method                             |
+| -------------------- | ---------------------------------- |
+| **Initialization**   | `init()`                           |
+| **Request handling** | `service()` → `doGet()/doPost()/…` |
+| **Cleanup**          | `destroy()`                        |
+
+The container creates **only one instance** of the servlet and uses **multiple threads** to handle requests.
+
+### **Example of HttpServlet**
+
+```java
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+
+public class HelloServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+
+        resp.setContentType("text/html");
+        resp.getWriter().println("<h1>Hello from HttpServlet!</h1>");
+    }
+}
+```
+
+### **Features Provided by HttpServlet**
+
+✔ Handles all HTTP methods
+✔ Supports session management (`HttpSession`)
+✔ Built-in cookie handling
+✔ Easy access to headers, parameters, paths
+✔ Simplifies REST API development
+✔ Cleaner than using `GenericServlet`
+
+### **Difference Between GenericServlet and HttpServlet**
+
+| Feature         | `GenericServlet`          | `HttpServlet`                       |
+| --------------- | ------------------------- | ----------------------------------- |
+| Protocol        | Protocol-independent      | HTTP-specific                       |
+| Methods         | Must override `service()` | Override `doGet()`, `doPost()` etc. |
+| Usage           | Rare today                | Standard for all web apps           |
+| Session/Cookies | Not supported directly    | Built-in support                    |
+| Typical Use     | Non-HTTP protocols        | Modern web applications             |
+
+### When to Use HttpServlet
+
+Use `HttpServlet` when:
+
+* Building web applications
+* Processing form data
+* Creating REST APIs
+* Handling login/logout
+* Sending or receiving JSON/XML
+
+This class is the **backbone of Java web development**.
+
+
