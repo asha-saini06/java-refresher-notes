@@ -12935,4 +12935,109 @@ Use `HttpServlet` when:
 
 This class is the **backbone of Java web development**.
 
+## 83. GET vs POST
+
+`GET` and `POST` are the two most commonly used **HTTP request methods** in web applications. They differ in **purpose, visibility, security, data size, and how browsers handle them**.
+
+### **What is GET?**
+
+`GET` is used to **request data** from the server.
+
+#### Characteristics of GET
+
+* Data is sent in the **URL** (query string).
+* Used for **fetching data**, not modifying it.
+* Can be **cached** by the browser.
+* Can be **bookmarked**.
+* Has **length limitations** (URL size).
+* More visible, less secure.
+
+#### Typical Uses
+
+* Search queries
+* Pagination
+* Filters
+* Simple form submissions where no sensitive data is involved
+
+#### Example GET request
+
+```
+GET /login?user=Shaurya&city=Delhi HTTP/1.1
+```
+
+### **What is POST?**
+
+`POST` is used to **send data to the server** for processing.
+
+#### Characteristics of POST
+
+* Data is sent in the **request body**, not URL.
+* Used for **form submissions** and actions that **change server data**.
+* Cannot be bookmarked.
+* Not cached by browser (by default).
+* No limit on data size (depends on server settings).
+* Safer than GET (still not encrypted unless HTTPS is used).
+
+#### Typical Uses
+
+* Login form
+* Registration form
+* File upload
+* Sending JSON data
+* Creating resources (REST API)
+
+#### Example POST request
+
+```
+POST /register HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+name=Dhairya&email=mail@example.com
+```
+
+### **Key Differences Between GET and POST**
+
+| Feature             | GET                               | POST                        |
+| ------------------- | --------------------------------- | --------------------------- |
+| Purpose             | Retrieve data                     | Submit data                 |
+| Data Location       | URL query string                  | Request body                |
+| Security            | Less secure (data visible in URL) | More secure than GET        |
+| Caching             | Yes                               | No                          |
+| Bookmarkable        | Yes                               | No                          |
+| Data Length Limit   | Yes (URL length)                  | No                          |
+| Encoding Type       | query string encoding             | form-data, JSON, XML, files |
+| Idempotent          | Yes                               | Not always                  |
+| Use in REST         | Used for **READ**                 | Used for **CREATE/UPDATE**  |
+| Browser Back Button | Safe                              | Re-submission warning       |
+
+### **When to Use What?**
+
+#### Use **GET** when:
+
+✔ Fetching data
+✔ Search operations
+✔ No sensitive information is involved
+✔ Bookmarkable URLs are needed
+
+#### Use **POST** when:
+
+✔ Submitting forms
+✔ Sending sensitive data
+✔ Uploading files
+✔ Creating or modifying data
+✔ Large amounts of data
+
+#### **GET vs POST in Forms**
+
+```html
+<form method="get" action="search">
+```
+
+→ Shows data in URL.
+
+```html
+<form method="post" action="login">
+```
+
+→ Sends sensitive data inside HTTP body.
 
