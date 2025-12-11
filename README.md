@@ -90,11 +90,11 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 79. [Servlet API](Notes.md#79-servlet-api)
 80. [Steps to create a Servlet](Notes.md#80-steps-to-create-a-servlet)
 81. [Filters and Listeners in Servlet API](Notes.md#81-filters-and-listeners-in-servlet-api)
-82. HttpServlet class
-83. GET vs. POST
-84. GenericServlet Class
-85. ServletRequest interface
-86. CRUD in Servlet
+82. [HttpServlet class](Notes.md#82-httpservlet-class)
+83. [GET vs POST](Notes.md#83-get-vs-post)
+84. [GenericServlet Class](Notes.md#84-genericservlet-class)
+85. [ServletRequest interface](Notes.md#85-servletrequest-interface)
+86. [CRUD in Servlet](Notes.md#86-crud-in-servlet)
 87. Servlet Collaborations : RequestDispatcher, sendRedirect
 88. ServletConfig Interface
 89. ServletContext Interface
