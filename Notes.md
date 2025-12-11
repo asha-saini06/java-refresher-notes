@@ -13014,18 +13014,18 @@ name=Dhairya&email=mail@example.com
 
 #### Use **GET** when:
 
-✔ Fetching data
-✔ Search operations
-✔ No sensitive information is involved
-✔ Bookmarkable URLs are needed
+- Fetching data
+- Search operations
+- No sensitive information is involved
+- Bookmarkable URLs are needed
 
 #### Use **POST** when:
 
-✔ Submitting forms
-✔ Sending sensitive data
-✔ Uploading files
-✔ Creating or modifying data
-✔ Large amounts of data
+- Submitting forms
+- Sending sensitive data
+- Uploading files
+- Creating or modifying data
+- Large amounts of data
 
 #### **GET vs POST in Forms**
 
@@ -13041,3 +13041,147 @@ name=Dhairya&email=mail@example.com
 
 → Sends sensitive data inside HTTP body.
 
+## 84. GenericServlet Class
+`GenericServlet` is an **abstract class** provided by the Servlet API that acts as a **general-purpose, protocol-independent** servlet.
+It implements the `Servlet`, `ServletConfig`, and `Serializable` interfaces and provides default implementations for most common methods.
+
+Although modern web apps primarily use `HttpServlet`, understanding `GenericServlet` is important because it forms the **foundation** for servlet development.
+
+### What is GenericServlet?
+
+`GenericServlet` is a **generic (non-HTTP specific)** servlet class that can be used with any protocol (HTTP, FTP, SMTP, etc.).
+It is rarely used directly in web development, but it works as the parent class for `HttpServlet`.
+
+#### Class Declaration
+
+```java
+public abstract class GenericServlet
+        implements Servlet, ServletConfig, Serializable
+```
+
+### Why GenericServlet Exists
+
+Before HTTP became the standard, servlets were intended to support **multiple protocols**.
+`GenericServlet` provides:
+
+* A common servlet structure
+* Lifecycle management
+* Initialization support
+* Access to ServletConfig & ServletContext
+
+`HttpServlet` expands this class for HTTP-specific usage.
+
+### **Key Features of GenericServlet**
+
+✔ **Protocol-Independent**
+
+It is not tied to HTTP.
+(But in practice, almost all implementations use HTTP.)
+
+✔ **Implements All Servlet Methods Except `service()`**
+
+The only abstract method left for the developer:
+
+```java
+public abstract void service(ServletRequest req, ServletResponse res)
+```
+
+You must override this if you extend `GenericServlet`.
+
+✔ **Provides Built-in Access to:**
+
+* `ServletConfig`
+* `ServletContext`
+* Initialization parameters
+* Logging utilities
+
+✔ **Can Be Used for Non-HTTP Applications**
+
+Rare, but valid—like custom socket-based servers.
+
+### Important Methods in GenericServlet
+
+**1. `init()`**
+
+Initializes the servlet.
+
+```java
+public void init(ServletConfig config)
+```
+
+You can override:
+
+```java
+public void init() {
+   // your initialization logic
+}
+```
+
+**2. `service()` (Mandatory Override)**
+
+Handles incoming client requests.
+
+```java
+public abstract void service(ServletRequest req, ServletResponse res)
+```
+
+**3. `destroy()`**
+
+Performs cleanup before shutting down.
+
+**4. `getServletConfig()`**
+
+Returns `ServletConfig` object.
+
+**5. `getServletContext()`**
+
+```java
+ServletContext ctx = getServletContext();
+```
+
+Used for logging, shared attributes, etc.
+
+**6. `log()`**
+
+Logs messages to server logs.
+
+```java
+log("Servlet started");
+```
+
+### Example of GenericServlet
+
+```java
+import jakarta.servlet.*;
+import java.io.IOException;
+
+public class MyGenericServlet extends GenericServlet {
+
+    @Override
+    public void service(ServletRequest req, ServletResponse res)
+            throws IOException {
+
+        res.setContentType("text/html");
+        res.getWriter().println("<h2>Hello from GenericServlet!</h2>");
+    }
+}
+```
+
+### **GenericServlet vs HttpServlet**
+
+| Feature                  | `GenericServlet`          | `HttpServlet`                       |
+| ------------------------ | ------------------------- | ----------------------------------- |
+| Protocol                 | Any protocol              | Only HTTP                           |
+| Methods to override      | Must override `service()` | Override `doGet()`, `doPost()` etc. |
+| Ease of use              | Less convenient           | Much easier for web apps            |
+| Supports session/cookies | No                        | Yes                                 |
+| Usage today              | Rare                      | Standard in web development         |
+
+### When to Use GenericServlet
+
+Use it when:
+
+* You want complete control over the request-handling logic
+* Protocol is not HTTP (very rare today)
+
+Otherwise, **always prefer `HttpServlet`**.
