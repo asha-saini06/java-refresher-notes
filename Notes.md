@@ -13185,3 +13185,305 @@ Use it when:
 * Protocol is not HTTP (very rare today)
 
 Otherwise, **always prefer `HttpServlet`**.
+
+## 85. ServletRequest Interface
+
+`ServletRequest` is a core interface in the Servlet API that represents **client request data** sent to a servlet.
+Every request (HTTP or non-HTTP) enters a servlet through this interface.
+
+It is part of:
+
+```
+jakarta.servlet
+```
+
+For HTTP-specific features, it is extended by `HttpServletRequest`.
+
+### What is ServletRequest?
+
+`ServletRequest` provides methods to:
+
+* Read **request parameters**
+* Read **headers**
+* Access **input stream**
+* Retrieve **attributes**
+* Get **client information**
+* Get **protocol, content type, and content length**
+* Work with **RequestDispatcher**
+
+It acts as a **generic request wrapper**, independent of protocol.
+
+### Main Responsibilities of ServletRequest
+
+✔ Provides client request data
+
+(Parameters, attributes, metadata)
+
+✔ Helps read form fields and query strings
+
+✔ Allows reading raw input stream
+
+(Useful for binary uploads, JSON bodies)
+
+✔ Allows passing data across servlets via attributes
+
+
+### Important Methods of ServletRequest
+
+**1. Parameter Handling**
+
+Used for form data, query strings, etc.
+
+```java
+String getParameter(String name);
+String[] getParameterValues(String name);
+Enumeration<String> getParameterNames();
+```
+
+**2. Reading Request Body**
+
+Used for reading JSON, XML, files, etc.
+
+```java
+BufferedReader getReader();
+ServletInputStream getInputStream();
+```
+
+**3. Attributes (Inter-Servlet Communication)**
+
+Used to pass data between servlets.
+
+```java
+void setAttribute(String name, Object value);
+Object getAttribute(String name);
+void removeAttribute(String name);
+Enumeration<String> getAttributeNames();
+```
+
+**4. Client & Request Metadata**
+
+```java
+String getRemoteAddr();        // Client IP
+String getRemoteHost();        // Client hostname
+int getRemotePort();           // Client port
+String getProtocol();          // HTTP/1.1, etc.
+String getScheme();            // http or https
+String getServerName();        // Server hostname
+int getServerPort();           // Server port
+```
+
+**5. Content Information**
+
+```java
+String getContentType();       // MIME type
+int getContentLength();
+long getContentLengthLong();
+```
+
+**6. Locale Information**
+
+```java
+Locale getLocale();
+Enumeration<Locale> getLocales();
+```
+
+**7. RequestDispatcher Methods**
+
+Used for forwarding request to another resource:
+
+```java
+RequestDispatcher getRequestDispatcher(String path);
+```
+
+**8. Character Encoding**
+
+```java
+String getCharacterEncoding();
+void setCharacterEncoding(String env);
+```
+
+### Relationship with HttpServletRequest
+
+`ServletRequest` is the parent interface of:
+
+```
+HttpServletRequest
+```
+
+That means:
+
+✔ `HttpServletRequest` contains all of `ServletRequest` methods
+
+➕ additional HTTP-specific features:
+
+* Cookies
+* Sessions
+* Headers
+* Methods (GET/POST)
+* URL/URI details
+
+
+### **Common Usage in Servlets**
+
+Example: reading form data
+
+```java
+String name = req.getParameter("username");
+```
+
+Example: forwarding request
+
+```java
+req.getRequestDispatcher("home.jsp").forward(req, res);
+```
+
+Example: setting attributes
+
+```java
+req.setAttribute("message", "Welcome!");
+```
+
+### Summary Table
+
+| Feature     | `ServletRequest`                 |
+| ----------- | -------------------------------- |
+| Protocol    | Generic, non-HTTP specific       |
+| Reads       | Parameters, body, attributes     |
+| Metadata    | Client info, server info         |
+| Streams     | Input stream, reader             |
+| Dispatching | Supports forwarding to resources |
+| Parent of   | `HttpServletRequest`             |
+
+
+---
+
+### HttpServletRequest Interface
+
+`HttpServletRequest` is a **child interface** of `ServletRequest` and is used specifically for **HTTP-based requests**.
+
+While `ServletRequest` is protocol-independent, `HttpServletRequest` adds all the features needed for web applications such as:
+
+* Reading **HTTP headers**
+* Handling **cookies**
+* Managing **sessions**
+* Knowing the **HTTP method** (GET/POST/etc.)
+* Working with **URL / URI details**
+* Processing **query strings**
+* Reading form data and multipart content
+
+It belongs to:
+
+```
+jakarta.servlet.http
+```
+
+#### Why HttpServletRequest Is Important
+
+Every servlet that extends `HttpServlet` automatically receives an object of `HttpServletRequest` in:
+
+```java
+doGet(HttpServletRequest req, HttpServletResponse res)
+doPost(HttpServletRequest req, HttpServletResponse res)
+```
+
+This interface is the backbone of **all request processing** in Java web applications.
+
+#### Features Added by HttpServletRequest
+
+**✔ HTTP Request Method Identification**
+
+```java
+String getMethod();   // GET, POST, PUT, DELETE
+```
+
+**✔ Header Handling**
+
+```java
+String getHeader(String name);
+Enumeration<String> getHeaderNames();
+int getIntHeader(String name);
+long getDateHeader(String name);
+```
+
+**✔ URL and Path Information**
+
+```java
+String getRequestURI();
+StringBuffer getRequestURL();
+String getContextPath();
+String getServletPath();
+String getQueryString();
+```
+
+These are heavily used in routing and resource mapping.
+
+**✔ Cookie Management**
+
+```java
+Cookie[] getCookies();
+```
+
+**✔ Session Management**
+
+```java
+HttpSession getSession();
+HttpSession getSession(boolean create);
+```
+
+This supports login systems, user tracking, shopping carts, etc.
+
+
+**✔ HTTP-Specific Attributes**
+
+```java
+String getAuthType();
+String getRemoteUser();
+boolean isUserInRole(String role);
+Principal getUserPrincipal();
+```
+
+Useful for authentication and security.
+
+**✔ Multipart/Form Data Handling**
+
+Used for file uploads (Servlet 3.0+):
+
+```java
+Collection<Part> getParts();
+Part getPart(String name);
+```
+
+#### **Comparison: ServletRequest vs HttpServletRequest**
+
+| Feature          | ServletRequest | HttpServletRequest |
+| ---------------- | -------------- | ------------------ |
+| Protocol         | Generic        | HTTP-specific      |
+| Input Stream     | ✔              | ✔                  |
+| Parameters       | ✔              | ✔                  |
+| Headers          | ❌              | ✔                  |
+| Cookies          | ❌              | ✔                  |
+| Sessions         | ❌              | ✔                  |
+| HTTP Method      | ❌              | ✔                  |
+| URL/URI Info     | Limited        | Full support       |
+| Multipart Upload | Limited        | ✔                  |
+
+
+#### Example Usage in Servlet
+
+```java
+protected void doGet(HttpServletRequest req, HttpServletResponse res)
+        throws IOException {
+
+    String name = req.getParameter("user");
+    String method = req.getMethod();
+    String agent = req.getHeader("User-Agent");
+    HttpSession session = req.getSession();
+
+    res.getWriter().println("User: " + name);
+}
+```
+
+---
+
+`HttpServletRequest` enhances `ServletRequest` by adding all essential **web, browser, and HTTP-related functionalities**, making it the core API used in modern Java web applications.
+
