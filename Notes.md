@@ -13662,6 +13662,7 @@ Database → DAO → Servlet → JSP (Result)
 ---
 
 ❓: **What is SQL Injection?**
+
 ▶ SQL Injection is a way attackers trick your application into running harmful database commands by typing malicious input into form fields like:
 - Login username
 - Password
@@ -13673,3 +13674,172 @@ Instead of normal data, they send SQL code.
 > **SQL Injection = User input behaving like SQL code**
 
 > **SQL Injection** is a security vulnerability where an attacker injects malicious SQL statements into an application’s input fields to manipulate or access the database illegally.
+
+## 87. Servlet Collaborations: `RequestDispatcher` and `sendRedirect`
+
+In a Java web application, **servlet collaboration** means **one servlet or resource working with another** to process a request or generate a response.
+
+The Servlet API provides **two main ways** for servlets to collaborate:
+
+1. **`RequestDispatcher`**
+2. **`sendRedirect()`**
+
+---
+
+### 1. `RequestDispatcher`
+
+`RequestDispatcher` is used to **forward a request** from one servlet to another resource **within the same server**.
+
+It belongs to:
+
+```
+jakarta.servlet
+```
+
+#### Key Characteristics
+
+* Works **inside the server**
+* Browser **does not know** about the forwarding
+* **Same request and response objects** are shared
+* Faster than redirect
+* Can forward to:
+
+  * Another servlet
+  * JSP
+  * HTML resource
+
+#### Types of RequestDispatcher Operations
+
+**a) `forward()`**
+
+Transfers control from one servlet to another resource.
+
+```java
+RequestDispatcher rd = req.getRequestDispatcher("home.jsp");
+rd.forward(req, res);
+```
+
+- URL in browser **remains same**
+- Request attributes are preserved
+- Used in MVC (Controller → View)
+
+**b) `include()`**
+
+Includes content of another resource in the response.
+
+```java
+RequestDispatcher rd = req.getRequestDispatcher("header.jsp");
+rd.include(req, res);
+```
+
+- Used for common content (header, footer)
+- Response is **combined**
+
+#### Example: Forwarding Data
+
+```java
+req.setAttribute("msg", "Welcome Asha");
+RequestDispatcher rd = req.getRequestDispatcher("welcome.jsp");
+rd.forward(req, res);
+```
+
+### 2. `sendRedirect()`
+
+`sendRedirect()` is used to **redirect the client (browser)** to a **new URL**.
+
+It belongs to:
+
+```
+jakarta.servlet.http.HttpServletResponse
+```
+
+**Syntax:**
+
+```java
+res.sendRedirect("login.jsp");
+```
+
+#### How sendRedirect Works
+
+1. Server sends **HTTP 302** response
+2. Browser receives new URL
+3. Browser sends **new request** to that URL
+
+🚨 **New request is created**
+
+#### Key Characteristics
+
+* Browser **URL changes**
+* Request data is **lost**
+* Slower (extra request)
+* Can redirect to:
+
+  * Same server
+  * Different server
+  * External sites
+
+**Example:**
+
+```java
+res.sendRedirect("https://google.com");
+```
+
+### Comparison: RequestDispatcher vs sendRedirect
+
+| Feature                 | RequestDispatcher             | sendRedirect                |
+| ----------------------- | ----------------------------- | --------------------------- |
+| Works at                | Server-side                   | Client-side (browser)       |
+| Number of requests      | 1                             | 2                           |
+| URL change in browser   | ❌ No                          | ✔ Yes                       |
+| Request object shared   | ✔ Yes                         | ❌ No                        |
+| Request attributes kept | ✔ Yes                         | ❌ No                        |
+| Performance             | Faster                        | Slower                      |
+| External redirection    | ❌ No                          | ✔ Yes                       |
+| Typical use             | MVC flow, internal forwarding | Login redirect, PRG pattern |
+
+### When to Use What?
+
+#### Use **RequestDispatcher** when:
+
+* Forwarding to JSP
+* Passing data between servlets
+* Implementing MVC architecture
+* Keeping URL unchanged
+
+#### Use **sendRedirect()** when:
+
+* Redirecting after form submission
+* Avoiding duplicate form submission
+* Redirecting to another application or site
+* Changing browser URL
+
+### Real-World Example
+
+#### Login Success (Forward)
+
+```java
+RequestDispatcher rd = req.getRequestDispatcher("dashboard.jsp");
+rd.forward(req, res);
+```
+
+#### Login Failure (Redirect)
+
+```java
+res.sendRedirect("login.jsp?error=true");
+```
+
+### One-Line Memory Trick 🧠
+
+> **forward = server work (same request)**
+>
+> **redirect = browser trip (new request)**
+
+---
+
+Servlet collaboration allows multiple resources to work together using:
+
+* **RequestDispatcher** → internal server-side forwarding
+* **sendRedirect()** → client-side redirection
+
+Both are essential for building **structured, scalable Java web applications**.
+
