@@ -95,23 +95,23 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 84. [GenericServlet Class](Notes.md#84-genericservlet-class)
 85. [ServletRequest interface](Notes.md#85-servletrequest-interface)
 86. [CRUD in Servlet](Notes.md#86-crud-in-servlet)
-87. Servlet Collaborations : RequestDispatcher, sendRedirect
-88. ServletConfig Interface
-89. ServletContext Interface
-90. Attribute in Servlet
-91. State Management
-92. Session Tracking in Servlets
-93. Servlet with Annotation
-94. HTTP Session
-95. Cookie Class
-96. Hidden Form Field
-97. Lambda Expression
-98. HashMap
-99. CAPTCHA
-100. MD5
-101. JSP
-102. JSP Implicit Objects
-103. Types of JSP tags
-104. EL (Expression Language)
-105. JSP Lifecycle
-106. JSP Elements
+87. [Servlet Collaborations : RequestDispatcher and sendRedirect](Notes.md#87-servlet-collaborations-requestdispatcher-and-sendredirect)
+88. [ServletConfig Interface](Notes.md#88-servletconfig-interface)
+89. [ServletContext Interface](Notes.md#89-servletcontext-interface)
+90. [Attribute in Servlet](Notes.md#90-attribute-in-servlet)
+91. [State Management](Notes.md#91-state-management)
+92. [Session Tracking in Servlets](Notes.md#92-session-tracking-in-servlets)
+93. [Servlet with Annotation](Notes.md#93-servlet-with-annotation)
+94. [HTTP Session](Notes.md#94-http-session)
+95. [Cookie Class](Notes.md#95-cookie-class)
+96. [Hidden Form Field](Notes.md#96-hidden-form-field)
+97. [Lambda Expression](Notes.md#97-lambda-expression)
+98. [HashMap](Notes.md#98-hashmap)
+99. [CAPTCHA](Notes.md#99-captcha)
+100. [MD5](Notes.md#100-md5)
+101. [JavaServer Pages (JSP)](Notes.md#101-javaserver-pages-jsp)
+102. [JSP Implicit Objects](Notes.md#102-jsp-implicit-objects)
+103. [Types of JSP tags](Notes.md#103-types-of-jsp-tags)
+104. [EL (Expression Language)](Notes.md#104-el-expression-language)
+105. [JSP Lifecycle](Notes.md#105-jsp-lifecycle)
+106. [JSP Elements](Notes.md#106-jsp-elements)
