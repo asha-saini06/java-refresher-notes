@@ -13487,3 +13487,189 @@ protected void doGet(HttpServletRequest req, HttpServletResponse res)
 
 `HttpServletRequest` enhances `ServletRequest` by adding all essential **web, browser, and HTTP-related functionalities**, making it the core API used in modern Java web applications.
 
+## 86. CRUD in Servlet
+In Java web applications, **Servlets** handle CRUD operations by:
+
+* Receiving HTTP requests
+* Processing data
+* Interacting with the database (via JDBC / DAO)
+* Sending responses back to the client
+
+#### CRUD Mapping with HTTP Methods
+
+| CRUD Operation | Purpose         | HTTP Method  | Servlet Method           |
+| -------------- | --------------- | ------------ | ------------------------ |
+| **Create**     | Insert new data | POST         | `doPost()`               |
+| **Read**       | Fetch data      | GET          | `doGet()`                |
+| **Update**     | Modify data     | PUT / POST   | `doPut()` / `doPost()`   |
+| **Delete**     | Remove data     | DELETE / GET | `doDelete()` / `doGet()` |
+
+> In traditional JSP/HTML forms, **GET** and **POST** are most commonly used.
+
+### Typical CRUD Architecture in Servlet
+
+```
+Browser
+   ↓
+Servlet (Controller)
+   ↓
+DAO / JDBC
+   ↓
+Database
+   ↑
+Servlet → JSP (Response)
+```
+
+#### **1. CREATE (Insert Data)**
+
+Used to add new records into the database.
+
+**HTTP Method:** POST
+**Servlet Method:** `doPost()`
+
+**Example: Insert User**
+
+```java
+protected void doPost(HttpServletRequest req, HttpServletResponse res)
+        throws IOException {
+
+    String name = req.getParameter("name");
+    String email = req.getParameter("email");
+
+    UserDAO dao = new UserDAO();
+    dao.insertUser(name, email);
+
+    res.sendRedirect("success.jsp");
+}
+```
+
+#### **2. READ (Fetch Data)**
+
+Used to retrieve data from the database.
+
+**HTTP Method:** GET
+**Servlet Method:** `doGet()`
+
+**Example: Fetch All Users**
+
+```java
+protected void doGet(HttpServletRequest req, HttpServletResponse res)
+        throws ServletException, IOException {
+
+    UserDAO dao = new UserDAO();
+    List<User> users = dao.getAllUsers();
+
+    req.setAttribute("users", users);
+    req.getRequestDispatcher("users.jsp").forward(req, res);
+}
+```
+
+#### **3. UPDATE (Modify Data)**
+
+Used to update existing records.
+
+**HTTP Method:** PUT / POST
+**Servlet Method:** `doPut()` or `doPost()`
+
+**Example: Update User**
+
+```java
+protected void doPost(HttpServletRequest req, HttpServletResponse res)
+        throws IOException {
+
+    int id = Integer.parseInt(req.getParameter("id"));
+    String name = req.getParameter("name");
+
+    UserDAO dao = new UserDAO();
+    dao.updateUser(id, name);
+
+    res.sendRedirect("viewUsers");
+}
+```
+
+#### **4. DELETE (Remove Data)**
+
+Used to delete records.
+
+**HTTP Method:** DELETE / GET
+**Servlet Method:** `doDelete()` or `doGet()`
+
+**Example: Delete User**
+
+```java
+protected void doGet(HttpServletRequest req, HttpServletResponse res)
+        throws IOException {
+
+    int id = Integer.parseInt(req.getParameter("id"));
+
+    UserDAO dao = new UserDAO();
+    dao.deleteUser(id);
+
+    res.sendRedirect("viewUsers");
+}
+```
+
+### DAO Layer (Recommended Practice)
+
+Servlets should **not directly contain JDBC logic**.
+
+**DAO (Data Access Object)** handles database operations.
+
+```java
+public class UserDAO {
+
+    public void insertUser(String name, String email) {
+        // JDBC insert logic
+    }
+
+    public List<User> getAllUsers() {
+        // JDBC select logic
+    }
+
+    public void updateUser(int id, String name) {
+        // JDBC update logic
+    }
+
+    public void deleteUser(int id) {
+        // JDBC delete logic
+    }
+}
+```
+
+### CRUD Using JSP + Servlet Flow
+
+```
+JSP Form → Servlet → DAO → Database
+Database → DAO → Servlet → JSP (Result)
+```
+
+### Best Practices for CRUD in Servlets
+
+- Use **DAO pattern**
+- Use **PreparedStatement** (prevent SQL Injection)
+- Validate input data
+- Handle exceptions properly
+- Avoid database logic inside JSP
+- Use MVC architecture
+
+| CRUD   | Servlet Role                 |
+| ------ | ---------------------------- |
+| Create | Accept form data → insert DB |
+| Read   | Fetch data → forward to JSP  |
+| Update | Modify existing DB records   |
+| Delete | Remove records from DB       |
+
+---
+
+❓: **What is SQL Injection?**
+▶ SQL Injection is a way attackers trick your application into running harmful database commands by typing malicious input into form fields like:
+- Login username
+- Password
+- Search box
+- URL parameters
+
+Instead of normal data, they send SQL code.
+
+> **SQL Injection = User input behaving like SQL code**
+
+> **SQL Injection** is a security vulnerability where an attacker injects malicious SQL statements into an application’s input fields to manipulate or access the database illegally.
