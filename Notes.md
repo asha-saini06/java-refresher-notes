@@ -13843,3 +13843,151 @@ Servlet collaboration allows multiple resources to work together using:
 
 Both are essential for building **structured, scalable Java web applications**.
 
+## 88. ServletConfig Interface
+The `ServletConfig` interface is part of the **Servlet API** and provides **configuration information** for a specific servlet.
+It is used to read **initialization parameters** defined in `web.xml` (or via annotations), without hard-coding them inside the servlet class.
+
+`ServletConfig` belongs to:
+
+```
+jakarta.servlet
+```
+
+It is created by the **servlet container** and passed to the servlet during initialization.
+
+### Why ServletConfig Exists
+
+When a servlet is loaded, the container can provide **initialization parameters** such as:
+
+* Database connection settings
+* API keys
+* File paths
+* Environment configurations
+
+This makes servlets **configurable and reusable** without modifying Java code.
+
+### How ServletConfig Is Provided
+
+During servlet initialization, the container calls:
+
+```java
+init(ServletConfig config)
+```
+
+The `ServletConfig` object passed here contains:
+
+- Initialization parameters (`<init-param>`)
+- A reference to the `ServletContext`
+
+### Accessing ServletConfig
+
+You can access `ServletConfig` from anywhere inside your servlet using:
+
+```java
+getServletConfig()
+```
+
+This returns the `ServletConfig` object associated with that servlet instance.
+
+### Defining Initialization Parameters
+
+#### Using web.xml (Deployment Descriptor)
+
+```xml
+<servlet>
+    <servlet-name>DBServlet</servlet-name>
+    <servlet-class>com.app.DBServlet</servlet-class>
+
+    <init-param>
+        <param-name>url</param-name>
+        <param-value>jdbc:mysql://localhost:3306/mydb</param-value>
+    </init-param>
+
+    <init-param>
+        <param-name>username</param-name>
+        <param-value>root</param-value>
+    </init-param>
+
+</servlet>
+```
+
+
+### Retrieving Init Parameters in Servlet
+
+```java
+public void init(ServletConfig config) throws ServletException {
+
+    String url = config.getInitParameter("url");
+    String user = config.getInitParameter("username");
+
+    System.out.println("DB URL: " + url);
+    System.out.println("DB User: " + user);
+}
+```
+
+Or directly inside servlet methods:
+
+```java
+String url = getServletConfig().getInitParameter("url");
+```
+
+### Common Methods of ServletConfig
+
+| Method                          | Purpose                                    |
+| ------------------------------- | ------------------------------------------ |
+| `getInitParameter(String name)` | Returns value of a specific init parameter |
+| `getInitParameterNames()`       | Returns all init parameter names           |
+| `getServletContext()`           | Returns the `ServletContext` object        |
+| `getServletName()`              | Returns the logical name of the servlet    |
+
+### **Example Using ServletConfig**
+
+**ServletConfig Example Servlet**
+
+```java
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+
+public class ConfigServlet extends HttpServlet {
+
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        String dbUrl = config.getInitParameter("url");
+        String user = config.getInitParameter("username");
+
+        System.out.println("DB URL: " + dbUrl);
+        System.out.println("User: " + user);
+    }
+
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse res)
+                         throws IOException {
+        res.getWriter().println("ServletConfig example");
+    }
+}
+```
+
+### **ServletConfig vs ServletContext**
+
+| Feature  | ServletConfig              | ServletContext            |
+| -------- | -------------------------- | ------------------------- |
+| Scope    | Only for one servlet       | Entire web application    |
+| Shared   | Not shared across servlets | Shared among all servlets |
+| Used for | Initialization parameters  | App-wide resources & data |
+| Access   | `getServletConfig()`       | `getServletContext()`     |
+
+### Why Use ServletConfig?
+
+- Keeps servlet settings separate from code
+- Makes applications **configurable without recompiling**
+- Useful for credentials, paths, and environment values
+- Keeps code cleaner and easier to maintain
+
+---
+
+* `ServletConfig` gives servlet-specific configuration
+* Parameters are defined in `web.xml` or annotations
+* Used for initialization logic
+* Provides servlet name and access to the context
