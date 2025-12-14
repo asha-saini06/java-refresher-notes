@@ -13991,3 +13991,192 @@ public class ConfigServlet extends HttpServlet {
 * Parameters are defined in `web.xml` or annotations
 * Used for initialization logic
 * Provides servlet name and access to the context
+
+## 89. ServletContext Interface
+`ServletContext` is an interface that represents the **entire web application**.
+It allows servlets to **share information**, access **application-level parameters**, and interact with the **web container**.
+
+It is part of:
+
+```
+jakarta.servlet
+```
+
+Unlike `ServletConfig` (which is **per servlet**), `ServletContext` is **one per web application**.
+
+### What is ServletContext?
+
+`ServletContext` provides a way for:
+
+* Servlets to **communicate with each other**
+* Accessing **global configuration parameters**
+* Managing **shared resources**
+* Interacting with the **container environment**
+
+Think of it as a **common meeting room** for all servlets in a web app 🏢
+
+### Key Characteristics
+
+* One `ServletContext` per web application
+* Created when the application starts
+* Destroyed when the application stops
+* Shared across **all servlets, filters, and listeners**
+
+### How to Get ServletContext
+
+```java
+ServletContext context = getServletContext();
+```
+
+or
+
+```java
+ServletContext context = getServletConfig().getServletContext();
+```
+
+### Uses of ServletContext
+
+- Sharing data between servlets
+- Reading application-wide parameters
+- Logging information
+- Getting real file paths
+- Managing resources
+
+### Important Methods of ServletContext
+
+#### 1. Application Parameters (Global)
+
+Defined in `web.xml`:
+
+```xml
+<context-param>
+    <param-name>dbDriver</param-name>
+    <param-value>com.mysql.cj.jdbc.Driver</param-value>
+</context-param>
+```
+
+Accessing it:
+
+```java
+String driver = context.getInitParameter("dbDriver");
+```
+
+Methods:
+
+```java
+String getInitParameter(String name);
+Enumeration<String> getInitParameterNames();
+```
+
+#### 2. Attribute Handling (Shared Data)
+
+Used for sharing objects across servlets.
+
+```java
+context.setAttribute("appName", "MyWebApp");
+String name = (String) context.getAttribute("appName");
+context.removeAttribute("appName");
+```
+
+Methods:
+
+```java
+void setAttribute(String name, Object value);
+Object getAttribute(String name);
+void removeAttribute(String name);
+Enumeration<String> getAttributeNames();
+```
+
+#### 3. Logging
+
+```java
+context.log("Application started");
+```
+
+Used for server-side logging.
+
+#### 4. Getting Real Path
+
+```java
+String path = context.getRealPath("/images/logo.png");
+```
+
+Useful for accessing files inside the web app.
+
+#### 5. Request Dispatching
+
+```java
+RequestDispatcher rd = context.getRequestDispatcher("/home.jsp");
+rd.forward(req, res);
+```
+
+### ServletContext vs ServletConfig
+
+| Feature         | ServletConfig        | ServletContext                |
+| --------------- | -------------------- | ----------------------------- |
+| Scope           | Single servlet       | Entire web application        |
+| Object count    | One per servlet      | One per web app               |
+| Init parameters | Servlet-specific     | Application-wide              |
+| Data sharing    | ❌ No                 | ✔ Yes                         |
+| Access method   | `getServletConfig()` | `getServletContext()`         |
+| Used for        | Servlet setup        | App-wide configuration & data |
+
+### When to Use ServletContext
+
+Use `ServletContext` when you need to:
+
+* Share data between multiple servlets
+* Store global configuration values
+* Log application-level events
+* Access common resources
+
+### Example Usage
+
+```java
+public class FirstServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) {
+        ServletContext ctx = getServletContext();
+        ctx.setAttribute("count", 1);
+    }
+}
+```
+
+```java
+public class SecondServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) {
+        ServletContext ctx = getServletContext();
+        int count = (int) ctx.getAttribute("count");
+    }
+}
+```
+
+### Common Use Cases
+
+- Application-wide configuration
+- Database connection pooling
+- Caching data
+- Sharing constants
+- Logging
+- Resource access
+
+---
+
+> **ServletContext = Application-wide shared object**
+
+It is heavily used in real-world Java web applications for configuration, caching, and resource management.
+
+| Feature              | ServletContext     |
+| -------------------- | ------------------ |
+| Scope                | Application-wide   |
+| Shared between       | All servlets       |
+| Parameters           | Context parameters |
+| Data storage         | Attributes         |
+| Lifecycle managed by | Servlet Container  |
+| Listener support     | ✔ Yes              |
+
+* `ServletContext` represents the **entire web application**
+* Shared across all servlets
+* Used for global parameters and shared data
+* Lives as long as the application is running
+
+This interface is a **cornerstone for inter-servlet communication** in Java web applications 🌐
