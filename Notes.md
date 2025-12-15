@@ -14548,3 +14548,206 @@ Context → App
 * Cookies are **client-side**
 * Session is **server-side**
 * Application data must be **thread-safe**
+
+## 92. Session Tracking in Servlets
+**Session Tracking** is the mechanism used to **maintain user state** across multiple HTTP requests.
+
+Since **HTTP is stateless**, the server does not remember the user between requests.
+Session tracking helps the server **identify the same user** and **retain data** like login status, preferences, or cart items.
+
+### Why Session Tracking Is Needed
+
+Without session tracking:
+
+* Each request is treated as a **new user**
+* Login information is lost
+* Shopping carts reset
+* Personalization is impossible
+
+So we need a way to **track users across requests**.
+
+### Common Session Tracking Techniques in Servlets
+
+Java Servlets support **four main session tracking techniques**:
+
+| Technique          | Description                |
+| ------------------ | -------------------------- |
+| Cookies            | Client-side storage        |
+| HttpSession        | Server-side session object |
+| URL Rewriting      | Session ID appended to URL |
+| Hidden Form Fields | Hidden input fields        |
+
+#### 1. Cookies
+
+A **cookie** is a small piece of data stored on the **client browser**.
+
+### How It Works
+
+* Server sends cookie → browser stores it
+* Browser sends cookie back with every request
+
+Example:
+
+```java
+Cookie ck = new Cookie("user", "Asha");
+res.addCookie(ck);
+```
+
+Reading cookie:
+
+```java
+Cookie[] cookies = req.getCookies();
+```
+
+**Pros**
+
+✔ Simple
+
+✔ Automatic transmission
+
+**Cons**
+
+❌ Can be disabled by browser
+
+❌ Security concerns
+
+❌ Limited size
+
+📌 **Use case:** Light client-side tracking
+
+#### 2. HttpSession (Most Important)
+
+`HttpSession` is the **most commonly used session tracking technique** in Servlets.
+
+It stores data on the **server side**.
+
+##### Creating / Accessing Session
+
+```java
+HttpSession session = request.getSession();
+```
+
+##### Storing Data
+
+```java
+session.setAttribute("user", "Asha");
+```
+
+##### Retrieving Data
+
+```java
+String user = (String) session.getAttribute("user");
+```
+
+##### Ending Session
+
+```java
+session.invalidate();
+```
+
+**Pros**
+
+✔ Secure (server-side)
+
+✔ Stores complex objects
+
+✔ Easy to use
+
+**Cons**
+
+❌ Uses server memory
+
+📌 **Use case:** Login systems, shopping carts, dashboards
+
+#### 3. URL Rewriting
+
+Session ID is appended to the URL when cookies are disabled.
+
+Example URL:
+
+```
+http://example.com/home;jsessionid=12345
+```
+
+Code:
+
+```java
+res.encodeURL("home.jsp");
+```
+
+### Pros
+
+✔ Works when cookies are disabled
+
+### Cons
+
+❌ Ugly URLs
+
+❌ Security risk (URL sharing)
+
+📌 **Use case:** Backup when cookies are off
+
+#### 4. Hidden Form Fields
+
+Data is stored inside hidden HTML inputs.
+
+```html
+<input type="hidden" name="user" value="Asha">
+```
+
+Retrieved using:
+
+```java
+request.getParameter("user");
+```
+
+### Pros
+
+✔ Simple
+
+### Cons
+
+❌ Works only with forms
+
+❌ Not secure
+
+❌ Manual handling
+
+📌 **Use case:** Small form-based flows
+
+### Comparison of Session Tracking Techniques
+
+| Technique     | Storage | Secure | Persistent | Common Usage |
+| ------------- | ------- | ------ | ---------- | ------------ |
+| Cookies       | Client  | ❌      | Yes        | Low          |
+| HttpSession   | Server  | ✔      | Yes        | Very High    |
+| URL Rewriting | URL     | ❌      | Yes        | Rare         |
+| Hidden Fields | Form    | ❌      | No         | Rare         |
+
+### Session Timeout
+
+Default session timeout can be set in `web.xml`:
+
+```xml
+<session-config>
+    <session-timeout>30</session-timeout>
+</session-config>
+```
+
+(Time in minutes)
+
+### Key Points to Remember
+
+* HTTP is **stateless**
+* Session tracking adds **state**
+* `HttpSession` is the **preferred and safest method**
+* Cookies + HttpSession often work together
+* Always invalidate session on logout
+
+### One-Line Memory Trick
+
+**Session Tracking = remembering the user across requests**
+
+```
+Stateless HTTP + Session Tracking = Stateful Web App
+```
