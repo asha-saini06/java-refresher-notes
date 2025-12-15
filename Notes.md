@@ -14838,8 +14838,6 @@ Access using:
 http://localhost:8080/app/welcome
 ```
 
----
-
 ### URL Pattern Options
 
 ```java
@@ -14874,8 +14872,6 @@ Access parameters:
 ```java
 String driver = getServletConfig().getInitParameter("driver");
 ```
-
----
 
 ### Load Servlet on Startup
 
@@ -14932,4 +14928,191 @@ Use annotations for most cases, `web.xml` only for advanced configurations.
 ### Key Point to Remember
 
 > **Servlet annotations remove the need for `web.xml` by enabling Java-based configuration.**
+
+## 94. HTTP Session
+
+An **HTTP Session** is a mechanism used to **maintain state between multiple requests** from the same user.
+
+Since **HTTP is stateless**, the server does not remember users between requests.
+`HttpSession` helps the server **identify a user and store user-specific data** across multiple requests.
+
+It belongs to:
+
+```
+jakarta.servlet.http
+```
+
+### What is HttpSession?
+
+`HttpSession` is an **interface** that represents a **session between a client (browser) and server**.
+
+A session:
+
+* Starts when a user first accesses the web application
+* Ends when:
+
+  * Session times out
+  * User logs out (session invalidated)
+  * Browser is closed (in many cases)
+
+Each user gets a **unique session ID**.
+
+### Why HttpSession Is Needed
+
+Without session tracking:
+
+* User must log in on every request
+* Shopping cart would be lost on page refresh
+* User preferences cannot be remembered
+
+`HttpSession` solves this by storing data **on the server side**.
+
+### How to Get HttpSession Object
+
+```java
+HttpSession session = request.getSession();
+```
+
+Create session only if it exists:
+
+```java
+HttpSession session = request.getSession(false);
+```
+
+| Method              | Meaning                                     |
+| ------------------- | ------------------------------------------- |
+| `getSession()`      | Returns existing session or creates new one |
+| `getSession(false)` | Returns session only if exists              |
+
+### Storing Data in HttpSession (Session Attributes)
+
+Session data is stored as **attributes (key–value pairs)**.
+
+```java
+session.setAttribute("user", "Asha");
+```
+
+Retrieve data:
+
+```java
+String user = (String) session.getAttribute("user");
+```
+
+Remove attribute:
+
+```java
+session.removeAttribute("user");
+```
+
+### Common Use Cases of HttpSession
+
+✔ User login information
+
+✔ Shopping cart data
+
+✔ User preferences
+
+✔ Authentication status
+
+✔ Temporary user-specific data
+
+### Session Lifetime and Timeout
+
+Default session timeout is set in `web.xml`:
+
+```xml
+<session-config>
+    <session-timeout>30</session-timeout> <!-- minutes -->
+</session-config>
+```
+
+Or programmatically:
+
+```java
+session.setMaxInactiveInterval(1800); // seconds
+```
+
+### Invalidating a Session (Logout)
+
+```java
+session.invalidate();
+```
+
+This:
+
+* Removes all session attributes
+* Destroys the session
+* Generates a new session ID next time
+
+📌 **Used during logout**
+
+### Session ID
+
+Each session has a unique ID:
+
+```java
+String sessionId = session.getId();
+```
+
+Session ID is stored using:
+
+* Cookies (JSESSIONID) ✅
+* URL rewriting (if cookies disabled)
+
+### HttpSession vs Cookies
+
+| Feature   | HttpSession  | Cookies                  |
+| --------- | ------------ | ------------------------ |
+| Storage   | Server-side  | Client-side              |
+| Security  | More secure  | Less secure              |
+| Data size | Large        | Limited (~4KB)           |
+| Lifetime  | Configurable | Browser / expiry         |
+| Usage     | Login, cart  | Remember-me, preferences |
+
+### HttpSession Lifecycle
+
+| Stage        | Description              |
+| ------------ | ------------------------ |
+| Creation     | First request from user  |
+| Usage        | Data stored & retrieved  |
+| Timeout      | Inactivity exceeds limit |
+| Invalidation | Explicit logout          |
+
+---
+
+### HttpSessionListener (Optional)
+
+Used to track session events:
+
+```java
+@WebListener
+public class SessionListener implements HttpSessionListener {
+
+    public void sessionCreated(HttpSessionEvent se) {
+        System.out.println("Session created");
+    }
+
+    public void sessionDestroyed(HttpSessionEvent se) {
+        System.out.println("Session destroyed");
+    }
+}
+```
+
+### Best Practices
+
+✔ Store minimal data in session
+
+✔ Avoid large objects
+
+✔ Always invalidate session on logout
+
+✔ Do not store sensitive data directly
+
+✔ Use HTTPS for session security
+
+### Key Point to Remember
+
+> **HttpSession = Server-side storage for user-specific data**
+
+It is the **backbone of authentication, authorization, and personalization** in Java web applications.
 
