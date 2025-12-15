@@ -14377,4 +14377,174 @@ Config   → Servlet-only
 * Application attributes must be **thread-safe**
 * Use minimal data in session to avoid memory issues
 
+## 91. State Management
+**State Management** in Servlets is the process of **preserving user data (state)** across **multiple HTTP requests**.
 
+### Why State Management Is Needed
+
+HTTP is a **stateless protocol**, which means:
+
+* Each request is treated as **new**
+* Server does **not remember previous requests**
+* User information is lost after every response
+
+But real applications need to remember things like:
+
+* Logged-in user
+* Shopping cart
+* Preferences
+* Session data
+
+👉 **State management solves this problem.**
+
+### What Is State?
+
+**State** = User-related data stored between multiple requests
+
+Example:
+
+```
+Username, Login status, Cart items
+```
+
+### Types of State Management in Servlets
+
+Servlets support **two main types**:
+
+1. **Client-side State Management**
+2. **Server-side State Management**
+
+#### 1. Client-Side State Management
+
+Data is stored **on the client (browser)**.
+
+**a) Cookies**
+
+Small key–value data stored in the browser.
+
+```java
+Cookie ck = new Cookie("user", "Asha");
+response.addCookie(ck);
+```
+
+Retrieve:
+
+```java
+Cookie[] cookies = request.getCookies();
+```
+
+✔ Lightweight
+
+✔ Automatic with browser
+
+❌ Limited size
+
+❌ Not secure (stored on client)
+
+
+**b) URL Rewriting**
+
+State is passed via URL.
+
+```
+profile.jsp?user=Asha
+```
+
+```java
+response.sendRedirect("profile.jsp?user=Asha");
+```
+
+✔ Works when cookies disabled
+
+❌ Visible in URL
+
+❌ Not secure
+
+**c) Hidden Form Fields**
+
+Data stored in hidden input fields.
+
+```html
+<input type="hidden" name="user" value="Asha">
+```
+
+✔ Simple
+
+❌ Only works with forms
+
+❌ Easily manipulated
+
+#### 2. Server-Side State Management
+
+Data is stored **on the server**.
+
+**a) HttpSession (Most Common)**
+
+Stores user data on server per session.
+
+```java
+HttpSession session = request.getSession();
+session.setAttribute("user", "Asha");
+```
+
+Retrieve later:
+
+```java
+String user = (String) session.getAttribute("user");
+```
+
+✔ Secure
+
+✔ Easy to use
+
+✔ Most widely used
+
+❌ Uses server memory
+
+**b) ServletContext (Application Scope)**
+
+Shared across all users.
+
+```java
+ServletContext ctx = getServletContext();
+ctx.setAttribute("count", 100);
+```
+
+✔ Global data
+
+❌ Not user-specific
+
+❌ Must handle thread safety
+
+### Comparison of State Management Techniques
+
+| Technique      | Stored Where | Scope       | Secure | Common Use       |
+| -------------- | ------------ | ----------- | ------ | ---------------- |
+| Cookies        | Client       | Browser     | ❌      | Remember user    |
+| URL Rewriting  | Client       | Request     | ❌      | Tracking         |
+| Hidden Fields  | Client       | Form        | ❌      | Form flow        |
+| HttpSession    | Server       | Per user    | ✔      | Login, cart      |
+| ServletContext | Server       | Application | ✔      | Counters, config |
+
+### Which One Should You Use?
+
+* **Login / Cart / User data** → `HttpSession`
+* **Global counters / config** → `ServletContext`
+* **Lightweight data** → Cookies
+* **Cookies disabled** → URL Rewriting
+
+### One-Line Memory Trick 🧠
+
+```
+Cookies → Client
+Session → User
+Context → App
+```
+
+---
+* HTTP is **stateless**
+* State management keeps user data across requests
+* `HttpSession` is the **most commonly used**
+* Cookies are **client-side**
+* Session is **server-side**
+* Application data must be **thread-safe**
