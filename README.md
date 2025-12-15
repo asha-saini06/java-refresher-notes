@@ -98,7 +98,7 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 87. [Servlet Collaborations : RequestDispatcher and sendRedirect](Notes.md#87-servlet-collaborations-requestdispatcher-and-sendredirect)
 88. [ServletConfig Interface](Notes.md#88-servletconfig-interface)
 89. [ServletContext Interface](Notes.md#89-servletcontext-interface)
-90. [Attribute in Servlet](Notes.md#90-attribute-in-servlet)
+90. [Attributes in Servlet](Notes.md#90-attributes-in-servlet)
 91. [State Management](Notes.md#91-state-management)
 92. [Session Tracking in Servlets](Notes.md#92-session-tracking-in-servlets)
 93. [Servlet with Annotation](Notes.md#93-servlet-with-annotation)
