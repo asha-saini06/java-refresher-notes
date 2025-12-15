@@ -14751,3 +14751,185 @@ Default session timeout can be set in `web.xml`:
 ```
 Stateless HTTP + Session Tracking = Stateful Web App
 ```
+
+## 93. Servlet with Annotation
+
+Servlet annotations were introduced in **Servlet 3.0** to **simplify servlet configuration** by eliminating the need for `web.xml` in most cases.
+
+Using annotations, we can **define servlets, URL mappings, filters, and listeners directly in Java code**.
+
+### What is Servlet Annotation?
+
+A **Servlet Annotation** is a metadata tag placed above a servlet class to:
+
+* Declare a servlet
+* Map URLs
+* Configure initialization parameters
+* Control loading behavior
+
+This makes servlet configuration **easier, cleaner, and less error-prone**.
+
+### Why Use Annotations?
+
+Before annotations, servlet configuration was done in `web.xml`, which had issues like:
+
+* Large XML files
+* Difficult maintenance
+* Duplicate servlet mappings
+* Hard to debug configuration errors
+
+Annotations solve this by keeping **configuration close to code**.
+
+### `@WebServlet` Annotation
+
+`@WebServlet` is used to declare a servlet and define its URL pattern.
+
+**Package:**
+
+```
+jakarta.servlet.annotation
+```
+
+### Basic Syntax
+
+```java
+@WebServlet("/hello")
+public class HelloServlet extends HttpServlet {
+}
+```
+
+This replaces the need for:
+
+```xml
+<servlet>
+    <servlet-name>HelloServlet</servlet-name>
+    <servlet-class>HelloServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>HelloServlet</servlet-name>
+    <url-pattern>/hello</url-pattern>
+</servlet-mapping>
+```
+
+### Example: Servlet Using Annotation
+
+```java
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
+import java.io.IOException;
+
+@WebServlet("/welcome")
+public class WelcomeServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
+            throws IOException {
+
+        res.setContentType("text/html");
+        res.getWriter().println("<h1>Welcome using Annotation!</h1>");
+    }
+}
+```
+
+Access using:
+
+```
+http://localhost:8080/app/welcome
+```
+
+---
+
+### URL Pattern Options
+
+```java
+@WebServlet("/login")
+@WebServlet({"/login", "/signin"})
+@WebServlet("/user/*")
+@WebServlet("*.do")
+```
+
+| Pattern   | Meaning                |
+| --------- | ---------------------- |
+| `/login`  | Exact match            |
+| `/user/*` | All URLs under `/user` |
+| `*.do`    | Extension mapping      |
+
+### Init Parameters Using Annotation
+
+```java
+@WebServlet(
+    urlPatterns = "/db",
+    initParams = {
+        @WebInitParam(name = "driver", value = "com.mysql.cj.jdbc.Driver"),
+        @WebInitParam(name = "url", value = "jdbc:mysql://localhost/db")
+    }
+)
+public class DBServlet extends HttpServlet {
+}
+```
+
+Access parameters:
+
+```java
+String driver = getServletConfig().getInitParameter("driver");
+```
+
+---
+
+### Load Servlet on Startup
+
+```java
+@WebServlet(urlPatterns = "/load", loadOnStartup = 1)
+```
+
+| Value | Meaning                     |
+| ----- | --------------------------- |
+| `0`   | Load when first requested   |
+| `>0`  | Load at application startup |
+
+### Annotations vs `web.xml`
+
+| Feature             | Annotation           | web.xml    |
+| ------------------- | -------------------- | ---------- |
+| Configuration style | Java-based           | XML-based  |
+| Readability         | High                 | Lower      |
+| Maintenance         | Easy                 | Difficult  |
+| Dynamic changes     | ❌ Requires recompile | ✔ Possible |
+| Enterprise control  | Limited              | Better     |
+
+📌 **Best practice:**
+Use annotations for most cases, `web.xml` only for advanced configurations.
+
+### Common Servlet Annotations
+
+| Annotation      | Purpose                       |
+| --------------- | ----------------------------- |
+| `@WebServlet`   | Declare servlet & URL mapping |
+| `@WebFilter`    | Define filters                |
+| `@WebListener`  | Define listeners              |
+| `@WebInitParam` | Init parameters               |
+
+### Important Notes
+
+* Annotations require **Servlet 3.0+**
+* Tomcat 7+ supports annotations
+* If both `web.xml` and annotation exist, **`web.xml` takes priority**
+* No restart needed for mapping changes in annotation-based apps (in dev tools)
+
+### When to Use Servlet Annotations?
+
+✔ Small to medium applications
+
+✔ Quick development
+
+✔ Clean configuration
+
+✔ Reduced XML dependency
+
+❌ Complex enterprise deployments (prefer `web.xml`)
+
+### Key Point to Remember
+
+> **Servlet annotations remove the need for `web.xml` by enabling Java-based configuration.**
+
