@@ -14180,3 +14180,201 @@ It is heavily used in real-world Java web applications for configuration, cachin
 * Lives as long as the application is running
 
 This interface is a **cornerstone for inter-servlet communication** in Java web applications 🌐
+
+## 90. Attributes in Servlet
+
+**Attributes** in Servlets are used to **store data temporarily** and **share information** between different components of a web application such as servlets, JSPs, and filters.
+
+In Java Servlets, an **Attribute** is an object that is stored inside a **request**, **session**, or **application (context)** scope to **share data** between different components of a web application.
+
+Attributes are mainly used to:
+
+* Transfer data between servlets
+* Pass data from servlet to JSP
+* Share data across multiple requests or users
+
+An **attribute** is a **key–value pair**:
+
+```
+Attribute Name  →  Attribute Value (Object)
+```
+
+Example:
+
+```java
+"userName" → "Asha"
+```
+
+Attributes can store **any Java object**.
+
+An attribute is stored as a **key–value pair**:
+
+```java
+setAttribute(String name, Object value)
+getAttribute(String name)
+removeAttribute(String name)
+```
+
+### Attribute Scopes in Servlet
+
+Java web applications provide **four attribute scopes**, based on how long the data lives and who can access it.
+
+| Scope       | Interface/Class Used | Lifetime           |
+| ----------- | -------------------- | ------------------ |
+| Request     | `ServletRequest`     | Single request     |
+| Session     | `HttpSession`        | User session       |
+| Application | `ServletContext`     | Entire application |
+
+#### **1. ServletConfig Attributes – Servlet Scope**
+
+**Scope:** One servlet only
+**Lifetime:** As long as the servlet exists
+
+`ServletConfig` is used to store **servlet-specific data**.
+
+```java
+ServletConfig config = getServletConfig();
+```
+
+✔ Used for initialization parameters
+
+❌ Not shared with other servlets
+
+Example:
+
+```java
+String driver = config.getInitParameter("dbDriver");
+```
+
+📌 **Use case:** Servlet-specific configuration
+
+#### **2. ServletContext Attributes – Application (Context) Scope**
+
+**Scope:** Entire web application
+**Lifetime:** Until application stops
+
+`ServletContext` attributes are **shared across all servlets and JSPs**.
+
+```java
+ServletContext context = getServletContext();
+```
+
+Example:
+
+```java
+context.setAttribute("appName", "My Web App");
+String name = (String) context.getAttribute("appName");
+```
+
+- Scope: **Entire application**
+- Shared globally
+- Use carefully due to thread-safety concerns
+- Ideal for configuration, caching, counters
+
+📌 **Use case:** Application-wide data
+
+#### **3. ServletRequest Attributes – Request Scope**
+
+**Scope:** Single request
+**Lifetime:** Until request is completed
+
+Used when forwarding data from one servlet to another or to JSP.
+
+```java
+request.setAttribute("msg", "Login Successful");
+```
+
+Access in JSP or another servlet:
+
+```java
+String msg = (String) request.getAttribute("msg");
+```
+
+- Scope: **Single request**
+- Lost after response is sent
+- Commonly used with `RequestDispatcher.forward()`
+- Automatically destroyed after response
+
+📌 **Use case:** Passing data during request forwarding
+
+#### **4. HttpSession Attributes – Session Scope**
+
+**Scope:** One user session
+**Lifetime:** Until session expires or is invalidated
+
+Used to store **user-specific data**.
+
+```java
+HttpSession session = request.getSession();
+session.setAttribute("user", "Asha");
+```
+
+Retrieve later:
+
+```java
+String user = (String) session.getAttribute("user");
+```
+
+- Scope: **Per user**
+- Used for login, cart, user preferences
+- Exists until session timeout or invalidation
+- Persists across multiple requests
+
+📌 **Use case:** User authentication, shopping cart
+
+### Scope Mapping (Important)
+
+| Scope Name        | Interface/Class  | Lifetime           |
+| ----------------- | ---------------- | ------------------ |
+| Servlet Scope     | `ServletConfig`  | One servlet        |
+| Application Scope | `ServletContext` | Entire application |
+| Request Scope     | `ServletRequest` | One request        |
+| Session Scope     | `HttpSession`    | One user session   |
+
+
+`ServletConfig` is **Servlet scope**, not page scope
+
+(Page scope is a **JSP concept**, not servlet.)
+
+### Request vs Session vs Application Attributes
+| Feature  | Request          | Session          | Application      |
+| -------- | ---------------- | ---------------- | ---------------- |
+| Scope    | Single request   | One user         | All users        |
+| Lifetime | Very short       | Session duration | App lifetime     |
+| Storage  | `ServletRequest` | `HttpSession`    | `ServletContext` |
+| Use case | Forwarding data  | Login, cart      | Config, caching  |
+
+### Common Use Cases
+
+- Passing data from Servlet to JSP
+- Sharing data between servlets
+- Maintaining user login state
+- Application-level configuration
+- Caching frequently used objects
+
+## When to Use What?
+
+- **Request** → Forwarding data
+- **Session** → User data
+- **Context** → Global/shared data
+- **Config** → Servlet initialization
+
+### Quick Memory Trick
+**Attributes = server-side shared data containers**
+
+```
+Request  → Shortest
+Session  → User-level
+Context  → Global
+Config   → Servlet-only
+```
+
+---
+
+* Attributes store **Objects**, not primitive types directly
+* Attributes are different from **parameters**
+* Request attributes work only with **forward**, not redirect
+* Application attributes must be **thread-safe**
+* Use minimal data in session to avoid memory issues
+
+
