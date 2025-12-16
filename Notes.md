@@ -15401,3 +15401,191 @@ Avoid them for:
 
 > **Hidden Form Fields are a simple client-side way to maintain state using HTML forms, but they are not secure.**
 
+## 97. Lambda Expression
+
+A **Lambda Expression** is a feature introduced in **Java 8** that allows us to write **anonymous functions** in a concise and readable way.
+
+It is mainly used to **implement functional interfaces** (interfaces with only one abstract method).
+
+Lambda expressions help reduce **boilerplate code** and make Java more **functional, expressive, and modern**.
+
+### What is a Lambda Expression?
+
+A **lambda expression** represents a block of code that can be passed around and executed later.
+
+Instead of writing a full class or anonymous class, we can write **compact inline logic**.
+
+**Syntax:**
+
+```
+(parameters) -> { body }
+```
+
+Example:
+
+```java
+(a, b) -> a + b
+```
+
+### Why Lambda Expressions?
+
+Before Java 8, we used **anonymous inner classes**, which were verbose.
+
+**Before Lambda (Anonymous Class):**
+
+```java
+Runnable r = new Runnable() {
+    public void run() {
+        System.out.println("Thread running");
+    }
+};
+```
+
+**With Lambda:**
+
+```java
+Runnable r = () -> System.out.println("Thread running");
+```
+
+✔ Less code
+
+✔ More readable
+
+✔ Cleaner logic
+
+### Functional Interface
+
+A **Functional Interface** is an interface that contains **exactly one abstract method**.
+
+Examples:
+
+* `Runnable`
+* `Callable`
+* `Comparator`
+* `Consumer`
+* `Supplier`
+* `Predicate`
+
+Custom functional interface example:
+
+```java
+@FunctionalInterface
+interface Calculator {
+    int add(int a, int b);
+}
+```
+
+### Lambda Expression with Functional Interface
+
+```java
+Calculator c = (a, b) -> a + b;
+System.out.println(c.add(10, 20));
+```
+
+### Types of Lambda Expressions
+
+#### 1. Lambda with No Parameters
+
+```java
+() -> System.out.println("Hello Lambda");
+```
+
+#### 2. Lambda with One Parameter
+
+```java
+(a) -> a * a
+```
+
+or
+
+```java
+a -> a * a
+```
+
+#### 3. Lambda with Multiple Parameters
+
+```java
+(a, b) -> a + b
+```
+
+#### 4. Lambda with Multiple Statements
+
+```java
+(a, b) -> {
+    int sum = a + b;
+    return sum;
+}
+```
+
+### Lambda Expression with Threads
+
+```java
+new Thread(() -> {
+    System.out.println("Thread running using lambda");
+}).start();
+```
+
+### Lambda Expression with Collections
+
+Example using `forEach()`:
+
+```java
+List<String> list = List.of("Java", "Spring", "Servlet");
+
+list.forEach(item -> System.out.println(item));
+```
+
+### Lambda with Comparator
+
+```java
+List<Integer> nums = Arrays.asList(5, 2, 8, 1);
+
+Collections.sort(nums, (a, b) -> a - b);
+```
+
+### Lambda vs Anonymous Class
+
+| Feature          | Lambda Expression     | Anonymous Class       |
+| ---------------- | --------------------- | --------------------- |
+| Code size        | Very small            | Large                 |
+| Readability      | High                  | Low                   |
+| Boilerplate code | Minimal               | More                  |
+| `this` reference | Refers to outer class | Refers to inner class |
+| Java version     | Java 8+               | All versions          |
+
+### Advantages of Lambda Expressions
+
+✔ Reduces boilerplate code
+
+✔ Improves readability
+
+✔ Enables functional programming
+
+✔ Works well with Streams API
+
+✔ Makes code cleaner and expressive
+
+### Limitations of Lambda Expressions
+
+✘ Works only with **functional interfaces**
+
+✘ Can reduce readability if overused
+
+✘ Debugging can be harder for beginners
+
+### Where Lambda Expressions Are Used
+
+* Collections (`forEach`, `sort`, `filter`)
+* Streams API
+* Multithreading
+* Event handling
+* Functional programming
+* Modern Java frameworks (Spring, etc.)
+
+### Key Points to Remember
+
+* Introduced in **Java 8**
+* Used with **functional interfaces**
+* Syntax uses `->`
+* Makes Java concise and modern
+* Backbone of **Streams API**
