@@ -15116,3 +15116,180 @@ public class SessionListener implements HttpSessionListener {
 
 It is the **backbone of authentication, authorization, and personalization** in Java web applications.
 
+## 95. Cookie Class
+A **Cookie** is a small piece of data stored on the **client’s browser** and sent back to the server with every subsequent request.
+In Servlets, the `Cookie` class is used for **client-side state management**.
+
+Cookies help the server **remember users** between requests.
+
+The `Cookie` class belongs to:
+
+```
+jakarta.servlet.http
+```
+
+### What is a Cookie?
+
+A **Cookie** is a **name–value pair** stored in the browser.
+
+Example:
+
+```
+username = Asha
+```
+
+Cookies are commonly used to:
+
+* Track user sessions
+* Remember login details
+* Store preferences (language, theme)
+* Implement “Remember Me” functionality
+
+### How Cookies Work (Simple Flow)
+
+1. Server creates a cookie
+2. Cookie is sent to browser in response
+3. Browser stores the cookie
+4. Browser sends cookie back with every request
+5. Server reads the cookie
+
+```
+Client → Request
+Server → Response + Cookie
+Client → Stores Cookie
+Client → Sends Cookie in next request
+```
+
+### Creating a Cookie
+
+```java
+Cookie cookie = new Cookie("user", "Asha");
+```
+
+### Sending a Cookie to Client
+
+```java
+response.addCookie(cookie);
+```
+
+### Reading Cookies from Request
+
+```java
+Cookie[] cookies = request.getCookies();
+
+for (Cookie c : cookies) {
+    if (c.getName().equals("user")) {
+        String value = c.getValue();
+    }
+}
+```
+
+### Important Cookie Methods
+
+| Method                 | Description          |
+| ---------------------- | -------------------- |
+| `getName()`            | Returns cookie name  |
+| `getValue()`           | Returns cookie value |
+| `setValue()`           | Updates value        |
+| `setMaxAge(int)`       | Sets cookie lifetime |
+| `getMaxAge()`          | Returns age          |
+| `setPath(String)`      | Sets URL path        |
+| `setSecure(boolean)`   | HTTPS only           |
+| `setHttpOnly(boolean)` | JS access disabled   |
+
+### Cookie Lifetime
+
+#### 1. Session Cookie (Default)
+
+* Stored in browser memory
+* Deleted when browser closes
+
+```java
+cookie.setMaxAge(-1);
+```
+
+#### 2. Persistent Cookie
+
+* Stored on disk
+* Survives browser restart
+
+```java
+cookie.setMaxAge(60 * 60 * 24); // 1 day
+```
+
+#### 3. Delete a Cookie
+
+```java
+cookie.setMaxAge(0);
+response.addCookie(cookie);
+```
+
+### Cookie Path
+
+Defines where the cookie is accessible.
+
+```java
+cookie.setPath("/myapp");
+```
+
+* Limits cookie visibility
+* Improves security
+
+### Security with Cookies
+
+```java
+cookie.setHttpOnly(true); // Prevents JS access
+cookie.setSecure(true);   // HTTPS only
+```
+
+✔ Helps prevent XSS attacks
+
+✔ Recommended for session cookies
+
+### Limitations of Cookies
+
+❌ Stored on client side
+
+❌ Can be disabled by user
+
+❌ Limited size (~4KB)
+
+❌ Less secure than sessions
+
+❌ Sent with every request (bandwidth cost)
+
+### Cookie vs HttpSession
+
+| Feature          | Cookie        | HttpSession    |
+| ---------------- | ------------- | -------------- |
+| Stored at        | Client        | Server         |
+| Security         | Low           | High           |
+| Size limit       | ~4KB          | Large          |
+| Lifetime         | Browser-based | Server-managed |
+| Disabled by user | Yes           | No             |
+| Best for         | Preferences   | Login data     |
+
+### When to Use Cookies
+
+Use cookies when:
+
+* Data is small
+* Security is not critical
+* You want client-side persistence
+* Remembering user preferences
+
+Avoid cookies for:
+
+* Passwords
+* Sensitive data
+* Large objects
+
+### Key Points to Remember
+
+* Cookies store data on **client side**
+* Always validate cookie data on server
+* Use **HttpSession** for sensitive data
+* Cookies are sent with **every HTTP request**
+
+> **Cookie = client-side memory**
+
