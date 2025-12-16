@@ -15293,3 +15293,111 @@ Avoid cookies for:
 
 > **Cookie = client-side memory**
 
+## 96. Hidden Form Field
+A **Hidden Form Field** is a **client-side state management technique** used in web applications to store and transfer data **between requests** without displaying it to the user.
+
+It uses an HTML `<input>` field with `type="hidden"`.
+
+```html
+<input type="hidden" name="userId" value="101">
+```
+
+The value is **not visible on the UI**, but it is **sent to the server** when the form is submitted.
+
+### Why Hidden Form Fields Are Used
+
+Hidden form fields are mainly used to:
+
+* Maintain **state** between multiple HTTP requests
+* Pass data from one page to another
+* Store temporary values like IDs, flags, or tokens
+* Avoid using server memory (unlike sessions)
+
+### How Hidden Form Fields Work
+
+1. Server sends an HTML form with hidden fields
+2. User submits the form
+3. Browser sends hidden field data along with the request
+4. Servlet reads the data using `getParameter()`
+
+### Example: Hidden Form Field with Servlet
+
+**HTML Form**
+
+```html
+<form action="NextServlet" method="post">
+    <input type="hidden" name="username" value="Asha">
+    <input type="submit" value="Continue">
+</form>
+```
+
+**Servlet Code**
+
+```java
+protected void doPost(HttpServletRequest req, HttpServletResponse res)
+        throws IOException {
+
+    String user = req.getParameter("username");
+    res.getWriter().println("User: " + user);
+}
+```
+
+### Characteristics of Hidden Form Fields
+
+* Data is stored on the **client side**
+* Sent with every form submission
+* Works only with **POST/GET form submissions**
+* Data is visible in **page source**
+* Limited to **string data**
+
+### Advantages of Hidden Form Fields
+
+✔ Simple to implement
+
+✔ No server memory usage
+
+✔ Useful for small data transfer
+
+✔ Works without cookies or sessions
+
+### Disadvantages of Hidden Form Fields
+
+❌ Not secure (user can modify values)
+
+❌ Works only with form-based navigation
+
+❌ Not suitable for large data
+
+❌ Cannot be used if user skips pages
+
+❌ Not reliable for sensitive information
+
+### Hidden Form Field vs Session vs Cookie
+
+| Feature    | Hidden Field    | Session          | Cookie           |
+| ---------- | --------------- | ---------------- | ---------------- |
+| Storage    | Client (HTML)   | Server           | Client (Browser) |
+| Security   | Low             | High             | Medium           |
+| Size limit | Small           | Large            | ~4KB             |
+| Lifetime   | One form submit | Session duration | Configurable     |
+| Visibility | View Source     | Not visible      | Browser tools    |
+
+### When to Use Hidden Form Fields
+
+Use Hidden Form Fields when:
+
+* Data is **non-sensitive**
+* Navigation is **form-based**
+* Temporary values need to be passed
+* Server memory usage must be avoided
+
+Avoid them for:
+
+* Authentication data
+* Passwords
+* Payment information
+
+### Key Point to Remember
+
+> **Hidden Form Fields are a simple client-side way to maintain state using HTML forms, but they are not secure.**
+
