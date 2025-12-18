@@ -108,7 +108,7 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 97. [Lambda Expression](Notes.md#97-lambda-expression)
 98. [HashMap](Notes.md#98-hashmap)
 99. [CAPTCHA](Notes.md#99-captcha)
-100. [MD5](Notes.md#100-md5)
+100. [MD5 (Message Digest Algorithm 5)](Notes.md#100-md5-message-digest-algorithm-5)
 101. [JavaServer Pages (JSP)](Notes.md#101-javaserver-pages-jsp)
 102. [JSP Implicit Objects](Notes.md#102-jsp-implicit-objects)
 103. [Types of JSP tags](Notes.md#103-types-of-jsp-tags)
