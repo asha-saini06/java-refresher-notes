@@ -15589,3 +15589,190 @@ Collections.sort(nums, (a, b) -> a - b);
 * Syntax uses `->`
 * Makes Java concise and modern
 * Backbone of **Streams API**
+
+## 98. HashMap
+`HashMap` is a **Map implementation** in Java that stores data in **key–value pairs**.
+It is part of the **Java Collections Framework** and is used when fast data lookup is required.
+
+It belongs to the package:
+
+```
+java.util
+```
+
+### What is HashMap?
+
+A `HashMap` stores data in the form:
+
+```
+Key → Value
+```
+
+Example:
+
+```java
+101 → "Anika"
+102 → "Ravi"
+```
+
+✔ Each **key is unique**
+
+✔ Values **can be duplicated**
+
+✔ One **null key** is allowed
+
+✔ Multiple **null values** are allowed
+
+### Why HashMap is Used
+
+`HashMap` is used when:
+
+* Fast **search**, **insert**, and **delete** operations are needed
+* Data needs to be accessed using a **key**
+* Ordering of elements is **not important**
+
+Average time complexity for basic operations is **O(1)**.
+
+### Creating a HashMap
+
+```java
+import java.util.HashMap;
+
+HashMap<Integer, String> map = new HashMap<>();
+```
+
+### Adding Elements
+
+```java
+map.put(1, "Java");
+map.put(2, "Python");
+map.put(3, "C++");
+```
+
+### Accessing Elements
+
+```java
+String value = map.get(2);   // Python
+```
+
+If the key does not exist, `get()` returns `null`.
+
+### Removing Elements
+
+```java
+map.remove(1);
+```
+
+### Checking Key or Value
+
+```java
+map.containsKey(2);    // true
+map.containsValue("Java"); // true
+```
+
+### Iterating a HashMap
+
+**Using entrySet() (Most common)**
+
+```java
+for (Map.Entry<Integer, String> entry : map.entrySet()) {
+    System.out.println(entry.getKey() + " : " + entry.getValue());
+}
+```
+
+**Using keySet()**
+
+```java
+for (Integer key : map.keySet()) {
+    System.out.println(key + " : " + map.get(key));
+}
+```
+
+### Internal Working of HashMap (Conceptual)
+
+1. HashMap uses a **hash function** on the key
+2. Hash code decides the **bucket index**
+3. Value is stored in that bucket
+4. In case of **collision**, elements are stored using:
+
+   * Linked List (Java 7)
+   * Balanced Tree (Java 8+ after threshold)
+
+📌 This is why keys should have proper `hashCode()` and `equals()` methods.
+
+### Important Characteristics of HashMap
+
+| Feature          | Description                |
+| ---------------- | -------------------------- |
+| Ordering         | ❌ No insertion order       |
+| Duplicate keys   | ❌ Not allowed              |
+| Duplicate values | ✔ Allowed                  |
+| Null key         | ✔ One                      |
+| Null values      | ✔ Multiple                 |
+| Thread-safe      | ❌ No                       |
+| Performance      | ✔ Very fast (O(1) average) |
+
+### HashMap vs Hashtable
+
+| Feature      | HashMap   | Hashtable     |
+| ------------ | --------- | ------------- |
+| Thread-safe  | ❌ No      | ✔ Yes         |
+| Null key     | ✔ One     | ❌ Not allowed |
+| Null values  | ✔ Allowed | ❌ Not allowed |
+| Performance  | Faster    | Slower        |
+| Legacy class | ❌ No      | ✔ Yes         |
+
+### HashMap vs LinkedHashMap
+
+| Feature     | HashMap     | LinkedHashMap             |
+| ----------- | ----------- | ------------------------- |
+| Order       | No order    | Maintains insertion order |
+| Performance | Faster      | Slightly slower           |
+| Use case    | Fast lookup | Ordered data              |
+
+### When to Use HashMap
+
+✔ Caching data
+
+✔ Storing user data (id → object)
+
+✔ Configuration values
+
+✔ Counting frequency
+
+✔ Fast lookups
+
+**Example Program:**
+
+```java
+import java.util.HashMap;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1, "Anika");
+        map.put(2, "Ravi");
+        map.put(3, "Neha");
+
+        System.out.println(map.get(2));
+        System.out.println(map);
+    }
+}
+```
+
+**Output:**
+
+```
+Ravi
+{1=Anika, 2=Ravi, 3=Neha}
+```
+
+### Key Points to Remember
+
+* HashMap is **not synchronized**
+* Use `Collections.synchronizedMap()` for thread safety
+* For concurrent environments, prefer **ConcurrentHashMap**
+* Keys should be **immutable**
+* HashMap does **not maintain order**
