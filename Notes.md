@@ -15776,3 +15776,284 @@ Ravi
 * For concurrent environments, prefer **ConcurrentHashMap**
 * Keys should be **immutable**
 * HashMap does **not maintain order**
+
+## 99. CAPTCHA
+
+CAPTCHA means "**Completely Automated Public Turing test to tell Computers and Humans Apart**", a security test for websites to differentiate real users from bots by presenting challenges (like distorted text or image selection) that are easy for humans but hard for automated programs to solve, preventing spam and abuse.
+
+**CAPTCHA** is a security mechanism used in web applications to **distinguish human users from automated programs (bots)**.
+
+It helps protect websites from:
+
+* Spam submissions
+* Automated attacks
+* Fake registrations
+* Brute-force login attempts
+
+In simple words:
+
+> **CAPTCHA asks a challenge that is easy for humans but difficult for bots.**
+
+### Why CAPTCHA Is Needed
+
+Without CAPTCHA, bots can:
+
+* Submit thousands of fake forms
+* Create fake user accounts
+* Overload servers
+* Attempt password cracking
+
+CAPTCHA ensures that **only real humans can perform sensitive actions**.
+
+### Common Places Where CAPTCHA Is Used
+
+* Login pages
+* Registration forms
+* Contact forms
+* Comment sections
+* Password reset pages
+* Online polls
+
+### Types of CAPTCHA
+
+#### 1. Text-based CAPTCHA
+
+User is asked to type distorted letters/numbers shown in an image.
+
+Example:
+
+```
+X7A9k
+```
+
+✔ Easy to implement
+
+❌ Can be cracked using OCR tools
+
+#### 2. Image-based CAPTCHA
+
+User selects images matching a condition.
+
+Example:
+
+> Select all images with traffic lights
+
+✔ Harder for bots
+
+✔ Widely used (Google reCAPTCHA)
+
+#### 3. Audio CAPTCHA
+
+An audio clip is played and user types what they hear.
+
+✔ Useful for visually impaired users
+
+❌ Less common
+
+#### 4. Math CAPTCHA
+
+Simple math question.
+
+Example:
+
+```
+What is 7 + 3?
+```
+
+✔ Very simple
+
+❌ Weak security
+
+#### 5. reCAPTCHA (Most Popular)
+
+Developed by **Google**.
+
+Types:
+
+* reCAPTCHA v2 (“I’m not a robot” checkbox)
+* reCAPTCHA v3 (background score-based)
+* Invisible reCAPTCHA
+
+✔ Strong security
+
+✔ User-friendly
+
+✔ Most widely used today
+
+### CAPTCHA in Java Web Applications
+
+In Servlets/JSP, CAPTCHA is implemented by:
+
+1. Generating a CAPTCHA value
+2. Storing it in **session**
+3. Displaying CAPTCHA to user
+4. Validating user input on submit
+
+#### Simple Flow
+
+```
+Generate CAPTCHA → Store in session → Show to user
+User submits form → Compare input with session CAPTCHA
+```
+
+### Example (Simple CAPTCHA Logic)
+
+```java
+String captcha = "AB12";
+session.setAttribute("captcha", captcha);
+```
+
+Validation:
+
+```java
+String userCaptcha = request.getParameter("captcha");
+String realCaptcha = (String) session.getAttribute("captcha");
+
+if(userCaptcha.equals(realCaptcha)) {
+    // Valid user
+} else {
+    // Invalid CAPTCHA
+}
+```
+
+### Advantages of CAPTCHA
+
+* Prevents automated abuse
+* Improves website security
+* Reduces spam
+* Protects server resources
+
+### Disadvantages of CAPTCHA
+
+* Can frustrate users
+* Accessibility issues
+* Sometimes hard to read
+* Bots are getting smarter
+
+### CAPTCHA vs Authentication
+
+| CAPTCHA            | Authentication             |
+| ------------------ | -------------------------- |
+| Verifies **human** | Verifies **user identity** |
+| Stops bots         | Confirms user              |
+| Used before login  | Used during login          |
+
+### Key Points to Remember
+
+* CAPTCHA ≠ Login security
+* CAPTCHA prevents bots, not hackers
+* Best used with:
+  * Authentication
+  * Session management
+  * Input validation
+
+> **CAPTCHA is a security technique used to differentiate humans from bots by presenting challenges that are easy for humans but difficult for automated programs.**
+
+### CAPTCHA vs reCAPTCHA
+
+Both **CAPTCHA** and **reCAPTCHA** are used to **distinguish humans from bots**, but they differ in implementation, usability, and intelligence.
+
+| Feature         | CAPTCHA                                                                    | reCAPTCHA                            |
+| --------------- | -------------------------------------------------------------------------- | ------------------------------------ |
+| Full Form       | Completely Automated Public Turing test to tell Computers and Humans Apart | Google reCAPTCHA                     |
+| Developer       | General concept                                                            | Developed by **Google**              |
+| User Effort     | High                                                                       | Low                                  |
+| Common Type     | Text-based distorted characters                                            | Checkbox, image selection, invisible |
+| AI-based        | ❌ No                                                                       | ✔ Yes                                |
+| Security Level  | Basic                                                                      | Advanced                             |
+| User Experience | Poor                                                                       | Better                               |
+| Bot Detection   | Rule-based                                                                 | Behavior + risk analysis             |
+
+### Traditional CAPTCHA
+
+Traditional CAPTCHA requires users to **manually solve a challenge**, such as:
+
+* Typing distorted text
+* Solving simple math
+* Identifying characters
+
+Example:
+
+```
+Type the text shown: X7kP9@
+```
+
+**Problems with CAPTCHA:**
+
+* Hard to read
+* Frustrating for users
+* Less effective against modern bots
+* Accessibility issues
+
+### Google reCAPTCHA
+
+**reCAPTCHA** uses **AI and behavioral analysis** to detect bots.
+
+Types of reCAPTCHA:
+
+#### 1. reCAPTCHA v2 (Checkbox)
+
+```
+☑ I’m not a robot
+```
+
+* Tracks mouse movement
+* Checks browser behavior
+* May show image challenges if suspicious
+
+#### 2. reCAPTCHA v2 (Image-based)
+
+Select all images containing:
+
+* traffic lights
+* buses
+* crosswalks
+
+#### 3. reCAPTCHA v3 (Invisible)
+
+* No user interaction
+* Assigns a **risk score (0.0 – 1.0)**
+* Used silently in background
+
+### How reCAPTCHA Works (Simplified)
+
+1. User interacts with the website
+2. Google analyzes:
+
+   * Mouse movement
+   * Keystrokes
+   * Browser fingerprint
+   * IP reputation
+3. A **score** or **challenge** is generated
+4. Website decides whether to allow or block
+
+### CAPTCHA / reCAPTCHA in Java Web Applications
+
+Used to protect:
+
+* Login forms
+* Registration pages
+* Password reset
+* Comment sections
+
+Usually implemented with:
+
+* HTML + JavaScript (frontend)
+* Servlet / Controller validation (backend)
+
+### When to Use What?
+
+* **CAPTCHA** → Learning/demo projects
+* **reCAPTCHA** → Real-world production apps
+
+### Key Exam Points 
+
+* CAPTCHA is **manual**
+* reCAPTCHA is **AI-driven**
+* reCAPTCHA improves **security + user experience**
+* Invisible reCAPTCHA requires **no user action**
+
+### One-line Summary 
+
+> **CAPTCHA requires human input, while reCAPTCHA intelligently detects humans using behavior analysis.**
+
