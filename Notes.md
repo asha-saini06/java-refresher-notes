@@ -16057,3 +16057,189 @@ Usually implemented with:
 
 > **CAPTCHA requires human input, while reCAPTCHA intelligently detects humans using behavior analysis.**
 
+## 100. MD5 (Message Digest Algorithm 5)
+
+**MD5** stands for **Message Digest Algorithm 5**.
+It is a **cryptographic hash function** that converts input data into a **fixed-length 128-bit (16-byte) hash value**.
+
+In simple words:
+
+> **MD5 converts data (like passwords or files) into a unique fixed-size hash.**
+
+The output is usually represented as a **32-character hexadecimal string**.
+
+Example:
+
+```
+MD5("hello") → 5d41402abc4b2a76b9719d911017c592
+```
+
+### What Is a Hash Function?
+
+A **hash function**:
+
+* Takes input of any size
+* Produces a fixed-size output (hash)
+* Is **one-way** (cannot be reversed)
+
+```
+Input (any size) → Hash Function → Fixed-length Hash
+```
+
+### Why MD5 Was Used
+
+MD5 was commonly used for:
+
+* Password hashing
+* File integrity checking
+* Digital signatures
+* Checksums
+
+It helped ensure:
+
+* Data integrity
+* Data consistency
+* Detection of accidental changes
+
+### Key Features of MD5
+
+✔ Produces **128-bit hash**
+
+✔ Fast computation
+
+✔ Deterministic (same input → same hash)
+
+✔ One-way function
+
+❌ Not reversible
+
+### MD5 in Java
+
+Java provides MD5 via `MessageDigest`.
+
+#### Example: MD5 Hash in Java
+
+```java
+import java.security.MessageDigest;
+
+public class MD5Example {
+    public static void main(String[] args) throws Exception {
+
+        String input = "password";
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] hashBytes = md.digest(input.getBytes());
+
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashBytes) {
+            sb.append(String.format("%02x", b));
+        }
+
+        System.out.println(sb.toString());
+    }
+}
+```
+
+Output:
+
+```
+5f4dcc3b5aa765d61d8327deb882cf99
+```
+
+### MD5 for Password Storage (Old Practice)
+
+Earlier:
+
+```java
+store MD5(password)
+```
+
+Now considered **unsafe**.
+
+### Why MD5 Is NOT Secure Anymore ❌
+
+MD5 is **cryptographically broken**.
+
+Major problems:
+
+#### 1. Collision Attacks
+
+Two different inputs can produce the **same MD5 hash**.
+
+```
+Input A ≠ Input B
+MD5(A) = MD5(B)
+```
+
+This breaks security guarantees.
+
+#### 2. Fast Hashing = Bad for Passwords
+
+MD5 is very fast → attackers can try **billions of passwords per second**.
+
+#### 3. Vulnerable to Rainbow Tables
+
+Precomputed hash tables can easily crack MD5 hashes.
+
+#### 4. Not Resistant to Modern Attacks
+
+MD5 fails against:
+
+* Collision attacks
+* Preimage attacks
+* Brute-force attacks
+
+### MD5 vs Modern Hash Algorithms
+
+| Algorithm | Secure Today | Use Case                |
+| --------- | ------------ | ----------------------- |
+| MD5       | ❌ No         | Legacy / checksums only |
+| SHA-1     | ❌ No         | Deprecated              |
+| SHA-256   | ✔ Yes        | Integrity, signatures   |
+| bcrypt    | ✔ Yes        | Password hashing        |
+| PBKDF2    | ✔ Yes        | Password hashing        |
+| Argon2    | ✔ Yes        | Best modern choice      |
+
+### MD5 Current Valid Uses (Limited)
+
+MD5 is still used for **non-security purposes**:
+
+✔ File integrity checks
+✔ Detecting accidental corruption
+✔ Legacy systems
+✔ Checksums (not authentication)
+
+Example:
+
+```
+Download file → compare MD5 checksum
+```
+
+### MD5 vs Encryption
+
+| MD5 (Hashing)      | Encryption          |
+| ------------------ | ------------------- |
+| One-way            | Two-way             |
+| Cannot be reversed | Can be decrypted    |
+| No key involved    | Uses encryption key |
+| Used for integrity | Used for secrecy    |
+
+### MD5 in Web Applications
+
+❌ **Do NOT use MD5 for:**
+
+* Passwords
+* Tokens
+* Authentication
+* Security keys
+
+✔ **Use instead:**
+
+* bcrypt
+* Argon2
+* PBKDF2
+* SHA-256 + salt
+
+### One-Line Exam Summary
+
+> **MD5 is a fast hashing algorithm that produces a 128-bit hash, but it is cryptographically broken and should not be used for security-sensitive purposes.**
+
