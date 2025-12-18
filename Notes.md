@@ -16243,3 +16243,229 @@ Download file → compare MD5 checksum
 
 > **MD5 is a fast hashing algorithm that produces a 128-bit hash, but it is cryptographically broken and should not be used for security-sensitive purposes.**
 
+## 101. JavaServer Pages (JSP)
+**JavaServer Pages (JSP)** is a server-side technology used to **create dynamic web pages** in Java.
+
+JSP allows you to **embed Java code inside HTML**, making it easier to generate dynamic content compared to writing everything in servlets.
+
+In simple words:
+
+> **JSP = HTML + Java code to generate dynamic web pages**
+
+JSP is part of the **Java EE / Jakarta EE** web technologies.
+
+It belongs to:
+
+```
+jakarta.servlet.jsp
+```
+
+### Why JSP Is Used
+
+Using servlets alone for UI is difficult because servlets generate HTML using Java code.
+
+JSP solves this problem by:
+
+* Separating **presentation (UI)** from **business logic**
+* Making code more readable
+* Reducing Java code inside HTML pages
+* Supporting MVC architecture
+
+### JSP vs Servlet (Quick Idea)
+
+* Servlet → Java-heavy, logic-focused
+* JSP → HTML-heavy, UI-focused
+
+In real applications:
+
+* **Servlets** handle logic
+* **JSP** handles display
+
+### How JSP Works (Behind the Scenes)
+
+1. Client requests a `.jsp` page
+2. Server converts JSP into a **Servlet**
+3. Servlet is compiled
+4. Servlet executes and generates HTML
+5. HTML is sent to the browser
+
+📌 **JSP is ultimately a servlet**
+
+### Basic JSP Example
+
+```jsp
+<html>
+<body>
+    <h1>Welcome to JSP</h1>
+    <%
+        String name = "Asha";
+    %>
+    <p>Hello, <%= name %></p>
+</body>
+</html>
+```
+
+Output in browser:
+
+```
+Hello, Asha
+```
+
+### JSP Scripting Elements
+
+JSP provides three main scripting elements:
+
+#### 1. Scriptlet `<% %>`
+
+Used to write Java code.
+
+```jsp
+<%
+    int a = 10;
+    int b = 20;
+    out.println(a + b);
+%>
+```
+
+#### 2. Expression `<%= %>`
+
+Used to print output.
+
+```jsp
+<%= "Welcome User" %>
+```
+
+#### 3. Declaration `<%! %>`
+
+Used to declare variables or methods.
+
+```jsp
+<%!
+    int count = 0;
+%>
+```
+
+### JSP Implicit Objects (Very Important)
+
+JSP provides **9 implicit objects**, available without creating them.
+
+| Object        | Purpose               |
+| ------------- | --------------------- |
+| `request`     | Client request data   |
+| `response`    | Response to client    |
+| `session`     | User session data     |
+| `application` | Application-wide data |
+| `out`         | Output stream         |
+| `config`      | ServletConfig         |
+| `pageContext` | Page-level context    |
+| `page`        | Current JSP object    |
+| `exception`   | Error handling        |
+
+Example:
+
+```jsp
+<%= request.getParameter("name") %>
+```
+
+### JSP Directives
+
+Directives give instructions to the container.
+
+#### 1. Page Directive
+
+```jsp
+<%@ page language="java" contentType="text/html" %>
+```
+
+Used for:
+
+* Importing packages
+* Setting error pages
+* Content type
+
+#### 2. Include Directive
+
+```jsp
+<%@ include file="header.jsp" %>
+```
+
+Includes content at **compile time**.
+
+#### 3. Taglib Directive
+
+Used for JSTL and custom tags.
+
+### JSP Action Tags
+
+Action tags perform actions at runtime.
+
+Common tags:
+
+```jsp
+<jsp:include page="header.jsp" />
+<jsp:forward page="home.jsp" />
+```
+
+Difference:
+
+* `<%@ include %>` → Compile time
+* `<jsp:include>` → Runtime
+
+### JSP and MVC Architecture
+
+* **Model** → Java classes / DAO
+* **Controller** → Servlet
+* **View** → JSP
+
+Flow:
+
+```
+Browser → Servlet → JSP → Browser
+```
+
+### Advantages of JSP
+
+✔ Easy to write UI
+
+✔ Less Java code than servlets
+
+✔ Supports MVC
+
+✔ Implicit objects reduce boilerplate
+
+✔ Good for dynamic pages
+
+### Disadvantages of JSP
+
+❌ Mixing Java and HTML can get messy
+
+❌ Scriptlets are discouraged today
+
+❌ Hard to debug large JSPs
+
+📌 Modern apps use:
+
+* JSTL
+* EL (Expression Language)
+* Frameworks (Spring MVC)
+
+### JSP vs HTML
+
+| Feature           | HTML | JSP   |
+| ----------------- | ---- | ----- |
+| Dynamic content   | ❌ No | ✔ Yes |
+| Server-side logic | ❌ No | ✔ Yes |
+| Database access   | ❌ No | ✔ Yes |
+
+### Key Exam Points
+
+* JSP is **translated into a servlet**
+* JSP runs on the **server**
+* JSP simplifies UI development
+* Implicit objects are auto-created
+* JSP follows MVC pattern
+
+### One-line Summary
+
+> **JSP is a server-side Java technology used to create dynamic web pages by embedding Java code inside HTML.**
+
