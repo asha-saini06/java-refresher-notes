@@ -16720,3 +16720,194 @@ Scope: **Page**
 
 > **JSP implicit objects are container-created objects that simplify access to request, response, session, and application data without explicit creation.**
 
+## 103. Types of JSP tags
+In **JavaServer Pages (JSP)**, **tags** are used to embed logic inside HTML pages.
+JSP tags make web pages **dynamic** and help separate **presentation** from **business logic**.
+
+JSP provides **four main types of tags**.
+
+### 1. JSP Scriptlet Tags
+
+Scriptlet tags allow you to write **Java code inside JSP**.
+
+**Syntax:**
+
+```jsp
+<%
+    // Java code
+%>
+```
+
+**Example:**
+
+```jsp
+<%
+    int a = 10;
+    out.println(a);
+%>
+```
+
+📌 **Note**:
+
+* Code inside scriptlet runs **on server**
+* Not recommended in modern applications (mixes Java + HTML)
+
+### 2. JSP Expression Tags
+
+Expression tags are used to **print values directly to the output**.
+
+**Syntax:**
+
+```jsp
+<%= expression %>
+```
+
+**Example:**
+
+```jsp
+<%= 10 + 20 %>
+```
+
+Output:
+
+```
+30
+```
+
+📌 Internally, it uses `out.print()`.
+
+### 3. JSP Declaration Tags
+
+Declaration tags are used to declare **variables or methods** that become part of the servlet class.
+
+**Syntax:**
+
+```jsp
+<%! declaration %>
+```
+
+**Example:**
+
+```jsp
+<%! 
+    int count = 0;
+
+    int square(int x) {
+        return x * x;
+    }
+%>
+```
+
+📌 Variables declared here are **class-level**, not request-level.
+
+### 4. JSP Directive Tags
+
+Directive tags give instructions to the JSP container.
+
+**Syntax:**
+
+```jsp
+<%@ directive %>
+```
+
+#### Types of Directives:
+
+##### a) Page Directive
+
+Defines page-level settings.
+
+```jsp
+<%@ page language="java" contentType="text/html" %>
+```
+
+Common attributes:
+
+* `language`
+* `contentType`
+* `import`
+* `session`
+* `errorPage`
+
+##### b) Include Directive
+
+Includes another file **at translation time**.
+
+```jsp
+<%@ include file="header.jsp" %>
+```
+
+##### c) Taglib Directive
+
+Used to include **custom tags** or JSTL.
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+```
+
+### 5. JSP Action Tags
+
+Action tags perform actions at **request time**.
+
+**Syntax:**
+
+```jsp
+<jsp:action />
+```
+
+#### Common Action Tags:
+
+| Tag                 | Purpose                        |
+| ------------------- | ------------------------------ |
+| `<jsp:include>`     | Includes another resource      |
+| `<jsp:forward>`     | Forwards request               |
+| `<jsp:useBean>`     | Creates or accesses a JavaBean |
+| `<jsp:setProperty>` | Sets bean property             |
+| `<jsp:getProperty>` | Gets bean property             |
+
+**Example:**
+
+```jsp
+<jsp:include page="menu.jsp" />
+```
+
+### 6. JSTL Tags (Recommended)
+
+**JSTL (JavaServer Pages Standard Tag Library)** removes Java code from JSP.
+
+Example:
+
+```jsp
+<c:if test="${age > 18}">
+    Eligible
+</c:if>
+```
+
+✔ Cleaner
+
+✔ More readable
+
+✔ Industry standard
+
+
+### Comparison of JSP Tag Types
+
+| Tag Type    | Purpose                   | Java Code Allowed |
+| ----------- | ------------------------- | ----------------- |
+| Scriptlet   | Write Java code           | ✔ Yes             |
+| Expression  | Print value               | ✔ Yes             |
+| Declaration | Declare variables/methods | ✔ Yes             |
+| Directive   | Page instructions         | ❌ No              |
+| Action      | Runtime operations        | ❌ No              |
+| JSTL        | Logic without Java        | ❌ No              |
+
+### Important Exam Points
+
+* Scriptlets are **deprecated in practice**
+* JSTL + EL is preferred
+* JSP tags are converted into **Servlet code**
+* JSP runs on **server-side**
+
+### One-Line Summary
+
+> **JSP tags are used to embed logic into JSP pages and make web pages dynamic.**
+
