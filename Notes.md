@@ -16911,3 +16911,228 @@ Example:
 
 > **JSP tags are used to embed logic into JSP pages and make web pages dynamic.**
 
+## 104. EL (Expression Language)
+**EL (Expression Language)** is a **simplified syntax** used in JSP to **access data stored in Java objects** (attributes, beans, collections) **without writing Java code** inside JSP pages.
+
+EL was introduced to **separate presentation from business logic** and make JSP pages **cleaner, readable, and maintainable**.
+
+### What is Expression Language (EL)?
+
+EL allows you to:
+
+* Access **request, session, application attributes**
+* Read **JavaBeans properties**
+* Access **arrays, lists, maps**
+* Perform **basic operations** (arithmetic, logical, relational)
+* Avoid scriptlets (`<% %>`)
+
+EL expressions are written using:
+
+```
+${ ... }
+```
+
+### Why EL is Needed
+
+Without EL (using scriptlets):
+
+```jsp
+<%= request.getAttribute("name") %>
+```
+
+With EL:
+
+```jsp
+${name}
+```
+
+✔ Cleaner syntax
+
+✔ No Java code in JSP
+
+✔ Better MVC design
+
+✔ Easier to maintain
+
+### How EL Works
+
+EL searches for variables in the following order:
+
+1. **Page scope**
+2. **Request scope**
+3. **Session scope**
+4. **Application scope**
+
+This is called **implicit scope resolution**.
+
+### Accessing Attributes Using EL
+
+Assume this is set in servlet:
+
+```java
+request.setAttribute("user", "Asha");
+```
+
+Access in JSP:
+
+```jsp
+${user}
+```
+
+### EL Implicit Objects
+
+| EL Object          | Description               |
+| ------------------ | ------------------------- |
+| `param`            | Request parameters        |
+| `paramValues`      | Multiple parameter values |
+| `header`           | Request headers           |
+| `headerValues`     | Multiple header values    |
+| `cookie`           | Cookies                   |
+| `sessionScope`     | Session attributes        |
+| `requestScope`     | Request attributes        |
+| `applicationScope` | Application attributes    |
+| `pageScope`        | Page attributes           |
+| `initParam`        | Context init parameters   |
+
+### Examples of EL Implicit Objects
+
+**Request parameter**
+
+```
+URL: login.jsp?user=Asha
+```
+
+```jsp
+${param.user}
+```
+
+**Session attribute**
+
+```jsp
+${sessionScope.user}
+```
+
+**Context parameter**
+
+```jsp
+${initParam.dbDriver}
+```
+
+### Accessing JavaBean Properties
+
+JavaBean:
+
+```java
+public class User {
+    private String name;
+    public String getName() { return name; }
+}
+```
+
+Stored as:
+
+```java
+request.setAttribute("user", userObj);
+```
+
+Access in JSP:
+
+```jsp
+${user.name}
+```
+
+✔ Calls `getName()` internally
+
+### Accessing Arrays, Lists, Maps
+
+**Array / List**
+
+```jsp
+${names[0]}
+```
+
+**Map**
+
+```jsp
+${map['key']}
+```
+
+or
+
+```jsp
+${map.key}
+```
+
+### EL Operators
+
+#### Arithmetic Operators
+
+| Operator     | Meaning        |
+| ------------ | -------------- |
+| `+`          | Addition       |
+| `-`          | Subtraction    |
+| `*`          | Multiplication |
+| `/` or `div` | Division       |
+| `%` or `mod` | Modulus        |
+
+Example:
+
+```jsp
+${10 + 5}
+```
+
+#### Relational Operators
+
+| Operator     | Meaning               |
+| ------------ | --------------------- |
+| `==` or `eq` | Equal                 |
+| `!=` or `ne` | Not equal             |
+| `<` or `lt`  | Less than             |
+| `>` or `gt`  | Greater than          |
+| `<=` or `le` | Less than or equal    |
+| `>=` or `ge` | Greater than or equal |
+
+Example:
+
+```jsp
+${age >= 18}
+```
+
+#### Logical Operators
+
+| Operator      | Meaning |         |    |
+| ------------- | ------- | ------- | -- |
+| `&&` or `and` | AND     |         |    |
+| `             |         | `or`or` | OR |
+| `!` or `not`  | NOT     |         |    |
+
+### EL with Conditional Logic (JSTL)
+
+EL is commonly used with JSTL:
+
+```jsp
+<c:if test="${age >= 18}">
+    Adult
+</c:if>
+```
+
+### EL vs JSP Scriptlet
+
+| Feature     | Scriptlet | EL        |
+| ----------- | --------- | --------- |
+| Java code   | ✔         | ❌         |
+| Readability | Poor      | Excellent |
+| MVC support | Weak      | Strong    |
+| Recommended | ❌ No      | ✔ Yes     |
+
+### Key Points to Remember
+
+* EL **cannot execute Java methods**
+* EL is **read-only**
+* EL replaces most JSP scriptlets
+* Used heavily with **JSTL**
+* Default in modern JSP applications
+
+### One-line Summary
+
+> **EL (Expression Language) allows JSP pages to access data easily without writing Java code, improving readability and maintainability.**
