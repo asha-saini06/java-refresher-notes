@@ -17147,6 +17147,15 @@ First, it is **translated into a Servlet**, then managed like any other servlet 
 
 ![JSP lifecycle](./resources/Life-Cycle-of-JSP.png)
 
+1. Translation of JSP page to Servlet
+2. Compilation of JSP page(Compilation of JSP into test.java)
+3. Classloading (test.java to test.class)
+4. Instantiation(Object of the generated Servlet is created)
+5. Initialization(jspInit() method is invoked by the container)
+6. Request processing(_jspService()is invoked by the container)
+7. JSP Cleanup (jspDestroy() method is invoked by the container)
+
+> We can override jspInit(), jspDestroy() but we can't override _jspService() method.
 
 ```
 JSP Page
@@ -17277,4 +17286,237 @@ Used for:
 ### One-Line Memory Trick 🧠
 
 **JSP → Translate → Compile → Load → Init → Service → Destroy**
+
+## 106. JSP Elements
+**JSP Elements** are the **building blocks of a JSP page**.
+They allow developers to **embed Java code, expressions, directives, and actions** inside HTML to create **dynamic web pages**.
+
+In simple terms:
+
+> **JSP Elements tell the container what to do while generating the response.**
+
+### Types of JSP Elements
+
+![JSP Elements](./resources/JSP-Elements.png) 
+
+JSP elements are broadly classified into **four main categories**:
+
+| Type       | Purpose                               |
+| ---------- | ------------------------------------- |
+| Directive  | Provide instructions to the container |
+| Scriptlet  | Write Java code                       |
+| Expression | Output data to response               |
+| Action     | Perform predefined actions            |
+
+## 1. JSP Directives
+
+Directives give **instructions to the JSP container** about how to process the JSP page.
+
+They do **not produce output directly**.
+
+Syntax:
+
+```jsp
+<%@ directive attribute="value" %>
+```
+
+### Types of JSP Directives
+
+#### a) Page Directive
+
+Controls page-level settings.
+
+```jsp
+<%@ page language="java" contentType="text/html" %>
+```
+
+Common attributes:
+
+* `language`
+* `contentType`
+* `import`
+* `session`
+* `errorPage`
+* `isErrorPage`
+
+Example:
+
+```jsp
+<%@ page import="java.util.Date" %>
+```
+
+#### b) Include Directive
+
+Used to include another file **at translation time**.
+
+```jsp
+<%@ include file="header.jsp" %>
+```
+
+✔ Static include
+✔ Code is merged before compilation
+
+---
+
+#### c) Taglib Directive
+
+Used to include **custom tags / JSTL**.
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+```
+
+## 2. JSP Scriptlet
+
+Scriptlets allow embedding **Java code inside JSP**.
+
+Syntax:
+
+```jsp
+<%
+   Java code
+%>
+```
+
+Example:
+
+```jsp
+<%
+   int a = 10;
+   out.println(a);
+%>
+```
+
+📌 **Not recommended in modern JSP**
+(Use EL + JSTL instead)
+
+## 3. JSP Expression
+
+Used to **display data directly in the output**.
+
+Syntax:
+
+```jsp
+<%= expression %>
+```
+
+Example:
+
+```jsp
+<%= new java.util.Date() %>
+```
+
+✔ Automatically converted to `out.print()`
+
+✔ Cannot contain statements (only expressions)
+
+## 4. JSP Declaration
+
+Used to declare **variables and methods** at class level.
+
+Syntax:
+
+```jsp
+<%! declaration %>
+```
+
+Example:
+
+```jsp
+<%! int count = 0; %>
+```
+
+```jsp
+<%! 
+   int add(int a, int b) {
+       return a + b;
+   }
+%>
+```
+
+📌 Declared variables are **shared across requests**
+(Be careful with thread safety)
+
+## 5. JSP Action Tags
+
+Action tags perform predefined tasks at **runtime**.
+
+Syntax:
+
+```jsp
+<jsp:actionName />
+```
+
+### Common JSP Action Tags
+
+#### a) `<jsp:include>`
+
+Includes another resource **at runtime**.
+
+```jsp
+<jsp:include page="header.jsp" />
+```
+
+✔ Dynamic include
+
+✔ Changes reflect immediately
+
+
+#### b) `<jsp:forward>`
+
+Forwards request to another resource.
+
+```jsp
+<jsp:forward page="home.jsp" />
+```
+
+#### c) `<jsp:useBean>`
+
+Creates or locates a JavaBean.
+
+```jsp
+<jsp:useBean id="user" class="com.model.User" scope="session" />
+```
+
+#### d) `<jsp:setProperty>` and `<jsp:getProperty>`
+
+```jsp
+<jsp:setProperty name="user" property="name" value="Asha" />
+<jsp:getProperty name="user" property="name" />
+```
+
+## Directive vs Scriptlet vs Expression
+
+| Feature     | Directive   | Scriptlet  | Expression |
+| ----------- | ----------- | ---------- | ---------- |
+| Purpose     | Instruction | Java logic | Output     |
+| Output      | ❌ No        | ✔ Yes      | ✔ Yes      |
+| Syntax      | `<%@ %>`    | `<% %>`    | `<%= %>`   |
+| Usage Today | ✔ Yes       | ❌ Avoid    | Limited    |
+
+## JSP Elements vs EL & JSTL
+
+| JSP Element | Modern Replacement |
+| ----------- | ------------------ |
+| Scriptlet   | EL + JSTL          |
+| Expression  | EL                 |
+| Logic       | JSTL tags          |
+
+Example (EL):
+
+```jsp
+${user.name}
+```
+
+## Key Exam Points
+
+* JSP Elements are processed **on the server**
+* Scriptlets are discouraged
+* Directives are processed at **translation time**
+* Actions are processed at **runtime**
+* JSP ultimately converts to a **Servlet**
+
+### One-line Summary
+
+> **JSP Elements define how Java, HTML, and server logic work together to generate dynamic web pages.**
 
