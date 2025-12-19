@@ -17136,3 +17136,145 @@ EL is commonly used with JSTL:
 ### One-line Summary
 
 > **EL (Expression Language) allows JSP pages to access data easily without writing Java code, improving readability and maintainability.**
+
+## 105. JSP Lifecycle
+The **JSP Lifecycle** describes the **sequence of steps** a JSP page goes through from creation to destruction.
+
+A JSP page is **not executed directly**.
+First, it is **translated into a Servlet**, then managed like any other servlet by the container.
+
+### JSP Lifecycle Phases
+
+![JSP lifecycle](./resources/Life-Cycle-of-JSP.png)
+
+
+```
+JSP Page
+   ↓
+Translation
+   ↓
+Compilation
+   ↓
+Loading
+   ↓
+Instantiation
+   ↓
+Initialization
+   ↓
+Request Processing
+   ↓
+Destruction
+```
+
+### 1. Translation Phase
+
+* JSP page is converted into a **Servlet (.java file)**
+* Happens only **once** (or when JSP is modified)
+* Done by the JSP container (Tomcat, Jetty, etc.)
+
+Example:
+
+```
+hello.jsp → hello_jsp.java
+```
+
+### 2. Compilation Phase
+
+* Generated servlet code is **compiled into a .class file**
+* Any syntax errors in JSP appear here
+
+### 3. Loading Phase
+
+* The compiled servlet class is **loaded into JVM**
+* Managed by the servlet container
+
+### 4. Instantiation Phase
+
+* Servlet container creates **one instance** of the JSP servlet
+* Uses default constructor
+
+### 5. Initialization Phase (`jspInit()`)
+
+Called **once** during JSP lifecycle.
+
+```java
+public void jspInit() {
+    // Initialization code
+}
+```
+
+Used for:
+
+* Resource initialization
+* Database connections
+* Loading configuration
+
+### 6. Request Processing Phase (`_jspService()`)
+
+* Called **for every request**
+* Handles client requests and generates response
+* Cannot be overridden by developer
+
+```java
+public void _jspService(HttpServletRequest request,
+                        HttpServletResponse response)
+```
+
+📌 This is where:
+
+* HTML is generated
+* JSP implicit objects are used
+* EL and JSTL are evaluated
+
+### 7. Destruction Phase (`jspDestroy()`)
+
+Called **once** when:
+
+* Server shuts down
+* JSP is unloaded
+* Application is redeployed
+
+```java
+public void jspDestroy() {
+    // Cleanup code
+}
+```
+
+Used for:
+
+* Closing DB connections
+* Releasing resources
+
+### JSP Lifecycle Methods Summary
+
+| Method          | Called When             | Frequency |
+| --------------- | ----------------------- | --------- |
+| `jspInit()`     | JSP initialized         | Once      |
+| `_jspService()` | Each client request     | Multiple  |
+| `jspDestroy()`  | JSP removed from memory | Once      |
+
+### JSP Lifecycle vs Servlet Lifecycle
+
+| JSP Lifecycle         | Servlet Lifecycle |
+| --------------------- | ----------------- |
+| Translated to servlet | Already servlet   |
+| `jspInit()`           | `init()`          |
+| `_jspService()`       | `service()`       |
+| `jspDestroy()`        | `destroy()`       |
+
+### Key Points
+
+✔ JSP is converted into a **Servlet**
+
+✔ Lifecycle is managed by **container**
+
+✔ `_jspService()` is **auto-generated**
+
+✔ Only **one instance**, multiple requests
+
+✔ Thread-safe coding is important
+
+### One-Line Memory Trick 🧠
+
+**JSP → Translate → Compile → Load → Init → Service → Destroy**
+
