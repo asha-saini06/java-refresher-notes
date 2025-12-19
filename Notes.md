@@ -16423,6 +16423,12 @@ Flow:
 Browser → Servlet → JSP → Browser
 ```
 
+- **Client Layer**: The browser sends a request to the server.
+- **Web Server Layer**: The server processes the request using a JSP engine.
+- **Database/Backend Layer**: Interacts with the database and returns the response to the client.
+
+![JavaServer Pages](./resources/JavaServerPages.png) 
+
 ### Advantages of JSP
 
 ✔ Easy to write UI
@@ -16457,7 +16463,16 @@ Browser → Servlet → JSP → Browser
 | Server-side logic | ❌ No | ✔ Yes |
 | Database access   | ❌ No | ✔ Yes |
 
-### Key Exam Points
+### Differences Between JSP and Servlets
+
+| Feature           | JSP                              | Servlet                          |
+|-------------------|----------------------------------|----------------------------------|
+| Code Length       | JSP requires less code           | Servlets require more code       |
+| Ease of Use       | JSP is simple to use             | Servlet is more complex to use   |
+| Dynamic Content   | Easily embedded in HTML          | Requires HTML generation in code |
+| Page Maintenance  | Easier to maintain               | More challenging                 |
+
+### Key Points
 
 * JSP is **translated into a servlet**
 * JSP runs on the **server**
@@ -16468,4 +16483,240 @@ Browser → Servlet → JSP → Browser
 ### One-line Summary
 
 > **JSP is a server-side Java technology used to create dynamic web pages by embedding Java code inside HTML.**
+
+## 102. JSP Implicit Objects
+**JSP Implicit Objects** are **predefined objects** that are automatically available in a JSP page without explicit declaration or creation.
+
+These objects are created by the **JSP container** and help developers easily access request data, session data, application data, and output streams.
+
+👉 You **do NOT need to create or import them**.
+
+### Why Implicit Objects Are Needed
+
+JSP implicit objects make it easy to:
+
+* Read request parameters
+* Access session data
+* Share application-level data
+* Write output to browser
+* Handle exceptions
+* Access servlet context and config
+
+They reduce boilerplate code and simplify JSP development.
+
+### List of JSP Implicit Objects
+
+There are **9 implicit objects** in JSP:
+
+| Implicit Object | Type / Interface      | Scope            |
+| --------------- | --------------------- | ---------------- |
+| `request`       | `HttpServletRequest`  | Request          |
+| `response`      | `HttpServletResponse` | Page             |
+| `out`           | `JspWriter`           | Page             |
+| `session`       | `HttpSession`         | Session          |
+| `application`   | `ServletContext`      | Application      |
+| `config`        | `ServletConfig`       | Page             |
+| `pageContext`   | `PageContext`         | Page             |
+| `page`          | `Object`              | Page             |
+| `exception`     | `Throwable`           | Page (error JSP) |
+
+### 1. `request` Object
+
+Represents the **client request**.
+
+Used to:
+
+* Read form data
+* Get parameters
+* Access request attributes
+
+Example:
+
+```jsp
+<%= request.getParameter("username") %>
+```
+
+Scope: **Request**
+
+### 2. `response` Object
+
+Represents the **server response** sent to client.
+
+Used to:
+
+* Redirect user
+* Set content type
+* Add cookies
+
+Example:
+
+```jsp
+<%
+response.sendRedirect("login.jsp");
+%>
+```
+
+Scope: **Page**
+
+### 3. `out` Object
+
+Used to **write output** to the browser.
+
+Example:
+
+```jsp
+<%= "Welcome to JSP" %>
+```
+
+Equivalent servlet method:
+
+```java
+PrintWriter out = response.getWriter();
+```
+
+Scope: **Page**
+
+### 4. `session` Object
+
+Used to store **user-specific data** across multiple requests.
+
+Example:
+
+```jsp
+<%
+session.setAttribute("user", "Asha");
+%>
+```
+
+Retrieve:
+
+```jsp
+<%= session.getAttribute("user") %>
+```
+
+Scope: **Session**
+
+### 5. `application` Object
+
+Represents the **entire web application**.
+
+Used for:
+
+* Global data
+* Configuration
+* Shared resources
+
+Example:
+
+```jsp
+<%
+application.setAttribute("appName", "Java Web App");
+%>
+```
+
+Scope: **Application**
+
+### 6. `config` Object
+
+Used to access **servlet initialization parameters**.
+
+Example:
+
+```jsp
+<%= config.getInitParameter("dbDriver") %>
+```
+
+Scope: **Page**
+
+### 7. `pageContext` Object
+
+Most powerful implicit object.
+
+Used to:
+
+* Access all scopes
+* Forward requests
+* Manage attributes
+
+Example:
+
+```jsp
+<%
+pageContext.setAttribute("msg", "Hello");
+%>
+```
+
+Accessing scopes:
+
+```jsp
+pageContext.getAttribute("msg", PageContext.REQUEST_SCOPE);
+```
+
+Scope: **Page (controls all scopes)**
+
+### 8. `page` Object
+
+Represents the **current JSP page instance**.
+
+Equivalent to:
+
+```java
+this
+```
+
+Rarely used in practice.
+
+Scope: **Page**
+
+### 9. `exception` Object
+
+Available **only in error pages**.
+
+Used to handle runtime exceptions.
+
+Error page declaration:
+
+```jsp
+<%@ page isErrorPage="true" %>
+```
+
+Usage:
+
+```jsp
+<%= exception.getMessage() %>
+```
+
+Scope: **Page**
+
+### Scope Summary
+
+| Scope       | Objects Used                   |
+| ----------- | ------------------------------ |
+| Page        | page, out, config, pageContext |
+| Request     | request                        |
+| Session     | session                        |
+| Application | application                    |
+
+### JSP Implicit Objects vs Servlet Objects
+
+| JSP Object    | Servlet Equivalent  |
+| ------------- | ------------------- |
+| `request`     | HttpServletRequest  |
+| `response`    | HttpServletResponse |
+| `session`     | HttpSession         |
+| `application` | ServletContext      |
+| `config`      | ServletConfig       |
+| `out`         | PrintWriter         |
+
+### Key Points to Remember
+
+* Implicit objects are **auto-created**
+* Available **only in JSP**, not in Servlets
+* Reduce boilerplate code
+* `exception` works only in error JSP
+* `pageContext` can access **all scopes**
+
+### One-Line Summary
+
+> **JSP implicit objects are container-created objects that simplify access to request, response, session, and application data without explicit creation.**
 
