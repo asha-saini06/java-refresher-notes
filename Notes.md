@@ -17771,3 +17771,140 @@ Usage:
 ❓: **Whatis the difference between include directive and JSP include action?**
 ▶ Include directive is processed at translation time (static), whereas JSP include action is processed at request time (dynamic).
 
+## 108. Include Directive vs `<jsp:include>` Action
+In JSP, content from another resource can be included in **two different ways**:
+
+1. **Include Directive** (`<%@ include %>`)
+2. **Include Action** (`<jsp:include>`)
+
+Although both are used to include one JSP into another, they behave **very differently** in terms of **time of execution, flexibility, and use cases**.
+
+Understanding this difference is a **common interview topic**.
+
+### Include Directive (`<%@ include %>`)
+
+The **include directive** performs **static inclusion**.
+
+📌 The content of the included file is **copied into the JSP at translation time**, before the JSP is compiled into a servlet.
+
+#### Syntax
+
+```jsp
+<%@ include file="header.jsp" %>
+```
+
+#### How it Works (Conceptual)
+
+* JSP container **merges both files**
+* Generates **one single servlet**
+* Any change in the included file requires **recompilation**
+* Variables, methods, and declarations are **shared**
+
+Think of it like **copy–paste before compilation**.
+
+#### Characteristics
+
+* Happens at **translation time**
+* Static inclusion
+* Faster execution at runtime
+* Included file cannot receive request parameters
+* Suitable for static content
+
+#### Example
+
+```jsp
+<%@ include file="header.jsp" %>
+<p>Main page content</p>
+```
+
+If `header.jsp` contains HTML or declarations, they become part of the same servlet.
+
+### `<jsp:include>` Action
+
+The **include action** performs **dynamic inclusion**.
+
+📌 The included resource is invoked **at request time**, and its output is inserted into the response.
+
+#### Syntax
+
+```jsp
+<jsp:include page="header.jsp" />
+```
+
+With parameters:
+
+```jsp
+<jsp:include page="header.jsp">
+    <jsp:param name="title" value="Home Page" />
+</jsp:include>
+```
+
+#### How it Works (Conceptual)
+
+* Each JSP is compiled into a **separate servlet**
+* At runtime, control is passed to the included resource
+* Output is returned and embedded in the response
+* Changes in included JSP **do not require recompilation**
+
+Think of it like **calling another servlet dynamically**.
+
+#### Characteristics
+
+* Happens at **request time**
+* Dynamic inclusion
+* Slightly slower than directive
+* Can pass request parameters
+* Better for dynamic content
+
+### Key Differences: Include Directive vs Include Action
+
+| Feature                        | Include Directive | `<jsp:include>` Action |
+| ------------------------------ | ----------------- | ---------------------- |
+| Inclusion time                 | Translation time  | Request time           |
+| Type                           | Static            | Dynamic                |
+| Servlet generated              | Single servlet    | Multiple servlets      |
+| Recompilation needed on change | Yes               | No                     |
+| Can pass parameters            | No                | Yes                    |
+| Performance                    | Faster            | Slightly slower        |
+| Best use case                  | Static content    | Dynamic content        |
+
+### When to Use Which
+
+* Use **Include Directive** when:
+
+  * Content is static (header, footer)
+  * You want faster performance
+  * No dynamic data is required
+
+* Use **`<jsp:include>` Action** when:
+
+  * Content changes frequently
+  * You need to pass parameters
+  * Output depends on request data
+
+### Key Notes
+
+* Both are used to include one resource into another
+* Main difference is **time of execution**
+* Include directive merges code
+* `<jsp:include>` merges output
+* Interviewers often ask this as a **conceptual comparison**
+
+---
+
+❓ **Why is include directive faster than `<jsp:include>`?**
+▶ Because the directive includes content at translation time, so no extra request is made at runtime.
+
+❓ **Can variables declared in included JSP be accessed by the parent JSP?**
+▶ Yes with include directive, because both become part of the same servlet. No with `<jsp:include>`, as they are separate servlets.
+
+❓ **Why is `<jsp:include>` preferred for dynamic pages?**
+▶ Because it executes at request time and supports passing parameters, making it suitable for dynamic content.
+
+❓ **Which one follows better modular design?**
+▶ `<jsp:include>` supports better modularity since each JSP remains independent.
+
+❓ **Is `<jsp:include>` similar to RequestDispatcher include?**
+▶ Yes conceptually. Both include output of another resource during request processing.
+
+
