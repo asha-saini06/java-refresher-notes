@@ -115,3 +115,48 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 104. [EL (Expression Language)](Notes.md#104-el-expression-language)
 105. [JSP Lifecycle](Notes.md#105-jsp-lifecycle)
 106. [JSP Elements](Notes.md#106-jsp-elements)
+107. JSP Directives (page, include, taglib)
+108. Include Directive vs `<jsp:include>` Action
+109. JSP Action Tags
+110. JavaBeans Architecture & `<jsp:useBean>`
+111. JSP Error Handling
+112. Custom Error Pages in JSP
+113. JSTL (JavaServer Pages Standard Tag Library) – Introduction
+114. Core JSTL Tags (`c:if`, `c:forEach`, `c:choose`)
+115. JSTL Functions (`fn:length`, `fn:contains`, etc.)
+116. EL + JSTL vs JSP Scriptlets (Best Practices)
+117. MVC Architecture using Servlet + JSP
+118. JSP vs Servlet (Role in MVC Architecture)
+119. Form Handling in JSP & Servlets
+120. Form Validation (Client-side & Server-side)
+121. Session Management in Web Applications
+122. Login–Logout Flow using HTTP Session
+123. Authentication & Authorization Basics
+124. File Upload & Download in Web Applications
+125. Pagination in Web Applications
+126. J2EE / Jakarta EE Architecture Overview
+127. WAR File Structure
+128. Deployment Descriptor (`web.xml`)
+129. Web Application Lifecycle
+130. Servlet Authentication with JDBC (Login/Signup)
+131. Role-Based Access Control (RBAC)
+132. Servlet Filters for Authentication & Authorization
+133. Session Security Best Practices
+134. Cookies vs Sessions (Security Perspective)
+135. CSRF Protection Techniques
+136. MVC Frameworks Introduction (Spring MVC, Jakarta MVC)
+137. Database Connection Pooling (DataSource vs DriverManager)
+138. DAO (Data Access Object) Pattern
+139. MVC with DAO + JDBC + JSP
+140. Front-End with Bootstrap in JSP Pages
+141. AJAX with JSP/Servlet Backend
+142. REST APIs with Java Servlets
+143. JSON Handling in Servlets (Jackson / GSON)
+144. WebSockets in Java
+145. Deployment on Apache Tomcat (Step-by-Step)
+146. Deployment on Cloud (Heroku / AWS / GCP)
+147. Logging with Log4j or SLF4J + Logback
+148. Unit Testing for Servlets & JSP (JUnit + MockMVC)
+149. Integration Testing with Selenium + Java
+150. Build Tools (Maven / Gradle) for Web Projects
+151. CI/CD in Java Projects (GitHub Actions / Jenkins)
