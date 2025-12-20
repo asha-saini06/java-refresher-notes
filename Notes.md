@@ -16046,7 +16046,7 @@ Usually implemented with:
 * **CAPTCHA** → Learning/demo projects
 * **reCAPTCHA** → Real-world production apps
 
-### Key Exam Points 
+### Key Points 
 
 * CAPTCHA is **manual**
 * reCAPTCHA is **AI-driven**
@@ -16239,7 +16239,7 @@ Download file → compare MD5 checksum
 * PBKDF2
 * SHA-256 + salt
 
-### One-Line Exam Summary
+### One-Line Summary
 
 > **MD5 is a fast hashing algorithm that produces a 128-bit hash, but it is cryptographically broken and should not be used for security-sensitive purposes.**
 
@@ -16900,7 +16900,7 @@ Example:
 | Action      | Runtime operations        | ❌ No              |
 | JSTL        | Logic without Java        | ❌ No              |
 
-### Important Exam Points
+### Important Points
 
 * Scriptlets are **deprecated in practice**
 * JSTL + EL is preferred
@@ -17508,7 +17508,7 @@ Example (EL):
 ${user.name}
 ```
 
-## Key Exam Points
+## Key Points
 
 * JSP Elements are processed **on the server**
 * Scriptlets are discouraged
@@ -17519,4 +17519,255 @@ ${user.name}
 ### One-line Summary
 
 > **JSP Elements define how Java, HTML, and server logic work together to generate dynamic web pages.**
+
+## 107. JSP Directives (page, include, taglib)
+
+**JSP Directives** are special instructions used to give **metadata and configuration information** to the JSP container.
+
+They guide the JSP container on **how the JSP page should be translated into a servlet**, but they **do not generate any output** themselves.
+
+📌 JSP directives are processed at **translation time** (before compilation).
+
+### General Syntax of JSP Directive
+
+```jsp
+<%@ directiveName attribute="value" %>
+```
+
+There are **three types of JSP Directives**:
+
+1. `page`
+2. `include`
+3. `taglib`
+
+### page Directive
+
+The **page directive** is used to define **page-level settings** for a JSP page.
+
+It controls:
+
+* Imports
+* Content type
+* Session usage
+* Error handling
+* Buffering
+* Thread behavior
+
+📌 A JSP page can have **multiple page directives**, but conflicting attributes are not allowed.
+
+#### Syntax
+
+```jsp
+<%@ page attribute="value" %>
+```
+
+#### Common page Directive Attributes
+
+**1. `import`**
+
+Used to import Java classes or packages into JSP.
+
+```jsp
+<%@ page import="java.util.Date, java.sql.*" %>
+```
+
+📌 Similar to `import` in Java.
+
+**2. `contentType`**
+
+Defines the MIME type and character encoding of the response.
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" %>
+```
+
+📌 Default:
+
+```
+text/html;charset=ISO-8859-1
+```
+**3. `language`**
+
+Specifies the scripting language.
+
+```jsp
+<%@ page language="java" %>
+```
+
+📌 Java is the **only supported language**.
+
+**4. `session`**
+
+Controls availability of the `session` implicit object.
+
+```jsp
+<%@ page session="true" %>   <!-- default -->
+<%@ page session="false" %>
+```
+
+* `true` → session object available
+* `false` → accessing session causes compilation error
+
+**5. `errorPage`**
+
+Specifies another JSP to handle runtime exceptions.
+
+```jsp
+<%@ page errorPage="error.jsp" %>
+```
+
+**6. `isErrorPage`**
+
+Used in error handling JSP page.
+
+```jsp
+<%@ page isErrorPage="true" %>
+```
+
+📌 Enables access to implicit object `exception`.
+
+**7. `buffer`**
+
+Specifies output buffer size.
+
+```jsp
+<%@ page buffer="8kb" %>
+```
+
+📌 Default: `8kb`
+
+**8. `autoFlush`**
+
+Controls automatic flushing of buffer.
+
+```jsp
+<%@ page autoFlush="true" %>
+```
+
+* `true` → auto flush buffer
+* `false` → throws exception if buffer overflows
+
+**9. `isThreadSafe`**
+
+Controls thread safety.
+
+```jsp
+<%@ page isThreadSafe="true" %>   <!-- default -->
+<%@ page isThreadSafe="false" %>
+```
+
+📌 `false` behaves like deprecated `SingleThreadModel`.
+
+#### Example: page Directive Usage
+
+```jsp
+<%@ page import="java.util.Date"
+         contentType="text/html;charset=UTF-8"
+         session="true" %>
+
+<html>
+<body>
+    Current Date: <%= new Date() %>
+</body>
+</html>
+```
+
+### include Directive
+
+The **include directive** is used to include another file **at translation time**.
+
+📌 The content of the included file becomes part of the JSP **before compilation**.
+
+#### Syntax
+
+```jsp
+<%@ include file="header.jsp" %>
+```
+
+#### Characteristics of include Directive
+
+* Static inclusion
+* Happens at translation time
+* Included content is merged into one servlet
+* Faster execution
+* Best for static content (header, footer, menu)
+
+#### Example: include Directive
+
+**header.jsp**
+
+```html
+<h1>Welcome</h1>
+```
+
+**home.jsp**
+
+```jsp
+<%@ include file="header.jsp" %>
+<p>This is home page</p>
+```
+
+📌 The final servlet contains both header and page content.
+
+### taglib Directive
+
+The **taglib directive** is used to define a **custom tag library** or **JSTL** in a JSP page.
+
+It enables the use of **custom tags instead of Java code**.
+
+#### Syntax
+
+```jsp
+<%@ taglib uri="URI" prefix="prefixName" %>
+```
+
+#### Example: JSTL Core Tag Library
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+```
+
+Usage:
+
+```jsp
+<c:out value="${username}" />
+
+<c:if test="${age >= 18}">
+    Adult
+</c:if>
+```
+
+#### Why taglib is Important
+
+* Removes Java code from JSP
+* Improves readability
+* Supports MVC architecture
+* Encourages clean separation of concerns
+
+### Key Notes
+
+* JSP directives start with `<%@` and end with `%>`
+* Directives are processed at **translation time**
+* They do **not generate output**
+* `page` → page configuration
+* `include` → static file inclusion
+* `taglib` → enables custom/JSTL tags
+* `include` directive ≠ `<jsp:include>` action tag
+
+---
+
+❓: **What is the purpose of JSP directives?**
+▶ JSP directives provide instructions to the JSP container about how the JSP page should be translated and compiled.
+
+❓: **At what time are JSP directives processed?**
+▶ At **translation time**, before the JSP is compiled into a servlet.
+
+❓: **Can a JSP page have multiple page directives?**
+▶ Yes, but duplicate or conflicting attributes are not allowed.
+
+❓: **Why is taglib preferred over scriptlets?**
+▶ Because it avoids Java code in JSP, improves readability, and supports MVC architecture.
+
+❓: **Whatis the difference between include directive and JSP include action?**
+▶ Include directive is processed at translation time (static), whereas JSP include action is processed at request time (dynamic).
 
