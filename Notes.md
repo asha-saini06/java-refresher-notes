@@ -18259,3 +18259,122 @@ JavaBeans act as the **Model**, keeping JSP clean and focused on UI.
 ❓ **Is JavaBean the same as a normal Java class?**
 ▶ Conceptually yes, but JavaBeans follow specific conventions to support frameworks and JSP.
 
+## 111. JSP Error Handling
+
+**Error handling in JSP** lets you gracefully manage exceptions and HTTP errors that occur during request processing.
+
+Rather than showing a stack trace to the user, JSP provides mechanisms to **forward errors to a dedicated page** where you can display friendly messages, logging info, or recovery options.
+
+### Types of Errors in JSP
+
+* **Runtime Exceptions** – e.g., `NullPointerException`, arithmetic errors
+* **HTTP Errors** – e.g., 404 (Not Found), 500 (Internal Server Error)
+
+JSP supports **both** kinds of error handling.
+
+### Built-In Error Handling Using Directives
+
+JSP provides two key attributes to support error handling:
+
+#### 1. `errorPage` (on the main JSP)
+
+Used on a JSP page to specify another JSP to handle exceptions.
+
+```jsp
+<%@ page errorPage="error.jsp" %>
+```
+
+📌 This tells the JSP container:
+*If this page throws an exception, forward to `error.jsp`.*
+
+#### 2. `isErrorPage` (on the error handling JSP)
+
+Used on the designated error page.
+
+```jsp
+<%@ page isErrorPage="true" %>
+```
+
+📌 This allows the error page to access the implicit object `exception`, which holds the thrown exception.
+
+### Example: Basic Error Handling
+
+**main.jsp**
+
+```jsp
+<%@ page errorPage="error.jsp" %>
+
+<%
+    int result = 10 / 0; // Causes ArithmeticException
+%>
+```
+
+**error.jsp**
+
+```jsp
+<%@ page isErrorPage="true" %>
+
+<h2>Oops! Something went wrong.</h2>
+<p>Error: <%= exception.getMessage() %></p>
+```
+
+📌 Here, `exception` is available because of `isErrorPage="true"`.
+
+### How Error Handling Works (Conceptually)
+
+* JSP container monitors the page for runtime errors
+* On exception, it **forwards** the request to the designated error page
+* The original request attributes and exception object are preserved
+* You can display custom messages and recover politely
+
+### Handling Specific HTTP Errors via `web.xml`
+
+Although JSP directives handle runtime exceptions, HTTP errors like 404/500 are often centralized in **web.xml**.
+
+```xml
+<error-page>
+    <error-code>404</error-code>
+    <location>/notfound.jsp</location>
+</error-page>
+
+<error-page>
+    <error-code>500</error-code>
+    <location>/servererror.jsp</location>
+</error-page>
+```
+
+📌 This method works even for **non-JSP errors** (like missing resources).
+
+### Best Practices for JSP Error Handling
+
+* Always design a friendly error page (UX matters)
+* Avoid exposing sensitive stack traces to users
+* Log the actual exception server-side
+* Use a **consistency layout** for error pages
+* Combine with servlet filters if needed for centralized logic
+
+## Key Notes
+
+* `errorPage` specifies where errors should be handled
+* `isErrorPage="true"` makes the error page receive the exception
+* Implicit object `exception` is available only on error pages
+* Runtime exceptions are forwarded by the container
+* HTTP errors like 404/500 are usually handled via `web.xml`
+
+---
+
+❓ **What is the role of `errorPage` in JSP?**
+▶ It instructs the JSP container to redirect to a designated page on exception.
+
+❓ **Why do we use `isErrorPage="true"`?**
+▶ To allow access to the `exception` implicit object inside the error page.
+
+❓ **Can the error page access request attributes from the original page?**
+▶ Yes, because forwarding preserves the original request scope.
+
+❓ **How do you handle HTTP error codes like 404?**
+▶ By configuring `<error-page>` entries in `web.xml`.
+
+❓ **Should we always display raw exception messages to users?**
+▶ No; raw stack traces can expose internal details. Use friendly messages instead.
+
