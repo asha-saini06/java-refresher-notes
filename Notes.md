@@ -17367,7 +17367,7 @@ Used to include **custom tags / JSTL**.
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 ```
 
-#### 2. JSP Scriptlet
+### 2. JSP Scriptlet
 
 Scriptlets allow embedding **Java code inside JSP**.
 
@@ -17391,7 +17391,7 @@ Example:
 📌 **Not recommended in modern JSP**
 (Use EL + JSTL instead)
 
-#### 3. JSP Expression
+### 3. JSP Expression
 
 Used to **display data directly in the output**.
 
@@ -17411,7 +17411,7 @@ Example:
 
 ✔ Cannot contain statements (only expressions)
 
-#### 4. JSP Declaration
+### 4. JSP Declaration
 
 Used to declare **variables and methods** at class level.
 
@@ -17438,7 +17438,7 @@ Example:
 📌 Declared variables are **shared across requests**
 (Be careful with thread safety)
 
-#### 5. JSP Action Tags
+### 5. JSP Action Tags
 
 Action tags perform predefined tasks at **runtime**.
 
@@ -17486,7 +17486,7 @@ Creates or locates a JavaBean.
 <jsp:getProperty name="user" property="name" />
 ```
 
-## Directive vs Scriptlet vs Expression
+### Directive vs Scriptlet vs Expression
 
 | Feature     | Directive   | Scriptlet  | Expression |
 | ----------- | ----------- | ---------- | ---------- |
@@ -17495,7 +17495,7 @@ Creates or locates a JavaBean.
 | Syntax      | `<%@ %>`    | `<% %>`    | `<%= %>`   |
 | Usage Today | ✔ Yes       | ❌ Avoid    | Limited    |
 
-## JSP Elements vs EL & JSTL
+### JSP Elements vs EL & JSTL
 
 | JSP Element | Modern Replacement |
 | ----------- | ------------------ |
@@ -17503,13 +17503,13 @@ Creates or locates a JavaBean.
 | Expression  | EL                 |
 | Logic       | JSTL tags          |
 
-Example (EL):
+**Example (EL):**
 
 ```jsp
 ${user.name}
 ```
 
-## Key Points
+### Key Points
 
 * JSP Elements are processed **on the server**
 * Scriptlets are discouraged
@@ -18085,4 +18085,177 @@ Retrieves values from JavaBean properties.
 
 ❓ **Is `<jsp:include>` similar to RequestDispatcher include?**
 ▶ Yes, both include output dynamically during request processing.
+
+## 110. JavaBeans Architecture & `<jsp:useBean>`
+
+**JavaBeans Architecture** defines a reusable, component-based Java class design that is used to **encapsulate data and business logic**.
+
+In JSP, JavaBeans are commonly used to:
+
+* Store form data
+* Share data between JSPs
+* Keep Java code out of JSP pages
+
+The `<jsp:useBean>` action tag is the **bridge between JSP and JavaBeans**.
+
+📌 JavaBeans support **clean separation of concerns**, a key idea behind MVC architecture.
+
+### What is a JavaBean?
+
+A **JavaBean** is a simple Java class that follows certain conventions.
+
+To qualify as a JavaBean, a class must:
+
+* Be a **public class**
+* Have a **public no-argument constructor**
+* Use **private fields**
+* Provide **getter and setter methods**
+* Be **Serializable** (recommended)
+
+### Example: Simple JavaBean
+
+```java
+package com.example;
+
+import java.io.Serializable;
+
+public class User implements Serializable {
+
+    private String username;
+    private int age;
+
+    public User() { }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+```
+
+📌 Fields are accessed indirectly via getters and setters.
+
+### Why JavaBeans are Used in JSP
+
+* Avoid Java code inside JSP
+* Improve maintainability
+* Enable reuse across multiple pages
+* Align with MVC design
+* Make JSP pages easier to test and debug
+
+### `<jsp:useBean>` Action Tag
+
+The `<jsp:useBean>` tag is used to **create or locate a JavaBean object** and bind it to a variable.
+
+#### Syntax
+
+```jsp
+<jsp:useBean id="beanName"
+             class="fully.qualified.ClassName"
+             scope="scopeType" />
+```
+
+### How `<jsp:useBean>` Works (Conceptual)
+
+1. JSP container checks if a bean with the given `id` exists in the specified scope
+2. If found, it **reuses the existing object**
+3. If not found, it **creates a new instance** using the no-arg constructor
+4. The bean becomes accessible in the JSP
+
+This behavior is often asked in interviews.
+
+### Scope Attribute in `<jsp:useBean>`
+
+The `scope` defines **how long the bean lives** and **who can access it**.
+
+* `page` – Available only in the current JSP (default)
+* `request` – Available throughout the request
+* `session` – Available for the user session
+* `application` – Shared across the entire application
+
+```jsp
+<jsp:useBean id="user" class="com.example.User" scope="session" />
+```
+
+### Setting Properties Using `<jsp:setProperty>`
+
+You can populate bean properties using request parameters or explicit values.
+
+#### Manual Assignment
+
+```jsp
+<jsp:setProperty name="user" property="username" value="Asha" />
+```
+
+#### Automatic Population
+
+```jsp
+<jsp:setProperty name="user" property="*" />
+```
+
+📌 Automatically maps request parameters to matching bean properties.
+
+### Getting Properties Using `<jsp:getProperty>`
+
+```jsp
+<jsp:getProperty name="user" property="username" />
+```
+
+📌 Internally calls the getter method.
+
+### End-to-End Flow Example
+
+```jsp
+<jsp:useBean id="user" class="com.example.User" scope="request" />
+<jsp:setProperty name="user" property="*" />
+
+Welcome,
+<jsp:getProperty name="user" property="username" />
+```
+
+📌 JSP handles presentation, JavaBean handles data.
+
+### JavaBeans Architecture in MVC
+
+* **Model** → JavaBeans (data + business logic)
+* **View** → JSP
+* **Controller** → Servlet
+
+JavaBeans act as the **Model**, keeping JSP clean and focused on UI.
+
+### Key Notes
+
+* JavaBeans follow strict naming conventions
+* `<jsp:useBean>` creates or reuses beans
+* Scope controls lifecycle and visibility
+* `<jsp:setProperty>` supports auto-population
+* Core to MVC-based JSP applications
+
+---
+
+❓ **Why must a JavaBean have a no-argument constructor?**
+▶ Because JSP container uses reflection to create the object.
+
+❓ **What happens if a bean already exists in the given scope?**
+▶ `<jsp:useBean>` reuses the existing instance instead of creating a new one.
+
+❓ **Why are getters and setters mandatory in JavaBeans?**
+▶ JSP accesses properties through these methods, not directly through fields.
+
+❓ **When would you prefer session scope over request scope?**
+▶ When data must persist across multiple requests from the same user.
+
+❓ **Is JavaBean the same as a normal Java class?**
+▶ Conceptually yes, but JavaBeans follow specific conventions to support frameworks and JSP.
 
