@@ -17308,7 +17308,7 @@ JSP elements are broadly classified into **four main categories**:
 | Expression | Output data to response               |
 | Action     | Perform predefined actions            |
 
-## 1. JSP Directives
+### 1. JSP Directives
 
 Directives give **instructions to the JSP container** about how to process the JSP page.
 
@@ -17320,9 +17320,9 @@ Syntax:
 <%@ directive attribute="value" %>
 ```
 
-### Types of JSP Directives
+#### Types of JSP Directives
 
-#### a) Page Directive
+##### a) Page Directive
 
 Controls page-level settings.
 
@@ -17345,7 +17345,7 @@ Example:
 <%@ page import="java.util.Date" %>
 ```
 
-#### b) Include Directive
+##### b) Include Directive
 
 Used to include another file **at translation time**.
 
@@ -17354,11 +17354,12 @@ Used to include another file **at translation time**.
 ```
 
 ✔ Static include
+
 ✔ Code is merged before compilation
 
 ---
 
-#### c) Taglib Directive
+##### c) Taglib Directive
 
 Used to include **custom tags / JSTL**.
 
@@ -17366,7 +17367,7 @@ Used to include **custom tags / JSTL**.
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 ```
 
-## 2. JSP Scriptlet
+#### 2. JSP Scriptlet
 
 Scriptlets allow embedding **Java code inside JSP**.
 
@@ -17390,7 +17391,7 @@ Example:
 📌 **Not recommended in modern JSP**
 (Use EL + JSTL instead)
 
-## 3. JSP Expression
+#### 3. JSP Expression
 
 Used to **display data directly in the output**.
 
@@ -17410,7 +17411,7 @@ Example:
 
 ✔ Cannot contain statements (only expressions)
 
-## 4. JSP Declaration
+#### 4. JSP Declaration
 
 Used to declare **variables and methods** at class level.
 
@@ -17437,7 +17438,7 @@ Example:
 📌 Declared variables are **shared across requests**
 (Be careful with thread safety)
 
-## 5. JSP Action Tags
+#### 5. JSP Action Tags
 
 Action tags perform predefined tasks at **runtime**.
 
@@ -17907,4 +17908,181 @@ Think of it like **calling another servlet dynamically**.
 ❓ **Is `<jsp:include>` similar to RequestDispatcher include?**
 ▶ Yes conceptually. Both include output of another resource during request processing.
 
+## 109. JSP Action Tags
+**JSP Action Tags** are special XML-based tags used to **perform actions at request time**.
+
+Unlike directives, which affect translation, **action tags are executed when a request is processed**.
+They help JSP pages **interact with JavaBeans, include resources dynamically, and control page flow**.
+
+📌 JSP action tags follow **XML syntax** and are executed at **request time**.
+
+### General Syntax of JSP Action Tags
+
+```jsp
+<jsp:actionName attribute="value" />
+```
+
+or with body:
+
+```jsp
+<jsp:actionName attribute="value">
+    ...
+</jsp:actionName>
+```
+
+### Why JSP Action Tags Are Needed
+
+* Reduce Java code inside JSP
+* Improve readability and maintainability
+* Support MVC architecture
+* Enable dynamic behavior at runtime
+
+### Common JSP Action Tags
+
+The most commonly used JSP action tags are:
+
+1. `<jsp:include>`
+2. `<jsp:forward>`
+3. `<jsp:param>`
+4. `<jsp:useBean>`
+5. `<jsp:setProperty>`
+6. `<jsp:getProperty>`
+
+### `<jsp:include>`
+
+Includes another resource **at request time** and merges its **output** into the response.
+
+#### Syntax
+
+```jsp
+<jsp:include page="header.jsp" />
+```
+
+With parameters:
+
+```jsp
+<jsp:include page="header.jsp">
+    <jsp:param name="title" value="Home" />
+</jsp:include>
+```
+
+#### Concept Explanation
+
+* Executes the included resource dynamically
+* Each JSP remains a separate servlet
+* Useful for content that changes frequently
+
+### `<jsp:forward>`
+
+Forwards the request to another resource **without returning control** to the current JSP.
+
+#### Syntax
+
+```jsp
+<jsp:forward page="login.jsp" />
+```
+
+With parameters:
+
+```jsp
+<jsp:forward page="dashboard.jsp">
+    <jsp:param name="role" value="admin" />
+</jsp:forward>
+```
+
+#### Concept Explanation
+
+* Request is forwarded on the server side
+* Browser URL does not change
+* Similar to `RequestDispatcher.forward()`
+
+### `<jsp:param>`
+
+Used to pass parameters to `<jsp:include>` or `<jsp:forward>`.
+
+#### Syntax
+
+```jsp
+<jsp:param name="username" value="Asha" />
+```
+
+📌 Cannot be used independently.
+
+### `<jsp:useBean>`
+
+Creates or locates a JavaBean and makes it available to the JSP.
+
+#### Syntax
+
+```jsp
+<jsp:useBean id="user" class="com.example.User" scope="session" />
+```
+
+#### Concept Explanation
+
+* Creates bean if it doesn’t exist
+* Reuses existing bean if already present in scope
+* Encourages separation of logic and presentation
+
+### `<jsp:setProperty>`
+
+Sets values into JavaBean properties.
+
+#### Syntax
+
+```jsp
+<jsp:setProperty name="user" property="username" value="Asha" />
+```
+
+Auto-population:
+
+```jsp
+<jsp:setProperty name="user" property="*" />
+```
+
+### `<jsp:getProperty>`
+
+Retrieves values from JavaBean properties.
+
+#### Syntax
+
+```jsp
+<jsp:getProperty name="user" property="username" />
+```
+
+### Flow Example Using Action Tags
+
+```jsp
+<jsp:useBean id="user" class="com.example.User" scope="request" />
+<jsp:setProperty name="user" property="*" />
+
+<jsp:include page="profile.jsp" />
+```
+
+📌 This keeps business logic in JavaBeans and JSP clean.
+
+### Key Notes
+
+* JSP action tags execute at **request time**
+* They follow **XML syntax**
+* Promote clean MVC-based JSP design
+* `<jsp:include>` ≠ include directive
+* JavaBeans integration is a core use case
+
+---
+
+❓ **How are JSP action tags different from directives?**
+▶ Directives affect translation, action tags execute at request time.
+
+❓ **Why are action tags preferred over scriptlets?**
+▶ They improve readability, maintain separation of concerns, and reduce embedded Java code.
+
+❓ **When would you use `<jsp:forward>` instead of `<jsp:include>`?**
+▶ When control should permanently move to another resource.
+
+❓ **What happens if a bean already exists in the given scope?**
+▶ `<jsp:useBean>` reuses it instead of creating a new one.
+
+❓ **Is `<jsp:include>` similar to RequestDispatcher include?**
+▶ Yes, both include output dynamically during request processing.
 
