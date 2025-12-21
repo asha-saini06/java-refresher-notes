@@ -115,11 +115,11 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 104. [EL (Expression Language)](Notes.md#104-el-expression-language)
 105. [JSP Lifecycle](Notes.md#105-jsp-lifecycle)
 106. [JSP Elements](Notes.md#106-jsp-elements)
-107. JSP Directives (page, include, taglib)
-108. Include Directive vs `<jsp:include>` Action
-109. JSP Action Tags
-110. JavaBeans Architecture & `<jsp:useBean>`
-111. JSP Error Handling
+107. [JSP Directives (page, include, taglib)](Notes.md#107-jsp-directives-page-include-taglib)
+108. [Include Directive vs `<jsp:include>` Action](Notes.md#108-include-directive-vs-jspinclude-action)
+109. [JSP Action Tags](Notes.md#109-jsp-action-tags)
+110. [JavaBeans Architecture & `<jsp:useBean>`](Notes.md#110-javabeans-architecture-jspusebean)
+111. [JSP Error Handling](Notes.md#111-jsp-error-handling)
 112. Custom Error Pages in JSP
 113. JSTL (JavaServer Pages Standard Tag Library) – Introduction
 114. Core JSTL Tags (`c:if`, `c:forEach`, `c:choose`)
