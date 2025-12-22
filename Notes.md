@@ -21317,3 +21317,204 @@ http://localhost:8080/myapp
 ❓ **How is WAR different from JAR?**
 ▶ WAR is for web applications; JAR is a general-purpose Java archive.
 
+## 128. Deployment Descriptor (web.xml)
+The **Deployment Descriptor (`web.xml`)** is a **central configuration file** that defines how a Java web application behaves inside a **web container**.
+
+It tells the container:
+
+* what components exist
+* how requests are mapped
+* how sessions, security, and errors are handled
+
+📌 `web.xml` is read **when the application starts**, before any request is processed.
+
+### Why web.xml Exists
+
+Without a deployment descriptor:
+
+* Configuration would be scattered across code
+* Behavior would be hard to change without recompiling
+* Central control would be impossible
+
+`web.xml` provides a **declarative, centralized configuration model**.
+
+### Location of web.xml
+
+```
+WEB-INF/web.xml
+```
+
+📌 Files under `WEB-INF` are protected from direct browser access.
+
+### Responsibilities of web.xml
+
+`web.xml` is used to configure:
+
+* Servlet declarations and mappings
+* Filters and filter mappings
+* Listeners
+* Session timeout
+* Error pages
+* Security constraints
+* Welcome files
+
+### Basic Structure of web.xml
+
+```xml
+<!-- Root element defining a web application -->
+<web-app>
+
+    <!-- Configuration elements go here -->
+
+</web-app>
+```
+
+📌 All configurations must be inside `<web-app>`.
+
+### Servlet Configuration in web.xml
+
+#### Servlet Declaration
+
+```xml
+<!-- Declare a servlet class -->
+<servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>com.example.servlet.LoginServlet</servlet-class>
+</servlet>
+```
+
+#### Servlet Mapping
+
+```xml
+<!-- Map servlet to a URL pattern -->
+<servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
+</servlet-mapping>
+```
+
+📌 Declaration defines *what*, mapping defines *where*.
+
+### Filter Configuration
+
+#### Filter Declaration
+
+```xml
+<!-- Define a filter -->
+<filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>com.example.filter.AuthFilter</filter-class>
+</filter>
+```
+
+#### Filter Mapping
+
+```xml
+<!-- Apply filter to URL patterns -->
+<filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+```
+
+📌 Filters intercept requests **before servlets**.
+
+### Listener Configuration
+
+```xml
+<!-- Register an application lifecycle listener -->
+<listener>
+    <listener-class>com.example.listener.AppStartupListener</listener-class>
+</listener>
+```
+
+📌 Listeners react to lifecycle events, not requests.
+
+---
+
+### Session Configuration
+
+```xml
+<!-- Configure session behavior -->
+<session-config>
+    <!-- Timeout in minutes -->
+    <session-timeout>30</session-timeout>
+</session-config>
+```
+
+📌 Timeout is based on inactivity.
+
+### Error Page Configuration
+
+```xml
+<!-- Handle HTTP 404 errors -->
+<error-page>
+    <error-code>404</error-code>
+    <location>/notfound.jsp</location>
+</error-page>
+
+<!-- Handle server-side exceptions -->
+<error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/error.jsp</location>
+</error-page>
+```
+
+📌 Centralized error handling improves consistency.
+
+### Welcome File Configuration
+
+```xml
+<!-- Default page loaded on root access -->
+<welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+</welcome-file-list>
+```
+
+📌 Avoid hardcoding landing pages in code.
+
+### web.xml vs Annotations
+
+| Aspect                     | web.xml     | Annotations |
+| -------------------------- | ----------- | ----------- |
+| Configuration              | Centralized | Scattered   |
+| Change without recompiling | Yes         | No          |
+| Visibility                 | High        | Lower       |
+| Flexibility                | Higher      | Limited     |
+
+📌 Modern applications often use **both together**.
+
+### When web.xml Is Still Preferred
+
+* Security rules
+* Global filters
+* Session configuration
+* Error handling
+* Legacy system compatibility
+
+### 📝 Points to Remember
+
+* `web.xml` is read at application startup
+* It centralizes application behavior
+* URL mappings are declarative
+* Filters execute before servlets
+* Annotations do not replace all web.xml use cases
+* `WEB-INF` protects configuration files
+
+---
+
+❓ **Is web.xml mandatory in modern applications?**
+▶ No, but it is still fully supported and often necessary.
+
+❓ **Which loads first: web.xml or annotations?**
+▶ `web.xml` loads first and can override annotation behavior.
+
+❓ **Can we mix annotations and web.xml?**
+▶ Yes, and this is common in real projects.
+
+❓ **Why prefer web.xml for security configuration?**
+▶ Because security rules should be centralized and declarative.
+
+❓ **What happens if servlet mapping conflicts occur?**
+▶ Deployment fails or mapping precedence rules apply.
+
