@@ -22518,3 +22518,198 @@ Optional strategies:
 ❓ **Why is regenerating session ID better than just adding attributes?**
 ▶ Regeneration breaks any association with a previously known session ID, eliminating fixation attacks.
 
+Here is the topic written **exactly in your established format**, with **clean hierarchy**, **commented examples**, **no extra separators**, and **explanatory conceptual answers**.
+
+You can paste this directly into `Notes.md`.
+
+---
+
+## 134. Cookies vs Sessions (Security Perspective)
+
+**Cookies** and **Sessions** are both used to maintain **user state** in web applications, but they differ fundamentally in **where data is stored**, **how it is protected**, and **what security risks they introduce**.
+
+From a security perspective, **sessions are generally safer**, while cookies must be handled with extreme care.
+
+---
+
+### Where Data Is Stored
+
+* **Cookies**
+  Stored on the **client (browser)**
+
+* **Sessions**
+  Stored on the **server**
+
+📌 Storage location directly impacts security.
+
+---
+
+### Cookies (Security View)
+
+A **cookie** is a small key-value pair stored in the browser and sent with every request.
+
+---
+
+#### Cookie Creation Example
+
+```java
+// Create a cookie storing non-sensitive data
+Cookie themeCookie = new Cookie("theme", "dark");
+
+// Set cookie expiry (in seconds)
+themeCookie.setMaxAge(60 * 60);
+
+// Restrict cookie to HTTPS
+themeCookie.setSecure(true);
+
+// Prevent JavaScript access
+themeCookie.setHttpOnly(true);
+
+// Add cookie to response
+response.addCookie(themeCookie);
+```
+
+📌 Cookies are **visible and modifiable** by the client.
+
+---
+
+### Cookie Security Risks
+
+Cookies are vulnerable to:
+
+* Client-side tampering
+* XSS attacks (if not HttpOnly)
+* Session hijacking
+* Replay attacks
+* Accidental leakage via logs or URLs
+
+📌 Cookies should never store sensitive data.
+
+---
+
+### Sessions (Security View)
+
+A **session** stores data on the server and uses a cookie only to store a **session ID**.
+
+---
+
+#### Session Usage Example
+
+```java
+// Create or retrieve session
+HttpSession session = request.getSession();
+
+// Store minimal user identity
+session.setAttribute("userId", userId);
+session.setAttribute("role", role);
+```
+
+📌 The browser never sees actual session data.
+
+---
+
+### Session Security Advantages
+
+Sessions provide:
+
+* Server-side control
+* Reduced data exposure
+* Easier invalidation
+* Better protection against tampering
+
+📌 Stealing a session ID is harder than modifying cookie data.
+
+---
+
+### Session Security Risks
+
+Sessions can still be compromised if:
+
+* Session IDs are exposed
+* HTTPS is not enforced
+* Session fixation is allowed
+* Long timeouts are configured
+
+📌 Sessions are safer, but **not automatically secure**.
+
+---
+
+### Cookies vs Sessions (Security Comparison)
+
+| Aspect               | Cookies     | Sessions    |
+| -------------------- | ----------- | ----------- |
+| Data location        | Client-side | Server-side |
+| Tampering risk       | High        | Low         |
+| Sensitive data       | Unsafe      | Safer       |
+| XSS exposure         | High        | Limited     |
+| Server memory usage  | None        | Yes         |
+| Invalidation control | Weak        | Strong      |
+
+---
+
+### When Cookies Are Acceptable
+
+Cookies are suitable for:
+
+* UI preferences
+* Language settings
+* Theme selection
+* Non-sensitive flags
+
+📌 Never use cookies for authentication data.
+
+---
+
+### When Sessions Are Required
+
+Sessions should be used for:
+
+* Login state
+* User identity
+* Roles and permissions
+* Shopping carts
+* Multi-step workflows
+
+📌 Authentication must always be session-based.
+
+---
+
+### Best Practices Combining Cookies and Sessions
+
+* Store only session ID in cookie
+* Use `HttpOnly` and `Secure` flags
+* Regenerate session ID after login
+* Avoid URL rewriting
+* Set reasonable session timeouts
+
+📌 Cookies and sessions work together, not against each other.
+
+---
+
+### 📝 Points to Remember
+
+* Cookies store data on the client
+* Sessions store data on the server
+* Cookies are easy to tamper with
+* Sessions provide better security
+* Never store credentials in cookies
+* Protect session IDs aggressively
+
+---
+
+❓ **Why are sessions considered more secure than cookies?**
+▶ Sessions keep all sensitive data on the server, where the client cannot read or modify it. The client only holds a session ID, which significantly reduces exposure and tampering risk.
+
+❓ **If sessions use cookies, why are they still safer?**
+▶ Because the cookie only contains a random session ID, not actual user data. Even if intercepted, proper safeguards like HTTPS, regeneration, and timeouts limit abuse.
+
+❓ **Can cookies ever replace sessions for authentication?**
+▶ No. Cookies alone cannot guarantee integrity because they are client-controlled. Authentication must rely on server-side session validation.
+
+❓ **What happens if a session cookie is stolen?**
+▶ The attacker can impersonate the user until the session expires or is invalidated. This is why HTTPS, `HttpOnly`, and session regeneration are critical.
+
+❓ **Why is URL rewriting worse than cookies for sessions?**
+▶ Session IDs in URLs can be logged, shared, cached, or bookmarked, making hijacking far easier than cookie-based session tracking.
+
+## 135. CSRF and XSS Attacks (Basics)
