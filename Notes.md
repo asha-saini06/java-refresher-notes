@@ -19712,3 +19712,208 @@ request.setAttribute("loginBean", bean);
 ❓ **What is PRG pattern and why is it used?**
 ▶ Post–Redirect–Get prevents duplicate form submissions on page refresh.
 
+## 120. Form Validation (Client-side & Server-side)
+
+**Form validation** ensures that user input is **correct, complete, and safe** before it is processed or stored.
+
+In Java web applications, validation is performed at **two levels**:
+
+1. **Client-side validation** (browser)
+2. **Server-side validation** (Servlet)
+
+### Why Form Validation Is Necessary
+
+* Prevents invalid data entry
+* Improves user experience
+* Protects against malicious input
+* Reduces server errors
+* Ensures data integrity
+
+📌 Client-side validation improves UX, but **server-side validation is mandatory**.
+
+### Client-side Validation
+
+**Client-side validation** is performed in the browser before the form is submitted.
+
+It is implemented using:
+
+* HTML5 attributes
+* JavaScript (optional)
+
+#### HTML5 Client-side Validation
+
+```html
+<!-- Login form with built-in HTML5 validation -->
+<form action="login" method="post">
+
+    <!-- Username field: cannot be empty -->
+    <input type="text" name="username"
+           required
+           minlength="3"
+           placeholder="Enter username" />
+
+    <!-- Email field: browser validates email format -->
+    <input type="email" name="email"
+           required
+           placeholder="Enter email" />
+
+    <!-- Password field: minimum length enforced -->
+    <input type="password" name="password"
+           required
+           minlength="6" />
+
+    <!-- Submit button -->
+    <input type="submit" value="Login" />
+</form>
+```
+
+📌 Validation happens **before request reaches the server**.
+
+#### JavaScript-based Client Validation (Optional)
+
+```html
+<script>
+    // Validate form before submission
+    function validateForm() {
+
+        // Read input value
+        const username = document.forms["loginForm"]["username"].value;
+
+        // Check if username is empty
+        if (username === "") {
+            alert("Username must not be empty");
+            return false; // Prevent form submission
+        }
+
+        return true; // Allow submission
+    }
+</script>
+```
+
+📌 JavaScript validation can be **bypassed**, so never rely on it alone.
+
+### Server-side Validation
+
+**Server-side validation** is performed inside **Servlets**.
+
+It ensures correctness **even if client-side validation is skipped or manipulated**.
+
+#### Server-side Validation in Servlet
+
+```java
+// Servlet handling server-side validation
+@WebServlet("/register")
+public class RegisterServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Read form parameters
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Server-side validation: username must not be empty
+        if (username == null || username.trim().isEmpty()) {
+
+            // Store error message in request scope
+            request.setAttribute("error", "Username is required");
+
+            // Forward back to form JSP
+            request.getRequestDispatcher("register.jsp")
+                   .forward(request, response);
+            return;
+        }
+
+        // Server-side validation: password length check
+        if (password == null || password.length() < 6) {
+
+            request.setAttribute("error", "Password must be at least 6 characters");
+
+            request.getRequestDispatcher("register.jsp")
+                   .forward(request, response);
+            return;
+        }
+
+        // If validation passes, continue processing
+        request.setAttribute("message", "Registration successful");
+
+        // Forward to success page
+        request.getRequestDispatcher("success.jsp")
+               .forward(request, response);
+    }
+}
+```
+
+📌 Server-side validation is **non-negotiable**.
+
+### Displaying Validation Errors in JSP
+
+```jsp
+<!-- Display validation error message -->
+<c:if test="${not empty error}">
+    <p style="color:red">${error}</p>
+</c:if>
+
+<!-- Display success message -->
+<c:if test="${not empty message}">
+    <p style="color:green">${message}</p>
+</c:if>
+```
+
+📌 Error messages are passed via **request scope**.
+
+### Client-side vs Server-side Validation
+
+| Aspect          | Client-side | Server-side |
+| --------------- | ----------- | ----------- |
+| Runs in         | Browser     | Server      |
+| Improves UX     | Yes         | No          |
+| Security        | No          | Yes         |
+| Can be bypassed | Yes         | No          |
+| Mandatory       | No          | Yes         |
+
+📌 rule: **Always validate on server**.
+
+---
+
+### Common Validation Mistakes
+
+* Relying only on client-side validation
+* Writing validation logic in JSP
+* Not trimming input values
+* Exposing detailed error messages
+* Repeating validation code (no reuse)
+
+### Best Practices for Validation
+
+* Use client-side validation for fast feedback
+* Always validate again on server
+* Centralize validation logic if possible
+* Show user-friendly error messages
+* Log detailed errors server-side
+
+### Key Notes
+
+* Validation must happen on both client and server
+* Client-side improves UX only
+* Server-side ensures security and correctness
+* Validation logic belongs in Servlets or services
+* JSP only displays validation results
+
+---
+
+❓ **Why is server-side validation mandatory even if client-side exists?**
+▶ Because client-side validation can be bypassed or disabled.
+
+❓ **Should validation logic be written in JSP?**
+▶ No. JSP should only display validation messages.
+
+❓ **Where should validation ideally reside?**
+▶ In Servlets or a dedicated service layer.
+
+❓ **Can JavaScript validation improve security?**
+▶ No. It only improves user experience.
+
+❓ **What is the interviewer’s expected answer for validation strategy?**
+▶ Use client-side for UX and server-side for security.
+
