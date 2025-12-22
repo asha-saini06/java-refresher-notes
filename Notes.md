@@ -19917,3 +19917,323 @@ public class RegisterServlet extends HttpServlet {
 ❓ **What is the interviewer’s expected answer for validation strategy?**
 ▶ Use client-side for UX and server-side for security.
 
+## 121. Session Management in Web Applications
+**Session management** is the mechanism used to **maintain user state across multiple HTTP requests**.
+
+HTTP is **stateless**, meaning each request is independent.
+Sessions allow the server to remember **who the user is** and **what they have already done**.
+
+### Why Session Management Is Needed
+
+Without sessions:
+
+* Each request looks like a new user
+* Login state cannot be preserved
+* Shopping carts, preferences, and workflows break
+
+Sessions provide **continuity** over multiple requests.
+
+### What Is a Session
+
+A **session** is a server-side storage area that:
+
+* Is associated with a unique user
+* Is identified by a **session ID**
+* Persists across multiple requests
+
+📌 The session ID is usually stored in a **cookie** (`JSESSIONID`).
+
+### How Session Management Works (Conceptually)
+
+1. Client sends first request
+2. Server creates a session
+3. Server generates a unique session ID
+4. Session ID is sent to client (usually as a cookie)
+5. Client sends session ID with every subsequent request
+6. Server uses it to retrieve session data
+
+### Creating and Accessing Session in Servlet
+
+```java
+// Servlet demonstrating session creation and usage
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Get or create a new session
+        HttpSession session = request.getSession();
+
+        // Store user data in session scope
+        session.setAttribute("username", "Asha");
+
+        // Redirect user to dashboard
+        response.sendRedirect("dashboard.jsp");
+    }
+}
+```
+
+📌 `getSession()` creates a session if one does not exist.
+
+### Accessing Session Data in JSP
+
+```jsp
+<!-- Access session attribute using EL -->
+<h2>Welcome, ${sessionScope.username}</h2>
+```
+
+📌 EL provides direct access to session scope.
+
+### Session Invalidation (Logout)
+
+```java
+// Servlet handling logout
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Get existing session without creating a new one
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            // Invalidate session and clear all data
+            session.invalidate();
+        }
+
+        // Redirect to login page
+        response.sendRedirect("login.jsp");
+    }
+}
+```
+
+📌 `invalidate()` destroys the session completely.
+
+### Session Timeout
+
+A session automatically expires after a period of inactivity.
+
+Configured in `web.xml`:
+
+```xml
+<!-- Session timeout configuration -->
+<session-config>
+    <!-- Timeout in minutes -->
+    <session-timeout>30</session-timeout>
+</session-config>
+```
+
+📌 Timeout is **based on inactivity**, not total lifetime.
+
+### Session Scope vs Other Scopes
+
+| Scope       | Lifetime                       |
+| ----------- | ------------------------------ |
+| Request     | Single request                 |
+| Session     | Multiple requests by same user |
+| Application | Entire application             |
+
+📌 Sessions are ideal for **user-specific data**.
+
+### Common Use Cases of Sessions
+
+* Login authentication
+* Shopping carts
+* User preferences
+* Multi-step forms
+
+### Common Session Management Mistakes
+
+* Storing large objects in session
+* Never invalidating sessions
+* Using session for temporary request data
+* Assuming session always exists
+
+### 📝 Rules / Points to Remember
+
+* HTTP is stateless; sessions maintain state
+* Session data is stored on the server
+* Session ID links client to server session
+* `getSession()` creates a session if absent
+* `getSession(false)` avoids creating a new session
+* Always invalidate session on logout
+* Do not store sensitive or large objects unnecessarily
+
+---
+
+❓: **Where is session data actually stored?**
+▶ Session data is stored **on the server**, not in the browser. The browser only stores the session ID.
+
+❓: **Is a session the same as a cookie?**
+▶ No. A cookie stores data on the client. A session stores data on the server and uses a cookie to track the session ID.
+
+❓: **What happens if cookies are disabled?**
+▶ Session tracking can still work using **URL rewriting**, where the session ID is appended to the URL.
+
+❓: **Does calling `getSession()` always create a new session?**
+▶ No. It returns an existing session if present; otherwise, it creates a new one.
+
+❓: **Why is `getSession(false)` important?**
+▶ It prevents accidental session creation when only checking for an existing session (e.g., during logout).
+
+❓: **What happens to session data after timeout?**
+▶ The session is destroyed and all stored attributes are lost.
+
+--- 
+
+### Cookies vs Sessions
+
+**Cookies** and **Sessions** are both mechanisms to maintain user state, but they differ fundamentally in **where data is stored** and **how secure they are**.
+
+#### Cookies
+
+A **cookie** is a small piece of data stored on the **client (browser)**.
+
+```java
+// Creating a cookie in servlet
+Cookie userCookie = new Cookie("username", "Asha");
+
+// Set cookie expiry time (in seconds)
+userCookie.setMaxAge(60 * 60); // 1 hour
+
+// Add cookie to response
+response.addCookie(userCookie);
+```
+
+📌 Cookies travel with every request to the server.
+
+#### Sessions
+
+A **session** stores data on the **server** and uses a cookie only to store the **session ID**.
+
+```java
+// Store data in session
+HttpSession session = request.getSession();
+session.setAttribute("username", "Asha");
+```
+
+#### Cookies vs Sessions Comparison
+
+| Aspect         | Cookies         | Sessions        |
+| -------------- | --------------- | --------------- |
+| Storage        | Client-side     | Server-side     |
+| Security       | Lower           | Higher          |
+| Size limit     | ~4 KB           | Larger          |
+| Performance    | Faster          | Slight overhead |
+| Sensitive data | Not recommended | Recommended     |
+
+📝 **Rules / Points to Remember**
+
+* Cookies store data on the browser
+* Sessions store data on the server
+* Sessions usually depend on cookies
+* Sensitive data should never be stored in cookies
+* Sessions are safer but consume server memory
+
+---
+
+❓: **Can a session exist without cookies?**
+▶ Yes. Using URL rewriting, session IDs can be passed through URLs.
+
+❓: **Why are sessions considered more secure than cookies?**
+▶ Because session data is never exposed to the client.
+
+---
+
+### URL Rewriting
+
+**URL Rewriting** is a session-tracking technique where the **session ID is appended to the URL**.
+
+It is mainly used when **cookies are disabled**.
+
+#### Example of URL Rewriting
+
+```java
+// Encode URL with session ID
+String encodedURL = response.encodeURL("dashboard.jsp");
+
+// Redirect using encoded URL
+response.sendRedirect(encodedURL);
+```
+
+📌 The container automatically appends `;jsessionid=XYZ`.
+
+#### How URL Rewriting Works
+
+1. Server generates a session
+2. Session ID is embedded into URLs
+3. Client sends session ID via URL
+4. Server retrieves session using that ID
+
+📝 **Rules / Points to Remember**
+
+* URL rewriting is a fallback mechanism
+* Session ID becomes visible in URL
+* Less secure than cookies
+* Used only when cookies are disabled
+
+---
+
+❓: **Why is URL rewriting considered unsafe?**
+▶ Because session IDs can be bookmarked, logged, or shared.
+
+❓: **Does URL rewriting work automatically?**
+▶ Only if `encodeURL()` or `encodeRedirectURL()` is used.
+
+---
+
+### Authentication & Authorization Basics
+
+**Authentication** and **Authorization** are core security concepts often implemented using sessions.
+
+#### Authentication
+
+Authentication answers: **Who is the user?**
+
+```java
+// After successful login
+HttpSession session = request.getSession();
+session.setAttribute("user", authenticatedUser);
+```
+
+📌 Session maintains login state across requests.
+
+#### Authorization
+
+Authorization answers: **What is the user allowed to do?**
+
+```java
+// Check user role before accessing resource
+if (!"ADMIN".equals(session.getAttribute("role"))) {
+    response.sendRedirect("accessDenied.jsp");
+    return;
+}
+```
+
+#### Authentication vs Authorization
+
+| Aspect        | Authentication | Authorization        |
+| ------------- | -------------- | -------------------- |
+| Purpose       | Identify user  | Grant permissions    |
+| Happens first | Yes            | After authentication |
+| Based on      | Credentials    | Roles / privileges   |
+
+📝 **Rules / Points to Remember**
+
+* Authentication establishes identity
+* Authorization controls access
+* Sessions maintain authentication state
+* Authorization checks should happen on every request
+* Never trust client-side role checks
+
+---
+
+❓: **Can authorization exist without authentication?**
+▶ No. You must know *who* the user is before checking permissions.
+
+❓: **Why should authorization not be handled in JSP alone?**
+▶ Because JSP can be bypassed; checks must exist in controllers or filters.
+
+
