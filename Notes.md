@@ -20411,3 +20411,136 @@ public class LogoutServlet extends HttpServlet {
 ❓: **Why should access control not rely only on JSP checks?**
 ▶ Because JSP can be bypassed; controllers or filters should enforce security.
 
+## 123. Authentication and Authorization Basics
+
+**Authentication** and **Authorization** are core security concepts used to **control access to web applications**.
+
+They solve two different problems and must always be handled **in the correct order**.
+
+### Authentication
+
+**Authentication** answers the question:
+
+> **Who is the user?**
+
+It verifies a user’s identity using credentials such as:
+
+* Username and password
+* Token
+* Session ID
+
+📌 Authentication establishes **identity**, not permissions.
+
+### How Authentication Works (Conceptually)
+
+1. User submits credentials
+2. Server validates credentials
+3. Server creates a session
+4. User identity is stored in session
+5. Subsequent requests rely on session data
+
+### Authentication Example using Session
+
+```java
+// After successful credential verification
+HttpSession session = request.getSession();
+
+// Store authenticated user identity
+session.setAttribute("authenticatedUser", username);
+```
+
+📌 Presence of this attribute indicates the user is logged in.
+
+### Authorization
+
+**Authorization** answers the question:
+
+> **What is the user allowed to do?**
+
+It controls access based on:
+
+* Roles (ADMIN, USER)
+* Permissions
+* Privileges
+
+📌 Authorization always happens **after authentication**.
+
+### How Authorization Works (Conceptually)
+
+1. User is authenticated
+2. Server checks user role or permission
+3. Access is either granted or denied
+4. Restricted resources remain protected
+
+### Authorization Example using Session
+
+```java
+// Retrieve session without creating a new one
+HttpSession session = request.getSession(false);
+
+// Read user role from session
+String role = (String) session.getAttribute("role");
+
+// Authorization check
+if (!"ADMIN".equals(role)) {
+    // Deny access if role does not match
+    response.sendRedirect("accessDenied.jsp");
+    return;
+}
+```
+
+📌 Authorization checks must be enforced on **every protected request**.
+
+### Authentication vs Authorization
+
+| Aspect            | Authentication | Authorization        |
+| ----------------- | -------------- | -------------------- |
+| Purpose           | Identify user  | Control access       |
+| Question answered | Who are you?   | What can you do?     |
+| Depends on        | Credentials    | Roles / permissions  |
+| Happens first     | Yes            | After authentication |
+| Stored in session | Identity       | Role / permissions   |
+
+### Where Authentication and Authorization Should Live
+
+* Authentication logic → **Servlet / Service layer**
+* Authorization checks → **Servlets / Filters**
+* JSP → **Display only**
+
+📌 JSP should never decide access control alone.
+
+### Common Mistakes
+
+* Mixing authentication and authorization
+* Trusting client-side role checks
+* Storing passwords in session
+* Performing authorization only in JSP
+* Not validating session existence
+
+### 📝 Rules / Points to Remember
+
+* Authentication verifies identity
+* Authorization verifies permissions
+* Authorization always follows authentication
+* Sessions maintain authentication state
+* Never store credentials in session
+* Access control must be server-side
+* JSP should not enforce security rules
+
+---
+
+❓ **Can a user be authenticated but not authorized?**
+▶ Yes. A user can be logged in but still lack permission to access certain resources.
+
+❓ **Can authorization exist without authentication?**
+▶ No. Permissions are meaningless without knowing the user’s identity.
+
+❓ **Why should authorization not be done only in JSP?**
+▶ JSP can be bypassed. Security must be enforced in controllers or filters.
+
+❓ **Is storing role in session safe?**
+▶ Yes, if it is set server-side and never trusted from client input.
+
+❓ **What happens if session expires during an authorized request?**
+▶ The user must be treated as unauthenticated and access must be denied.
+
