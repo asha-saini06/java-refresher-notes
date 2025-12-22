@@ -18086,7 +18086,7 @@ Retrieves values from JavaBean properties.
 ❓ **Is `<jsp:include>` similar to RequestDispatcher include?**
 ▶ Yes, both include output dynamically during request processing.
 
-## 110. JavaBeans Architecture & `<jsp:useBean>`
+## 110. JavaBeans Architecture and `<jsp:useBean>`
 
 **JavaBeans Architecture** defines a reusable, component-based Java class design that is used to **encapsulate data and business logic**.
 
@@ -18718,4 +18718,146 @@ ${fn:length(username)}
 
 ❓ **Is SQL JSTL recommended in real projects?**
 ▶ No. Database logic should remain in DAO or service layers.
+
+## 114. Core JSTL Tags (`c:if`, `c:forEach`, `c:choose`)
+The **Core JSTL tags** provide **control flow and iteration** capabilities in JSP without using Java scriptlets.
+
+They are the **most frequently used JSTL tags** and form the backbone of clean, readable JSP pages.
+
+📌 These tags work with **Expression Language (EL)** and are executed at **request time**.
+
+### Why Core JSTL Tags Matter
+
+* Remove conditional and looping logic from Java scriptlets
+* Improve readability and maintainability
+* Align JSP with MVC architecture
+* Make JSP pages interview-ready and production-safe
+
+### `<c:if>`
+
+The `<c:if>` tag is used for **simple conditional rendering**.
+
+It evaluates a condition and includes its body **only if the condition is true**.
+
+#### Syntax
+
+```jsp
+<!-- Execute block only when condition evaluates to true -->
+<c:if test="${age >= 18}">
+    <!-- Content visible for adults only -->
+    Adult User
+</c:if>
+```
+
+#### Concept Explanation
+
+* Similar to a simple `if` statement
+* Does **not** support `else`
+* Best for single-condition checks
+
+### `<c:forEach>`
+
+The `<c:forEach>` tag is used to **iterate over collections, arrays, maps, or ranges**.
+
+It replaces Java `for` and `while` loops inside JSP.
+
+#### Iterating Over a Numeric Range
+
+```jsp
+<!-- Loop from 1 to 5 -->
+<c:forEach var="i" begin="1" end="5">
+    <!-- Display current loop counter -->
+    <p>Count: ${i}</p>
+</c:forEach>
+```
+
+#### Iterating Over a Collection
+
+```jsp
+<!-- Iterate over a list of User beans stored in request scope -->
+<c:forEach var="user" items="${userList}">
+    <!-- Access bean property using EL -->
+    <p>${user.username}</p>
+</c:forEach>
+```
+
+#### Common Attributes of `<c:forEach>`
+
+* `var` – loop variable
+* `items` – collection or array
+* `begin`, `end`, `step` – numeric iteration
+* `varStatus` – loop status information
+
+```jsp
+<!-- Use varStatus to access index and count -->
+<c:forEach var="item" items="${items}" varStatus="status">
+    <!-- status.index starts from 0, status.count starts from 1 -->
+    <p>${status.count}. ${item}</p>
+</c:forEach>
+```
+
+### `<c:choose>`, `<c:when>`, `<c:otherwise>`
+
+Used for **multiple conditional branches**, similar to `if–else if–else`.
+
+This is preferred over chaining multiple `<c:if>` tags.
+
+#### Syntax and Example
+
+```jsp
+<c:choose>
+    <!-- First condition -->
+    <c:when test="${score >= 90}">
+        Excellent
+    </c:when>
+
+    <!-- Second condition -->
+    <c:when test="${score >= 60}">
+        Passed
+    </c:when>
+
+    <!-- Default case -->
+    <c:otherwise>
+        Failed
+    </c:otherwise>
+</c:choose>
+```
+
+#### Concept Explanation
+
+* Exactly **one branch executes**
+* Cleaner and more readable than multiple `c:if`
+* Ideal for grading, role-based UI, or status checks
+
+### Common Mistakes to Avoid
+
+* Using multiple `<c:if>` where `<c:choose>` is more suitable
+* Mixing scriptlets with JSTL
+* Forgetting EL `${}` inside test conditions
+
+### Key Notes
+
+* Core JSTL tags control **flow and iteration**
+* `<c:if>` → simple condition
+* `<c:forEach>` → loops and collections
+* `<c:choose>` → multi-branch conditions
+* Executed at **request time**
+* Strongly preferred over scriptlets
+
+---
+
+❓ **Why doesn’t `<c:if>` support an else block?**
+▶ JSTL encourages cleaner branching using `<c:choose>` for multiple conditions.
+
+❓ **When should `<c:choose>` be preferred over multiple `<c:if>` tags?**
+▶ When conditions are mutually exclusive and only one block should execute.
+
+❓ **What is `varStatus` used for in `<c:forEach>`?**
+▶ It provides loop metadata like index, count, first, and last.
+
+❓ **Are Core JSTL tags faster than scriptlets?**
+▶ Performance is similar, but JSTL is safer, cleaner, and easier to maintain.
+
+❓ **Can Core JSTL tags work without EL?**
+▶ No. Core JSTL tags rely heavily on Expression Language.
 
