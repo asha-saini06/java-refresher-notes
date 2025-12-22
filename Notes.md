@@ -21728,4 +21728,231 @@ public void contextDestroyed(ServletContextEvent sce) {
 ❓ **What happens if resources are not released on shutdown?**
 ▶ Memory leaks and resource exhaustion can occur.
 
+## 130. Servlet Authentication with JDBC (Login / Signup)
+**Servlet Authentication with JDBC** is the process of **verifying user identity** by checking credentials against a **database** using JDBC.
+
+It is a foundational pattern for:
+
+* Login systems
+* Signup / registration flows
+* Session-based authentication
+* Secure access control
+
+📌 Authentication answers **“Who is the user?”**, not **“What can the user do?”**.
+
+### Why JDBC-Based Authentication Is Used
+
+Using JDBC allows:
+
+* Persistent user storage
+* Centralized credential management
+* Server-side verification
+* Integration with sessions and roles
+
+📌 Credentials must **never be trusted from the client**.
+
+### High-Level Authentication Flow
+
+1. User submits login/signup form
+2. Servlet receives request
+3. Input is validated
+4. Database is queried via JDBC
+5. Credentials are verified
+6. Session is created on success
+7. User is redirected to secured area
+
+### Database Table Design (Users)
+
+```sql
+-- Table storing user credentials
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+```
+
+📌 Passwords should be **hashed**, never stored as plain text.
+
+### Signup Flow (Registration)
+
+#### Signup HTML Form
+
+```html
+<!-- User registration form -->
+<form action="signup" method="post">
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button type="submit">Sign Up</button>
+</form>
+```
+
+📌 Client-side validation improves UX but does not replace server validation.
+
+#### Signup Servlet Logic
+
+```java
+@WebServlet("/signup")
+public class SignupServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Read user input from request
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Validate input (basic example)
+        if (username == null || password == null) {
+            response.sendRedirect("signup.jsp");
+            return;
+        }
+
+        // Insert user into database using JDBC
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO users(username, password) VALUES (?, ?)")) {
+
+            // Set query parameters
+            ps.setString(1, username);
+            ps.setString(2, password); // Should be hashed in real apps
+
+            ps.executeUpdate();
+
+            // Redirect to login after successful signup
+            response.sendRedirect("login.jsp");
+
+        } catch (Exception e) {
+            // Handle duplicate users or DB errors
+            e.printStackTrace();
+            response.sendRedirect("signup.jsp");
+        }
+    }
+}
+```
+
+📌 Always use `PreparedStatement` to prevent SQL injection.
+
+### Login Flow
+
+#### Login HTML Form
+
+```html
+<!-- Login form -->
+<form action="login" method="post">
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+</form>
+```
+
+#### Login Servlet Logic
+
+```java
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Read credentials from request
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Validate input
+        if (username == null || password == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        // Verify credentials using JDBC
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT * FROM users WHERE username=? AND password=?")) {
+
+            ps.setString(1, username);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Create session on successful login
+                HttpSession session = request.getSession();
+                session.setAttribute("username", username);
+
+                // Redirect to secured page
+                response.sendRedirect("dashboard.jsp");
+            } else {
+                // Invalid credentials
+                response.sendRedirect("login.jsp");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("login.jsp");
+        }
+    }
+}
+```
+
+📌 Authentication success should always result in **session creation**.
+
+### Logout Flow
+
+```java
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Get existing session without creating a new one
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            // Invalidate session to logout user
+            session.invalidate();
+        }
+
+        // Redirect to login page
+        response.sendRedirect("login.jsp");
+    }
+}
+```
+
+📌 Logout is simply **session invalidation**.
+
+### Security Considerations
+
+* Hash passwords (BCrypt, PBKDF2)
+* Never store plain text passwords
+* Use HTTPS for forms
+* Protect dashboard URLs with filters
+* Prevent session fixation
+
+### 📝 Points to Remember
+
+* Authentication verifies user identity
+* JDBC handles database interaction
+* PreparedStatement prevents SQL injection
+* Sessions maintain login state
+* Logout means invalidating session
+* Never trust client-side validation
+
+---
+
+❓ **Why should authentication logic not be placed in JSP?**
+▶ JSPs are meant for presentation. Putting authentication logic in JSP mixes UI with business logic, makes code hard to maintain, and exposes security risks. Servlets act as controllers and provide a safer, centralized place for authentication.
+
+❓ **Why is session creation required after successful login?**
+▶ HTTP is stateless. Without a session, the server cannot remember that the user is authenticated. Sessions store authentication state across multiple requests.
+
+❓ **Why is `PreparedStatement` preferred over `Statement`?**
+▶ `PreparedStatement` separates SQL logic from user input, preventing SQL injection attacks and improving performance through query precompilation.
+
+❓ **Why should passwords never be stored in plain text?**
+▶ If the database is compromised, plain text passwords expose all user accounts. Hashing ensures that even leaked data cannot be directly used.
+
+❓ **What happens if session invalidation is skipped during logout?**
+▶ The user may remain authenticated, allowing unauthorized access and session hijacking risks.
 
