@@ -19377,3 +19377,156 @@ JSP should:
 ❓ **Should JSP ever access request parameters directly?**
 ▶ No. The controller should prepare data and forward it to the JSP.
 
+## 118. JSP vs Servlet (Role in MVC Architecture)
+
+In Java web applications, **JSP and Servlets serve different purposes**, even though both ultimately run on the server and generate responses.
+
+Understanding **where JSP fits and where Servlets fit in MVC** is a **very common interview discussion**, especially to judge architectural clarity.
+
+📌 Short answer:
+**Servlet = Controller**, **JSP = View**
+
+### Servlet in MVC (Controller Role)
+
+A **Servlet** acts as the **Controller** in MVC.
+
+Its responsibility is to **handle requests and control application flow**, not to generate UI.
+
+#### What a Servlet Does
+
+* Receives HTTP requests
+* Reads request parameters
+* Performs validation
+* Calls business logic (Model)
+* Stores data in request/session scope
+* Forwards or redirects to a JSP
+
+> 📌 A servlet should **never generate HTML-heavy UI**.
+
+#### Example: Servlet as Controller
+
+```java
+// Servlet acting as Controller in MVC
+@WebServlet("/profile")
+public class ProfileServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Call model/service layer (simulated here)
+        String username = "Asha";
+
+        // Store data in request scope for JSP
+        request.setAttribute("username", username);
+
+        // Forward request to JSP view
+        request.getRequestDispatcher("profile.jsp")
+               .forward(request, response);
+    }
+}
+```
+
+> 📌 Servlet prepares data and decides **which view to render**.
+
+### JSP in MVC (View Role)
+
+A **JSP** acts as the **View** in MVC.
+
+Its responsibility is to **display data**, not to process requests or contain business logic.
+
+#### What a JSP Does
+
+* Reads data using EL
+* Uses JSTL for conditional rendering
+* Displays UI elements
+* Avoids Java logic
+
+📌 JSP should be **logic-light and presentation-heavy**.
+
+#### Example: JSP as View
+
+```jsp
+<!-- JSP view displaying data using EL -->
+<h2>Welcome, ${username}</h2>
+
+<!-- Conditional display using JSTL -->
+<c:if test="${not empty username}">
+    <p>User profile loaded successfully.</p>
+</c:if>
+```
+
+📌 No Java code. Only rendering logic.
+
+### JSP vs Servlet: Side-by-Side Comparison
+
+| Aspect                 | Servlet                     | JSP                 |
+| ---------------------- | --------------------------- | ------------------- |
+| MVC role               | Controller                  | View                |
+| Primary responsibility | Request handling            | Presentation        |
+| Handles HTTP logic     | Yes                         | No                  |
+| Business logic         | Coordinates                 | Never               |
+| UI generation          | Minimal                     | Main responsibility |
+| Uses EL & JSTL         | No                          | Yes                 |
+| Interview expectation  | Strong controller knowledge | Clean view design   |
+
+### Why JSP Should Not Replace Servlets
+
+* JSPs are not designed for request handling
+* Mixing logic with UI breaks MVC
+* Scriptlets reduce maintainability
+* Harder to test and scale
+
+📌 JSP-as-controller is considered **poor design**.
+
+### Can a Servlet Replace JSP?
+
+Technically yes, but **not recommended**.
+
+```java
+// Servlet generating HTML directly (discouraged)
+PrintWriter out = response.getWriter();
+out.println("<h1>Hello</h1>");
+```
+
+📌 This approach:
+
+* Makes code unreadable
+* Couples logic with UI
+* Is hard to maintain
+
+### Best Practice Flow in MVC
+
+1. Client sends request
+2. Servlet processes request
+3. Model performs business logic
+4. Servlet forwards to JSP
+5. JSP renders response
+
+📌 Clear separation = cleaner codebase.
+
+### Key Notes
+
+* Servlet = Controller
+* JSP = View
+* Servlets handle logic and flow
+* JSP handles presentation only
+* EL + JSTL replace scriptlets
+* MVC clarity is a common interview focus
+
+---
+
+❓ **Why is JSP considered a View and not a Controller?**
+▶ Because JSP is meant for rendering UI, not handling requests or business logic.
+
+❓ **Why are Servlets better suited as Controllers?**
+▶ Servlets are designed for request processing, validation, and flow control.
+
+❓ **Is it okay to access request parameters directly in JSP?**
+▶ For display purposes only. Processing and validation belong in Servlets.
+
+❓ **Can JSP forward requests like Servlets?**
+▶ JSP can forward, but flow control should remain in Servlets.
+
+❓ **What should you answer in interviews if asked “JSP vs Servlet”?**
+▶ JSP is the View, Servlet is the Controller, and mixing roles breaks MVC.
+
