@@ -19024,3 +19024,141 @@ Removes leading and trailing spaces.
 ❓ **Are JSTL functions evaluated at compile time?**
 ▶ No. They are evaluated at request time along with EL.
 
+## 116. EL + JSTL vs JSP Scriptlets (Best Practices)
+
+In JSP development, there are **two ways** to implement logic inside pages:
+
+1. **JSP Scriptlets** (`<% %>`)
+2. **Expression Language (EL) + JSTL**
+
+Modern JSP development **strongly prefers EL + JSTL**. Scriptlets are considered **legacy** and should be avoided in production code.
+
+📌 Interviewers often ask *why* scriptlets are discouraged, not just *what* replaces them.
+
+### JSP Scriptlets
+
+**Scriptlets** allow embedding raw Java code directly inside JSP pages.
+
+#### Example: Scriptlet Usage
+
+```jsp
+<%
+    // Java logic written directly inside JSP (NOT recommended)
+    if (age >= 18) {
+        out.println("Adult User");
+    }
+%>
+```
+
+#### Problems with Scriptlets
+
+* Mix Java logic with HTML
+* Reduce readability
+* Harder to maintain and debug
+* Break MVC separation
+* Difficult to test
+* Considered outdated
+
+### EL + JSTL Approach
+
+**EL (Expression Language)** is used for data access, and **JSTL** is used for flow control and utility operations.
+
+Together, they replace almost all scriptlet use cases.
+
+#### Example: Same Logic Using EL + JSTL
+
+```jsp
+<!-- Conditional rendering using JSTL -->
+<c:if test="${age >= 18}">
+    <!-- Clean, readable output -->
+    Adult User
+</c:if>
+```
+
+📌 No Java code inside JSP. Only expressions and tags.
+
+### Comparison: Scriptlets vs EL + JSTL
+
+| Aspect                | JSP Scriptlets | EL + JSTL         |
+| --------------------- | -------------- | ----------------- |
+| Readability           | Poor           | High              |
+| MVC compliance        | Weak           | Strong            |
+| Maintainability       | Difficult      | Easy              |
+| Testing               | Hard           | Easier            |
+| Industry usage        | Deprecated     | Standard practice |
+| Interview expectation | ❌              | ✅                 |
+
+### Why EL + JSTL Is Best Practice
+
+* Keeps JSP focused on **presentation**
+* Moves logic to **Java classes and controllers**
+* Improves security (e.g., automatic escaping with `c:out`)
+* Makes JSP files easier to review and maintain
+* Aligns with MVC and clean architecture principles
+
+### Typical Migration Example
+
+#### Scriptlet-Based Code
+
+```jsp
+<%
+    // Loop through list using Java code
+    for (User user : userList) {
+        out.println(user.getUsername());
+    }
+%>
+```
+
+#### EL + JSTL Equivalent
+
+```jsp
+<!-- Iterate over collection using JSTL -->
+<c:forEach var="user" items="${userList}">
+    <!-- Access bean property using EL -->
+    <p>${user.username}</p>
+</c:forEach>
+```
+
+📌 Same functionality, drastically improved clarity.
+
+### When Scriptlets Might Still Appear
+
+* Legacy applications
+* Very old frameworks
+* Quick prototypes (still discouraged)
+
+📌 In interviews, always **recommend refactoring scriptlets**.
+
+### Best Practices for JSP Development
+
+* Use **EL for data access**
+* Use **JSTL for flow control**
+* Keep business logic in **Servlets / Services**
+* Avoid Java code inside JSP
+* Treat JSP strictly as the **View layer**
+
+### Key Notes
+
+* Scriptlets are outdated and discouraged
+* EL + JSTL is the modern standard
+* Improves readability, security, and maintainability
+* Strongly aligns with MVC architecture
+* Always preferred in interviews and real projects
+
+---
+
+❓ **Why are JSP scriptlets considered bad practice?**
+▶ They mix Java logic with UI code, making applications hard to maintain and test.
+
+❓ **Can EL + JSTL completely replace scriptlets?**
+▶ For almost all view-level logic, yes. Business logic still belongs in Java classes.
+
+❓ **Do EL + JSTL improve performance?**
+▶ Performance is similar, but maintainability and clarity improve significantly.
+
+❓ **Is it okay to use scriptlets in new projects?**
+▶ No. Modern JSP development avoids scriptlets entirely.
+
+❓ **What should you say in interviews when asked about scriptlets?**
+▶ Acknowledge them as legacy and recommend EL + JSTL as best practice.
+
