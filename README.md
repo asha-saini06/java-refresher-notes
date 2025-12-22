@@ -143,7 +143,7 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 132. [Servlet Filters for Authentication and Authorization](Notes.md#132-servlet-filters-for-authentication-and-authorization)
 133. [Session Security Best Practices](Notes.md#133-session-security-best-practices)
 134. [Cookies vs Sessions (Security Perspective)](Notes.md#134-cookies-vs-sessions-security-perspective)
-135. [CSRF Protection Techniques](Notes.md#135-csrf-protection-techniques)
+135. [CSRF and XSS Attacks](Notes.md#135-csrf-and-xss-attacks)
 136. [MVC Frameworks Introduction (Spring MVC, Jakarta MVC)](Notes.md#136-mvc-frameworks-introduction-spring-mvc-jakarta-mvc)
 137. [Database Connection Pooling (DataSource vs DriverManager)](Notes.md#137-database-connection-pooling-datasource-vs-drivermanager)
 138. [DAO (Data Access Object) Pattern](Notes.md#138-dao-data-access-object-pattern)
