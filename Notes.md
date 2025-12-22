@@ -21518,3 +21518,214 @@ WEB-INF/web.xml
 ❓ **What happens if servlet mapping conflicts occur?**
 ▶ Deployment fails or mapping precedence rules apply.
 
+## 129. Web Application Lifecycle
+
+The **Web Application Lifecycle** describes the **sequence of events** from the moment a web application is deployed to the moment it is shut down.
+
+It explains:
+
+* when configuration is read
+* when resources are initialized
+* how requests are handled
+* when cleanup happens
+
+📌 Lifecycle understanding is essential for **resource management, performance, and stability**.
+
+### Phases of Web Application Lifecycle
+
+A Java web application goes through these major phases:
+
+1. Deployment
+2. Initialization
+3. Request Processing
+4. Destruction
+
+Each phase is managed by the **web container**.
+
+### Deployment Phase
+
+During deployment:
+
+* WAR file is extracted
+* `web.xml` is read
+* Annotations are scanned
+* Servlets, filters, listeners are registered
+* Context path is assigned
+
+📌 No user requests are handled at this stage.
+
+### Initialization Phase
+
+Initialization happens **once**, when the application starts.
+
+#### Application Initialization (Context Level)
+
+The container creates a **ServletContext** for the application.
+
+```java
+// Listener triggered when application starts
+public class AppStartupListener implements ServletContextListener {
+
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        // Executed once during application startup
+
+        // Access application-wide context
+        ServletContext context = sce.getServletContext();
+
+        // Initialize shared resources
+        context.setAttribute("appName", "MyWebApp");
+
+        // Example: initialize database connection pool
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        // Executed once during application shutdown
+
+        // Cleanup shared resources
+    }
+}
+```
+
+📌 Use listeners for **global initialization**, not servlets.
+
+#### Servlet Initialization
+
+Each servlet is initialized **once** before serving requests.
+
+```java
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+
+    @Override
+    public void init() throws ServletException {
+        // Called once when servlet is created
+
+        // Initialize servlet-specific resources
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        // Handles client requests
+    }
+}
+```
+
+📌 `init()` runs before any request reaches the servlet.
+
+### Request Processing Phase
+
+This phase repeats **for every client request**.
+
+#### Request Handling Flow
+
+1. Client sends HTTP request
+2. Filters intercept request
+3. Servlet processes request
+4. Business logic executes
+5. Response is generated
+6. JSP renders output
+7. Response sent to client
+
+📌 This is the **most frequently executed phase**.
+
+#### Servlet Request Methods
+
+```java
+@Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+    // Executed for every GET request
+
+    // Read request parameters
+    String username = request.getParameter("username");
+
+    // Process request and forward to JSP
+    request.getRequestDispatcher("dashboard.jsp")
+           .forward(request, response);
+}
+```
+
+📌 Do not store request-specific data in instance variables.
+
+### Destruction Phase
+
+Triggered when:
+
+* Server shuts down
+* Application is undeployed
+* Application is redeployed
+
+#### Servlet Destruction
+
+```java
+@Override
+public void destroy() {
+    // Called once before servlet is removed
+
+    // Release servlet-specific resources
+}
+```
+
+📌 Called only once per servlet lifecycle.
+
+#### Application Shutdown (Context Destruction)
+
+```java
+@Override
+public void contextDestroyed(ServletContextEvent sce) {
+    // Executed once during application shutdown
+
+    // Close database pools, threads, files
+}
+```
+
+📌 Always clean up resources here.
+
+### Lifecycle of Major Components
+
+| Component      | Created                 | Destroyed              |
+| -------------- | ----------------------- | ---------------------- |
+| ServletContext | App startup             | App shutdown           |
+| Servlet        | First request / startup | App shutdown           |
+| Filter         | App startup             | App shutdown           |
+| Listener       | App startup             | App shutdown           |
+| HttpSession    | On demand               | Timeout / invalidation |
+
+### Common Lifecycle Mistakes
+
+* Initializing heavy resources in JSP
+* Using servlet constructors instead of `init()`
+* Forgetting to release resources
+* Storing request data in instance variables
+* Creating background threads without cleanup
+
+### 📝 Points to Remember
+
+* Lifecycle is container-managed
+* Initialization happens once
+* Request processing happens per request
+* Destruction happens once
+* Use listeners for application-wide setup
+* Always clean up resources properly
+
+---
+
+❓ **When is `web.xml` read during the lifecycle?**
+▶ During the deployment phase, before initialization.
+
+❓ **How many times is `init()` called on a servlet?**
+▶ Exactly once per servlet lifecycle.
+
+❓ **Can multiple requests run concurrently in a servlet?**
+▶ Yes, unless explicitly synchronized.
+
+❓ **Where should database pools be initialized?**
+▶ In application startup listeners, not servlets.
+
+❓ **What happens if resources are not released on shutdown?**
+▶ Memory leaks and resource exhaustion can occur.
+
+
