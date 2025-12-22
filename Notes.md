@@ -20544,3 +20544,188 @@ if (!"ADMIN".equals(role)) {
 ❓ **What happens if session expires during an authorized request?**
 ▶ The user must be treated as unauthenticated and access must be denied.
 
+## 124. File Upload and Download in Web Applications
+
+**File upload and download** allow users to send files to the server and retrieve files from it later.
+
+In web applications:
+
+* **Upload** → client → server
+* **Download** → server → client
+
+These operations must be handled carefully to ensure **correctness, security, and performance**.
+
+### Why File Handling Is Special
+
+Files are different from normal form fields because:
+
+* They can be large
+* They are binary data
+* They require special request handling
+* They introduce security risks
+
+### File Upload
+
+#### How File Upload Works (Conceptually)
+
+1. User selects a file in a form
+2. Browser sends file as multipart request
+3. Server parses multipart data
+4. File is saved to server storage
+5. Metadata may be stored in database
+
+📌 File upload requires **multipart/form-data** encoding.
+
+#### Upload Form (JSP – View)
+
+```jsp
+<!-- File upload form -->
+<form action="upload" method="post" enctype="multipart/form-data">
+
+    <!-- File selection input -->
+    <input type="file" name="file" />
+
+    <!-- Submit button -->
+    <input type="submit" value="Upload" />
+</form>
+```
+
+📌 `enctype="multipart/form-data"` is mandatory.
+
+#### Upload Servlet (Server-side Processing)
+
+```java
+// Servlet handling file upload
+@WebServlet("/upload")
+@MultipartConfig // Enables multipart request processing
+public class FileUploadServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Retrieve uploaded file part
+        Part filePart = request.getPart("file");
+
+        // Get original file name
+        String fileName = filePart.getSubmittedFileName();
+
+        // Define upload directory on server
+        String uploadPath = getServletContext().getRealPath("/") + "uploads";
+
+        // Create directory if it does not exist
+        new File(uploadPath).mkdirs();
+
+        // Save file to server directory
+        filePart.write(uploadPath + File.separator + fileName);
+
+        // Send confirmation response
+        response.getWriter().println("File uploaded successfully");
+    }
+}
+```
+
+📌 `@MultipartConfig` tells the container to handle file data.
+
+#### Common Upload Validation Checks
+
+* File size limit
+* Allowed file types
+* Empty file check
+* Directory existence
+
+### File Download
+
+#### How File Download Works (Conceptually)
+
+1. Client requests a file
+2. Server locates file
+3. Response headers are set
+4. File bytes are streamed to client
+5. Browser downloads the file
+
+#### Download Servlet Example
+
+```java
+// Servlet handling file download
+@WebServlet("/download")
+public class FileDownloadServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // File to be downloaded
+        String fileName = "example.pdf";
+
+        // File path on server
+        String filePath = getServletContext().getRealPath("/") + "uploads/" + fileName;
+
+        File file = new File(filePath);
+
+        // Set response content type
+        response.setContentType("application/pdf");
+
+        // Tell browser this is a download
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+        // Stream file to response output
+        try (FileInputStream fis = new FileInputStream(file);
+             OutputStream os = response.getOutputStream()) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            // Read file and write to response
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+        }
+    }
+}
+```
+
+📌 Streaming avoids loading entire file into memory.
+
+### Upload vs Download (Quick Comparison)
+
+| Aspect    | Upload              | Download            |
+| --------- | ------------------- | ------------------- |
+| Direction | Client → Server     | Server → Client     |
+| Encoding  | multipart/form-data | Normal response     |
+| Key API   | `Part`              | `OutputStream`      |
+| Risk      | Malicious files     | Unauthorized access |
+
+### Common Mistakes
+
+* Forgetting `multipart/form-data`
+* Not validating file type or size
+* Overwriting existing files
+* Exposing file paths
+* Loading large files into memory
+
+### 📝Points to Remember
+
+* File uploads require multipart requests
+* Always validate file size and type
+* Never trust client-side file names
+* Store uploads outside public directories if possible
+* Stream files during download
+* Set correct response headers
+* Protect download URLs with authorization
+
+---
+
+❓ **Why can’t file uploads be handled like normal form fields?**
+▶ Files are binary data and require multipart request parsing.
+
+❓ **What happens if `enctype="multipart/form-data"` is missing?**
+▶ File data will not be sent correctly to the server.
+
+❓ **Why should uploaded files not be stored directly under web root?**
+▶ It can expose files publicly and create security risks.
+
+❓ **Why is streaming preferred for downloads?**
+▶ It prevents high memory usage for large files.
+
+❓ **Is file name from client always safe to use?**
+▶ No. It must be sanitized to avoid path traversal attacks.
+
