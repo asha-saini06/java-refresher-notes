@@ -20236,4 +20236,178 @@ if (!"ADMIN".equals(session.getAttribute("role"))) {
 ❓: **Why should authorization not be handled in JSP alone?**
 ▶ Because JSP can be bypassed; checks must exist in controllers or filters.
 
+## 122. Login and Logout Flow using HTTP Sessions
+A **login/logout flow** using HTTP sessions is a standard way to **authenticate users and maintain their logged-in state** across multiple requests.
+
+The session acts as the **single source of truth** for whether a user is logged in or not.
+
+### What Problem This Solves
+
+Without sessions:
+
+* User would need to authenticate on every request
+* Protected pages could not distinguish logged-in users
+* Logout would be meaningless
+
+Sessions provide **continuity and control** over user access.
+
+### High-Level Login–Logout Flow
+
+1. User submits login form
+2. Server validates credentials
+3. Server creates a session
+4. User identity is stored in session
+5. Protected pages check session data
+6. User logs out
+7. Session is invalidated
+
+### Login Form (JSP – View)
+
+```jsp
+<!-- Login form -->
+<form action="login" method="post">
+
+    <!-- Username input -->
+    <input type="text" name="username" required />
+
+    <!-- Password input -->
+    <input type="password" name="password" required />
+
+    <!-- Submit button -->
+    <input type="submit" value="Login" />
+</form>
+
+<!-- Display login error if present -->
+<c:if test="${not empty error}">
+    <p style="color:red">${error}</p>
+</c:if>
+```
+
+📌 JSP only collects input and displays messages.
+
+### Login Servlet (Authentication + Session Creation)
+
+```java
+// Servlet handling login logic
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Read credentials from request
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Simple authentication check (example only)
+        if ("admin".equals(username) && "1234".equals(password)) {
+
+            // Create a new session or reuse existing one
+            HttpSession session = request.getSession();
+
+            // Store user identity in session
+            session.setAttribute("loggedInUser", username);
+
+            // Redirect to dashboard after successful login
+            response.sendRedirect("dashboard.jsp");
+
+        } else {
+
+            // Authentication failed
+            request.setAttribute("error", "Invalid username or password");
+
+            // Forward back to login page
+            request.getRequestDispatcher("login.jsp")
+                   .forward(request, response);
+        }
+    }
+}
+```
+
+📌 Authentication result decides whether a session is created.
+
+### Access Control for Protected Pages
+
+Protected pages should **check session data before rendering content**.
+
+#### Session Check (Servlet or JSP)
+
+```jsp
+<!-- Check login status using session -->
+<c:if test="${empty sessionScope.loggedInUser}">
+    <!-- Redirect to login page if not logged in -->
+    <c:redirect url="login.jsp" />
+</c:if>
+
+<h2>Welcome, ${sessionScope.loggedInUser}</h2>
+```
+
+📌 Access is granted only if session contains login data.
+
+### Logout Servlet (Session Invalidation)
+
+```java
+// Servlet handling logout
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Get existing session without creating a new one
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            // Invalidate session and remove all attributes
+            session.invalidate();
+        }
+
+        // Redirect user to login page
+        response.sendRedirect("login.jsp");
+    }
+}
+```
+
+📌 Logout = complete session destruction.
+
+### What Happens After Logout
+
+* Session ID becomes invalid
+* All session attributes are cleared
+* User must log in again to access protected pages
+* Old session ID cannot be reused
+
+### Common Login/Logout Mistakes
+
+* Not invalidating session on logout
+* Trusting client-side login state
+* Storing passwords in session
+* Not checking session on protected pages
+* Using request scope instead of session scope
+
+### 📝 Points to Remember
+
+* Login state must be stored in session
+* Session creation happens after successful authentication
+* Protected resources must always check session
+* Logout must invalidate the session
+* Never store passwords in session
+* Use `getSession(false)` during logout checks
+
+---
+
+❓: **Why should login status be stored in session and not in request scope?**
+▶ Request scope lasts only for a single request. Login state must persist across multiple requests.
+
+❓: **Is redirect preferred over forward after successful login?**
+▶ Yes. Redirect prevents form resubmission and creates a clean request flow.
+
+❓: **What happens if a user opens a protected page in a new tab after logout?**
+▶ Access is denied because the session no longer exists.
+
+❓: **Can logout be implemented without invalidating the session?**
+▶ It can be simulated by removing attributes, but invalidation is safer and cleaner.
+
+❓: **Why should access control not rely only on JSP checks?**
+▶ Because JSP can be bypassed; controllers or filters should enforce security.
 
