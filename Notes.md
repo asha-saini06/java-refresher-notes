@@ -22912,3 +22912,233 @@ Welcome, <%= request.getParameter("name") %>
 ❓ **Why is `HttpOnly` important against XSS?**
 ▶ It prevents JavaScript from accessing cookies, reducing session theft even if XSS occurs.
 
+## 136. MVC Frameworks Introduction (Spring MVC, Jakarta MVC)
+**MVC frameworks** provide a structured way to build web applications by **separating responsibilities** into clear layers.
+
+They solve problems caused by:
+
+* Mixing business logic inside JSPs
+* Repetitive servlet code
+* Poor maintainability as applications grow
+
+📌 MVC frameworks sit **on top of Servlets and JSP**, not outside them.
+
+### What Is MVC (Model–View–Controller)
+
+**MVC** is an architectural pattern that separates application concerns.
+
+### MVC Components
+
+#### Model
+
+* Holds business data and business rules
+* Represents domain objects (e.g., User, Order)
+* Independent of UI and HTTP
+
+📌 Model should not know about JSP or Servlets.
+
+#### View
+
+* Responsible for rendering UI
+* Typically JSP, HTML, Thymeleaf
+* Displays data provided by controller
+
+📌 View must not contain business logic.
+
+#### Controller
+
+* Handles incoming requests
+* Coordinates between Model and View
+* Controls application flow
+
+📌 Controller is the traffic police of the application 🚦
+
+### Problems Without an MVC Framework
+
+Without a framework:
+
+* Every servlet handles routing manually
+* Validation, binding, and navigation are repetitive
+* Business logic leaks into JSPs
+* Code becomes tightly coupled and fragile
+
+📌 MVC frameworks standardize these concerns.
+
+### What MVC Frameworks Provide
+
+Common features across MVC frameworks:
+
+* Central request handling
+* URL-to-controller mapping
+* Automatic request parameter binding
+* Validation support
+* Clean separation of concerns
+* Better testability
+
+📌 Frameworks reduce boilerplate, not control.
+
+### Spring MVC Overview
+
+**Spring MVC** is a popular, annotation-based MVC framework built on the Servlet API.
+
+It follows the **Front Controller pattern** using `DispatcherServlet`.
+
+### Spring MVC Architecture (Conceptual)
+
+1. Request hits `DispatcherServlet`
+2. Handler mapping finds controller
+3. Controller processes request
+4. Model data is returned
+5. View resolver selects view
+6. Response is rendered
+
+📌 All requests flow through one entry point.
+
+### Simple Spring MVC Controller Example
+
+```java
+// Marks this class as a Spring MVC controller
+@Controller
+public class LoginController {
+
+    // Maps HTTP GET request to /login
+    @GetMapping("/login")
+    public String showLoginPage() {
+        // Returns logical view name
+        return "login";
+    }
+
+    // Handles form submission
+    @PostMapping("/login")
+    public String processLogin(@RequestParam String username,
+                               @RequestParam String password,
+                               Model model) {
+
+        // Business logic (simplified)
+        if ("admin".equals(username)) {
+            // Add data to model for view rendering
+            model.addAttribute("user", username);
+            return "dashboard";
+        }
+
+        // Error case
+        model.addAttribute("error", "Invalid credentials");
+        return "login";
+    }
+}
+```
+
+📌 No `HttpServletRequest` needed unless required.
+
+### Key Concepts in Spring MVC
+
+* `@Controller` defines controller classes
+* `@RequestMapping`, `@GetMapping`, `@PostMapping` map URLs
+* `Model` passes data to views
+* View names are resolved automatically
+
+📌 Configuration is mostly annotation-driven.
+
+### Jakarta MVC Overview
+
+**Jakarta MVC** is the official MVC specification under **Jakarta EE**.
+
+It is based on:
+
+* Servlets
+* CDI (Contexts and Dependency Injection)
+* JAX-RS (for routing)
+
+📌 Jakarta MVC is **standardized**, not proprietary.
+
+### Jakarta MVC Architecture (Conceptual)
+
+1. Request enters Servlet container
+2. JAX-RS routes request
+3. Controller processes logic
+4. Model data is prepared
+5. JSP renders the response
+
+📌 It integrates tightly with Jakarta EE stack.
+
+### Jakarta MVC Controller Example
+
+```java
+// Defines base path for controller
+@Path("/login")
+@Controller
+public class LoginController {
+
+    // Handles GET request
+    @GET
+    public String showLogin() {
+        return "login.jsp";
+    }
+
+    // Handles POST request
+    @POST
+    public String processLogin(@FormParam("username") String username) {
+
+        // Simple validation
+        if ("admin".equals(username)) {
+            return "dashboard.jsp";
+        }
+
+        return "login.jsp";
+    }
+}
+```
+
+📌 Uses JAX-RS annotations instead of Spring annotations.
+
+### Spring MVC vs Jakarta MVC
+
+| Aspect               | Spring MVC  | Jakarta MVC        |
+| -------------------- | ----------- | ------------------ |
+| Type                 | Framework   | Specification      |
+| Routing              | Annotations | JAX-RS             |
+| Dependency Injection | Spring DI   | CDI                |
+| Ecosystem            | Very large  | Jakarta EE         |
+| Flexibility          | High        | Standardized       |
+| Adoption             | Widely used | Enterprise-focused |
+
+📌 Spring prioritizes flexibility; Jakarta prioritizes standards.
+
+### When to Use MVC Frameworks
+
+Use MVC frameworks when:
+
+* Application complexity increases
+* Multiple developers work together
+* Validation and binding grow complex
+* Maintainability matters
+
+📌 For small demos, raw servlets may suffice.
+
+### 📝 Points to Remember
+
+* MVC separates concerns cleanly
+* Controllers should stay thin
+* Views must not contain business logic
+* Models are framework-agnostic
+* MVC frameworks reduce boilerplate
+* Spring MVC is framework-driven
+* Jakarta MVC is specification-driven
+
+---
+
+❓ **Why are MVC frameworks built on Servlets instead of replacing them?**
+▶ Because Servlets are the low-level HTTP foundation defined by the Java platform. MVC frameworks abstract repetitive tasks but still rely on the Servlet container for request handling, lifecycle, threading, and security.
+
+❓ **Why is a Front Controller important in MVC frameworks?**
+▶ A single entry point centralizes routing, security checks, logging, and error handling. This avoids duplicated logic across multiple servlets and ensures consistent behavior.
+
+❓ **Why should controllers remain thin?**
+▶ Thin controllers improve testability and maintainability. Business logic belongs in service layers so it can be reused, tested independently, and changed without affecting request flow.
+
+❓ **Can JSP act as a controller in MVC?**
+▶ No. JSP is a view technology. Using JSP as a controller mixes concerns, makes logic harder to maintain, and breaks MVC principles.
+
+❓ **Why is Spring MVC more popular than Jakarta MVC?**
+▶ Spring MVC offers richer tooling, faster innovation, broader ecosystem support, and easier standalone deployment compared to Jakarta MVC’s enterprise-centric approach.
+
