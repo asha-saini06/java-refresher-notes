@@ -118,37 +118,37 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 107. [JSP Directives (page, include, taglib)](Notes.md#107-jsp-directives-page-include-taglib)
 108. [Include Directive vs `<jsp:include>` Action](Notes.md#108-include-directive-vs-jspinclude-action)
 109. [JSP Action Tags](Notes.md#109-jsp-action-tags)
-110. [JavaBeans Architecture & `<jsp:useBean>`](Notes.md#110-javabeans-architecture-jspusebean)
+110. [JavaBeans Architecture and `<jsp:useBean>`](Notes.md#110-javabeans-architecture-and-jspusebean)
 111. [JSP Error Handling](Notes.md#111-jsp-error-handling)
-112. Custom Error Pages in JSP
-113. JSTL (JavaServer Pages Standard Tag Library) – Introduction
-114. Core JSTL Tags (`c:if`, `c:forEach`, `c:choose`)
-115. JSTL Functions (`fn:length`, `fn:contains`, etc.)
-116. EL + JSTL vs JSP Scriptlets (Best Practices)
-117. MVC Architecture using Servlet + JSP
-118. JSP vs Servlet (Role in MVC Architecture)
-119. Form Handling in JSP & Servlets
-120. Form Validation (Client-side & Server-side)
-121. Session Management in Web Applications
-122. Login–Logout Flow using HTTP Session
-123. Authentication & Authorization Basics
-124. File Upload & Download in Web Applications
-125. Pagination in Web Applications
-126. J2EE / Jakarta EE Architecture Overview
-127. WAR File Structure
-128. Deployment Descriptor (`web.xml`)
-129. Web Application Lifecycle
-130. Servlet Authentication with JDBC (Login/Signup)
-131. Role-Based Access Control (RBAC)
-132. Servlet Filters for Authentication & Authorization
-133. Session Security Best Practices
-134. Cookies vs Sessions (Security Perspective)
-135. CSRF Protection Techniques
-136. MVC Frameworks Introduction (Spring MVC, Jakarta MVC)
-137. Database Connection Pooling (DataSource vs DriverManager)
-138. DAO (Data Access Object) Pattern
-139. MVC with DAO + JDBC + JSP
-140. Front-End with Bootstrap in JSP Pages
+112. [Custom Error Pages in JSP](Notes.md#112-custom-error-pages-in-jsp)
+113. [JSTL (JavaServer Pages Standard Tag Library)](Notes.md#113-jstl-javaserver-pages-standard-tag-library)
+114. [Core JSTL Tags (`c:if`, `c:forEach`, `c:choose`)](Notes.md#114-core-jstl-tags-cif-cforeach-cchoose)
+115. [JSTL Functions (`fn:length`, `fn:contains`, etc.)](Notes.md#115-jstl-functions-fnlength-fncontains-etc)
+116. [EL + JSTL vs JSP Scriptlets (Best Practices)](Notes.md#116-el-jstl-vs-jsp-scriptlets-best-practices)
+117. [MVC Architecture using Servlet + JSP](Notes.md#117-mvc-architecture-using-servlet-jsp)
+118. [JSP vs Servlet (Role in MVC Architecture)](Notes.md#118-jsp-vs-servlet-role-in-mvc-architecture)
+119. [Form Handling in JSP and Servlets](Notes.md#119-form-handling-in-jsp-and-servlets)
+120. [Form Validation (Client-side and Server-side)](Notes.md#120-form-validation-client-side-and-server-side)
+121. [Session Management in Web Applications](Notes.md#121-session-management-in-web-applications)
+122. [Login–Logout Flow using HTTP Sessions](Notes.md#122-login-logout-flow-using-http-sessions)
+123. [Authentication and Authorization Basics](Notes.md#123-authentication-and-authorization-basics)
+124. [File Upload and Download in Web Applications](Notes.md#124-file-upload-and-download-in-web-applications)
+125. [Pagination in Web Applications](Notes.md#125-pagination-in-web-applications)
+126. [J2EE / Jakarta EE Architecture Overview](Notes.md#126-j2ee-jakarta-ee-architecture-overview)
+127. [WAR File Structure](Notes.md#127-war-file-structure)
+128. [Deployment Descriptor (`web.xml`)](Notes.md#128-deployment-descriptor-webxml)
+129. [Web Application Lifecycle](Notes.md#129-web-application-lifecycle)
+130. [Servlet Authentication with JDBC (Login/Signup)](Notes.md#130-servlet-authentication-with-jdbc-login-signup)
+131. [Role-Based Access Control (RBAC)](Notes.md#131-role-based-access-control-rbac)
+132. [Servlet Filters for Authentication and Authorization](Notes.md#132-servlet-filters-for-authentication-and-authorization)
+133. [Session Security Best Practices](Notes.md#133-session-security-best-practices)
+134. [Cookies vs Sessions (Security Perspective)](Notes.md#134-cookies-vs-sessions-security-perspective)
+135. [CSRF Protection Techniques](Notes.md#135-csrf-protection-techniques)
+136. [MVC Frameworks Introduction (Spring MVC, Jakarta MVC)](Notes.md#136-mvc-frameworks-introduction-spring-mvc-jakarta-mvc)
+137. [Database Connection Pooling (DataSource vs DriverManager)](Notes.md#137-database-connection-pooling-datasource-vs-drivermanager)
+138. [DAO (Data Access Object) Pattern](Notes.md#138-dao-data-access-object-pattern)
+139. [MVC with DAO + JDBC + JSP](Notes.md#139-mvc-with-dao-jdbc-jsp)
+140. [Front-End with Bootstrap in JSP Pages](Notes.md#140-front-end-with-bootstrap-in-jsp-pages)
 141. AJAX with JSP/Servlet Backend
 142. REST APIs with Java Servlets
 143. JSON Handling in Servlets (Jackson / GSON)
@@ -156,7 +156,7 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 145. Deployment on Apache Tomcat (Step-by-Step)
 146. Deployment on Cloud (Heroku / AWS / GCP)
 147. Logging with Log4j or SLF4J + Logback
-148. Unit Testing for Servlets & JSP (JUnit + MockMVC)
+148. Unit Testing for Servlets and JSP (JUnit + MockMVC)
 149. Integration Testing with Selenium + Java
 150. Build Tools (Maven / Gradle) for Web Projects
 151. CI/CD in Java Projects (GitHub Actions / Jenkins)
