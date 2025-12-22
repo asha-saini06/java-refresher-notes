@@ -23142,3 +23142,143 @@ Use MVC frameworks when:
 ❓ **Why is Spring MVC more popular than Jakarta MVC?**
 ▶ Spring MVC offers richer tooling, faster innovation, broader ecosystem support, and easier standalone deployment compared to Jakarta MVC’s enterprise-centric approach.
 
+## 137. Database Connection Pooling (DataSource vs DriverManager)
+
+**Database connection pooling** is a technique to **reuse database connections** instead of creating a new one for every request.
+
+It improves:
+
+* Performance
+* Resource utilization
+* Scalability of web applications
+
+📌 Creating a database connection is **expensive**; pooling avoids repeated overhead.
+
+### Why Connection Pooling Is Needed
+
+Without pooling:
+
+* Each request creates a new connection → slow
+* Database may hit max connection limits
+* Application performance degrades under load
+
+Connection pooling **maintains a ready pool** of connections for reuse.
+
+### DriverManager vs DataSource
+
+#### DriverManager
+
+* Traditional way to obtain JDBC connections
+* Example:
+
+```java
+// Create connection via DriverManager
+Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/dbname", "root", "password");
+```
+
+**Limitations:**
+
+* New connection for every request → costly
+* No built-in pooling
+* Hard to manage in large applications
+
+📌 Suitable only for small, low-traffic apps.
+
+#### DataSource
+
+* Preferred way to obtain connections
+* Supports **connection pooling** and **JNDI lookups**
+* Example:
+
+```java
+// Lookup DataSource via JNDI
+Context ctx = new InitialContext();
+DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/MyDB");
+
+// Get connection from pool
+Connection con = ds.getConnection();
+```
+
+**Advantages:**
+
+* Connection pooling support
+* Centralized configuration
+* Better scalability
+* Can integrate with application servers (Tomcat, GlassFish, etc.)
+
+📌 `DataSource` is the modern standard in enterprise apps.
+
+### How Connection Pooling Works (Conceptually)
+
+1. Pool initializes a set of connections at startup
+2. When a request needs a connection, it borrows one from the pool
+3. After use, the connection is returned to the pool
+4. Connections are reused for future requests
+
+📌 Pool size, timeout, and validation settings are configurable.
+
+### Example: Using Apache DBCP Pool
+
+```java
+// Create BasicDataSource
+BasicDataSource ds = new BasicDataSource();
+ds.setUrl("jdbc:mysql://localhost:3306/dbname");
+ds.setUsername("root");
+ds.setPassword("password");
+
+// Pool settings
+ds.setInitialSize(5);     // initial connections
+ds.setMaxTotal(20);       // max connections
+
+// Get connection from pool
+try (Connection con = ds.getConnection()) {
+    // Use connection
+    PreparedStatement ps = con.prepareStatement("SELECT * FROM users");
+    ResultSet rs = ps.executeQuery();
+    while (rs.next()) {
+        System.out.println(rs.getString("username"));
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+```
+
+📌 Using `try-with-resources` ensures connection is returned to the pool automatically.
+
+### Key Differences: DriverManager vs DataSource
+
+| Feature             | DriverManager  | DataSource / Pooling |
+| ------------------- | -------------- | -------------------- |
+| Connection creation | New every time | Reuse from pool      |
+| Performance         | Low            | High                 |
+| Pooling support     | No             | Yes                  |
+| Configuration       | Hardcoded      | Centralized via JNDI |
+| Scalability         | Low            | High                 |
+
+### 📝 Points to Remember
+
+* Connection creation is expensive; pooling saves time
+* `DriverManager` → old, no pooling
+* `DataSource` → preferred, supports pooling
+* Always close connections (returns to pool)
+* Pool settings affect performance
+* Use try-with-resources for safety
+
+---
+
+❓ **Why is DataSource preferred over DriverManager?**
+▶ DataSource supports pooling, centralized configuration, and better scalability. DriverManager always creates new connections, which is costly under load.
+
+❓ **What happens if you forget to close a pooled connection?**
+▶ Connection is not returned to the pool → pool depletion → application may block or fail.
+
+❓ **Can a DataSource work without pooling?**
+▶ Yes, but most enterprise DataSource implementations include pooling. A non-pooling DataSource is rarely used in production.
+
+❓ **Why is connection pooling important in web apps?**
+▶ Web apps handle many simultaneous requests. Pooling avoids creating new connections repeatedly, improving performance and reducing database load.
+
+❓ **How can you tune a connection pool?**
+▶ By configuring initial size, max total connections, max idle, min idle, and validation query.
+
