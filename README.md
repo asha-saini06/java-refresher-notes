@@ -130,7 +130,7 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 119. [Form Handling in JSP and Servlets](Notes.md#119-form-handling-in-jsp-and-servlets)
 120. [Form Validation (Client-side and Server-side)](Notes.md#120-form-validation-client-side-and-server-side)
 121. [Session Management in Web Applications](Notes.md#121-session-management-in-web-applications)
-122. [Login–Logout Flow using HTTP Sessions](Notes.md#122-login-logout-flow-using-http-sessions)
+122. [Login and Logout Flow using HTTP Sessions](Notes.md#122-login-and-logout-flow-using-http-sessions)
 123. [Authentication and Authorization Basics](Notes.md#123-authentication-and-authorization-basics)
 124. [File Upload and Download in Web Applications](Notes.md#124-file-upload-and-download-in-web-applications)
 125. [Pagination in Web Applications](Notes.md#125-pagination-in-web-applications)
