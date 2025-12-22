@@ -23317,7 +23317,6 @@ DAO creates an **interface for persistence**, so business logic does not depend 
 
 📌 The DAO interface and implementation ensure consistency in how you interact with different types of databases or data sources.
 
-
 ![DAO](./resources/Components-of-Data-Access-Object-Pattern.png)
 
 ### Example: DAO Interface (Java)
@@ -23482,4 +23481,151 @@ public class UserDAOImpl implements UserDAO {
 
 ❓ **What happens if DAO implementation changes?**
 ▶ Business logic remains unaffected as long as the interface stays the same.
+
+## 139. MVC with DAO + JDBC + JSP
+
+**Combining MVC, DAO, JDBC, and JSP** allows building a **structured web application** where:
+
+* **MVC** separates responsibilities into Model, View, and Controller
+* **DAO** abstracts data access logic
+* **JDBC** handles database operations
+* **JSP** renders the user interface
+
+📌 This approach keeps code modular, maintainable, and scalable.
+
+### Why Combine MVC + DAO + JDBC + JSP
+
+Without this structure:
+
+* Business logic and database access mix inside JSP → hard to maintain
+* Changing database structure affects multiple parts of the app
+* Code becomes difficult to test
+
+Combining these patterns ensures:
+
+* **Controller** handles requests and delegates to DAO
+* **DAO** manages database operations
+* **Model** represents data entities
+* **JSP** presents data to the user
+
+### Typical Flow
+
+1. **User request** → Controller servlet
+2. Controller calls **DAO methods** to access database
+3. DAO interacts with **JDBC** to execute queries
+4. Controller adds results to **request/session attributes**
+5. Forward to **JSP** for display
+
+```
+[User Request] → [Controller Servlet] → [DAO Interface/Impl] → [JDBC / Database]
+                                           ↓
+                                       [Model/POJO]
+                                           ↓
+                                       [JSP View]
+```
+
+### Example: Controller Servlet
+
+```java
+@WebServlet("/users")
+public class UserController extends HttpServlet {
+    private UserDAO userDAO;
+
+    public void init() {
+        // Initialize DAO with JDBC connection
+        Connection conn = DatabaseUtil.getConnection();
+        userDAO = new UserDAOImpl(conn);
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        List<User> users = userDAO.findAll(); // Fetch data via DAO
+        request.setAttribute("userList", users); // Add data to request
+        RequestDispatcher dispatcher = request.getRequestDispatcher("users.jsp");
+        dispatcher.forward(request, response); // Forward to JSP view
+    }
+}
+```
+
+📌 Controller does **not contain SQL**; it delegates to DAO.
+
+### Example: JSP View (`users.jsp`)
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head><title>User List</title></head>
+<body>
+<h2>Users</h2>
+<table border="1">
+    <tr><th>ID</th><th>Name</th><th>Email</th></tr>
+    <c:forEach var="user" items="${userList}">
+        <tr>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+        </tr>
+    </c:forEach>
+</table>
+</body>
+</html>
+```
+
+📌 JSP only displays data; no database logic is present.
+
+### Example: DAO Interface
+
+```java
+public interface UserDAO {
+    List<User> findAll();
+    User findById(int id);
+    void addUser(User user);
+    void updateUser(User user);
+    void deleteUser(int id);
+}
+```
+
+### Example: DAO Implementation (JDBC)
+
+```java
+public class UserDAOImpl implements UserDAO {
+    private Connection conn;
+
+    public UserDAOImpl(Connection conn) {
+        this.conn = conn;
+    }
+
+    @Override
+    public List<User> findAll() {
+        // JDBC code to fetch all users from database
+    }
+
+    // Other CRUD methods (add, update, delete) using JDBC
+}
+```
+
+📌 DAO encapsulates all SQL operations; Controller and JSP remain clean.
+
+### 📝 Points to Remember
+
+* **MVC** separates responsibilities → easier to maintain
+* **DAO** isolates database logic → flexible and testable
+* **JSP** only handles presentation → no business or SQL code
+* **JDBC** handles actual database operations
+* Use **request attributes** to pass data from Controller to JSP
+* Connection management (e.g., connection pool) improves performance
+
+---
+
+❓ **Why use DAO with MVC?**
+▶ DAO ensures database logic is decoupled from Controller and JSP, making the application modular and maintainable.
+
+❓ **Can JSP directly access JDBC?**
+▶ Technically yes, but it violates MVC principles and makes code hard to maintain. Always use DAO and Controller layers.
+
+❓ **How does MVC + DAO improve testability?**
+▶ Controller can be tested with mock DAOs; DAO can be tested independently with mock connections.
+
+❓ **Why forward to JSP using `RequestDispatcher`?**
+▶ Allows passing data via request attributes without exposing database logic to the view.
 
