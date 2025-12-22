@@ -23629,3 +23629,252 @@ public class UserDAOImpl implements UserDAO {
 ❓ **Why forward to JSP using `RequestDispatcher`?**
 ▶ Allows passing data via request attributes without exposing database logic to the view.
 
+## 140. Front-End with Bootstrap in JSP Pages
+
+**Bootstrap** is a popular **front-end CSS framework** used to build **responsive, mobile-first UIs** quickly.
+
+When used with **JSP**, Bootstrap handles **presentation**, while JSP/Servlets handle **logic and data**—maintaining clean MVC separation.
+
+### Why Use Bootstrap with JSP
+
+Using plain HTML + CSS in JSP can become:
+
+* Repetitive
+* Inconsistent across pages
+* Hard to make responsive
+* Time-consuming to style
+
+Bootstrap solves this by providing:
+
+* Prebuilt CSS classes
+* Responsive grid system
+* Ready-made UI components
+* Cross-browser consistency
+
+📌 Bootstrap fits perfectly into the **View layer** of MVC.
+
+### Role of JSP vs Bootstrap (Concept)
+
+* **JSP**
+
+  * Renders dynamic data
+  * Uses EL and JSTL
+  * Controls *what* data is shown
+
+* **Bootstrap**
+
+  * Styles the UI
+  * Controls *how* data looks
+  * Handles responsiveness
+
+📌 JSP + Bootstrap = dynamic + presentable UI.
+
+### Adding Bootstrap to a JSP Page
+
+#### Using CDN (Recommended)
+
+```jsp
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+
+<!-- Bootstrap JS (optional, for components like modal, dropdown) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+```
+
+📌 CDN avoids local setup and ensures faster delivery.
+
+### Basic Bootstrap Page Structure in JSP
+
+```jsp
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2 class="text-primary">Welcome, ${sessionScope.username}</h2>
+</div>
+
+</body>
+</html>
+```
+
+📌 EL injects data; Bootstrap styles it.
+
+### Bootstrap Grid System with JSP Data
+
+Bootstrap uses a **12-column grid**.
+
+```jsp
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>User Info</h5>
+                <p>Name: ${user.name}</p>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card p-3">
+                <h5>Activity</h5>
+                <p>Last Login: ${user.lastLogin}</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+```
+
+📌 Layout is responsive without writing custom CSS.
+
+### Styling Forms with Bootstrap in JSP
+
+```jsp
+<form action="login" method="post" class="w-50 mx-auto mt-5">
+
+    <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+        Login
+    </button>
+
+</form>
+```
+
+📌 Bootstrap ensures uniform spacing and alignment.
+
+### Displaying Server Messages Using Bootstrap Alerts
+
+```jsp
+<c:if test="${not empty error}">
+    <div class="alert alert-danger">
+        ${error}
+    </div>
+</c:if>
+
+<c:if test="${not empty success}">
+    <div class="alert alert-success">
+        ${success}
+    </div>
+</c:if>
+```
+
+📌 Server controls message logic; Bootstrap controls appearance.
+
+### Tables with Bootstrap + JSTL
+
+```jsp
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="user" items="${users}">
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
+```
+
+📌 Bootstrap tables improve readability instantly.
+
+### Common Bootstrap Components Used in JSP
+
+* Navbar
+* Cards
+* Alerts
+* Modals
+* Pagination
+* Forms
+* Buttons
+
+📌 These components require **no Java code**.
+
+### Best Practices: Bootstrap with JSP
+
+* Keep Bootstrap code **only in JSP**
+* Avoid inline CSS when possible
+* Do not write Java logic in JSP
+* Reuse common layout (header/footer)
+* Combine with JSTL instead of scriptlets
+
+📌 JSP = view logic, not business logic.
+
+### Common Mistakes
+
+* Mixing Bootstrap JS with outdated jQuery versions
+* Putting business logic in JSP for UI decisions
+* Copy-pasting Bootstrap code across pages
+* Hardcoding styles instead of using classes
+
+### 📝 Points to Remember
+
+* Bootstrap is a UI framework, not a backend tool
+* JSP renders data; Bootstrap styles it
+* Use CDN for faster setup
+* Combine Bootstrap with EL + JSTL
+* Maintain MVC separation strictly
+* Responsive UI comes “for free” with Bootstrap
+
+---
+
+❓ **Why should Bootstrap be used only in JSP and not Servlets?**
+▶ Servlets are part of the **controller layer**. Their responsibility is to handle HTTP requests, perform validation, invoke business logic, and decide *which view* to render. Bootstrap, on the other hand, is purely a **presentation-layer tool**.
+If UI-related code or styling decisions leak into servlets, the controller becomes tightly coupled to the view. This breaks MVC separation, makes the code harder to test, and complicates future UI changes. JSP is designed to render HTML, so Bootstrap naturally belongs there.
+
+❓ **Does Bootstrap replace JSP or JSTL?**
+▶ No. Bootstrap does not generate HTML dynamically and cannot access server-side data. JSP and JSTL are responsible for **producing dynamic HTML** using data provided by the server. Bootstrap only styles the HTML that already exists.
+Think of it as division of labor: JSP and JSTL decide *what* content appears, Bootstrap decides *how* it looks.
+
+❓ **Is Bootstrap mandatory for JSP applications?**
+▶ Not at all. JSP applications can work perfectly with plain HTML and CSS. Bootstrap is a productivity and consistency tool. It reduces the amount of custom CSS you need to write and helps ensure responsive layouts without deep CSS knowledge.
+Its value increases as the UI grows or when multiple developers work on the same project.
+
+❓ **Can Bootstrap be used with any MVC framework?**
+▶ Yes, because Bootstrap is **backend-agnostic**. It only requires HTML, CSS, and JavaScript. Whether your backend is raw Servlets, Spring MVC, Jakarta MVC, or even a REST API, Bootstrap works the same way.
+This is why UI frameworks are often reused even when backend technologies change.
+
+❓ **Why is CDN preferred over local Bootstrap files?**
+▶ CDNs provide globally distributed, cached assets that browsers may already have from other sites. This reduces load time and removes the need to manage static files manually.
+Local files make sense when working offline, enforcing strict security policies, or customizing Bootstrap heavily, but CDN is ideal for most learning and production setups.
+
+❓ **Can I use Bootstrap JS components in JSP?**
+▶ Yes. JSP simply outputs HTML and JavaScript to the browser. Once the page reaches the client, Bootstrap’s JavaScript behaves like it would on any static page.
+Including `bootstrap.bundle.min.js` enables interactive components such as modals, dropdowns, carousels, and tooltips without any servlet involvement.
+
+❓ **Do I need to write custom CSS if using Bootstrap?**
+▶ Often no, especially for standard layouts and forms. Bootstrap covers spacing, typography, grids, and components.
+Custom CSS becomes necessary only when implementing branding, custom themes, or design requirements that go beyond Bootstrap’s defaults.
+
+❓ **Can Bootstrap make JSP pages responsive on mobile?**
+▶ Yes. Bootstrap’s grid system and responsive utility classes automatically adapt layouts based on screen size. Since JSP generates HTML on the server, responsiveness is handled entirely on the client side by Bootstrap’s CSS.
+No additional server-side logic is required for mobile layouts.
+
+❓ **Is Bootstrap compatible with JSTL and EL?**
+▶ Completely. JSTL and EL operate **before the response is sent**, generating dynamic HTML. Bootstrap operates **after the page is rendered**, styling that HTML.
+You can safely use `${}` expressions and `<c:forEach>` inside Bootstrap components without any conflict, as they operate at different phases of the request lifecycle.
