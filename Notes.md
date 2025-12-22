@@ -20729,3 +20729,173 @@ public class FileDownloadServlet extends HttpServlet {
 ❓ **Is file name from client always safe to use?**
 ▶ No. It must be sanitized to avoid path traversal attacks.
 
+## 125. Pagination in Web Applications
+
+**Pagination** is the technique of **splitting large data sets into smaller, manageable pages** instead of loading everything at once.
+
+It improves:
+
+* Performance
+* Memory usage
+* User experience
+* Server scalability
+
+### Why Pagination Is Needed
+
+Without pagination:
+
+* Large result sets slow down responses
+* High memory consumption occurs
+* Network bandwidth is wasted
+* UI becomes difficult to navigate
+
+Pagination ensures **controlled data loading**.
+
+### How Pagination Works (Conceptually)
+
+1. Client requests a specific page number
+2. Server calculates offset and limit
+3. Server fetches only required records
+4. Data is sent to the view
+5. Navigation links allow page switching
+
+### Pagination Parameters
+
+Common parameters used:
+
+* `page` → current page number
+* `pageSize` → number of records per page
+* `offset` → starting record index
+
+📌 `offset = (page - 1) × pageSize`
+
+## Pagination with Servlet + JSP
+
+### Request Example
+
+```
+/users?page=2
+```
+
+📌 Page numbering usually starts from **1**, not 0.
+
+### Servlet Handling Pagination Logic
+
+```java
+// Servlet handling paginated data
+@WebServlet("/users")
+public class UserListServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Default values
+        int page = 1;
+        int pageSize = 10;
+
+        // Read page number from request
+        String pageParam = request.getParameter("page");
+
+        if (pageParam != null) {
+            page = Integer.parseInt(pageParam);
+        }
+
+        // Calculate offset for database query
+        int offset = (page - 1) * pageSize;
+
+        // Fetch paginated data from database/service
+        List<User> users = userService.getUsers(offset, pageSize);
+
+        // Get total record count
+        int totalUsers = userService.getTotalUserCount();
+
+        // Calculate total pages
+        int totalPages = (int) Math.ceil((double) totalUsers / pageSize);
+
+        // Store data for JSP
+        request.setAttribute("users", users);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
+        // Forward to JSP
+        request.getRequestDispatcher("users.jsp")
+               .forward(request, response);
+    }
+}
+```
+
+📌 Pagination logic belongs on the server.
+
+### JSP Display with Pagination Controls
+
+```jsp
+<!-- Display user list -->
+<c:forEach var="user" items="${users}">
+    <p>${user.username}</p>
+</c:forEach>
+
+<!-- Pagination navigation -->
+<c:forEach var="i" begin="1" end="${totalPages}">
+    <c:choose>
+        <c:when test="${i == currentPage}">
+            <!-- Highlight current page -->
+            <strong>${i}</strong>
+        </c:when>
+        <c:otherwise>
+            <!-- Page navigation link -->
+            <a href="users?page=${i}">${i}</a>
+        </c:otherwise>
+    </c:choose>
+</c:forEach>
+```
+
+📌 JSP only renders navigation and data.
+
+### Database-Level Pagination (Concept)
+
+Most databases support pagination directly.
+
+Example (SQL-style):
+
+```sql
+-- Fetch limited records with offset
+SELECT * FROM users
+LIMIT 10 OFFSET 20;
+```
+
+📌 Always paginate at database level, not in memory.
+
+### Common Pagination Mistakes
+
+* Fetching all records and slicing in Java
+* Not validating page number
+* Hardcoding page size everywhere
+* Not handling empty pages
+* Ignoring total record count
+
+### 📝 Points to Remember
+
+* Pagination improves performance and UX
+* Always paginate on the server
+* Use offset and limit
+* Validate page parameters
+* Avoid loading full datasets
+* Keep page size configurable
+
+---
+
+❓ **Why is pagination done on the server instead of JSP?**
+▶ Because JSP should only render data, not control how much data is fetched.
+
+❓ **What happens if page number is out of range?**
+▶ Server should clamp it to valid bounds or return an empty result.
+
+❓ **Why is database-level pagination preferred?**
+▶ It avoids loading unnecessary data into memory.
+
+❓ **Is offset-based pagination always efficient?**
+▶ No. Large offsets can be slow; cursor-based pagination may be better.
+
+❓ **Can pagination work without knowing total record count?**
+▶ Yes, but page navigation becomes limited.
+
