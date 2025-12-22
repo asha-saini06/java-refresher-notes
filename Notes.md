@@ -18538,3 +18538,184 @@ This method provides **centralized error handling** for the entire application.
 ❓ **Should logging be done inside JSP error pages?**
 ▶ Minimal logging is acceptable, but serious logging should be handled by servlets or filters.
 
+## 113. JSTL (JavaServer Pages Standard Tag Library)
+**JSTL (JavaServer Pages Standard Tag Library)** is a collection of **standard JSP tags** that replace Java code inside JSP pages.
+
+It helps developers write **cleaner, readable, and maintainable JSPs** by moving logic out of scriptlets and into reusable tags.
+
+📌 JSTL works on top of **Expression Language (EL)** and is a core part of modern JSP development.
+
+### Why JSTL is Needed
+
+* Eliminates Java scriptlets from JSP
+* Improves readability and maintainability
+* Encourages MVC architecture
+* Reduces boilerplate code
+* Makes JSPs easier to debug and test
+
+### JSTL Tag Libraries
+
+JSTL is divided into several tag libraries:
+
+| Library    | Prefix | Purpose                                  |
+| ---------- | ------ | ---------------------------------------- |
+| Core       | `c`    | Flow control, URL handling, variables    |
+| Formatting | `fmt`  | Date, number, and i18n formatting        |
+| Functions  | `fn`   | String manipulation                      |
+| SQL        | `sql`  | Database access (not recommended in MVC) |
+| XML        | `x`    | XML processing                           |
+
+### Enabling JSTL in JSP
+
+Before using JSTL, it must be declared using the `taglib` directive.
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+```
+
+📌 This makes JSTL core tags available with prefix `c`.
+
+### Core JSTL Tags (Most Used)
+
+#### `<c:out>`
+
+Used to display data safely by **escaping HTML characters**.
+
+```jsp
+<!-- Prints the username safely (prevents XSS) -->
+<c:out value="${username}" />
+```
+
+📌 Preferred over `<%= %>` for output.
+
+#### `<c:set>`
+
+Used to create or update variables.
+
+```jsp
+<!-- Set a variable named 'count' with value 10 -->
+<c:set var="count" value="10" />
+```
+
+#### `<c:if>`
+
+Used for conditional logic.
+
+```jsp
+<!-- Check condition using EL -->
+<c:if test="${age >= 18}">
+    <!-- Content shown only if condition is true -->
+    Adult User
+</c:if>
+```
+
+#### `<c:choose>`, `<c:when>`, `<c:otherwise>`
+
+Used for multiple conditional branches (similar to if–else).
+
+```jsp
+<c:choose>
+    <!-- First condition -->
+    <c:when test="${score >= 90}">
+        Excellent
+    </c:when>
+
+    <!-- Second condition -->
+    <c:when test="${score >= 60}">
+        Passed
+    </c:when>
+
+    <!-- Default case -->
+    <c:otherwise>
+        Failed
+    </c:otherwise>
+</c:choose>
+```
+
+#### `<c:forEach>`
+
+Used to iterate over collections or ranges.
+
+```jsp
+<!-- Loop from 1 to 5 -->
+<c:forEach var="i" begin="1" end="5">
+    <!-- Print loop counter -->
+    <p>Count: ${i}</p>
+</c:forEach>
+```
+
+```jsp
+<!-- Iterate over a list stored in request scope -->
+<c:forEach var="user" items="${userList}">
+    <!-- Access bean properties using EL -->
+    <p>${user.username}</p>
+</c:forEach>
+```
+
+#### `<c:remove>`
+
+Used to remove variables from scope.
+
+```jsp
+<!-- Remove 'count' variable from all scopes -->
+<c:remove var="count" />
+```
+
+### Formatting Tags (`fmt`)
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+```
+
+#### `<fmt:formatDate>`
+
+```jsp
+<!-- Format date for display -->
+<fmt:formatDate value="${today}" pattern="dd-MM-yyyy" />
+```
+
+### JSTL Functions (`fn`)
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+```
+
+```jsp
+<!-- Check length of string -->
+${fn:length(username)}
+```
+
+### JSTL vs Scriptlets (Conceptual)
+
+| Aspect          | JSTL   | Scriptlets |
+| --------------- | ------ | ---------- |
+| Readability     | High   | Low        |
+| MVC support     | Strong | Weak       |
+| Maintainability | Easy   | Hard       |
+| Recommended     | Yes    | No         |
+
+### Key Notes
+
+* JSTL replaces Java code in JSP
+* Works with Expression Language (EL)
+* Core library is most commonly used
+* Improves security and readability
+* Essential for interview-ready JSP knowledge
+
+---
+
+❓ **Why is JSTL preferred over scriptlets?**
+▶ Because it keeps JSPs clean, readable, and aligned with MVC architecture.
+
+❓ **Does JSTL replace servlets?**
+▶ No. JSTL is used in the view layer, while servlets handle control logic.
+
+❓ **Is JSTL executed at translation time?**
+▶ No. JSTL tags are executed at **request time**.
+
+❓ **What happens if JSTL is not available in the classpath?**
+▶ JSP compilation fails with tag library errors.
+
+❓ **Is SQL JSTL recommended in real projects?**
+▶ No. Database logic should remain in DAO or service layers.
+
