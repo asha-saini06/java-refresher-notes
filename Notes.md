@@ -21103,3 +21103,217 @@ Example: WildFly, GlassFish
 ❓ **What breaks if layers are mixed?**
 ▶ Scalability, maintainability, testability, and security.
 
+## 127. WAR File Structure
+
+A **WAR (Web Application Archive)** file is a **standard deployment unit** used to package and deploy Java web applications to a **web container** (such as Tomcat).
+
+It bundles all components required to run a web application into a **single, portable archive**.
+
+### Why WAR Files Are Needed
+
+Without a standard archive structure:
+
+* Deployment becomes inconsistent
+* Configuration files get scattered
+* Library conflicts increase
+* Web containers cannot reliably load applications
+
+WAR files establish a **clear contract** between the application and the container.
+
+### What a WAR File Contains (Overview)
+
+A WAR file is essentially a **ZIP file** with a predefined directory layout understood by the servlet container.
+
+Example:
+
+```
+myapp.war
+```
+
+When deployed, it is extracted as:
+
+```
+myapp/
+```
+
+### Standard WAR Directory Structure
+
+```
+myapp/
+│
+├── index.jsp
+├── login.jsp
+├── css/
+│   └── style.css
+├── js/
+│   └── app.js
+├── images/
+│   └── logo.png
+│
+└── WEB-INF/
+    ├── web.xml
+    ├── classes/
+    │   └── com/example/servlet/LoginServlet.class
+    └── lib/
+        └── mysql-connector.jar
+```
+
+📌 Anything inside `WEB-INF` is **not directly accessible** from the browser.
+
+### Root Directory (Public Area)
+
+Files placed in the **root directory** are publicly accessible over HTTP.
+
+Typical contents:
+
+* JSP files
+* HTML files
+* CSS, JavaScript, images
+* Static client-side resources
+
+📌 These resources can be accessed directly using URLs.
+
+Example:
+
+```
+http://localhost:8080/myapp/login.jsp
+```
+
+### WEB-INF Directory (Protected Area)
+
+The `WEB-INF` directory acts as a **security boundary** for the application.
+
+* Browser access is blocked
+* Only the container can access its contents
+* Critical configuration lives here
+
+#### WEB-INF/web.xml
+
+`web.xml` is the **deployment descriptor** of the web application.
+
+It is used to configure:
+
+* Servlet mappings
+* Filters
+* Listeners
+* Session configuration
+* Error pages
+* Security constraints
+
+```xml
+<!-- Deployment descriptor -->
+<web-app>
+
+    <!-- Servlet declaration -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.example.servlet.LoginServlet</servlet-class>
+    </servlet>
+
+    <!-- Servlet URL mapping -->
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+```
+
+📌 Even annotation-based applications may still use `web.xml` for centralized control.
+
+#### WEB-INF/classes
+
+This directory contains **compiled Java classes**.
+
+Includes:
+
+* Servlets
+* Filters
+* Listeners
+* Utility and service classes
+
+Example:
+
+```
+WEB-INF/classes/com/example/service/UserService.class
+```
+
+📌 The package structure must be preserved.
+
+#### WEB-INF/lib
+
+Contains **external dependency JAR files** required by the application.
+
+Examples:
+
+* JDBC drivers
+* Logging frameworks
+* Utility libraries
+
+📌 All JARs placed here are automatically added to the application’s classpath.
+
+### Class Loading in a WAR File
+
+Simplified class loading order:
+
+1. Web container libraries
+2. JARs in `WEB-INF/lib`
+3. Classes in `WEB-INF/classes`
+
+📌 Application-level libraries can override container-provided classes.
+
+### Deployment of WAR Files
+
+WAR files can be deployed by:
+
+* Copying to the `webapps/` directory
+* Uploading via server admin console
+* CI/CD pipeline automation
+
+📌 The container automatically extracts and initializes the application.
+
+### Context Path
+
+The **WAR file name** becomes the **context path** of the application.
+
+Example:
+
+```
+myapp.war → /myapp
+```
+
+Access URL:
+
+```
+http://localhost:8080/myapp
+```
+
+📌 Renaming the WAR file changes the application URL.
+
+### 📝 Points to Remember
+
+* WAR is a deployable web application archive
+* It follows a strict directory structure
+* Root directory is publicly accessible
+* `WEB-INF` is protected from direct access
+* `web.xml` defines deployment behavior
+* `WEB-INF/lib` manages dependencies
+* WAR file name determines context path
+
+---
+
+❓ **Why is the WEB-INF directory not accessible via browser?**
+▶ To prevent direct access to configuration files and compiled classes.
+
+❓ **Can JSP files be placed inside WEB-INF?**
+▶ Yes, but they must be accessed via forwarding, not direct URLs.
+
+❓ **Is `web.xml` mandatory in modern applications?**
+▶ No, annotations can replace it, but it is still supported and useful.
+
+❓ **What happens if multiple JARs contain the same class?**
+▶ Class loading order determines which class is used, which can cause conflicts.
+
+❓ **How is WAR different from JAR?**
+▶ WAR is for web applications; JAR is a general-purpose Java archive.
+
