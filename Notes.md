@@ -21956,3 +21956,209 @@ public class LogoutServlet extends HttpServlet {
 ❓ **What happens if session invalidation is skipped during logout?**
 ▶ The user may remain authenticated, allowing unauthorized access and session hijacking risks.
 
+## 131. Role-Based Access Control (RBAC)
+
+**Role-Based Access Control (RBAC)** is a security model where **access to resources is granted based on user roles**, not individual users.
+
+Instead of checking *who* the user is everywhere, the system checks **what role the user has**.
+
+📌 RBAC answers **“What is the user allowed to do?”**, after authentication.
+
+### Why RBAC Is Needed
+
+Without RBAC:
+
+* Authorization logic gets duplicated
+* Permissions become hard-coded
+* Security rules scatter across code
+* Applications become hard to scale
+
+RBAC provides **centralized, consistent authorization**.
+
+### Core RBAC Concepts
+
+RBAC is built on three core ideas:
+
+* **User** → an authenticated identity
+* **Role** → a named set of permissions
+* **Permission** → access to a resource or action
+
+📌 Users are assigned roles, roles define permissions.
+
+### Typical Roles in Web Applications
+
+Common examples:
+
+* `ADMIN`
+* `USER`
+* `MANAGER`
+* `GUEST`
+
+📌 Roles are **business concepts**, not technical ones.
+
+### Where Roles Are Stored
+
+Roles are usually stored in:
+
+* Database tables
+* Session attributes
+* Security context
+
+📌 Roles should never be trusted from the client.
+
+### Database Design for RBAC
+
+#### Users Table
+
+```sql
+-- Stores user accounts
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+```
+
+#### Roles Table
+
+```sql
+-- Defines available roles
+CREATE TABLE roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    role_name VARCHAR(50) UNIQUE NOT NULL
+);
+```
+
+#### User–Role Mapping Table
+
+```sql
+-- Maps users to roles
+CREATE TABLE user_roles (
+    user_id INT,
+    role_id INT
+);
+```
+
+📌 This design supports **multiple roles per user**.
+
+### Assigning Roles After Login
+
+After authentication, roles are loaded and stored in session.
+
+```java
+// After successful authentication
+HttpSession session = request.getSession();
+
+// Store username
+session.setAttribute("username", username);
+
+// Store user role (example: single role)
+session.setAttribute("role", "ADMIN");
+```
+
+📌 Role assignment happens **once per login**.
+
+### Role Check in Servlet
+
+```java
+// Retrieve existing session
+HttpSession session = request.getSession(false);
+
+if (session == null) {
+    // User not logged in
+    response.sendRedirect("login.jsp");
+    return;
+}
+
+// Read role from session
+String role = (String) session.getAttribute("role");
+
+// Authorize based on role
+if (!"ADMIN".equals(role)) {
+    // Access denied
+    response.sendRedirect("accessDenied.jsp");
+    return;
+}
+
+// Authorized user continues
+```
+
+📌 Authorization checks must be server-side.
+
+### Role Check Using Filter (Recommended)
+
+#### Authorization Filter
+
+```java
+public class AdminFilter implements Filter {
+
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain)
+            throws IOException, ServletException {
+
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+
+        // Get existing session
+        HttpSession session = req.getSession(false);
+
+        // Check authentication and role
+        if (session == null || !"ADMIN".equals(session.getAttribute("role"))) {
+            // Block unauthorized access
+            res.sendRedirect("accessDenied.jsp");
+            return;
+        }
+
+        // User authorized, continue request
+        chain.doFilter(request, response);
+    }
+}
+```
+
+📌 Filters enforce authorization **before** reaching servlets.
+
+### Securing URLs with RBAC
+
+RBAC is commonly applied to:
+
+* Admin dashboards
+* Management endpoints
+* Sensitive operations
+* Configuration pages
+
+📌 URL-level protection is safer than JSP-level checks.
+
+### Common RBAC Mistakes
+
+* Hardcoding roles in JSP
+* Trusting client-side role flags
+* Repeating role checks in every servlet
+* Storing roles in cookies
+* Mixing authentication and authorization
+
+### 📝 Points to Remember
+
+* Authentication identifies the user
+* RBAC controls access using roles
+* Roles group permissions logically
+* Authorization should be centralized
+* Filters are ideal for RBAC enforcement
+* Never trust roles sent from the client
+
+---
+
+❓ **Why is RBAC preferred over user-based checks?**
+▶ User-based checks require hardcoding permissions per user, which does not scale. RBAC groups permissions under roles, making authorization easier to manage, audit, and extend.
+
+❓ **Why should role checks be done in filters instead of JSP?**
+▶ Filters run before any servlet or JSP logic executes. This prevents unauthorized users from even reaching protected resources, improving both security and code cleanliness.
+
+❓ **Can a user have multiple roles? How is it handled?**
+▶ Yes. Users can be mapped to multiple roles using a mapping table. During login, all roles are loaded and stored in session or security context for authorization checks.
+
+❓ **What happens if roles are stored on the client side?**
+▶ Client-side role storage can be tampered with, leading to privilege escalation. Roles must always be validated on the server.
+
+❓ **Is RBAC enough for fine-grained security?**
+▶ RBAC works well for coarse-grained control. For finer control, it is often combined with permission-based or attribute-based access control.
+
