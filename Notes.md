@@ -18861,3 +18861,166 @@ This is preferred over chaining multiple `<c:if>` tags.
 ❓ **Can Core JSTL tags work without EL?**
 ▶ No. Core JSTL tags rely heavily on Expression Language.
 
+## 115. JSTL Functions (`fn:length`, `fn:contains`, etc.)
+**JSTL Functions** provide a set of **EL-based utility functions** mainly used for **string manipulation and collection inspection** inside JSP pages.
+
+They help you perform common operations **without writing Java code or scriptlets**, keeping JSP clean and expressive.
+
+📌 JSTL functions are used **inside Expression Language (EL)** and are evaluated at **request time**.
+
+### Enabling JSTL Functions
+
+To use JSTL functions, you must declare the functions tag library.
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+```
+
+📌 This makes functions available using the `fn:` prefix.
+
+### Why JSTL Functions Are Useful
+
+* Avoid Java code in JSP
+* Improve readability of expressions
+* Work seamlessly with EL
+* Ideal for UI-level logic
+* Commonly tested in JSP interviews
+
+### Common JSTL Functions
+
+#### `fn:length()`
+
+Returns the **length of a string**, array, collection, or map.
+
+```jsp
+<!-- Get length of a string -->
+<p>Username length: ${fn:length(username)}</p>
+
+<!-- Get size of a collection -->
+<p>Total users: ${fn:length(userList)}</p>
+```
+
+📌 Works with strings and collections alike.
+
+#### `fn:contains()`
+
+Checks whether a string **contains another string**.
+
+```jsp
+<!-- Check if email contains '@' -->
+<c:if test="${fn:contains(email, '@')}">
+    <!-- Valid email format (basic check) -->
+    Email looks valid
+</c:if>
+```
+
+#### `fn:containsIgnoreCase()`
+
+Same as `contains`, but **case-insensitive**.
+
+```jsp
+<!-- Case-insensitive substring check -->
+<c:if test="${fn:containsIgnoreCase(role, 'admin')}">
+    <!-- User has admin role -->
+    Admin User
+</c:if>
+```
+
+#### `fn:startsWith()` and `fn:endsWith()`
+
+Checks string prefix or suffix.
+
+```jsp
+<!-- Check if filename ends with .pdf -->
+<c:if test="${fn:endsWith(fileName, '.pdf')}">
+    <!-- File is a PDF -->
+    PDF File
+</c:if>
+```
+
+#### `fn:substring()`
+
+Extracts a portion of a string.
+
+```jsp
+<!-- Extract substring from index 0 to 4 -->
+<p>Short code: ${fn:substring(code, 0, 4)}</p>
+```
+
+#### `fn:substringBefore()` and `fn:substringAfter()`
+
+Splits strings around a delimiter.
+
+```jsp
+<!-- Get username from email -->
+<p>User: ${fn:substringBefore(email, '@')}</p>
+
+<!-- Get domain from email -->
+<p>Domain: ${fn:substringAfter(email, '@')}</p>
+```
+
+#### `fn:toUpperCase()` and `fn:toLowerCase()`
+
+Converts string case.
+
+```jsp
+<!-- Convert username to uppercase -->
+<p>${fn:toUpperCase(username)}</p>
+```
+
+#### `fn:trim()`
+
+Removes leading and trailing spaces.
+
+```jsp
+<!-- Trim whitespace from input -->
+<p>${fn:trim(userInput)}</p>
+```
+
+### Typical Use Case Example
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<!-- Check if list has items before displaying -->
+<c:if test="${fn:length(userList) > 0}">
+    <!-- Display total users -->
+    <p>Total users: ${fn:length(userList)}</p>
+</c:if>
+```
+
+📌 Prevents empty list rendering.
+
+### JSTL Functions vs Java Methods (Conceptual)
+
+| Aspect          | JSTL Functions | Java Methods      |
+| --------------- | -------------- | ----------------- |
+| Where used      | JSP (EL)       | Java classes      |
+| Purpose         | UI-level logic | Business logic    |
+| Recommended for | Views          | Models / Services |
+
+### Key Notes
+
+* JSTL functions work only inside EL
+* Used mainly for string and collection operations
+* Evaluated at request time
+* Should not replace business logic
+* Improve JSP readability and safety
+
+---
+
+❓ **Can JSTL functions modify data?**
+▶ No. They are read-only utility functions.
+
+❓ **Are JSTL functions available without declaring taglib?**
+▶ No. The functions taglib must be declared explicitly.
+
+❓ **Should complex logic be implemented using JSTL functions?**
+▶ No. Complex logic belongs in Java classes, not JSP.
+
+❓ **Do JSTL functions work with null values?**
+▶ Some return safe defaults, but null handling should be done carefully.
+
+❓ **Are JSTL functions evaluated at compile time?**
+▶ No. They are evaluated at request time along with EL.
+
