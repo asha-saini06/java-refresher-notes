@@ -22341,3 +22341,180 @@ Request → AuthFilter → AdminFilter → Servlet → Response
 ❓ **Should filters create sessions?**
 ▶ Generally no. Filters should check existing sessions. Creating sessions unnecessarily increases memory usage and can cause security issues.
 
+## 133. Session Security Best Practices
+
+**Session security** focuses on protecting the **session lifecycle and session identifier** from attacks such as hijacking, fixation, and unauthorized reuse.
+
+Since sessions represent an authenticated user, **compromising a session is equivalent to compromising the user**.
+
+📌 Strong authentication is useless if sessions are weak.
+
+### Why Session Security Matters
+
+Without proper session security:
+
+* Attackers can hijack active sessions
+* Users can be impersonated
+* Sensitive data can be exposed
+* Logout may not actually log users out
+
+Session security protects **authenticated state**, not just credentials.
+
+### Secure Session ID Handling
+
+The **session ID** uniquely identifies a user session.
+
+Best practices:
+
+* Use container-generated session IDs
+* Never expose session IDs in URLs
+* Avoid logging session IDs
+* Regenerate session ID after login
+
+📌 Session IDs must be **unguessable and short-lived**.
+
+### Preventing Session Fixation
+
+**Session fixation** occurs when an attacker forces a victim to use a known session ID.
+
+#### Regenerating Session ID After Login
+
+```java
+// Invalidate old session after successful authentication
+HttpSession oldSession = request.getSession(false);
+
+if (oldSession != null) {
+    oldSession.invalidate();
+}
+
+// Create a new session for authenticated user
+HttpSession newSession = request.getSession(true);
+
+// Store authentication details
+newSession.setAttribute("username", username);
+newSession.setAttribute("role", role);
+```
+
+📌 Always regenerate session ID after login.
+
+### Secure Cookie Configuration
+
+Session IDs are usually stored in cookies.
+
+Best practices:
+
+* Use `HttpOnly` cookies
+* Enable `Secure` flag
+* Set appropriate cookie path
+
+#### Cookie Configuration Example
+
+```java
+// Create a secure cookie manually (conceptual example)
+Cookie sessionCookie = new Cookie("JSESSIONID", session.getId());
+
+// Prevent JavaScript access
+sessionCookie.setHttpOnly(true);
+
+// Ensure cookie is sent only over HTTPS
+sessionCookie.setSecure(true);
+
+// Add cookie to response
+response.addCookie(sessionCookie);
+```
+
+📌 Most containers allow configuring these flags globally.
+
+### Session Timeout Management
+
+Sessions should expire automatically after inactivity.
+
+#### web.xml Session Timeout
+
+```xml
+<!-- Session timeout configuration -->
+<session-config>
+    <!-- Timeout in minutes -->
+    <session-timeout>30</session-timeout>
+</session-config>
+```
+
+📌 Timeout is based on inactivity, not total lifetime.
+
+### Proper Logout Handling
+
+Logout must fully terminate the session.
+
+#### Secure Logout Example
+
+```java
+// Logout servlet logic
+HttpSession session = request.getSession(false);
+
+if (session != null) {
+    // Invalidate session and clear all attributes
+    session.invalidate();
+}
+
+// Redirect to login page
+response.sendRedirect("login.jsp");
+```
+
+📌 Invalidating the session ensures session ID is destroyed.
+
+### Avoiding Sensitive Data in Sessions
+
+Do not store:
+
+* Passwords
+* Credit card details
+* Large objects
+* Database connections
+
+📌 Store only identifiers and minimal user context.
+
+### Protecting Against Concurrent Session Abuse
+
+Optional strategies:
+
+* Restrict one active session per user
+* Track login timestamps
+* Invalidate old sessions on new login
+
+📌 This limits account sharing and hijacking damage.
+
+### Common Session Security Mistakes
+
+* Using URL rewriting unnecessarily
+* Not invalidating sessions on logout
+* Long or infinite session timeouts
+* Storing sensitive data in session
+* Trusting session data blindly
+
+### 📝 Points to Remember
+
+* Sessions represent authenticated users
+* Session IDs must be protected
+* Regenerate session after login
+* Use secure cookie flags
+* Set reasonable session timeouts
+* Always invalidate session on logout
+* Keep session data minimal
+
+---
+
+❓ **Why is session fixation dangerous even after authentication?**
+▶ Because the attacker already knows the session ID. If the ID is not regenerated after login, the attacker can reuse the same ID to impersonate the user, even though authentication succeeded.
+
+❓ **Why should session IDs never appear in URLs?**
+▶ URLs can be logged, bookmarked, cached, or shared. If a session ID appears in a URL, anyone who obtains that URL can hijack the session.
+
+❓ **Why is `HttpOnly` important for session cookies?**
+▶ `HttpOnly` prevents JavaScript from accessing the cookie, protecting sessions from XSS-based theft.
+
+❓ **Does invalidating a session also remove the cookie?**
+▶ The server-side session is destroyed, and the cookie becomes useless. The container usually instructs the browser to discard it.
+
+❓ **Why is regenerating session ID better than just adding attributes?**
+▶ Regeneration breaks any association with a previously known session ID, eliminating fixation attacks.
+
