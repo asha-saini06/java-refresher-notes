@@ -23282,3 +23282,204 @@ try (Connection con = ds.getConnection()) {
 ❓ **How can you tune a connection pool?**
 ▶ By configuring initial size, max total connections, max idle, min idle, and validation query.
 
+## 138. DAO (Data Access Object) Pattern
+
+**DAO (Data Access Object) Pattern** is a design pattern that **abstracts and encapsulates all access to a data source** (like a database), providing a *clean API for CRUD operations* while keeping business logic separate from persistence logic.
+
+It improves:
+
+* Separation of concerns
+* Maintainability of code
+* Testability and flexibility
+
+📌 DAO hides database interaction details (SQL, queries, connections) from the rest of the application.
+
+> DAO allows you to separate data access logic from business logic, making your codebase cleaner, modular, and easier to test.
+
+### Why DAO Pattern Is Needed
+
+Without DAO:
+
+* Database access logic directly littered throughout business services
+* Difficult to modify or swap data sources
+* Hard to test business logic without real database access
+
+DAO creates an **interface for persistence**, so business logic does not depend on underlying data storage.
+
+### Core Components
+
+| Component              | Purpose                                                                   |
+| ---------------------- | ------------------------------------------------------------------------- |
+| **Model / Entity**     | Represents application data (e.g., `User`).                               |
+| **DAO Interface**      | Defines standard CRUD methods (e.g., `save`, `find`, `update`, `delete`). |
+| **DAO Implementation** | Implements interface to interact with the database or data source.        |
+| **Business / Service** | Uses DAO interface instead of direct database calls.                      |
+
+📌 The DAO interface and implementation ensure consistency in how you interact with different types of databases or data sources.
+
+
+![DAO](./resources/Components-of-Data-Access-Object-Pattern.png)
+
+### Example: DAO Interface (Java)
+
+```java
+// Create the Model/Entity Class 
+public interface UserDAO {
+    void addUser(User user);
+    User getUser(int id);
+    void updateUser(User user);
+    void deleteUser(int id);
+}
+```
+
+📌 Defines basic CRUD operations without tying them to any database technology.
+
+### Example: DAO Implementation (JDBC)
+
+```java
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class UserDAOImpl implements UserDAO {
+    // JDBC Connection object used for database operations
+    private Connection connection;
+
+    // Constructor: injects the Connection from outside (DI-friendly)
+    public UserDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+
+    @Override
+    public void addUser(User user) {
+        // SQL query to insert a new user record
+        String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Set parameters from User object
+            stmt.setString(1, user.getName());
+            stmt.setString(2, user.getEmail());
+            // Execute the INSERT operation
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            // Print stack trace for debugging (in production, log properly)
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public User getUser(int id) {
+        User user = null;
+        // SQL query to fetch a user by ID
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Set the ID parameter
+            stmt.setInt(1, id);
+            // Execute SELECT query
+            ResultSet rs = stmt.executeQuery();
+            // Map result set to User object if a record exists
+            if (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("id"));       // Map 'id' column
+                user.setName(rs.getString("name")); // Map 'name' column
+                user.setEmail(rs.getString("email")); // Map 'email' column
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // Return the User object or null if not found
+        return user;
+    }
+
+    @Override
+    public void updateUser(User user) {
+        // SQL query to update a user's name and email by ID
+        String sql = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Set parameters from User object
+            stmt.setString(1, user.getName());
+            stmt.setString(2, user.getEmail());
+            stmt.setInt(3, user.getId());
+            // Execute the UPDATE operation
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        // SQL query to delete a user by ID
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Set the ID parameter
+            stmt.setInt(1, id);
+            // Execute the DELETE operation
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+- Try-with-resources ensures automatic closing of PreparedStatement, reducing resource leaks.
+- Exceptions are printed here for simplicity, but in production, a logger should be used instead.
+- Constructor injection allows flexibility and easier unit testing with mock connections.
+
+📌 Concrete implementation encapsulates SQL details.
+
+### How DAO Works (Conceptually)
+
+1. Business layer calls a **DAO interface method**
+2. The **DAO implementation** runs database operations
+3. Results are returned as **entity objects**
+4. Business logic stays unaffected if DAO changes
+
+```
+[Business / Service] → uses → [DAO Interface] → implemented by → [DAO Implementation] → accesses → [Database]
+```
+
+📌 The DAO pattern separates concerns and makes persistence interchangeable.
+
+### Pros and Cons
+
+**Advantages:**
+
+* Code organization and separation of concerns
+* Easier to switch databases or persistence technology
+* Improves testability through mockable interfaces
+
+**Drawbacks:**
+
+* Additional abstraction layer adds overhead in very small apps
+* DAO may feel redundant when using advanced ORM frameworks with built‑in repositories
+
+### 📝 Points to Remember
+
+* DAO abstracts data access logic away from business logic
+* Always design DAO with interfaces for flexibility
+* Implementations encapsulate persistence details
+* Works well with dependency injection for testing
+* DAO interfaces can be mocked easily in unit tests
+
+---
+
+❓ **Is DAO still useful with ORMs like JPA or Hibernate?**
+▶ Yes. Even ORMs benefit from DAO‑style abstraction (e.g., repository layers) to decouple persistence logic.
+
+❓ **Does DAO support transactions?**
+▶ Transactions are typically managed at the service layer or by frameworks (e.g., Spring), not directly inside DAO.
+
+❓ **Why use DAO instead of writing SQL in service classes?**
+▶ DAO isolates SQL/persistence code from business logic, making maintenance and testing easier.
+
+❓ **Can DAO work with non-database sources?**
+▶ Yes, DAO can abstract access to *any* data source (REST APIs, NoSQL databases, or even files).
+
+❓ **How does DAO improve testability?**
+▶ DAO interfaces can be mocked during unit tests, so business logic can be tested without a real database.
+
+❓ **What happens if DAO implementation changes?**
+▶ Business logic remains unaffected as long as the interface stays the same.
+
