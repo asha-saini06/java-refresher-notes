@@ -19530,3 +19530,185 @@ out.println("<h1>Hello</h1>");
 ❓ **What should you answer in interviews if asked “JSP vs Servlet”?**
 ▶ JSP is the View, Servlet is the Controller, and mixing roles breaks MVC.
 
+## 119. Form Handling in JSP & Servlets
+
+**Form handling** is one of the most common tasks in Java web applications.
+It involves **collecting user input from HTML forms**, processing it on the server, and sending an appropriate response back to the user.
+
+In an MVC-based application:
+
+* **JSP** displays the form (View)
+* **Servlet** processes the form submission (Controller)
+* **Model** holds and validates data (optional but recommended)
+
+📌 This topic is frequently asked in interviews because it ties together **JSP, Servlets, MVC, and HTTP concepts**.
+
+### HTML Form Basics
+
+Forms typically use either **GET** or **POST** method.
+
+```html
+<!-- Simple login form rendered using JSP -->
+<form action="login" method="post">
+    <!-- Username input field -->
+    <input type="text" name="username" />
+
+    <!-- Password input field -->
+    <input type="password" name="password" />
+
+    <!-- Submit button -->
+    <input type="submit" value="Login" />
+</form>
+```
+
+📌 `action` maps to a servlet URL pattern.
+
+### Handling Form Submission in Servlet
+
+A servlet reads form data using `getParameter()` methods.
+
+#### Servlet Example (Controller)
+
+```java
+// Servlet handling form submission
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Read form parameters from request
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Simple validation (example only)
+        if (username == null || username.isEmpty()) {
+
+            // Store error message in request scope
+            request.setAttribute("error", "Username is required");
+
+            // Forward back to form JSP
+            request.getRequestDispatcher("login.jsp")
+                   .forward(request, response);
+            return;
+        }
+
+        // On successful validation, store data for view
+        request.setAttribute("username", username);
+
+        // Forward to success JSP
+        request.getRequestDispatcher("welcome.jsp")
+               .forward(request, response);
+    }
+}
+```
+
+📌 Servlet handles **validation and flow control**, not presentation.
+
+### Displaying Form Data in JSP
+
+```jsp
+<!-- Display submitted username -->
+<h2>Welcome, ${username}</h2>
+
+<!-- Display error message if present -->
+<c:if test="${not empty error}">
+    <p style="color:red">${error}</p>
+</c:if>
+```
+
+📌 JSP only displays data using EL + JSTL.
+
+### GET vs POST (Conceptual)
+
+| Aspect          | GET             | POST         |
+| --------------- | --------------- | ------------ |
+| Data visibility | URL             | Request body |
+| Security        | Less secure     | More secure  |
+| Data length     | Limited         | Larger       |
+| Use case        | Search, filters | Login, forms |
+
+📌 Interviews often test this distinction.
+
+### Using JavaBeans for Form Data (Best Practice)
+
+Instead of passing raw parameters, data can be wrapped in a **JavaBean**.
+
+```java
+// JavaBean to hold form data
+public class LoginBean {
+
+    private String username;
+    private String password;
+
+    // Required no-arg constructor
+    public LoginBean() {}
+
+    // Getter and setter methods
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+}
+```
+
+```java
+// Inside servlet: populate bean
+LoginBean bean = new LoginBean();
+bean.setUsername(username);
+
+// Store bean in request scope
+request.setAttribute("loginBean", bean);
+```
+
+```jsp
+<!-- Access bean properties in JSP -->
+<p>User: ${loginBean.username}</p>
+```
+
+📌 This aligns with MVC and improves clarity.
+
+### Common Form Handling Mistakes
+
+* Processing logic inside JSP
+* Using scriptlets for validation
+* Not validating user input
+* Exposing sensitive data via GET
+* Not handling character encoding
+
+### Best Practices for Form Handling
+
+* Use POST for sensitive data
+* Validate input in Servlets
+* Use JavaBeans to carry form data
+* Use request scope for single submission
+* Apply PRG (Post–Redirect–Get) when needed
+
+### Key Notes
+
+* JSP displays forms, Servlets process them
+* `getParameter()` reads form values
+* Validation belongs in Servlets
+* EL + JSTL used for display
+* MVC flow keeps code clean
+
+---
+
+❓ **Why should form processing not be done in JSP?**
+▶ Because it mixes presentation with logic and breaks MVC separation.
+
+❓ **When should POST be preferred over GET?**
+▶ When handling sensitive or large amounts of data.
+
+❓ **What scope is best for form data?**
+▶ Request scope, since form submission is a single request.
+
+❓ **Why use JavaBeans for form handling?**
+▶ They group related data and improve maintainability.
+
+❓ **What is PRG pattern and why is it used?**
+▶ Post–Redirect–Get prevents duplicate form submissions on page refresh.
+
