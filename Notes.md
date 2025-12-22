@@ -18353,7 +18353,7 @@ Although JSP directives handle runtime exceptions, HTTP errors like 404/500 are 
 * Use a **consistency layout** for error pages
 * Combine with servlet filters if needed for centralized logic
 
-## Key Notes
+### Key Notes
 
 * `errorPage` specifies where errors should be handled
 * `isErrorPage="true"` makes the error page receive the exception
@@ -18377,4 +18377,164 @@ Although JSP directives handle runtime exceptions, HTTP errors like 404/500 are 
 
 ❓ **Should we always display raw exception messages to users?**
 ▶ No; raw stack traces can expose internal details. Use friendly messages instead.
+
+## 112. Custom Error Pages in JSP
+
+**Custom error pages in JSP** allow you to handle application errors in a **centralized, user-friendly, and maintainable way**.
+
+Instead of showing default server error messages, custom error pages let you:
+
+* Display meaningful messages to users
+* Maintain a consistent UI
+* Log errors safely on the server
+
+This is a **real-world requirement**, often discussed in interviews when talking about production-ready JSP applications.
+
+### Why Custom Error Pages Are Needed
+
+* Default server error pages look unprofessional
+* Stack traces expose internal implementation details
+* Different errors require different user responses
+* Centralized handling improves maintainability
+
+### Ways to Configure Custom Error Pages
+
+Custom error pages in JSP can be configured in **two ways**:
+
+1. Using **JSP directives** (`errorPage`, `isErrorPage`)
+2. Using **`web.xml` error-page configuration** (recommended)
+
+### Method 1: Custom Error Pages Using JSP Directives
+
+This approach handles **runtime exceptions thrown by a specific JSP**.
+
+#### Step 1: Configure `errorPage` in the JSP
+
+```jsp
+<%@ page errorPage="error.jsp" %>
+
+<%
+    // This will cause ArithmeticException
+    int result = 10 / 0;
+%>
+```
+
+📌 If an exception occurs, the container forwards the request to `error.jsp`.
+
+#### Step 2: Configure `isErrorPage` in the Error JSP
+
+```jsp
+<%@ page isErrorPage="true" %>
+
+<!-- Display a user-friendly message -->
+<h2>Something went wrong</h2>
+
+<!-- Access the exception implicit object -->
+<p>Error Message: <%= exception.getMessage() %></p>
+```
+
+📌 `exception` is available only because `isErrorPage="true"` is set.
+
+### Limitations of Directive-Based Error Pages
+
+* Works only for JSP pages
+* Cannot handle HTTP errors like 404
+* Error handling is scattered across JSPs
+
+Because of these limitations, **`web.xml` is preferred in real projects**.
+
+### Method 2: Custom Error Pages Using `web.xml` (Recommended)
+
+This method provides **centralized error handling** for the entire application.
+
+#### Handling HTTP Error Codes
+
+```xml
+<error-page>
+    <!-- Handle "Page Not Found" errors -->
+    <error-code>404</error-code>
+    <location>/errors/404.jsp</location>
+</error-page>
+
+<error-page>
+    <!-- Handle internal server errors -->
+    <error-code>500</error-code>
+    <location>/errors/500.jsp</location>
+</error-page>
+```
+
+📌 These pages are triggered automatically by the container.
+
+#### Handling Specific Exceptions
+
+```xml
+<error-page>
+    <!-- Handle NullPointerException globally -->
+    <exception-type>java.lang.NullPointerException</exception-type>
+    <location>/errors/null-error.jsp</location>
+</error-page>
+```
+
+📌 This applies to **JSPs, Servlets, and filters**.
+
+### Example: Custom Error Page JSP
+
+**/errors/500.jsp**
+
+```jsp
+<%@ page isErrorPage="true" %>
+
+<!-- Custom UI for server errors -->
+<h2>Internal Server Error</h2>
+
+<!-- Safe message for users -->
+<p>We are working on fixing the issue. Please try again later.</p>
+
+<!-- Optional: log technical details (not shown to user) -->
+<%
+    // exception object contains the root cause
+    System.out.println("Error occurred: " + exception);
+%>
+```
+
+### How Custom Error Pages Work (Conceptually)
+
+* Container detects an error
+* Matches it against `web.xml` rules
+* Forwards request to mapped error page
+* Original request and exception are preserved
+* Browser URL does **not change**
+
+### Best Practices for Custom Error Pages
+
+* Always use `web.xml` for centralized handling
+* Keep messages user-friendly
+* Log exceptions securely
+* Avoid exposing exception details in UI
+* Reuse a common layout for all error pages
+
+### Key Notes
+
+* Custom error pages improve UX and security
+* JSP directives are page-specific
+* `web.xml` provides global error handling
+* HTTP errors and exceptions can be handled separately
+* Error pages use server-side forwarding
+
+---
+
+❓ **Why is `web.xml` preferred over JSP directives for error handling?**
+▶ Because it centralizes error handling and works for JSPs, Servlets, and static resources.
+
+❓ **Can one error page handle multiple error codes?**
+▶ No. Each `<error-page>` entry handles a single error code or exception type.
+
+❓ **Is `isErrorPage="true"` required for all custom error pages?**
+▶ Yes, if you want access to the `exception` implicit object.
+
+❓ **Does redirect happen when an error page is shown?**
+▶ No. The container forwards the request internally.
+
+❓ **Should logging be done inside JSP error pages?**
+▶ Minimal logging is acceptable, but serious logging should be handled by servlets or filters.
 
