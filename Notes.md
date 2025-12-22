@@ -19162,3 +19162,218 @@ Together, they replace almost all scriptlet use cases.
 ❓ **What should you say in interviews when asked about scriptlets?**
 ▶ Acknowledge them as legacy and recommend EL + JSTL as best practice.
 
+## 117. MVC Architecture using Servlet + JSP
+
+**MVC (Model–View–Controller)** is a design pattern that separates an application into **three distinct layers**, each with a clear responsibility.
+
+In Java web applications:
+
+* **Servlets** act as the **Controller**
+* **JavaBeans / Services** act as the **Model**
+* **JSP** acts as the **View**
+
+This architecture is **foundational knowledge** for JSP/Servlet interviews and real-world projects.
+
+### Why MVC Is Important
+
+* Separates concerns clearly
+* Improves maintainability and scalability
+* Makes applications easier to test
+* Enables team-based development
+* Prevents business logic inside JSP
+
+### What Problem Does MVC Solve?
+
+Without MVC:
+
+* Business logic, presentation, and control flow get mixed
+* JSP pages become cluttered with Java code
+* Applications are hard to test and maintain
+
+MVC enforces **separation of concerns**, making code cleaner and easier to evolve.
+
+### MVC Components in Servlet + JSP
+
+### Model
+
+The **Model** represents application data and business logic.
+
+Typically implemented using:
+
+* JavaBeans
+* DAO classes
+* Service classes
+
+>The model **does not know** about the UI or HTTP.
+
+📌 The Model should **not** depend on JSP or Servlets.
+
+#### Example: Model (JavaBean)
+
+```java
+public class User {
+    private String username;
+
+    // No-arg constructor required for JavaBean
+    public User() {}
+
+    // Getter method used by JSP via EL
+    public String getUsername() {
+        return username;
+    }
+
+    // Setter method used by controller to populate data
+    public void setUsername(String username) {
+        this.username = username;
+    }
+}
+```
+
+### Controller (Servlet)
+
+The **Controller** handles:
+
+* Incoming requests (HTTP requests)
+* Input validation
+* Business logic coordination
+* Request forwarding to views
+* Deciding which view to render
+
+In Java web apps, this role is played by **Servlets**.
+
+📌 Servlets act as the **traffic controller**.
+
+#### Example: Controller Servlet
+
+```java
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Read request parameter from client
+        String username = request.getParameter("username");
+
+        // Create and populate model
+        User user = new User();
+        user.setUsername(username);
+
+        // Store model in request scope
+        request.setAttribute("user", user);
+
+        // Forward request to JSP view
+        request.getRequestDispatcher("welcome.jsp")
+               .forward(request, response);
+    }
+}
+```
+
+### View (JSP)
+
+The **View** is responsible only for **presentation**.
+
+JSP should:
+
+* Display data using EL
+* Use JSTL for flow control
+* Avoid Java code
+* Contains no business logic
+
+> 📌 JSP should never directly access the database.
+
+#### Example: View JSP
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!-- Display user data using EL -->
+<h2>Welcome, ${user.username}</h2>
+```
+
+📌 JSP never creates or modifies business logic.
+
+### Forward vs Redirect in MVC
+
+* **Forward**
+
+  * Server-side
+  * Request data preserved
+  * Preferred in MVC
+
+* **Redirect**
+
+  * Client-side
+  * New request created
+  * Used after form submission (PRG pattern)
+
+### Request Flow in MVC (Conceptual)
+
+1. Client sends HTTP request
+2. Servlet (Controller) receives request
+3. Servlet calls Model to process data
+4. Model returns data
+5. Servlet stores data in request/session scope
+6. Servlet forwards request to JSP (View)
+7. JSP renders the response using EL + JSTL
+
+> 📌 JSP never talks directly to the database.
+
+### Why MVC Improves JSP Applications
+
+* Clear separation of concerns
+* Easier maintenance and testing
+* JSP remains clean and readable
+* Business logic stays reusable
+* Encourages team collaboration
+
+### Common Mistakes to Avoid
+
+* Writing database code in JSP
+* Using scriptlets (for logic) in views 
+* Accessing request parameters directly in JSP
+* Skipping controller layer
+* Tight coupling between JSP and model
+* Not using EL + JSTL
+
+### MVC vs Model 1 Architecture
+
+| Feature         | Model 1      | MVC (Model 2)      |
+| --------------- | ------------ | ------------------ |
+| JSP role        | Logic + View | View only          |
+| Servlet role    | Minimal      | Central controller |
+| Maintainability | Low          | High               |
+| Industry usage  | Obsolete     | Standard           |
+
+📌 MVC using Servlets + JSP is also called **Model 2 architecture**.
+
+### Key Notes
+
+* MVC separates Model, View, and Controller
+* Servlets act as controllers (**Servlet = Controller**)
+* **JavaBeans/Services = Model**
+* **JSP = View**
+* JSP acts as the view layer. JSP should contain no business logic
+* JavaBeans/services form the model
+* MVC improves scalability and maintainability
+
+---
+
+❓ **Why are Servlets used as controllers instead of JSP?**
+▶ Servlets are better suited for request handling, validation, and flow control.
+
+❓ **Should JSP ever access request parameters directly?**
+▶ No. The controller should prepare data and forward it to the JSP.
+
+❓ **What scope is commonly used to pass data from Servlet to JSP?**
+▶ Request scope, to avoid unnecessary session usage.
+
+❓ **Is MVC mandatory for small applications?**
+▶ Not mandatory, but strongly recommended for clean structure and growth.
+
+❓ **What is Model 2 architecture?**
+▶ It is MVC implemented using Servlets as controllers and JSP as views.
+
+❓ **Should JSP ever access request parameters directly?**
+▶ No. The controller should prepare data and forward it to the JSP.
+
