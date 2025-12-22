@@ -22162,3 +22162,182 @@ RBAC is commonly applied to:
 ❓ **Is RBAC enough for fine-grained security?**
 ▶ RBAC works well for coarse-grained control. For finer control, it is often combined with permission-based or attribute-based access control.
 
+## 132. Servlet Filters for Authentication and Authorization
+
+**Servlet Filters** are components that **intercept HTTP requests and responses** before they reach servlets or JSPs.
+
+They are ideal for **authentication and authorization** because security checks should happen **before any business logic executes**.
+
+📌 Filters sit **outside** servlets in the request flow.
+
+### Why Use Filters for Security
+
+Using filters for authentication and authorization:
+
+* Centralizes security logic
+* Avoids duplicate checks in servlets
+* Prevents unauthorized access early
+* Keeps controllers clean
+
+📌 Security is a **cross-cutting concern**, and filters are designed for that.
+
+### Filter Lifecycle (Brief)
+
+A filter follows this lifecycle:
+
+1. `init()` – called once at application startup
+2. `doFilter()` – called for every matching request
+3. `destroy()` – called once at application shutdown
+
+📌 Filters are managed by the web container.
+
+### Authentication vs Authorization in Filters
+
+* **Authentication filter**
+  Checks whether the user is logged in
+
+* **Authorization filter**
+  Checks whether the user has permission (role)
+
+📌 Authentication happens **before** authorization.
+
+### Authentication Filter Example
+
+#### Authentication Filter Logic
+
+```java
+public class AuthFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain)
+            throws IOException, ServletException {
+
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+
+        // Get existing session without creating a new one
+        HttpSession session = req.getSession(false);
+
+        // Check if user is authenticated
+        if (session == null || session.getAttribute("username") == null) {
+            // User not logged in, redirect to login page
+            res.sendRedirect("login.jsp");
+            return;
+        }
+
+        // User is authenticated, continue request
+        chain.doFilter(request, response);
+    }
+}
+```
+
+📌 This filter blocks unauthenticated users early.
+
+### Authorization Filter Example (Role-Based)
+
+#### Authorization Filter Logic
+
+```java
+public class AdminFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain)
+            throws IOException, ServletException {
+
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+
+        // Retrieve existing session
+        HttpSession session = req.getSession(false);
+
+        // Check authentication first
+        if (session == null) {
+            res.sendRedirect("login.jsp");
+            return;
+        }
+
+        // Retrieve role from session
+        String role = (String) session.getAttribute("role");
+
+        // Check authorization
+        if (!"ADMIN".equals(role)) {
+            // User is authenticated but not authorized
+            res.sendRedirect("accessDenied.jsp");
+            return;
+        }
+
+        // Authorized user, proceed to servlet
+        chain.doFilter(request, response);
+    }
+}
+```
+
+📌 Authorization filters prevent privilege escalation.
+
+### Filter Mapping
+
+Filters must be mapped to URLs.
+
+#### Using web.xml
+
+```xml
+<!-- Authentication filter -->
+<filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>com.example.filter.AuthFilter</filter-class>
+</filter>
+
+<filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/secure/*</url-pattern>
+</filter-mapping>
+```
+
+📌 Filters apply to all matching requests.
+
+### Multiple Filters in a Chain
+
+Multiple filters can be applied in sequence:
+
+```
+Request → AuthFilter → AdminFilter → Servlet → Response
+```
+
+📌 Order matters. Authentication must run before authorization.
+
+### Common Security Mistakes with Filters
+
+* Applying filters only to JSPs
+* Forgetting to protect REST endpoints
+* Creating sessions inside filters unnecessarily
+* Hardcoding roles in multiple places
+* Skipping filter ordering
+
+### 📝 Points to Remember
+
+* Filters intercept requests before servlets
+* Security checks should run early
+* Authentication precedes authorization
+* Filters centralize security logic
+* Order of filters matters
+* Filters improve maintainability
+
+---
+
+❓ **Why are filters better than checking sessions inside every servlet?**
+▶ Filters remove repetitive code by enforcing security once, before requests reach servlets. This ensures consistency and reduces the risk of missing checks.
+
+❓ **Why should authentication be checked before authorization?**
+▶ Authorization assumes an authenticated identity. Without knowing who the user is, role or permission checks are meaningless.
+
+❓ **Can filters block both requests and responses?**
+▶ Yes. Filters can modify or block requests before they reach servlets and also process responses on the way back.
+
+❓ **What happens if `chain.doFilter()` is not called?**
+▶ The request stops at the filter and never reaches the servlet, effectively blocking processing.
+
+❓ **Should filters create sessions?**
+▶ Generally no. Filters should check existing sessions. Creating sessions unnecessarily increases memory usage and can cause security issues.
+
