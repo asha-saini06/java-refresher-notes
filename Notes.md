@@ -22548,7 +22548,6 @@ From a security perspective, **sessions are generally safer**, while cookies mus
 
 A **cookie** is a small key-value pair stored in the browser and sent with every request.
 
----
 
 #### Cookie Creation Example
 
@@ -22571,8 +22570,6 @@ response.addCookie(themeCookie);
 
 📌 Cookies are **visible and modifiable** by the client.
 
----
-
 ### Cookie Security Risks
 
 Cookies are vulnerable to:
@@ -22585,13 +22582,9 @@ Cookies are vulnerable to:
 
 📌 Cookies should never store sensitive data.
 
----
-
 ### Sessions (Security View)
 
 A **session** stores data on the server and uses a cookie only to store a **session ID**.
-
----
 
 #### Session Usage Example
 
@@ -22605,8 +22598,6 @@ session.setAttribute("role", role);
 ```
 
 📌 The browser never sees actual session data.
-
----
 
 ### Session Security Advantages
 
@@ -23878,3 +23869,200 @@ No additional server-side logic is required for mobile layouts.
 ❓ **Is Bootstrap compatible with JSTL and EL?**
 ▶ Completely. JSTL and EL operate **before the response is sent**, generating dynamic HTML. Bootstrap operates **after the page is rendered**, styling that HTML.
 You can safely use `${}` expressions and `<c:forEach>` inside Bootstrap components without any conflict, as they operate at different phases of the request lifecycle.
+
+## 141. AJAX with JSP / Servlet Backend
+
+**AJAX (Asynchronous JavaScript and XML)** allows a web page to **communicate with the server without reloading the entire page**.
+
+Instead of submitting a full form and refreshing the page, AJAX sends **background HTTP requests** and updates only required parts of the UI.
+
+This leads to:
+
+* Faster user experience
+* Reduced bandwidth usage
+* More interactive applications
+
+📌 Despite the name, AJAX commonly uses **JSON**, not XML.
+
+### Why AJAX Is Needed
+
+Without AJAX:
+
+* Every user action reloads the whole page
+* UI feels slow and clunky
+* Server sends full HTML repeatedly
+* Poor user experience for modern apps
+
+AJAX enables **partial page updates** while keeping the user on the same screen.
+
+### How AJAX Works (Conceptually)
+
+1. User triggers an event (click, input, scroll)
+2. JavaScript sends an HTTP request asynchronously
+3. Servlet processes the request
+4. Server sends back data (usually JSON)
+5. JavaScript updates the DOM dynamically
+
+📌 JSP is **not involved** in AJAX responses directly; it renders the initial page.
+
+### Role of JSP, Servlet, and JavaScript
+
+#### JSP
+
+* Renders initial HTML page
+* Includes JavaScript and UI structure
+* Displays data returned by AJAX
+
+📌 JSP handles **view rendering**, not background calls.
+
+#### Servlet
+
+* Acts as AJAX endpoint
+* Processes requests
+* Talks to database or services
+* Returns JSON or plain text
+
+📌 Servlet behaves like a lightweight API.
+
+#### JavaScript
+
+* Sends AJAX requests
+* Handles responses
+* Updates UI dynamically
+
+📌 JavaScript controls the async flow.
+
+### Basic AJAX Request (Using Fetch API)
+
+```html
+<!-- Button triggering AJAX call -->
+<button onclick="loadUser()">Load User</button>
+
+<div id="result"></div>
+
+<script>
+    // Function to call servlet asynchronously
+    function loadUser() {
+        fetch("user") // Servlet URL mapping
+            .then(response => response.json()) // Parse JSON response
+            .then(data => {
+                // Update UI dynamically
+                document.getElementById("result").innerText =
+                    "Username: " + data.username;
+            })
+            .catch(error => console.error("Error:", error));
+    }
+</script>
+```
+
+📌 `fetch()` sends request without reloading the page.
+
+---
+
+### Servlet Handling AJAX Request
+
+```java
+@WebServlet("/user")
+public class UserServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Set response type as JSON
+        response.setContentType("application/json");
+
+        // Example JSON response
+        String json = "{ \"username\": \"Asha\" }";
+
+        // Write response to client
+        response.getWriter().write(json);
+    }
+}
+```
+
+📌 Servlet returns **data**, not JSP.
+
+### AJAX with Form Submission
+
+```html
+<!-- Login form -->
+<form id="loginForm">
+    <input type="text" id="username" placeholder="Username">
+    <button type="submit">Login</button>
+</form>
+
+<div id="message"></div>
+
+<script>
+    // Handle form submit using AJAX
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent page reload
+
+        // Send form data asynchronously
+        fetch("login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "username=" + document.getElementById("username").value
+        })
+        .then(res => res.text())
+        .then(msg => document.getElementById("message").innerText = msg);
+    });
+</script>
+```
+
+📌 `preventDefault()` is essential to stop full reload.
+
+### Common Response Formats
+
+* **JSON** → most common and flexible
+* Plain text → simple responses
+* HTML fragments → partial UI updates (less preferred)
+
+📌 JSON keeps UI and logic decoupled.
+
+### AJAX vs Traditional JSP Request
+
+| Aspect          | Traditional Request | AJAX Request |
+| --------------- | ------------------- | ------------ |
+| Page reload     | Yes                 | No           |
+| Data transfer   | Full HTML           | Data only    |
+| User experience | Slower              | Faster       |
+| Server load     | Higher              | Lower        |
+| Interactivity   | Limited             | High         |
+
+### Common AJAX Mistakes
+
+* Returning JSP instead of data
+* Mixing HTML generation in servlet
+* Not setting correct `Content-Type`
+* Ignoring error handling
+* Overusing AJAX for simple pages
+
+### 📝 Points to Remember
+
+* AJAX avoids full page reloads
+* Servlets act as API endpoints
+* JSP renders initial UI only
+* JSON is preferred response format
+* JavaScript controls async flow
+* Always set correct response type
+* Handle errors gracefully
+
+---
+
+❓ **Why should servlets return JSON instead of JSP in AJAX?**
+▶ AJAX expects **data**, not full pages. Returning JSP tightly couples UI rendering with background calls, making the application harder to maintain and scale.
+
+❓ **Can JSP directly handle AJAX requests?**
+▶ No. JSP is compiled into a servlet and is meant for rendering views. AJAX endpoints should be servlets (or controllers), not JSP pages.
+
+❓ **Is AJAX secure by default?**
+▶ No. AJAX uses the same HTTP mechanisms as normal requests. Authentication, authorization, CSRF protection, and validation are still required server-side.
+
+❓ **Does AJAX replace MVC architecture?**
+▶ No. AJAX enhances the view layer but does not change MVC roles. Controllers still control flow, models handle logic, and views render UI.
+
+❓ **When should AJAX be avoided?**
+▶ For simple pages where full reloads are acceptable. Overusing AJAX increases complexity without real benefit.
