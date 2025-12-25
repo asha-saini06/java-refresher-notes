@@ -24066,3 +24066,191 @@ public class UserServlet extends HttpServlet {
 
 ❓ **When should AJAX be avoided?**
 ▶ For simple pages where full reloads are acceptable. Overusing AJAX increases complexity without real benefit.
+
+## 142. REST APIs with Java Servlets
+
+**REST (Representational State Transfer)** is an architectural style for building **scalable, stateless web APIs** that communicate using standard HTTP methods.
+
+In a REST-based system, **Servlets act as API endpoints**, returning **data (JSON/XML)** instead of HTML pages.
+
+📌 REST APIs are backend-focused; JSP is **not used** for rendering API responses.
+
+### Why REST APIs Are Needed
+
+Traditional JSP-based applications:
+
+* Return full HTML pages
+* Are tightly coupled to UI
+* Are difficult to consume by mobile or frontend apps
+
+REST APIs solve this by:
+
+* Separating frontend and backend
+* Supporting multiple clients (web, mobile, SPA)
+* Enabling stateless, scalable communication
+
+### Core REST Principles
+
+#### Statelessness
+
+* Each request contains all required information
+* Server does not store client state between requests
+
+📌 Sessions are generally avoided in REST APIs.
+
+#### Resource-Based Design
+
+* Everything is a **resource**
+* Resources are identified by URLs
+
+Examples:
+
+```
+/users
+/users/10
+/orders/25
+```
+
+📌 URLs represent **nouns**, not actions.
+
+#### HTTP Methods Semantics
+
+| HTTP Method | Purpose                   |
+| ----------- | ------------------------- |
+| GET         | Read resource             |
+| POST        | Create resource           |
+| PUT         | Update resource (full)    |
+| PATCH       | Update resource (partial) |
+| DELETE      | Remove resource           |
+
+📌 Method choice matters for clarity and correctness.
+
+### REST with Servlets: High-Level Flow
+
+1. Client sends HTTP request (JSON payload)
+2. Servlet maps request to a resource
+3. Servlet processes business logic
+4. Servlet returns JSON response
+5. Client consumes response
+
+📌 Servlets behave like lightweight REST controllers.
+
+### Example: RESTful Servlet (GET + POST)
+
+```java
+@WebServlet("/api/users")
+public class UserApiServlet extends HttpServlet {
+
+    // Handle GET request: fetch users
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Set response type to JSON
+        response.setContentType("application/json");
+
+        // Example JSON response (normally from DB)
+        String jsonResponse = "[{\"id\":1,\"name\":\"Asha\"}]";
+
+        // Write JSON to response
+        response.getWriter().write(jsonResponse);
+    }
+
+    // Handle POST request: create user
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Read request body (JSON)
+        BufferedReader reader = request.getReader();
+        String body = reader.lines().collect(Collectors.joining());
+
+        // Process data (simplified)
+        System.out.println("Received JSON: " + body);
+
+        // Send success response
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        response.getWriter().write("{\"message\":\"User created\"}");
+    }
+}
+```
+
+📌 One servlet can support multiple HTTP methods.
+
+### Content-Type and Accept Headers
+
+REST APIs rely on **content negotiation**.
+
+```http
+Content-Type: application/json
+Accept: application/json
+```
+
+📌 Always set and validate content types.
+
+### Error Handling in REST APIs
+
+REST APIs return **HTTP status codes**, not JSP error pages.
+
+| Status Code | Meaning          |
+| ----------- | ---------------- |
+| 200         | Success          |
+| 201         | Resource created |
+| 400         | Bad request      |
+| 401         | Unauthorized     |
+| 404         | Not found        |
+| 500         | Server error     |
+
+Example:
+
+```java
+// Return 400 Bad Request
+response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+response.getWriter().write("{\"error\":\"Invalid input\"}");
+```
+
+📌 Status codes convey meaning to clients.
+
+### REST APIs vs Traditional JSP Flow
+
+| Aspect      | JSP-Based App | REST API         |
+| ----------- | ------------- | ---------------- |
+| Response    | HTML          | JSON / XML       |
+| UI coupling | Tight         | Loose            |
+| Clients     | Browser only  | Web, mobile, SPA |
+| State       | Session-based | Stateless        |
+| Scalability | Limited       | High             |
+
+### Common REST Mistakes with Servlets
+
+* Using sessions for API state
+* Returning JSP from API
+* Ignoring HTTP method semantics
+* Not validating input JSON
+* Returning 200 for every response
+
+### 📝 Points to Remember
+
+* REST APIs return data, not views
+* Servlets act as REST controllers
+* Use correct HTTP methods
+* Keep APIs stateless
+* Prefer JSON over XML
+* Use proper HTTP status codes
+* Do not mix JSP with REST responses
+
+---
+
+❓ **Why should REST APIs be stateless?**
+▶ Statelessness allows the server to scale horizontally. Since no client state is stored, any request can be handled by any server instance without coordination.
+
+❓ **Can sessions be used in REST APIs?**
+▶ Technically yes, but it breaks REST principles. Sessions introduce server-side state, reduce scalability, and complicate load balancing.
+
+❓ **Why shouldn’t REST APIs return JSP pages?**
+▶ REST APIs are designed for machine consumption. Returning HTML couples the API to a specific UI and prevents reuse across different clients.
+
+❓ **Is it okay to use one servlet for multiple HTTP methods?**
+▶ Yes. REST encourages grouping operations on the same resource under a single endpoint, differentiated by HTTP method.
+
+❓ **When should Servlets be preferred over frameworks for REST?**
+▶ For learning, small services, or lightweight APIs where full frameworks would add unnecessary complexity.
+
