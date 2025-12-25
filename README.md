@@ -149,8 +149,8 @@ Includes concepts, examples, and explanations in easy-to-read Markdown format.
 138. [DAO (Data Access Object) Pattern](Notes.md#138-dao-data-access-object-pattern)
 139. [MVC with DAO + JDBC + JSP](Notes.md#139-mvc-with-dao-jdbc-jsp)
 140. [Front-End with Bootstrap in JSP Pages](Notes.md#140-front-end-with-bootstrap-in-jsp-pages)
-141. AJAX with JSP/Servlet Backend
-142. REST APIs with Java Servlets
+141. [AJAX with JSP/Servlet Backend](Notes.md#141-ajax-with-jsp-servlet-backend)
+142. [REST APIs with Java Servlets](Notes.md#142-rest-apis-with-java-servlets)
 143. JSON Handling in Servlets (Jackson / GSON)
 144. WebSockets in Java
 145. Deployment on Apache Tomcat (Step-by-Step)
