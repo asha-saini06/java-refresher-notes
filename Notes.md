@@ -36,6 +36,35 @@
 > - To Compile a Java File → `javac FileName.java`
 > - To Run a Java File → `java FileName`
 
+### Command Line Compilation (CLI)
+
+#### 📍 `javac` & `java` basics
+
+* 🟢 **Compile single file (no packages)**
+
+  ```bash
+  javac Main.java
+  java Main
+  ```
+
+* 🟡 **Compile all `.java` files in the same folder**
+
+  ```bash
+  javac *.java
+  ```
+
+* 🔵 **Compile multiple files using packages**
+
+  ```bash
+  javac -d . src/banking/*.java
+  java banking.Main
+  ```
+
+  **Explanation:**
+  * `-d .` → tells the compiler where to place `.class` files (current directory)
+  * `src/banking/*.java` → compiles all Java source files inside the `banking` package
+  * When packages are used, the program is run using the **fully qualified class name**
+
 ### Interpreter & Compiler
 
 Java is a compiled language, so you must compile your code before you can run it.
