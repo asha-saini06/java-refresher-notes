@@ -1,6 +1,6 @@
 # ☕ Java - James Gosling
 
-> Started in 1991 -> Oak -> 1995 -> Java (breed of Coffee)
+> Started in 1991 → Oak → 1995 → Java (breed of Coffee)
 
 - Java is _statically typed_, so variable type must be declared before use.
 - Use `var` (Java 10+) for type inference.
@@ -27,7 +27,7 @@
 
 **Sun Microsystems**
 
-> -> Java -> owned by Oracle -> So, Java is a product of Oracle.
+> → Java → owned by Oracle → So, Java is a product of Oracle.
 
 `Platform` : it is an environment where you can run your programs.
 
@@ -69,15 +69,15 @@
 
 Java is a compiled language, so you must compile your code before you can run it.
 
-    > Java Code -> Java Compiler (javac) -> Java Virtual Machine (JVM) -> Java Bytecode (JVM) -> Executable Code (OS)
+    > Java Code → Java Compiler (javac) → Java Virtual Machine (JVM) → Java Bytecode (JVM) → Executable Code (OS)
 
 JVM has an Interpreter which is known as **Just-In-Time** (JIT) compiler.
 
-    > Java Code -> Compile (Compiler) -> Bytecode -> Independent
+    > Java Code → Compile (Compiler) → Bytecode → Independent
 
-> Hello.java -> javac Hello.java -> Hello.class
+> Hello.java → javac Hello.java → Hello.class
 
-> Hello.class -> Java Virtual Machine (JVM) -> Executable Code (OS)
+> Hello.class → Java Virtual Machine (JVM) → Executable Code (OS)
 
 > - **JVM** : Dependent on OS
 > - **Bytecode** : Independent
@@ -24283,3 +24283,246 @@ response.getWriter().write("{\"error\":\"Invalid input\"}");
 ❓ **When should Servlets be preferred over frameworks for REST?**
 ▶ For learning, small services, or lightweight APIs where full frameworks would add unnecessary complexity.
 
+## 143. JSON Handling in Servlets (Jackson / Gson)
+
+**JSON (JavaScript Object Notation)** is the most common data format used by **REST APIs** to exchange data between clients and servers.
+
+In servlet-based applications, JSON handling involves:
+
+* Converting Java objects → JSON (serialization)
+* Converting JSON → Java objects (deserialization)
+
+📌 Servlets do **not** handle JSON automatically; libraries like **Jackson** and **Gson** are used.
+
+### Why JSON Libraries Are Needed
+
+Without libraries:
+
+* Manual string parsing is error-prone
+* Complex objects are difficult to handle
+* Validation becomes messy
+* Code readability suffers
+
+JSON libraries provide **safe, efficient, and maintainable** data binding.
+
+### Jackson vs Gson
+
+#### Jackson
+
+* Faster and feature-rich
+* Widely used in enterprise applications
+* Strong support for annotations
+* Default choice in Spring
+
+#### Gson
+
+* Lightweight and simple
+* Minimal configuration
+* Good for small applications
+
+📌 Both are industry-standard and reliable.
+
+### Dependency Setup (Conceptual)
+
+Add the library JAR or dependency manager entry.
+
+Example (Maven-style):
+
+```xml
+<!-- Jackson dependency -->
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+</dependency>
+```
+
+📌 Servlets do not care how dependencies are added.
+
+### Example Model Class
+
+```java
+// Plain Java object to be converted to/from JSON
+public class User {
+
+    private int id;
+    private String name;
+
+    // Required no-arg constructor
+    public User() {}
+
+    // Getters and setters required for JSON mapping
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+}
+```
+
+📌 POJOs must follow JavaBean conventions.
+
+### JSON Serialization (Java → JSON)
+
+#### Using Jackson
+
+```java
+@WebServlet("/json-user")
+public class JsonUserServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Create example object
+        User user = new User();
+        user.setId(1);
+        user.setName("Asha");
+
+        // Create Jackson ObjectMapper
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Set response type to JSON
+        response.setContentType("application/json");
+
+        // Convert Java object to JSON and write to response
+        mapper.writeValue(response.getWriter(), user);
+    }
+}
+```
+
+📌 Jackson automatically converts object fields into JSON keys.
+
+#### Using Gson
+
+```java
+@WebServlet("/gson-user")
+public class GsonUserServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Create example object
+        User user = new User();
+        user.setId(2);
+        user.setName("Asha");
+
+        // Create Gson instance
+        Gson gson = new Gson();
+
+        // Convert Java object to JSON
+        String json = gson.toJson(user);
+
+        // Set response type
+        response.setContentType("application/json");
+
+        // Send JSON response
+        response.getWriter().write(json);
+    }
+}
+```
+
+📌 Gson returns JSON as a String.
+
+### JSON Deserialization (JSON → Java)
+
+#### Using Jackson
+
+```java
+@WebServlet("/create-user")
+public class CreateUserServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Create ObjectMapper
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Read JSON from request body and convert to Java object
+        User user = mapper.readValue(request.getInputStream(), User.class);
+
+        // Process user object
+        System.out.println(user.getName());
+
+        // Respond with success
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        response.getWriter().write("{\"message\":\"User created\"}");
+    }
+}
+```
+
+📌 Jackson reads directly from request stream.
+
+#### Using Gson
+
+```java
+@WebServlet("/gson-create")
+public class GsonCreateServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Read JSON manually
+        BufferedReader reader = request.getReader();
+        String jsonBody = reader.lines().collect(Collectors.joining());
+
+        // Convert JSON to Java object
+        Gson gson = new Gson();
+        User user = gson.fromJson(jsonBody, User.class);
+
+        // Process user
+        System.out.println(user.getName());
+
+        // Respond
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        response.getWriter().write("{\"message\":\"User created\"}");
+    }
+}
+```
+
+📌 Gson requires reading the request body manually.
+
+### Handling Lists and Collections
+
+```java
+// Convert list of users to JSON
+List<User> users = List.of(new User(1, "Asha"), new User(2, "John"));
+
+ObjectMapper mapper = new ObjectMapper();
+mapper.writeValue(response.getWriter(), users);
+```
+
+📌 Both libraries support collections naturally.
+
+### Common JSON Handling Mistakes
+
+* Forgetting to set `Content-Type`
+* Not validating JSON input
+* Using JSP for JSON responses
+* Catching and ignoring parse exceptions
+* Returning plain text instead of JSON
+
+### 📝 Points to Remember
+
+* JSON is the standard REST data format
+* Servlets need libraries for JSON handling
+* Jackson is feature-rich and fast
+* Gson is lightweight and simple
+* Always set response content type
+* Validate JSON input
+* Keep models simple (POJOs)
+
+---
+
+❓ **Why do POJOs need getters and setters for JSON mapping?**
+▶ JSON libraries rely on JavaBean conventions. Getters and setters allow libraries to access and populate object fields in a controlled and consistent way.
+
+❓ **Why is Jackson preferred in large applications?**
+▶ Jackson offers better performance, streaming support, annotations, and integration with frameworks, making it suitable for complex systems.
+
+❓ **Can servlets directly parse JSON without libraries?**
+▶ Yes, but it is error-prone and not scalable. Libraries handle edge cases, encoding, and nested structures safely.
+
+❓ **Why should JSON parsing happen in servlets and not JSP?**
+▶ JSP is meant for rendering views. Parsing JSON is a backend responsibility and belongs in controllers or servlets.
+
+❓ **Is it safe to trust JSON input from clients?**
+▶ No. JSON input must always be validated server-side to prevent malformed data and security vulnerabilities.
