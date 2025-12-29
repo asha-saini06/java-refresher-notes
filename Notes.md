@@ -527,6 +527,11 @@ Object-oriented programming (OOP) offers several key advantages over procedural 
 - OOP creates a lot of objects, so it can use more memory compared to simple programs written in a procedural way.
 
 ## 6. Variables in Java
+**Variable**: a resuable container for a value
+a variable behaves as if it was the value it contains
+
+- **Primitive** : simple value stored directly in memory (stack) → `int`, `double`, `char`, `boolean`
+- **Reference** : memory address (stack) that points to the *heap* → `String`, `array`, `Object`
 
 Variables are containers to store data in memory. Each variable has a name, type and value. It is the basic unit of storage in a program. Java has 4 types of variables.
 
@@ -24526,3 +24531,207 @@ mapper.writeValue(response.getWriter(), users);
 
 ❓ **Is it safe to trust JSON input from clients?**
 ▶ No. JSON input must always be validated server-side to prevent malformed data and security vulnerabilities.
+
+## 144. WebSockets in Java
+
+**WebSockets** provide a **full-duplex, persistent communication channel** between client and server over a single TCP connection.
+
+Unlike HTTP, which is **request–response based**, WebSockets allow the server to **push data to the client in real time**.
+
+This enables:
+
+* Real-time updates
+* Low-latency communication
+* Bi-directional messaging
+
+📌 WebSockets are ideal for applications where **continuous data exchange** is required.
+
+### Why WebSockets Are Needed
+
+With traditional HTTP:
+
+* Client must repeatedly poll the server
+* High latency and unnecessary requests
+* Poor real-time performance
+
+WebSockets solve this by keeping the connection **open** and **stateful**.
+
+### HTTP vs WebSocket (Conceptual)
+
+| Aspect        | HTTP                | WebSocket             |
+| ------------- | ------------------- | --------------------- |
+| Communication | One-way per request | Two-way (full-duplex) |
+| Connection    | Short-lived         | Persistent            |
+| Server push   | Not supported       | Supported             |
+| Latency       | Higher              | Very low              |
+| Use case      | CRUD, pages, APIs   | Real-time messaging   |
+
+📌 WebSockets start as HTTP, then **upgrade the protocol**.
+
+---
+
+### WebSocket Lifecycle (Conceptually)
+
+1. Client sends HTTP request with `Upgrade: websocket`
+2. Server accepts and upgrades protocol
+3. Persistent WebSocket connection is established
+4. Client and server exchange messages freely
+5. Connection closes explicitly or on error
+
+📌 After upgrade, HTTP semantics no longer apply.
+
+### Java WebSocket API (JSR-356)
+
+Java provides built-in WebSocket support via **Jakarta WebSocket API**.
+
+Core components:
+
+* `@ServerEndpoint`
+* `@OnOpen`
+* `@OnMessage`
+* `@OnClose`
+* `@OnError`
+
+📌 No servlets are involved after connection upgrade.
+
+### Simple WebSocket Server Endpoint
+
+```java
+// Defines a WebSocket endpoint at /chat
+@ServerEndpoint("/chat")
+public class ChatEndpoint {
+
+    // Called when a new client connects
+    @OnOpen
+    public void onOpen(Session session) {
+        System.out.println("Client connected: " + session.getId());
+    }
+
+    // Called when a message is received
+    @OnMessage
+    public void onMessage(String message, Session session) throws IOException {
+
+        // Log incoming message
+        System.out.println("Received: " + message);
+
+        // Send message back to client (echo)
+        session.getBasicRemote().sendText("Echo: " + message);
+    }
+
+    // Called when client disconnects
+    @OnClose
+    public void onClose(Session session) {
+        System.out.println("Client disconnected: " + session.getId());
+    }
+
+    // Called when an error occurs
+    @OnError
+    public void onError(Session session, Throwable error) {
+        error.printStackTrace();
+    }
+}
+```
+
+📌 Each client gets its own `Session`.
+
+### WebSocket Client (Browser Side)
+
+```html
+<script>
+    // Create WebSocket connection
+    const socket = new WebSocket("ws://localhost:8080/app/chat");
+
+    // Called when connection opens
+    socket.onopen = () => {
+        console.log("Connected");
+        socket.send("Hello Server");
+    };
+
+    // Receive messages from server
+    socket.onmessage = event => {
+        console.log("Received:", event.data);
+    };
+
+    // Handle errors
+    socket.onerror = error => {
+        console.error("WebSocket error", error);
+    };
+
+    // Called when connection closes
+    socket.onclose = () => {
+        console.log("Disconnected");
+    };
+</script>
+```
+
+📌 `ws://` for HTTP, `wss://` for HTTPS.
+
+### Broadcasting Messages (Concept)
+
+```java
+// Send message to all connected clients
+for (Session s : session.getOpenSessions()) {
+    if (s.isOpen()) {
+        s.getBasicRemote().sendText("Broadcast message");
+    }
+}
+```
+
+📌 Useful for chat rooms and live updates.
+
+### Common Use Cases
+
+* Chat applications
+* Live notifications
+* Stock price updates
+* Multiplayer games
+* Real-time dashboards
+
+### WebSockets vs AJAX / REST
+
+| Feature           | REST / AJAX      | WebSockets     |
+| ----------------- | ---------------- | -------------- |
+| Communication     | Request–response | Bi-directional |
+| Server push       | No               | Yes            |
+| Real-time support | Limited          | Native         |
+| Complexity        | Lower            | Higher         |
+
+📌 WebSockets **complement**, not replace REST.
+
+### Security Considerations
+
+* Use `wss://` (TLS)
+* Authenticate during handshake
+* Validate all incoming messages
+* Limit message size
+* Handle idle connections
+
+📌 WebSockets bypass filters once connected.
+
+### 📝 Points to Remember
+
+* WebSockets provide persistent connections
+* Full-duplex communication
+* Start as HTTP, then upgrade
+* No request–response cycle
+* Suitable for real-time apps
+* Not ideal for simple CRUD
+* Security must be handled explicitly
+
+---
+
+❓ **Why are WebSockets faster than HTTP polling?**
+▶ Because the connection is established once and reused. There is no repeated request overhead, headers, or handshake for each message, reducing latency significantly.
+
+❓ **Do WebSockets replace REST APIs?**
+▶ No. REST is better for stateless operations like CRUD. WebSockets are better for continuous, event-driven communication. They serve different purposes.
+
+❓ **Why are servlets not used after WebSocket connection is established?**
+▶ Once the protocol is upgraded, the communication no longer follows HTTP semantics. WebSocket endpoints handle messages directly without servlet involvement.
+
+❓ **Can sessions be used in WebSockets?**
+▶ HTTP sessions are not automatically available. Any authentication or user mapping must be handled manually during handshake or message processing.
+
+❓ **Why is WebSocket security more complex?**
+▶ Because long-lived connections bypass traditional request filters and interceptors, making validation and authorization critical at the message level.
+
