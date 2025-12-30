@@ -24735,3 +24735,176 @@ for (Session s : session.getOpenSessions()) {
 ❓ **Why is WebSocket security more complex?**
 ▶ Because long-lived connections bypass traditional request filters and interceptors, making validation and authorization critical at the message level.
 
+## 145. Deployment on Apache Tomcat (Step-by-Step)
+
+**Apache Tomcat** is a lightweight **Servlet container** used to deploy and run Java web applications built using **Servlets, JSP, JSTL, WebSockets**, etc.
+
+Deployment means **making your web application available** so Tomcat can serve it to users via HTTP.
+
+### What Does Tomcat Deploy?
+
+Tomcat can deploy:
+
+* A **WAR file**
+* An **exploded WAR directory** (unpacked folder)
+* Applications defined via configuration
+
+📌 Tomcat does **not** deploy plain `.java` files.
+
+### Prerequisites
+
+Before deployment, ensure:
+
+* Java JDK is installed
+* `JAVA_HOME` is set correctly
+* Apache Tomcat is downloaded and extracted
+* Application is packaged correctly (WAR or folder)
+
+📌 Tomcat version should be compatible with your Servlet/JSP version.
+
+### Step 1: Prepare the Web Application
+
+Your project must follow the **standard web application structure**.
+
+```
+MyApp/
+ ├── WEB-INF/
+ │    ├── web.xml
+ │    └── classes/
+ │         └── com/example/MyServlet.class
+ ├── index.jsp
+```
+
+📌 Files inside `WEB-INF` are **not directly accessible** from browser.
+
+### Step 2: Build the WAR File
+
+A **WAR (Web Application Archive)** is a zipped version of your app.
+
+Example WAR name:
+
+```
+MyApp.war
+```
+
+📌 The WAR filename becomes the **context path**.
+
+### Step 3: Deploy Using `webapps` Directory (Most Common)
+
+1. Copy `MyApp.war` into:
+
+```
+TOMCAT_HOME/webapps/
+```
+
+2. Start Tomcat
+
+```
+startup.bat   (Windows)
+startup.sh    (Linux/Mac)
+```
+
+3. Tomcat automatically:
+
+   * Detects the WAR
+   * Extracts it
+   * Deploys the application
+
+📌 This is called **hot deployment**.
+
+### Step 4: Access the Application
+
+Open browser and navigate to:
+
+```
+http://localhost:8080/MyApp/
+```
+
+If `index.jsp` exists, it loads automatically.
+
+📌 Port `8080` is Tomcat’s default.
+
+### Step 5: Deploy Exploded Directory (Alternative)
+
+Instead of WAR, copy the **project folder** directly:
+
+```
+TOMCAT_HOME/webapps/MyApp/
+```
+
+📌 Useful during development for faster changes.
+
+### Step 6: Verify Deployment Logs
+
+Check Tomcat logs to confirm deployment.
+
+```
+TOMCAT_HOME/logs/catalina.out
+```
+
+Look for:
+
+* “Deployment of web application archive… has finished”
+* No stack traces or errors
+
+📌 Most deployment issues are visible in logs.
+
+### Step 7: Redeploy / Update Application
+
+To redeploy:
+
+1. Stop Tomcat
+2. Delete:
+
+   * `MyApp.war`
+   * `MyApp/` folder
+3. Copy updated WAR
+4. Restart Tomcat
+
+📌 Avoid overwriting while Tomcat is running.
+
+### Common Deployment Errors
+
+* Port already in use
+* Missing `web.xml` or annotations
+* ClassNotFoundException
+* Wrong Java version
+* Incorrect context path
+
+📌 Always check logs first.
+
+### WAR vs Exploded Deployment
+
+| Aspect         | WAR File  | Exploded Directory |
+| -------------- | --------- | ------------------ |
+| Ease           | High      | Medium             |
+| Performance    | Same      | Same               |
+| Updates        | Slower    | Faster             |
+| Production use | Preferred | Rare               |
+
+### 📝 Points to Remember
+
+* Tomcat deploys WAR or exploded apps
+* WAR name = context path
+* `webapps` directory is auto-deployed
+* Logs are crucial for debugging
+* Restart often resolves stale issues
+* Match Java & Tomcat versions
+* Use WAR for production deployments
+
+---
+
+❓ **Why does Tomcat extract the WAR file automatically?**
+▶ Tomcat runs applications as directories. Extracting allows it to load classes, JSPs, and resources efficiently during runtime.
+
+❓ **What happens if two apps have the same context path?**
+▶ Tomcat will deploy only one. Context paths must be unique to avoid conflicts.
+
+❓ **Why are files inside `WEB-INF` not accessible via browser?**
+▶ This is a security rule enforced by the Servlet specification to protect configuration files and compiled classes.
+
+❓ **Is restarting Tomcat always required for deployment?**
+▶ Not always. Tomcat supports hot deployment, but restarts are safer and more predictable, especially in production.
+
+❓ **Why is WAR preferred in production?**
+▶ WAR files provide consistency, versioning, and easier rollback compared to exploded directories.
