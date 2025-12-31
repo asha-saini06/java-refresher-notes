@@ -24908,3 +24908,460 @@ To redeploy:
 
 ❓ **Why is WAR preferred in production?**
 ▶ WAR files provide consistency, versioning, and easier rollback compared to exploded directories.
+
+## 146. Deployment on Cloud (Heroku / AWS / GCP)
+
+**Cloud deployment** means running your web application on **remote, managed infrastructure** instead of a local server.
+
+The cloud handles:
+
+* Server provisioning
+* Scalability
+* Availability
+* Networking
+* Monitoring (to varying degrees)
+
+📌 Your application logic stays the same; **deployment model changes**.
+
+### Why Cloud Deployment Is Needed
+
+On local servers:
+
+* Scaling is manual
+* Hardware failures cause downtime
+* Infrastructure management is your responsibility
+
+Cloud platforms solve this by offering:
+
+* On-demand resources
+* Automatic scaling
+* High availability
+* Pay-as-you-use pricing
+
+### Common Cloud Deployment Models
+
+#### Platform as a Service (PaaS)
+
+Examples: **Heroku**
+
+* No server management
+* Simple deployment workflow
+* Opinionated environment
+
+📌 Focus on code, not infrastructure.
+
+#### Infrastructure as a Service (IaaS)
+
+Examples: **AWS EC2**, **GCP Compute Engine**
+
+* Full control over OS and server
+* Manual setup required
+* More flexible, more complex
+
+📌 You manage Tomcat, Java, and security.
+
+---
+
+### General Cloud Deployment Flow (Conceptual)
+
+1. Package application (WAR/JAR)
+2. Push code or artifact to cloud
+3. Platform provisions runtime
+4. App is started on cloud server
+5. Public URL is assigned
+6. Requests routed via load balancer
+
+📌 This flow is common across providers.
+
+### Deployment on Heroku (PaaS)
+
+#### Characteristics
+
+* Extremely simple setup
+* Git-based deployment
+* Ephemeral file system
+* Auto-managed runtime
+
+📌 Ideal for learning and quick demos.
+
+#### High-Level Steps (Conceptual)
+
+1. Create Heroku app
+2. Push code via Git
+3. Heroku detects Java app
+4. Buildpack installs JDK & server
+5. App is started automatically
+
+📌 Tomcat is abstracted away.
+
+#### Important Notes
+
+* Use `PORT` environment variable
+* Filesystem resets on restart
+* Logs accessed via CLI
+
+📌 External storage required for uploads.
+
+### Deployment on AWS (IaaS / PaaS)
+
+AWS provides multiple deployment options.
+
+#### AWS EC2 (IaaS)
+
+**Flow:**
+
+1. Create EC2 instance
+2. Install Java & Tomcat
+3. Upload WAR
+4. Configure security groups
+5. Access via public IP
+
+📌 Full control, full responsibility.
+
+#### AWS Elastic Beanstalk (PaaS-like)
+
+* Abstracts EC2 setup
+* Auto-scales
+* Manages deployments
+
+📌 Good balance between control and ease.
+
+### Deployment on Google Cloud Platform (GCP)
+
+#### GCP App Engine (PaaS)
+
+* Supports Java web apps
+* Auto-scaling
+* Minimal configuration
+
+📌 Similar philosophy to Heroku.
+
+#### GCP Compute Engine (IaaS)
+
+* VM-based deployment
+* Manual Tomcat setup
+* High flexibility
+
+📌 Comparable to AWS EC2.
+
+### Configuration Differences in Cloud
+
+Cloud environments rely heavily on:
+
+* Environment variables
+* Externalized configs
+* Managed databases
+
+Example:
+
+```text
+DB_URL
+DB_USERNAME
+DB_PASSWORD
+```
+
+📌 Never hardcode credentials.
+
+### Database in Cloud Deployment
+
+Databases are usually:
+
+* Managed services (RDS, Cloud SQL)
+* External to application server
+* Accessed via network
+
+📌 App and DB rarely live on same machine.
+
+### Cloud vs Local Deployment
+
+| Aspect       | Local Server | Cloud Deployment |
+| ------------ | ------------ | ---------------- |
+| Scalability  | Manual       | Automatic / Easy |
+| Availability | Low          | High             |
+| Maintenance  | Manual       | Platform-managed |
+| Cost model   | Fixed        | Usage-based      |
+| Access       | Local / LAN  | Global           |
+
+### Common Cloud Deployment Mistakes
+
+* Hardcoding IPs and ports
+* Using local file storage
+* Ignoring environment variables
+* Not enabling HTTPS
+* Assuming single-instance behavior
+
+📌 Cloud apps must be **stateless**.
+
+### 📝 Rules / Points to Remember
+
+* Cloud shifts focus from server to application
+* Prefer stateless application design
+* Externalize configuration
+* Use managed services where possible
+* Logs and files are not permanent
+* Scale horizontally, not vertically
+* Security configuration matters
+
+---
+
+❓ **Why must cloud applications be stateless?**
+▶ Cloud platforms scale by running multiple instances. If state is stored locally, requests may hit different instances, causing inconsistent behavior.
+
+❓ **Why are environment variables preferred over config files?**
+▶ Environment variables allow changing configuration without rebuilding or redeploying the application, which is critical in cloud environments.
+
+❓ **Why is local file storage discouraged in cloud apps?**
+▶ Instances can be restarted or replaced at any time, causing local files to disappear. Persistent data must live outside the app instance.
+
+❓ **Is Tomcat always required in cloud deployment?**
+▶ Not always. Some platforms manage the server internally, while others require manual Tomcat setup depending on deployment model.
+
+❓ **Which platform is best for beginners?**
+▶ Heroku or App Engine, because they minimize infrastructure concerns and let you focus on application behavior.
+
+Here’s the topic written **platform-agnostic first**, then **provider-specific**, keeping everything conceptual, practical, and clean.
+
+---
+
+## 146. Deployment on Cloud (Heroku / AWS / GCP)
+
+**Cloud deployment** means running your web application on **remote, managed infrastructure** instead of a local server.
+
+The cloud handles:
+
+* Server provisioning
+* Scalability
+* Availability
+* Networking
+* Monitoring (to varying degrees)
+
+📌 Your application logic stays the same; **deployment model changes**.
+
+---
+
+### Why Cloud Deployment Is Needed
+
+On local servers:
+
+* Scaling is manual
+* Hardware failures cause downtime
+* Infrastructure management is your responsibility
+
+Cloud platforms solve this by offering:
+
+* On-demand resources
+* Automatic scaling
+* High availability
+* Pay-as-you-use pricing
+
+---
+
+### Common Cloud Deployment Models
+
+#### Platform as a Service (PaaS)
+
+Examples: **Heroku**
+
+* No server management
+* Simple deployment workflow
+* Opinionated environment
+
+📌 Focus on code, not infrastructure.
+
+---
+
+#### Infrastructure as a Service (IaaS)
+
+Examples: **AWS EC2**, **GCP Compute Engine**
+
+* Full control over OS and server
+* Manual setup required
+* More flexible, more complex
+
+📌 You manage Tomcat, Java, and security.
+
+---
+
+### General Cloud Deployment Flow (Conceptual)
+
+1. Package application (WAR/JAR)
+2. Push code or artifact to cloud
+3. Platform provisions runtime
+4. App is started on cloud server
+5. Public URL is assigned
+6. Requests routed via load balancer
+
+📌 This flow is common across providers.
+
+---
+
+### Deployment on Heroku (PaaS)
+
+#### Characteristics
+
+* Extremely simple setup
+* Git-based deployment
+* Ephemeral file system
+* Auto-managed runtime
+
+📌 Ideal for learning and quick demos.
+
+---
+
+#### High-Level Steps (Conceptual)
+
+1. Create Heroku app
+2. Push code via Git
+3. Heroku detects Java app
+4. Buildpack installs JDK & server
+5. App is started automatically
+
+📌 Tomcat is abstracted away.
+
+---
+
+#### Important Notes
+
+* Use `PORT` environment variable
+* Filesystem resets on restart
+* Logs accessed via CLI
+
+📌 External storage required for uploads.
+
+---
+
+### Deployment on AWS (IaaS / PaaS)
+
+AWS provides multiple deployment options.
+
+---
+
+#### AWS EC2 (IaaS)
+
+**Flow:**
+
+1. Create EC2 instance
+2. Install Java & Tomcat
+3. Upload WAR
+4. Configure security groups
+5. Access via public IP
+
+📌 Full control, full responsibility.
+
+---
+
+#### AWS Elastic Beanstalk (PaaS-like)
+
+* Abstracts EC2 setup
+* Auto-scales
+* Manages deployments
+
+📌 Good balance between control and ease.
+
+---
+
+### Deployment on Google Cloud Platform (GCP)
+
+#### GCP App Engine (PaaS)
+
+* Supports Java web apps
+* Auto-scaling
+* Minimal configuration
+
+📌 Similar philosophy to Heroku.
+
+---
+
+#### GCP Compute Engine (IaaS)
+
+* VM-based deployment
+* Manual Tomcat setup
+* High flexibility
+
+📌 Comparable to AWS EC2.
+
+---
+
+### Configuration Differences in Cloud
+
+Cloud environments rely heavily on:
+
+* Environment variables
+* Externalized configs
+* Managed databases
+
+Example:
+
+```text
+DB_URL
+DB_USERNAME
+DB_PASSWORD
+```
+
+📌 Never hardcode credentials.
+
+---
+
+### Database in Cloud Deployment
+
+Databases are usually:
+
+* Managed services (RDS, Cloud SQL)
+* External to application server
+* Accessed via network
+
+📌 App and DB rarely live on same machine.
+
+---
+
+### Cloud vs Local Deployment
+
+| Aspect       | Local Server | Cloud Deployment |
+| ------------ | ------------ | ---------------- |
+| Scalability  | Manual       | Automatic / Easy |
+| Availability | Low          | High             |
+| Maintenance  | Manual       | Platform-managed |
+| Cost model   | Fixed        | Usage-based      |
+| Access       | Local / LAN  | Global           |
+
+---
+
+### Common Cloud Deployment Mistakes
+
+* Hardcoding IPs and ports
+* Using local file storage
+* Ignoring environment variables
+* Not enabling HTTPS
+* Assuming single-instance behavior
+
+📌 Cloud apps must be **stateless**.
+
+---
+
+### 📝 Rules / Points to Remember
+
+* Cloud shifts focus from server to application
+* Prefer stateless application design
+* Externalize configuration
+* Use managed services where possible
+* Logs and files are not permanent
+* Scale horizontally, not vertically
+* Security configuration matters
+
+---
+
+❓ **Why must cloud applications be stateless?**
+▶ Cloud platforms scale by running multiple instances. If state is stored locally, requests may hit different instances, causing inconsistent behavior.
+
+❓ **Why are environment variables preferred over config files?**
+▶ Environment variables allow changing configuration without rebuilding or redeploying the application, which is critical in cloud environments.
+
+❓ **Why is local file storage discouraged in cloud apps?**
+▶ Instances can be restarted or replaced at any time, causing local files to disappear. Persistent data must live outside the app instance.
+
+❓ **Is Tomcat always required in cloud deployment?**
+▶ Not always. Some platforms manage the server internally, while others require manual Tomcat setup depending on deployment model.
+
+❓ **Which platform is best for beginners?**
+▶ Heroku or App Engine, because they minimize infrastructure concerns and let you focus on application behavior.
+
