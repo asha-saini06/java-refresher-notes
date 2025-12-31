@@ -25319,3 +25319,236 @@ Databases are usually:
 ❓ **Why must cloud apps be restart-safe?**
 ▶ Cloud instances can restart anytime for scaling or maintenance. Apps must not depend on local state.
 
+## 147. Logging with Log4j or SLF4J + Logback
+
+**Logging** is the process of recording application events to understand **what the application is doing internally** during execution.
+
+Logs help with:
+
+* Debugging issues
+* Monitoring production systems
+* Auditing user actions
+* Diagnosing failures after they occur
+
+📌 Logging is **not printing**. It is structured, configurable, and environment-aware.
+
+### Why Logging Is Important
+
+Without proper logging:
+
+* Bugs are hard to trace
+* Production issues become guesswork
+* Errors may go unnoticed
+* Debug statements pollute code
+
+Logging provides **visibility into runtime behavior** without changing code.
+
+### Logging vs `System.out.println()`
+
+| Aspect              | println()    | Logging Framework     |
+| ------------------- | ------------ | --------------------- |
+| Configurable levels | No           | Yes                   |
+| Output destination  | Console only | Console, file, remote |
+| Performance control | No           | Yes                   |
+| Production-ready    | No           | Yes                   |
+| Can be disabled     | No           | Yes                   |
+
+📌 `System.out.println()` is unsuitable for real applications.
+
+### Logging Levels (Concept)
+
+Common logging levels (low → high severity):
+
+* TRACE → very detailed execution flow
+* DEBUG → debugging information
+* INFO → normal application events
+* WARN → unexpected but recoverable issues
+* ERROR → failures affecting functionality
+* FATAL → application cannot continue (framework-specific)
+
+📌 Use levels to control log verbosity per environment.
+
+### Log4j vs SLF4J vs Logback
+
+#### Log4j
+
+* Logging framework
+* Older versions had major security issues
+* Log4j2 is modern but requires careful setup
+
+📌 Direct usage is less common now.
+
+#### SLF4J
+
+* **Facade**, not a logger
+* Provides a common API
+* Allows switching logging implementations easily
+
+📌 Code depends on SLF4J, not the implementation.
+
+#### Logback
+
+* Logging implementation
+* Native SLF4J support
+* High performance and simple configuration
+
+📌 **SLF4J + Logback is the preferred combination**.
+
+### Typical Logging Architecture
+
+```
+Application Code
+      ↓
+   SLF4J API
+      ↓
+ Logging Backend (Logback / Log4j2)
+      ↓
+ Console / File / Remote System
+```
+
+📌 This decouples application code from logging technology.
+
+### Dependency Setup (Conceptual)
+
+Example (Maven-style):
+
+```xml
+<!-- SLF4J API -->
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+</dependency>
+
+<!-- Logback implementation -->
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+</dependency>
+```
+
+📌 Never include multiple logging implementations together.
+
+### Basic Logging Usage (Servlet Example)
+
+```java
+// Import SLF4J logger
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+
+    // Create logger for this class
+    private static final Logger logger =
+            LoggerFactory.getLogger(LoginServlet.class);
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Log normal flow
+        logger.info("Login request received");
+
+        String username = request.getParameter("username");
+
+        // Log debug information
+        logger.debug("Username received: {}", username);
+
+        if (username == null || username.isEmpty()) {
+            // Log warning for unexpected input
+            logger.warn("Login attempt with empty username");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        try {
+            // Simulate business logic
+            authenticate(username);
+        } catch (Exception e) {
+            // Log error with stack trace
+            logger.error("Authentication failed for user {}", username, e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+}
+```
+
+📌 Parameterized logging avoids unnecessary string creation.
+
+### Logback Configuration (`logback.xml`)
+
+```xml
+<configuration>
+
+    <!-- Console appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>
+```
+
+📌 Configuration controls logging without code changes.
+
+### Logging in Different Environments
+
+* **Development** → DEBUG / TRACE
+* **Testing** → INFO / WARN
+* **Production** → INFO / WARN / ERROR
+
+📌 Never enable DEBUG in production unnecessarily.
+
+### Common Logging Mistakes
+
+* Logging sensitive data (passwords, tokens)
+* Using `println()` alongside logging
+* Logging at ERROR for normal flow
+* Catching exceptions without logging
+* Excessive logging inside loops
+
+### 📝 Points to Remember
+
+* Logging is essential for observability
+* Use SLF4J as logging API
+* Prefer Logback as implementation
+* Use appropriate log levels
+* Never log sensitive data
+* Logging should aid, not flood
+* Configuration should control verbosity
+
+---
+
+❓ **Why is SLF4J preferred over directly using Log4j?**
+▶ SLF4J decouples application code from the logging implementation. This allows switching logging backends without changing code, improving maintainability and flexibility.
+
+❓ **Why should logging levels be used correctly?**
+▶ Levels allow filtering logs per environment. Incorrect usage leads to either missing critical information or overwhelming log noise.
+
+❓ **Why is parameterized logging important?**
+▶ It avoids unnecessary string creation when a log level is disabled, improving performance and reducing memory overhead.
+
+❓ **Why should sensitive data never be logged?**
+▶ Logs are often stored, aggregated, and accessible to multiple systems. Logging sensitive data creates security and compliance risks.
+
+❓ **Can logging affect application performance?**
+▶ Yes. Excessive logging, especially at DEBUG or TRACE levels, can degrade performance. Proper configuration and level control are essential.
+
