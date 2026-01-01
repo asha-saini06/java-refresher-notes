@@ -25292,21 +25292,6 @@ Databases are usually:
 ❓ **Which platform is best for beginners?**
 ▶ Heroku or App Engine, because they minimize infrastructure concerns and let you focus on application behavior.
 
-❓ **Why must cloud applications be stateless?**
-▶ Cloud platforms scale by running multiple instances. If state is stored locally, requests may hit different instances, causing inconsistent behavior.
-
-❓ **Why are environment variables preferred over config files?**
-▶ Environment variables allow changing configuration without rebuilding or redeploying the application, which is critical in cloud environments.
-
-❓ **Why is local file storage discouraged in cloud apps?**
-▶ Instances can be restarted or replaced at any time, causing local files to disappear. Persistent data must live outside the app instance.
-
-❓ **Is Tomcat always required in cloud deployment?**
-▶ Not always. Some platforms manage the server internally, while others require manual Tomcat setup depending on deployment model.
-
-❓ **Which platform is best for beginners?**
-▶ Heroku or App Engine, because they minimize infrastructure concerns and let you focus on application behavior.
-
 ❓ **Why does Heroku not allow fixed ports?**
 ▶ Heroku runs apps behind a router. Each app instance is dynamically assigned a port, so hardcoding ports breaks routing.
 
