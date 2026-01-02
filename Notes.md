@@ -38,22 +38,22 @@
 
 ### Command Line Compilation (CLI)
 
-#### 📍 `javac` & `java` basics
+#### `javac` & `java` basics
 
-* 🟢 **Compile single file (no packages)**
+ 🟢 **Compile single file (no packages)**
 
   ```bash
   javac Main.java
   java Main
   ```
 
-* 🟡 **Compile all `.java` files in the same folder**
+ 🟡 **Compile all `.java` files in the same folder**
 
   ```bash
   javac *.java
   ```
 
-* 🔵 **Compile multiple files using packages**
+ 🔵 **Compile multiple files using packages**
 
   ```bash
   javac -d . src/banking/*.java
@@ -168,6 +168,7 @@ class Demo{
 ![Multiple Classes Example](./resources/multiple-classes.png)
 
 ## 2. Differences Between JDK, JRE and JVM
+
 JDK (Java Development Kit) provides tools and libraries to develop Java applications, working with JRE and JVM. JRE (Java Runtime Environment) offers the libraries and JVM needed to run Java programs. JVM (Java Virtual Machine) executes the compiled Java bytecode on the system.
 
 ![JDK, JRE and JVM](/resources/jvm.png)
@@ -175,6 +176,7 @@ JDK (Java Development Kit) provides tools and libraries to develop Java applicat
 > 📝: Java bytecode can run on any machine with a JVM, but JVM implementations are platform-dependent for each operating system.
 
 ### JDK (Java Development Kit)
+
 JDK is a software development kit used to build Java applications. It contains the JRE and a set of development tools.
 
 - Includes compiler (javac), debugger, and utilities like jar and javadoc.
@@ -191,11 +193,13 @@ JDK is a software development kit used to build Java applications. It contains t
 - JDK is platform-dependent (different version for windows, Linux, macOS)
 
 #### Working of JDK:
+
 - **Source Code (.java)**: Developer writes a Java program.
 - **Compilation**: The JDK’s compiler (javac) converts the code into bytecode stored in .class files.
 - **Execution**: The JVM executes the bytecode, translating it into native instructions.
 
 ### JRE (Java Runtime Environment)
+
 JRE provides an environment to run Java programs but does not include development tools. It is intended for end-users who only need to execute applications.
 
 - Contains the JVM and standard class libraries.
@@ -207,11 +211,13 @@ JRE provides an environment to run Java programs but does not include developmen
 - It is platform-dependent (different builds for different OS).
 
 #### Working of JRE:
+
 - **Class Loading**: Loads compiled .class files into memory.
 - **Bytecode Verification**: Ensures security and validity of bytecode.
 - **Execution**: Uses the JVM (interpreter + JIT compiler) to execute instructions and make system calls.
 
 ### JVM (Java Virtual Machine)
+
 JVM is the core execution engine of Java. It is responsible for converting bytecode into machine-specific instructions.
 
 - Part of both JDK and JRE.
@@ -233,6 +239,7 @@ JVM is the core execution engine of Java. It is responsible for converting bytec
 4. **Execution**: Interprets or compiles bytecode into native code.
 
 ### JDK vs JRE vs JVM
+
 | Aspect              | JDK                                      | JRE                                      | JVM                                                   |
 |---------------------|-------------------------------------------|-------------------------------------------|--------------------------------------------------------|
 | **Purpose**             | Used to develop Java applications         | Used to run Java applications             | Executes Java bytecode                                |
@@ -431,6 +438,7 @@ Object-Oriented Programming is a methodology or paradigm to design a program usi
 ![OOP](./resources/OOPsConcept.gif)
 
 ### Key Features of OOP in Java:
+
 - Structures code into logical units (classes and objects)
 - Keeps related data and methods together (encapsulation)
 - Makes code modular, reusable and scalable
@@ -511,9 +519,11 @@ class abc {
    - If you use `int[]`, `float[]`, or any other type, the JVM will not recognize it as the entry point.
 
 ✅ **In summary:**  
+
 Command-line input always comes in as text. `String[] args` ensures Java can accept any kind of input, and the program can later parse those strings into numbers or other data types as needed.
 
 ### Advantage of OOPs over Procedure-Oriented Programming Language
+
 Object-oriented programming (OOP) offers several key advantages over procedural programming:
 - By using objects and classes, you can create reusable components, leading to less duplication and more efficient development.
 - It provides a clear and logical structure, making the code easier to understand, maintain, and debug.
@@ -521,12 +531,14 @@ Object-oriented programming (OOP) offers several key advantages over procedural 
 - By reusing existing code and creating modular components, OOP allows for quicker and more efficient application development
 
 ### Disadvantages of OOPs
+
 - OOP has concepts like classes, objects, inheritance etc. For beginners, this can be confusing and takes time to learn.
 - If we write a small program, using OOP can feel too heavy. We might have to write more code than needed just to follow the OOP structure.
 - The code is divided into different classes and layers, so in this, finding and fixing bugs can sometimes take more time.
 - OOP creates a lot of objects, so it can use more memory compared to simple programs written in a procedural way.
 
 ## 6. Variables in Java
+
 **Variable**: a resuable container for a value
 a variable behaves as if it was the value it contains
 
@@ -1163,9 +1175,11 @@ Example: `add(int a, int b)` is the method signature.
 > 📝: **Method overriding** allows a subclass to provide a different implementation for a method that is already defined in the superclass.
 
 ### Java Scope
+
 In Java, variables are only accessible inside the region where they are created. This is called **scope**.
 
 #### Method Scope
+
 Variables declared directly inside a method are available anywhere in the method following the line of code in which they were declared:
 ```java  
 public class Main {
@@ -1182,6 +1196,7 @@ public class Main {
 ```
 
 #### Block Scope
+
 A block of code refers to all of the code between curly braces `{ }`.
 
 Variables declared inside a block of code are only accessible by the code between the curly braces, and only after the line in which the variable was declared:
@@ -1210,6 +1225,7 @@ public class Main {
 > 📝 : A block of code can stand alone, or be part of an `if`, `while`, or `for` statement. In a `for` loop, the variable declared in the loop header (like `int i = 0`) only exists inside the loop.
 
 #### Loop Scope
+
 Variables declared inside a for loop only exist inside the loop:
 ```java
 public class Main {
@@ -1247,6 +1263,7 @@ public class Main {
 }
 ```
 #### Class Scope
+
 Variables declared inside a class but outside any method have class scope (also called fields). These variables can be accessed by all methods in the class:
 ```java
 public class Main {
@@ -1260,6 +1277,7 @@ public class Main {
 ```
 
 ### Recursion
+
 Recursion is the technique of making a function call itself. This technique provides a way to break complicated problems down into simpler problems which are easier to solve.
 
 **Recursion Example**
@@ -4021,6 +4039,7 @@ class TestSubstring{
 - Tokenizing or pattern-based string operations
 
 ## 34. Constructor
+
 Constructor is a special method which is used to initialize the object. It is called automatically when object is created.
 - Constructor is always declared with class name.
 
@@ -4038,6 +4057,7 @@ ABC(){ // default constructor
 > 📝: Everytime an object is created using `new()` keyword, atleast one constructor is called. It is called a **default constructor**.
 
 ## 35. Types of Constructors
+
 There are Four types of constructors in Java
 ![constructors](/resources/constructors_in_java.webp)
 
@@ -4209,6 +4229,7 @@ Copy constructor
 > 📝:  Java does not provide a built-in copy constructor like C++. We can create our own by writing a constructor that takes an object of the same class as a parameter and copies its fields.
 
 ## 36. Access Modifiers
+
 Access Modifiers in Java define the **visibility (scope)** of classes, methods, and variables across different parts of a program.
 They help achieve **encapsulation**, ensuring that sensitive data or methods are protected from unintended access.
 
@@ -4351,6 +4372,7 @@ Comparison Table of Access Modifiers in Java
 | **public**    | Global               | APIs, library classes         |
 
 ## 37. Getter and Setter Methods
+
 Getter and Setter methods are **used to access and modify private data members** of a class.
 They form the foundation of **Encapsulation**, one of the four pillars of Object-Oriented Programming (OOP).
 
@@ -4479,6 +4501,7 @@ They protect your fields, control changes, and keep your code safe, modular, and
 
 
 ## 38. Constructor Overloading
+
 A private constructor cannot be accessed from outside the class. It is commonly used in:
 
 - **Singleton Pattern**: To ensure only one instance of a class is created.
@@ -4628,6 +4651,7 @@ ABC 1
 > By overriding, the `toString()` method of the Object class, we can return values of the object, so we don't need to write much code.
 
 ## 39. ASCII (American Standard Code for Information Interchange)
+
 **ASCII** stands for **American Standard Code for Information Interchange**.
 It is a **character encoding standard** used to represent text (letters, digits, symbols, and control characters) in computers and other digital devices.
 
@@ -4786,6 +4810,7 @@ Think of ASCII as a **translator** that tells computers what each character (lik
 Without ASCII (or Unicode), your computer would not know how to display or interpret letters and symbols.
 
 ## 40. Inheritance
+
 - Java supports only 3 types of Inheritance: `Single`, `Mutli-level`, `Hierarchical`.
 - We can't inherit multiple classes because **Java doesn't support multiple inheritance**.
 
@@ -5982,6 +6007,7 @@ Interface → extends → Interface
 | Usage                | Common behavior across related classes | Common capability across unrelated classes  |
 
 ## 48. Exception Handling
+
 Exception is an event that disrupts the normal flow of the program.
 
 It is one of the powerful **mechanism to handle the runtime errors** so that normal flow of the application can be maintained.
@@ -5993,6 +6019,7 @@ The core advantage of exception handling is **to amintain the normal flow of the
 ![exception_hierarchy](/resources/exceptionHierarchy.png)
 
 ### Types of Exceptions
+
 There are mainly two types of exceptions: **Checked** and **Unchecked**; where `error` is considered unchecked exception.
 The SunMicrosystem says there are three types of exceptions:
 
@@ -6024,6 +6051,7 @@ Error is irrecoverable. eg, `OutOfMemoryError`, `VirtualMachineError`, `Assertio
 
 ---
 ### Exception Handling Keywords
+
 1. `try`
 2. `catch`
 3. `finally`
@@ -6035,6 +6063,7 @@ Error is irrecoverable. eg, `OutOfMemoryError`, `VirtualMachineError`, `Assertio
 ![exception_handling](/resources/exceptionHandling2.png)
 
 ### `try-catch`
+
 - `try` block is used to enclose code that might throw an exception. It must be used within the method.
 - The `try` block must be followed by either `catch` or `finally` block.
 
@@ -6087,6 +6116,7 @@ The JVM firstly checks whether the exception is handled or not. If exception is 
 But if exception is handled by the application programmer, normal flow of the application is maintained, i.e., rest of the code is executed.
 
 #### How to use command line arguments
+
 ```java
 class A{
     public static void main(String... args){
@@ -6125,6 +6155,7 @@ catch(Exception e){
 `Exception` class consists of all the exceptions. So, instead of mentioning exceptions individually, just use class name.
 
 #### Nested try-block
+
 We can use method nested try-block. Sometimes a situation may arise where a part of a block may causeone error and the entire block itself may cause another error. In such cases, exception handlers have to be nested.
 
 ```java
@@ -6154,6 +6185,7 @@ catch (ArithemeticException e){} // error
 ```
 
 ### `finally`
+
 `finally` block is a block that is used to **exceute importent code** such as closing connection, stream.
 
 - `finally` block is always executed, whether an exception occurs or not.
@@ -6172,6 +6204,7 @@ finally{
 ```
 
 ❓: **Why use `finally` block?**
+
 ▶ `finally` block in Java can be used to put 'cleanup' code such as closing a file, a database connection, etc. Finally block is always executed, whether an exception occurs or not.
 
 > If you have to perform different tasks at the occurences of different Exceptions, use java mutli-catch blocks.
@@ -6189,11 +6222,13 @@ finally{
 ![final vs finally vs finalize](/resources/finalfinallyfinalize.png) 
 
 ### `throw`
+
 `throw` is used to explicitly throw an exception. We can throw either checked or unchecked exception in java by throw keyword. The `throw` keyword is mainly used to throw custo exception.
 
-**Syntax:** 
+**Syntax:**
 
     throw exception;
+
 **Example:**
 ```java 
 throw new IOException("Sorry, device error!");
@@ -6211,6 +6246,7 @@ class A{
 ```
 
 ### `throws`
+
 `throws` used to declare an exception. It gives an **information to the programmer that there may occur an exception** so it is better for the programmer to provide the exception handling code so that normal flow can be maintained. 
 
 Declares exceptions that a method might throw, informing the caller to handle them. It is mainly used with checked exceptions (explained below). If a method calls another method that throws a checked exception, and it doesn’t catch it, it must declare that exception in its `throws` clause
@@ -6684,6 +6720,7 @@ System.out.println(d);
 > Function to get/calculate total space of a drive: `getTotalSpace()`.
 
 ## 51. File Class
+
 The `File` Class is an abstract representation of file and directory pathname.
 The **File** class have several methods for working with directories and files such as creating new directories or files, deleting and renaming directories or files etc.
 
@@ -12705,6 +12742,8 @@ To compile a Servlet a JAR file is required. Different servers require different
 - Declaring tag libraries.
 
 ## 81. Filters and Listeners in Servlet API
+
+![Filters and Listeners in Servlet API](./resources/Filters_and_Listeners_in_ServletAPI.png) 
 
 ### Filters in Servlets
 
@@ -23518,6 +23557,8 @@ public class UserDAOImpl implements UserDAO {
 
 📌 This approach keeps code modular, maintainable, and scalable.
 
+![mvc-dao-jdbc-jsp](./resources/MVC_architecture_JSP_Servlet_and_Java%20Beans.jpg) 
+
 ### Why Combine MVC + DAO + JDBC + JSP
 
 Without this structure:
@@ -23918,6 +23959,8 @@ This leads to:
 
 📌 Despite the name, AJAX commonly uses **JSON**, not XML.
 
+![AJAX](./resources/working-of-ajax.jpg) 
+
 ### Why AJAX Is Needed
 
 Without AJAX:
@@ -24109,6 +24152,8 @@ In a REST-based system, **Servlets act as API endpoints**, returning **data (JSO
 
 📌 REST APIs are backend-focused; JSP is **not used** for rendering API responses.
 
+![REST APIs with Java Servlets](./resources/REST%20APIs%20with%20Java%20Servlets.gif) 
+
 ### Why REST APIs Are Needed
 
 Traditional JSP-based applications:
@@ -24298,6 +24343,8 @@ In servlet-based applications, JSON handling involves:
 * Converting JSON → Java objects (deserialization)
 
 📌 Servlets do **not** handle JSON automatically; libraries like **Jackson** and **Gson** are used.
+
+![How to parse JSON in Java](./resources/How%20to%20parse%20JSON%20In%20Java.png) 
 
 ### Why JSON Libraries Are Needed
 
@@ -24546,6 +24593,8 @@ This enables:
 
 📌 WebSockets are ideal for applications where **continuous data exchange** is required.
 
+![JavaWebSockets](./resources/WebSockets-in-Java.png) 
+
 ### Why WebSockets Are Needed
 
 With traditional HTTP:
@@ -24568,7 +24617,7 @@ WebSockets solve this by keeping the connection **open** and **stateful**.
 
 📌 WebSockets start as HTTP, then **upgrade the protocol**.
 
----
+![Traditional HTTP communication vs. WebSocket](./resources/JavaWebSocket.png) 
 
 ### WebSocket Lifecycle (Conceptually)
 
@@ -25537,3 +25586,263 @@ public class LoginServlet extends HttpServlet {
 ❓ **Can logging affect application performance?**
 ▶ Yes. Excessive logging, especially at DEBUG or TRACE levels, can degrade performance. Proper configuration and level control are essential.
 
+## 148. Unit Testing for Servlets and JSP (JUnit + MockMVC)
+
+**Unit testing** in web applications ensures that **individual components behave correctly in isolation** before the full application is deployed.
+
+In Java web apps, this typically means testing:
+
+* Servlets (request handling, logic, flow)
+* Controllers (in MVC frameworks)
+* Supporting services used by servlets
+
+📌 JSPs themselves are **not unit-tested directly**; their logic is tested indirectly.
+
+### Why Unit Testing Is Needed in Web Applications
+
+Without unit testing:
+
+* Bugs appear only at runtime
+* Refactoring becomes risky
+* Logic errors reach production
+* Manual testing becomes repetitive
+
+Unit testing helps achieve:
+
+* Early bug detection
+* Safer refactoring
+* Better code confidence
+* Faster development cycles
+
+### What Can and Cannot Be Unit Tested
+
+#### Can Be Unit Tested
+
+* Servlet logic
+* Request parameter handling
+* Response status and redirects
+* Session interactions
+* Controller behavior
+* Service-layer logic
+
+#### Cannot Be Unit Tested Directly
+
+* JSP rendering output
+* HTML layout
+* CSS / UI behavior
+
+📌 JSPs are **views**, not logic holders.
+
+### Tools Used
+
+#### JUnit
+
+* Standard Java testing framework
+* Used to write and run test cases
+* Works without servlet container
+
+📌 Focuses on logic correctness.
+
+#### Mockito
+
+* Used to mock dependencies
+* Simulates request, response, session objects
+
+📌 Avoids real HTTP calls.
+
+#### Spring MockMVC
+
+* Tests MVC controllers without starting a server
+* Simulates HTTP requests and responses
+
+📌 Ideal for Spring MVC applications.
+
+## Testing Servlets Using JUnit + Mockito
+
+### Basic Servlet Testing Idea
+
+Since servlets depend on container objects, we **mock** them.
+
+### Example Servlet
+
+```java
+@WebServlet("/hello")
+public class HelloServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        String name = request.getParameter("name");
+
+        if (name == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        response.getWriter().write("Hello " + name);
+    }
+}
+```
+
+### Unit Test for Servlet
+
+```java
+// Unit test for HelloServlet
+class HelloServletTest {
+
+    private HelloServlet servlet;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private StringWriter responseContent;
+
+    @BeforeEach
+    void setup() throws Exception {
+        servlet = new HelloServlet();
+        request = mock(HttpServletRequest.class);
+        response = mock(HttpServletResponse.class);
+
+        responseContent = new StringWriter();
+        when(response.getWriter()).thenReturn(new PrintWriter(responseContent));
+    }
+
+    @Test
+    void shouldReturnGreetingWhenNameProvided() throws Exception {
+        when(request.getParameter("name")).thenReturn("Asha");
+
+        servlet.doGet(request, response);
+
+        assertEquals("Hello Asha", responseContent.toString());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenNameMissing() throws Exception {
+        when(request.getParameter("name")).thenReturn(null);
+
+        servlet.doGet(request, response);
+
+        verify(response).sendError(HttpServletResponse.SC_BAD_REQUEST);
+    }
+}
+```
+
+📌 Servlet logic is tested **without deploying on Tomcat**.
+
+## Testing Session Behavior in Servlets
+
+```java
+@Test
+void shouldStoreUserInSession() throws Exception {
+    HttpSession session = mock(HttpSession.class);
+    when(request.getSession()).thenReturn(session);
+
+    servlet.doPost(request, response);
+
+    verify(session).setAttribute(eq("user"), any());
+}
+```
+
+📌 Session behavior can be validated using mocks.
+
+## Testing Spring MVC Controllers with MockMVC
+
+Spring MVC controllers are easier to test using **MockMVC**.
+
+### Example Controller
+
+```java
+@Controller
+public class LoginController {
+
+    @PostMapping("/login")
+    public String login(@RequestParam String username, Model model) {
+        if ("admin".equals(username)) {
+            return "dashboard";
+        }
+        model.addAttribute("error", "Invalid user");
+        return "login";
+    }
+}
+```
+
+### MockMVC Test
+
+```java
+@WebMvcTest(LoginController.class)
+class LoginControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void shouldRedirectToDashboardForAdmin() throws Exception {
+        mockMvc.perform(post("/login")
+                .param("username", "admin"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard"));
+    }
+
+    @Test
+    void shouldReturnLoginOnInvalidUser() throws Exception {
+        mockMvc.perform(post("/login")
+                .param("username", "guest"))
+                .andExpect(model().attributeExists("error"))
+                .andExpect(view().name("login"));
+    }
+}
+```
+
+📌 No servlet container is started.
+
+## Why JSPs Are Not Unit Tested
+
+* JSPs are compiled into servlets internally
+* They mainly contain presentation logic
+* HTML output is difficult to assert reliably
+
+📌 JSP behavior is tested through **integration tests** or manual UI testing.
+
+## Unit Testing vs Integration Testing
+
+| Aspect           | Unit Testing     | Integration Testing |
+| ---------------- | ---------------- | ------------------- |
+| Scope            | Single component | Multiple components |
+| Speed            | Fast             | Slower              |
+| Container needed | No               | Yes                 |
+| Purpose          | Logic validation | End-to-end behavior |
+
+📌 Unit tests catch bugs early; integration tests validate flow.
+
+## Common Testing Mistakes
+
+* Testing JSP rendering logic
+* Using real databases in unit tests
+* Starting Tomcat for unit tests
+* Over-mocking everything
+* Mixing unit and integration tests
+
+### 📝 Points to Remember
+
+* Unit tests validate logic, not UI
+* Servlets can be tested using mocks
+* JSPs should stay logic-free
+* MockMVC simplifies controller testing
+* Avoid container startup in unit tests
+* Keep tests fast and isolated
+* Test behavior, not implementation details
+
+---
+
+❓ **Why can’t JSPs be unit tested directly?**
+▶ JSPs focus on presentation and are compiled internally into servlets. Their output depends heavily on HTML structure, making unit-level assertions fragile and unreliable.
+
+❓ **Why is mocking required for servlet testing?**
+▶ Servlets depend on container-managed objects like requests and responses. Mocking simulates these objects without requiring a real server.
+
+❓ **Why is MockMVC preferred for Spring MVC testing?**
+▶ MockMVC allows testing request handling, validation, and view resolution without starting Tomcat, making tests fast and focused.
+
+❓ **Should databases be used in unit tests?**
+▶ No. Databases introduce external dependencies. Use mocks or in-memory substitutes; real DBs belong in integration tests.
+
+❓ **What is the biggest benefit of unit testing web apps?**
+▶ Confidence. You can change code safely knowing that core behavior is continuously verified.
