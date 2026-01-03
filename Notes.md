@@ -84,6 +84,11 @@ JVM has an Interpreter which is known as **Just-In-Time** (JIT) compiler.
 
 Class files are **bytecode** files. Java files are **source code** files.
 
+❓: **Is Java Platform Independent? If yes, how?**
+▶ Yes, Java is a platform-independent language. Unlike many programming languages, the Java compiler (javac) compiles a program into bytecode (a .class file). This bytecode is not tied to any specific hardware or operating system but requires a Java Virtual Machine (JVM) to execute.
+
+Although the JVM itself is platform-dependent, bytecode generated on one system can run on any other system that has a compatible JVM installed. This is what makes Java platform independent.
+
 ### Java Installation
 
 - Download Java 17 (LTS) from Adoptium Temurin
@@ -119,16 +124,52 @@ class Demo{
 - To compile: `javac Demo.java`
 - To run: `java Demo`
 
+![main function in java](./resources/Main_function.jpg)
+
 #### Parameters used
 
 - `class` keyword is used to declare a class in java.
-- `public` keyword is an access modifier which represets visibility, it means it is visible to all.
-- `static` is a keyword, if we declare any method as static , it is known as static method. The core advantage of static method is that there is no need to create an object to invoke the static method.
+- `public` : the public is the access modifier responsible for mentioning who can access the element or the method and what is the limit.  It is responsible for making the main function globally available. It is made public so that JVM can invoke it from outside the class as it is not present in the current class.
+- `static` is a keyword, if we declare any method as static , it is known as static method. static is a keyword used so that we can use the element without initiating the class so to avoid the unnecessary allocation of the memory. 
   The **main** method is executed by the JVM, so it doesn't require to create object to inovke the main method. So it saves memory.
-- `void` keyword is used to declare the return type of the method; it means it doesn't return any value.
-- `main` represents the entry point of the program.
-- `String[] args` is used to accept command-line arguments.
+- `void`: void is a keyword and is used to specify that a method doesn’t return anything. As the main function doesn't return anything we use void.
+- `main` represents the entry point of the program. main represents that the function declared is the main function. It helps JVM to identify that the declared function is the main function.
+- `String[] args` : It stores Java command-line arguments and is an array of type java.lang.String class.
 - `System.out.println()` is used to print the output on the console. `System` is a class in the java.lang package. The `out` is a static variable in the `System` class, and is an insurance of java.io.PrintStream. The `println()` method is used to print the output on the console. The `println` is a method of java.io.PrintStream; this method is overloaded to print message to output destination, which is typically a console or a file.
+
+❓ : **What will happen if we don’t declare the main method as static?**
+▶ - The main method in Java is declared as public static void main(String[] args) because the JVM needs to call it without creating an object.
+- If the main method is not static, it becomes an instance method, and the JVM cannot call it directly since no object exists at the start of execution.
+- The code will compile successfully, but at runtime, the JVM will throw an error like:
+```
+Error: Main method is not static in class Example, please define the main method as:
+
+public static void main(String[] args)
+```
+
+❓ : **What are Packages in Java?**
+▶ Packages in Java can be defined as the grouping of related types of classes, interfaces, etc providing access to protection and namespace management.
+
+❓: **Why Packages are used?**
+▶ Packages are used in Java in order to prevent naming conflicts, control access, and make searching/locating and usage of classes, interfaces, etc easier.
+
+❓: **What are the advantages of Packages in Java?**
+▶ There are various advantages of defining packages in Java.
+
+- Packages avoid name clashes.
+- The Package provides easier access control.
+- We can also have the hidden classes that are not visible outside and are used by the package.
+- It is easier to locate the related classes.
+
+❓: **How many types of packages are there in Java?**
+▶ There are two types of packages in Java
+
+- User-defined packages
+- Build In packages
+
+❓: **Why is Java not 100% Object-Oriented?**
+▶ Because it contains primitive data types (int, boolean, char, etc.) which are not objects.
+
 
 > ❓ **Difference between print and println**
 > ➡ `print` method doesn't add a new line character at the end of the output, while `println` method adds a new line character at the end of the output.
@@ -210,13 +251,31 @@ JRE provides an environment to run Java programs but does not include developmen
 - JRE is only for running applications, not for developing them.
 - It is platform-dependent (different builds for different OS).
 
-#### Working of JRE:
+#### Working of JRE
 
 - **Class Loading**: Loads compiled .class files into memory.
 - **Bytecode Verification**: Ensures security and validity of bytecode.
 - **Execution**: Uses the JVM (interpreter + JIT compiler) to execute instructions and make system calls.
 
+#### JIT (Just-in-Time) compiler
+
+JIT stands for (Just-in-Time) compiler is a part of JRE(Java Runtime Environment), it is used for better performance of the Java applications during run-time. The use of JIT is mentioned in step by step process mentioned below:
+
+![JIT](./resources/JIT.png)
+
+1. Source code is compiled with javac to form bytecode
+2. Bytecode is further passed on to JVM 
+3. JIT is a part of JVM, JIT is responsible for compiling bytecode into native machine code at run time.
+4. The JIT compiler is enabled throughout, while it gets activated when a method is invoked. For a compiled method, the JVM directly calls the compiled code, instead of interpreting it.
+5. As JVM calls the compiled code that increases the performance and speed of the execution.
+
 ### JVM (Java Virtual Machine)
+
+- JVM stands for Java Virtual Machine, which is a Java interpreter. It is responsible for loading, verifying, and executing the bytecode created in Java.
+
+- Although it is platform dependent, which means the software of JVM is different for different Operating Systems, it plays a vital role in making Java platform Independent.
+
+![JVM](./resources/JavaVirtualMachine.png)
 
 JVM is the core execution engine of Java. It is responsible for converting bytecode into machine-specific instructions.
 
@@ -237,6 +296,25 @@ JVM is the core execution engine of Java. It is responsible for converting bytec
 2. **Linking**: Performs verification, preparation, and resolution.
 3. **Initialization**: Executes class constructors and static initializers.
 4. **Execution**: Interprets or compiles bytecode into native code.
+
+❓ : **What are Memory storages available with JVM?**
+▶ JVM consists of a few memory storages as mentioned below:
+
+1. **Class(Method) Area**: stores class-level data of every class such as the runtime constant pool, field, and method data, and the code for methods.
+2. **Heap**: Objects are created or objects are stored. It is used to allocate memory to objects during run time.
+3. **Stack**: stores data and partial results which will be needed while returning value for method and performing dynamic linking
+4. **Program Counter Register**: stores the address of the Java virtual machine instruction currently being executed.
+5. **Native Method Stack**: stores all the native methods used in the application.
+
+![Class Loader](./resources/ClassLoader.png) 
+
+❓: **what is class Loader?**
+▶ A Class Loader in Java is a part of the Java Virtual Machine (JVM) responsible for loading Java classes into memory at runtime.
+
+**Key Responsibilities of Class Loader:**
+- **Loading**: Reads class bytecode (.class file) from disk, network, or other sources.
+- **Linking**: Verifies bytecode (security check) and Prepares static fields
+- **Initialization**: Executes static blocks and Initializes static variables
 
 ### JDK vs JRE vs JVM
 
@@ -539,6 +617,16 @@ Object-oriented programming (OOP) offers several key advantages over procedural 
 
 ## 6. Variables in Java
 
+A variable is a container that stores data, which can be used and manipulated by a program.
+
+- It has a name, type, and value.
+- Variables are stored in memory during program execution.
+
+```java
+int age = 25;
+String name = "Vishnu";
+```
+
 **Variable**: a resuable container for a value
 a variable behaves as if it was the value it contains
 
@@ -716,9 +804,117 @@ Output:
 ```
 
 ⚡ So the key takeaway:
-
 - **Static variables are shared across all instances.**
 - Changing them via any object (or even class name `abc.a`) updates the single shared copy.
+
+❓: **What is the difference between System.out, System.err, and System.in?**
+| Feature            | `System.out`                       | `System.err`                                | `System.in`                            |
+| ------------------ | ---------------------------------- | ------------------------------------------- | -------------------------------------- |
+| **Purpose**        | Displays **normal program output** | Displays **error or diagnostic messages**   | Takes **input from the user**          |
+| **Stream Type**    | `PrintStream`                      | `PrintStream`                               | `InputStream`                          |
+| **Direction**      | Output                             | Output                                      | Input                                  |
+| **Default Device** | Console (stdout)                   | Console (stderr)                            | Keyboard (stdin)                       |
+| **Typical Use**    | `System.out.println("Hello");`     | `System.err.println("Error occurred");`     | `Scanner sc = new Scanner(System.in);` |
+| **Redirection**    | Can be redirected to file/stream   | Can be redirected **separately** from `out` | Can be redirected from file/stream     |
+
+1️⃣ `System.out` (Standard Output)
+
+* Used for **normal program messages**
+* Buffered output
+* Commonly used for results, logs, and display
+
+```java
+System.out.println("Program executed successfully");
+```
+
+📌 Even though it prints to the console, it is **not meant for errors**.
+
+2️⃣ `System.err` (Standard Error)
+
+* Used for **error messages**
+* Unbuffered (appears immediately)
+* Printed separately from `System.out`
+
+```java
+System.err.println("Invalid input provided");
+```
+
+📌 Useful when redirecting output to a file but still wanting errors on the console.
+
+3️⃣ `System.in` (Standard Input)
+
+* Used to **read input**
+* Reads raw bytes
+* Commonly wrapped using `Scanner` or `BufferedReader`
+
+```java
+Scanner sc = new Scanner(System.in);
+int x = sc.nextInt();
+```
+
+📌 Direct reading is low-level; wrapper classes make it convenient.
+
+* `System.out` and `System.err` both print to the console but **use different streams**
+* Errors can be logged separately using `System.err`
+* `System.in` is an input stream, not output
+* All three belong to the `java.lang.System` class
+* They are **static final** fields
+
+**One-Line Memory Trick:**
+> **out = results**, **err = problems**, **in = input**
+
+❓: **What is a Class Variable?**
+▶ In Java, a class variable (also known as a static variable) is a variable that is declared within a class but outside of any method, constructor, or block. Class variables are declared with the static keyword, and they are shared by all instances (objects) of the class as well as by the class itself. No matter how many objects are derived from a class, each class variable would only exist once.
+
+❓: **What is the default value stored in Local Variables?**
+▶ There is no default value stored with local variables. Also, primitive variables and objects don't have any default values.
+
+❓: **Explain the difference between instance variable and a class variable.**
+▶ **Instance Variable**: A class variable without the static modifier is called an instance variable. It is unique to each object (instance) of the class and is not shared between instances.
+```java
+// Java Program to demonstrate Instance Variable
+import java.io.*;
+class GFG {
+    private String name;
+    public void setName(String name) { this.name = name; }
+    public String getName() { return name; }
+    public static void main(String[] args)
+    {
+        GFG obj = new GFG();
+        obj.setName("John");
+        System.out.println("Name " + obj.getName());
+    }
+}
+```
+
+Output:
+```
+Name John
+```
+
+**Class Variable**:  Class Variable variable can be declared anywhere at the class level using the keyword static. These variables can only have one value when applied to various objects. These variables can be shared by all class members since they are not connected to any specific object of the class.
+
+```java
+// Java Program to demonstrate Class Variable
+import java.io.*;
+class GFG {
+    // class variable
+    private static final double PI = 3.14159;
+    private double radius;
+    public GFG(double radius) { this.radius = radius; }
+    public double getArea() { return PI * radius * radius; }
+    public static void main(String[] args)
+    {
+        GFG obj = new GFG(5.0);
+        System.out.println("Area of circle: " + obj.getArea());
+    }
+}
+```
+
+Output:
+```
+Area of circle: 78.53975
+```
 
 ## 7. Loops
 
@@ -24605,7 +24801,24 @@ With traditional HTTP:
 
 WebSockets solve this by keeping the connection **open** and **stateful**.
 
+### Applications of WebSocket
+Chat applications, live notifications, online games, stock tickers, collaborative editing tools.
+
+- **WhatsApp Web, Slack and Facebook Messenger** : For instant messaging sync between browser and phone.
+- **Google Docs** – Collaborative document editing where changes appear instantly.
+- **Zoom / Microsoft Teams** – For live presence indicators, chat messages, and meeting controls.
+- **TradingView** – Real-time stock, crypto, and forex price updates.
+- **Uber** – Live driver location and ride status updates.
+- **Online multiplayer games** – Many browser-based games use WebSockets for low-latency player interactions.
+
+### When not to use WebSocket?
+WebSocket can be used if we want any real-time updated or continuous streams of data that are being transmitted over the network but if we want to fetch old data, or want to get the data only once to process it with an application we should go with HTTP protocol, old data which is not required very frequently or fetched only once can be queried by the simple HTTP request, so in this scenario, it's better not use WebSocket.
+
+> Note: RESTful web services are sufficient to get the data from the server if we are loading the data only once. 
+
 ### HTTP vs WebSocket (Conceptual)
+
+**HTTP** is a stateless protocol that runs on top of TCP which is a connection-oriented protocol it guarantees the delivery of data packet transfer using the three-way handshaking methods and re-transmits the lost packets.  **WebSocket** is bidirectional and a full-duplex protocol
 
 | Aspect        | HTTP                | WebSocket             |
 | ------------- | ------------------- | --------------------- |
@@ -25657,13 +25870,13 @@ Unit testing helps achieve:
 
 📌 Ideal for Spring MVC applications.
 
-## Testing Servlets Using JUnit + Mockito
+### Testing Servlets Using JUnit + Mockito
 
-### Basic Servlet Testing Idea
+#### Basic Servlet Testing Idea
 
 Since servlets depend on container objects, we **mock** them.
 
-### Example Servlet
+#### Example Servlet
 
 ```java
 @WebServlet("/hello")
@@ -25684,7 +25897,7 @@ public class HelloServlet extends HttpServlet {
 }
 ```
 
-### Unit Test for Servlet
+#### Unit Test for Servlet
 
 ```java
 // Unit test for HelloServlet
@@ -25727,7 +25940,7 @@ class HelloServletTest {
 
 📌 Servlet logic is tested **without deploying on Tomcat**.
 
-## Testing Session Behavior in Servlets
+### Testing Session Behavior in Servlets
 
 ```java
 @Test
@@ -25743,11 +25956,11 @@ void shouldStoreUserInSession() throws Exception {
 
 📌 Session behavior can be validated using mocks.
 
-## Testing Spring MVC Controllers with MockMVC
+### Testing Spring MVC Controllers with MockMVC
 
 Spring MVC controllers are easier to test using **MockMVC**.
 
-### Example Controller
+#### Example Controller
 
 ```java
 @Controller
@@ -25764,7 +25977,7 @@ public class LoginController {
 }
 ```
 
-### MockMVC Test
+#### MockMVC Test
 
 ```java
 @WebMvcTest(LoginController.class)
@@ -25793,7 +26006,7 @@ class LoginControllerTest {
 
 📌 No servlet container is started.
 
-## Why JSPs Are Not Unit Tested
+### Why JSPs Are Not Unit Tested
 
 * JSPs are compiled into servlets internally
 * They mainly contain presentation logic
@@ -25801,7 +26014,7 @@ class LoginControllerTest {
 
 📌 JSP behavior is tested through **integration tests** or manual UI testing.
 
-## Unit Testing vs Integration Testing
+### Unit Testing vs Integration Testing
 
 | Aspect           | Unit Testing     | Integration Testing |
 | ---------------- | ---------------- | ------------------- |
@@ -25812,7 +26025,7 @@ class LoginControllerTest {
 
 📌 Unit tests catch bugs early; integration tests validate flow.
 
-## Common Testing Mistakes
+### Common Testing Mistakes
 
 * Testing JSP rendering logic
 * Using real databases in unit tests
@@ -25846,3 +26059,253 @@ class LoginControllerTest {
 
 ❓ **What is the biggest benefit of unit testing web apps?**
 ▶ Confidence. You can change code safely knowing that core behavior is continuously verified.
+
+## 149. Integration Testing with Selenium + Java
+
+**Integration testing** verifies that **multiple components of a web application work together correctly** in a real or near-real environment.
+
+With **Selenium**, integration testing focuses on **end-to-end user behavior**, such as:
+
+* Opening a browser
+* Filling forms
+* Clicking buttons
+* Navigating pages
+* Verifying visible results
+
+📌 Unlike unit tests, Selenium tests the application **as a user would experience it**.
+
+### Why Integration Testing Is Needed
+
+Even if unit tests pass:
+
+* UI may break
+* Pages may not load correctly
+* Forms may fail silently
+* Session flow may be incorrect
+
+Integration testing helps catch issues related to:
+
+* UI + backend interaction
+* Navigation flow
+* JavaScript behavior
+* Session and authentication flow
+* Deployment environment mismatches
+
+### Unit Testing vs Integration Testing (Quick Context)
+
+| Aspect           | Unit Testing        | Integration Testing   |
+| ---------------- | ------------------- | --------------------- |
+| Scope            | Single class/method | Multiple components   |
+| Speed            | Very fast           | Slower                |
+| Browser involved | ❌ No                | ✅ Yes                 |
+| Server required  | ❌ No                | ✅ Yes                 |
+| Purpose          | Logic correctness   | User flow correctness |
+
+📌 Selenium is **not a replacement** for unit tests; it complements them.
+
+### What Selenium Does (Conceptually)
+
+Selenium:
+
+1. Launches a real browser (Chrome, Firefox, Edge)
+2. Loads your deployed web app
+3. Performs user actions programmatically
+4. Reads page content / state
+5. Verifies expected outcomes
+
+📌 Selenium tests the **entire stack**: UI → Controller → Service → DB → Response.
+
+### Selenium Components
+
+#### Selenium WebDriver
+
+* Core API to control browsers
+* Provides methods like `get()`, `click()`, `sendKeys()`
+
+📌 Each browser has its own driver.
+
+#### Browser Drivers
+
+Examples:
+
+* Chrome → `chromedriver`
+* Firefox → `geckodriver`
+* Edge → `msedgedriver`
+
+📌 Driver version must match browser version.
+
+### Typical Selenium Setup (Java)
+
+Dependencies (conceptual):
+
+* Selenium Java
+* JUnit or TestNG
+* Browser driver
+
+📌 Selenium tests usually live in a **separate test module**.
+
+### Example Scenario to Test
+
+**Login Flow Integration Test**
+
+User flow:
+
+1. Open login page
+2. Enter username & password
+3. Submit form
+4. Verify dashboard page loads
+
+### Basic Selenium Test Example (Java)
+
+```java
+// Selenium integration test for login flow
+public class LoginIntegrationTest {
+
+    private WebDriver driver;
+
+    @BeforeEach
+    void setup() {
+        // Set path to browser driver executable
+        System.setProperty("webdriver.chrome.driver", "/path/to/chromedriver");
+
+        // Launch Chrome browser
+        driver = new ChromeDriver();
+
+        // Maximize browser window for consistent behavior
+        driver.manage().window().maximize();
+    }
+
+    @Test
+    void shouldLoginSuccessfullyWithValidCredentials() {
+        // Open login page
+        driver.get("http://localhost:8080/MyApp/login.jsp");
+
+        // Locate username input field by name attribute
+        WebElement usernameField = driver.findElement(By.name("username"));
+
+        // Locate password input field
+        WebElement passwordField = driver.findElement(By.name("password"));
+
+        // Enter credentials
+        usernameField.sendKeys("admin");
+        passwordField.sendKeys("admin123");
+
+        // Locate submit button and click
+        driver.findElement(By.id("loginBtn")).click();
+
+        // Verify dashboard page content
+        String pageSource = driver.getPageSource();
+
+        // Assertion: dashboard text should be visible
+        assertTrue(pageSource.contains("Welcome Admin"));
+    }
+
+    @AfterEach
+    void teardown() {
+        // Close browser after test
+        driver.quit();
+    }
+}
+```
+
+📌 This test requires:
+
+* App running on server
+* Browser installed
+* Correct driver configured
+
+### Synchronization: Waiting for Elements
+
+Web apps are **asynchronous**. Elements may not load instantly.
+
+#### Implicit Wait (Global)
+
+```java
+// Wait up to 10 seconds for elements to appear
+driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+```
+
+#### Explicit Wait (Preferred)
+
+```java
+// Wait explicitly for a specific condition
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+// Wait until element becomes clickable
+WebElement loginButton = wait.until(
+        ExpectedConditions.elementToBeClickable(By.id("loginBtn"))
+);
+```
+
+📝 **Points to Remember**
+
+* Prefer explicit waits
+* Avoid fixed `Thread.sleep()`
+* Wait for conditions, not time
+
+### What Selenium Integration Tests Should Cover
+
+Good candidates:
+
+* Login / logout flow
+* Form submission
+* Navigation menus
+* Role-based access
+* Error messages
+* Session timeout behavior
+
+Bad candidates:
+
+* Edge-case business logic
+* Heavy data validation
+* Internal service logic
+
+📌 Keep Selenium tests focused on **user behavior**.
+
+### Test Environment Considerations
+
+* Use **test database**, not production
+* Reset data before each run
+* Keep test data predictable
+* Run tests on stable environments
+
+📌 Flaky environments cause flaky tests.
+
+### Common Selenium Testing Mistakes
+
+* Writing too many UI tests
+* Testing every small detail
+* Hardcoding waits
+* Using production data
+* Not cleaning up browser sessions
+* Depending on UI layout too tightly
+
+📌 UI tests are powerful but expensive—use wisely.
+
+### 📝 Points to Remember
+
+* Selenium is for end-to-end testing
+* Requires running application
+* Tests real browser behavior
+* Slower than unit tests
+* Complements JUnit/Mockito tests
+* UI tests validate user flow, not internal logic
+* Prefer explicit waits
+* Keep Selenium tests minimal and stable
+
+---
+
+❓ **Why is Selenium considered integration testing and not unit testing?**
+▶ Because Selenium tests involve multiple components working together—browser, UI, server, controllers, services, and database—rather than isolating a single class or method.
+
+❓ **Why shouldn’t Selenium replace unit tests?**
+▶ Selenium tests are slower, harder to maintain, and more fragile. Unit tests catch logic errors faster and earlier in development.
+
+❓ **Why do Selenium tests often fail intermittently?**
+▶ Because of timing issues, dynamic content, unstable environments, or improper waits. Explicit waits and stable test data reduce flakiness.
+
+❓ **Why is testing JSP output directly discouraged?**
+▶ HTML structure changes frequently. Selenium focuses on **behavior and visible results**, not exact markup.
+
+❓ **When should Selenium tests be run?**
+▶ After unit tests pass—typically in CI pipelines or before major releases.
