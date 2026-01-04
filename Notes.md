@@ -110,6 +110,9 @@ Class file -> Class loader -> Byte Code verifier -> Interpreter -> Runtime -> Ha
 > - **CamelCase** : `helloWorld`
 > - **SnakeCase** : `hello_world`
 
+❓: **What is dot operator?**
+▶ The Dot operator in Java is used to access the instance variables and methods of class objects. It is also used to access classes and sub-packages from the package.
+
 ### `public static void main(String[] args)` explained
 
 ```java
@@ -325,6 +328,11 @@ JVM is the core execution engine of Java. It is responsible for converting bytec
 | **Includes**            | JRE + Development tools (javac, debugger, etc.) | JVM + Libraries (e.g., rt.jar)            | ClassLoader, JIT Compiler, Garbage Collector          |
 | **Use Case**            | Writing and compiling Java code           | Running a Java application on a system               | Converts bytecode into native machine code            |
 
+❓: **What is Java String Pool?**
+▶ A Java String Pool is a place in heap memory where all the strings defined in the program are stored. A separate place in a stack is there where the variable storing the string is stored. Whenever we create a new string object, JVM checks for the presence of the object in the String pool, If String is available in the pool, the same object reference is shared with the variable, else a new object is created.
+
+![Java String Pool](./resources/Java-String-Pool.png)
+
 ## 3. Data Types
 
 Java has two main categories of data types:
@@ -398,6 +406,15 @@ String myText = "Hi"; // myText is a String
 
 > ❓ _What is the difference between primitive and reference data types?_
 > ➡ Primitive stores **actual value**. Reference stores **address of the object in heap memory**.
+
+❓: **When a byte datatype is used?**
+▶ A byte is an 8-bit signed two-complement integer. The minimum value supported by bytes is -128 and 127 is the maximum value. It is used in conditions where we need to save memory and the limit of numbers needed is between -128 to 127.
+
+❓: **What is the default value of byte datatype in Java?**
+▶ The default value of the byte datatype in Java is 0.
+
+❓: **What is the default value of float and double datatype in Java?**
+▶ The default value of the float is 0.0f and of double is 0.0d in Java.
 
 ## 4. Operators
 
@@ -916,6 +933,9 @@ Output:
 Area of circle: 78.53975
 ```
 
+❓:  **What will be the initial value of an object reference which is defined as an instance variable?**
+▶ The initial value of an object reference which is defined as an instance variable is a NULL value.
+
 ## 7. Loops
 
 `for`, `while`, `do-while`, `foreach`
@@ -1238,6 +1258,99 @@ Arrays can be returned just like **primitive data types**.
 📝: Arrays are faster than ArrayList.
 
 📝: Wrapper classes are faster than primitive data types.
+
+❓: **What is an array in Java?**
+▶ An Array in Java is a data structure that is used to store a fixed-size sequence of elements of the same type. Elements of an array can be accessed by their index, which starts from 0 and goes up to a length of minus 1.
+
+❓: **On which memory arrays are created in Java?**
+▶ In Java, arrays are always created in the Heap memory, regardless of whether:
+
+- They are declared inside a method (local variable)
+- They are declared as instance variables
+- They are declared as static variables
+
+❓: **Why does the Java array index start with 0?**
+The index of an array signifies the distance from the start of the array. So, the first element has 0 distance therefore the starting index is 0.
+
+Syntax:
+````
+[Base Address + (index * no_of_bytes)]
+````
+
+❓: **What is the difference between int array[] and int[] array?**
+Both int array[] and int[] array are used to declare an array of integers in java. The only difference between them is on their syntax no functionality difference is present between them.
+
+> int arr[] is a C-Style syntax to declare an Array.
+
+> int[] arr is a Java-Style syntax to declare an Array.
+
+However, it is generally recommended to use Java-style syntax to declare an Array. As it is easy to read and understand also it is more consistent with other Java language constructs.
+
+❓: **How to copy an array in Java?**
+In Java, there are multiple ways to copy an array based on the requirements:
+
+1. **clone() Method (Shallow Copy)**
+
+- The clone() method creates a new array with its own memory but contains references to the same objects for non-primitive data types.
+- For primitive arrays, it behaves like a deep copy since primitive values are directly copied.
+```java
+int[] arr = {1, 2, 3, 5, 0};
+int[] tempArr = arr.clone(); // Creates a new array with copied values
+```
+
+2. **System.arraycopy() Method (Deep Copy)**
+
+- This method creates a new array and copies elements from the original array.
+- It allows partial copying by specifying an offset and length.
+```java
+int[] arr = {1, 2, 7, 9, 8};
+int[] tempArr = new int[arr.length];
+System.arraycopy(arr, 0, tempArr, 0, arr.length);
+```
+
+3. **Arrays.copyOf() Method (Creates New Array)**
+
+- This method creates a new array and copies the entire original array into it.
+- If the specified length is greater than the original array, extra elements are initialized with default values.
+```java
+int[] arr = {1, 2, 4, 8};
+int[] tempArr = Arrays.copyOf(arr, arr.length);
+```
+
+4. **Arrays.copyOfRange() Method (Copying a Subset)**
+
+Similar to copyOf(), but allows copying a specific range of elements.
+```java
+int[] arr = {1, 2, 4, 8};
+int[] tempArr = Arrays.copyOfRange(arr, 0, arr.length);
+```
+
+❓: **What do you understand by the jagged array?**
+▶ In Java, a jagged array (also called a ragged array) is an array of arrays where each inner array can have a different length.
+```java
+int[][] Arr = new int[][] {
+
+    {1, 2, 8}, 
+
+    {7, 5}, 
+
+    {6, 7, 2, 6}
+
+};
+```
+
+❓: **What are the advantages and disadvantages of an array?**
+▶ **The advantages of Arrays are:**
+
+- Direct and effective access to any element in the collection is made possible by arrays. An array's elements can be accessed using an O(1) operation, which means that the amount of time needed to do so is constant and independent of the array's size.
+- Data can be stored effectively in memory using arrays. The size of an array is known at compile time since its elements are stored in contiguous memory regions.
+- Due to the fact that the data is stored in contiguous memory areas, arrays provide quick data retrieval.
+
+**Disadvantages of Arrays are:**
+
+Arrays are created with a predetermined size that is chosen at that moment. This means that if the array's size needs to be extended, a new array will need to be made, and the data will need to be copied from the old array to the new array, which can take a lot of time and memory.
+- There may be unused memory space in an array's memory space if the array is not completely occupied. If you have poor recall, this can be a problem.
+- Compared to other data structures like linked lists and trees, arrays might be rigid due to their fixed size and limited support for sophisticated data types.
 
 ## 9. Functions (methods)
 
@@ -1720,9 +1833,11 @@ The `this` keyword can be used to refer current class instance variable. If ther
 
 - `this` is **automatically added by the compiler** when accessing instance variables, but we use it explicitly when needed for clarity.
 
-### this variable
+### `this` variable
 
-![this variable](./resources/this-variable.png)]
+‘`this`’ is a keyword used to reference a variable that refers to the current object.
+
+![this variable](./resources/this-variable.png)
 
 ```java
 class xyz {
@@ -1759,6 +1874,25 @@ Output:
   - `this` can be used to refer current instance variable. [Example: `this.a;`]
   - `this` can be used to invoke current instance method (implicity). [Example: `this.display();`]
   - `this` can be used to invoke current class constructor. [Example: `this();`]
+
+❓: **What are the advantages and disadvantages of object cloning?**
+▶ There are many advantages and disadvantages of using object cloning as mentioned below:
+
+**Advantages:**
+
+- Unlike = which copies only references, clone() creates a new object copy.
+- Reduces code size since manual field copying is avoided.
+- Useful for replicating complex objects (similar to Prototype pattern).
+
+**Disadvantages:**
+
+- clone() is protected, so classes must override it and implement Cloneable.
+- By default, it performs a shallow copy deep copy needs custom implementation.
+- Can be tricky to maintain if objects have nested references.
+
+❓: **What is the difference between shallow cloning and deep cloning in Java?**
+▶ - **Shallow cloning**: Shallow cloning copies only the object’s top-level structure, meaning nested objects are shared between the original and the clone.
+- **Deep cloning**: Deep cloning creates a completely independent copy, including all nested objects.
 
 ## 11. Types of functions
 
@@ -2455,6 +2589,12 @@ In other words, we can wrap a primitve value into a wrapper class.
 ❓ **Why there is need for wrapper classes?**
 ➤ Wrapper classes are used to convert any data types into an  object. The primitve data types are not objects; they do not belong to any class; they are defined in the language itself. Sometimes, it is required to convert data types into objects in Java language.
 
+The wrapper class is an object class that encapsulates the primitive data types, and we need them for the following reasons:
+
+- Wrapper classes are final and immutable
+- Provides methods like valueOf(), parseInt(), etc.
+- It provides the feature of autoboxing and unboxing.
+
 > 📝: Wrapper class is defined in `java.lang.*` package.
 
 The eight classes of `java.lang.package` are known as wrapper classes in Java.
@@ -2801,6 +2941,25 @@ String using new keyword: Hello Java
 String from char array: JAVA
 String from byte array: Hello
 ```
+
+❓: **How is the creation of a String using new() different from that of a literal?**
+▶ String using new() is different from the literal as when we declare string it stores the elements inside the stack memory whereas when it is declared using new() it allocates a dynamic memory in the heap memory. The object gets created in the heap memory even if the same content object is present.
+
+Syntax:
+````java
+String x = new String("ABC");
+````
+
+![String](./resources/String.jpg)
+
+❓: **Difference between == and .equals() for Strings**
+▶ `==` -> compares references (memory addresses).
+`.equals()` -> compares actual content of the String.
+String s1 = "Hello";
+String s2 = "Hello";
+System.out.println(s1 == s2);      // true (same String pool object)
+System.out.println(s1.equals(s2)); // true (same content)
+
 
 ## 23. Character Class
 
@@ -4255,6 +4414,7 @@ ABC(){ // default constructor
 ## 35. Types of Constructors
 
 There are Four types of constructors in Java
+
 ![constructors](/resources/constructors_in_java.webp)
 
 #### **1. Default Constructor**
@@ -4424,12 +4584,57 @@ Copy constructor
 
 > 📝:  Java does not provide a built-in copy constructor like C++. We can create our own by writing a constructor that takes an object of the same class as a parameter and copies its fields.
 
+
+❓: **What happens if we don't provide constructor in class?**
+▶ If you don't provide a constructor in a class in Java, the compiler automatically generates a default constructor with no arguments and no operation which is a default constructor.
+
+❓: **What is the purpose of a default constructor?**
+▶ Constructors help to create instances of a class or can be said to create objects of a class. Constructor is called during the initialization of objects. A default constructor is a type of constructor which do not accept any parameter, So whatever value is assigned to properties of the objects are considered default values.
+
+❓: **Where and how can you use a private constructor?**
+▶ A private constructor is used if you don't want any other class to instantiate the object to avoid subclassing. The use private constructor can be seen as implemented in the example.
+
+Example: Java program to demonstrate implementation of Singleton pattern using private constructors.
+```java
+import java.io.*;
+class GFG {
+    static GFG instance = null;
+    public int x = 10;
+    // private constructor can't be accessed outside the class
+    private GFG() {}
+    // Factory method to provide the users with instances
+    static public GFG getInstance()
+    {
+        if (instance == null)
+            instance = new GFG();
+        return instance;
+    }
+}
+// Driver Class
+class Main {
+    public static void main(String args[])
+    {
+        GFG a = GFG.getInstance();
+        GFG b = GFG.getInstance();
+        a.x = a.x + 10;
+        System.out.println("Value of a.x = " + a.x);
+        System.out.println("Value of b.x = " + b.x);
+    }
+}
+```
+Output:
+```
+Value of a.x = 20
+Value of b.x = 20
+```
+
 ## 36. Access Modifiers
 
 Access Modifiers in Java define the **visibility (scope)** of classes, methods, and variables across different parts of a program.
 They help achieve **encapsulation**, ensuring that sensitive data or methods are protected from unintended access.
 
-There are 4 types of access modifiers available in Java: 
+There are 4 types of access modifiers available in Java:
+
 ![Access Modifiers](/resources/Access-Modifiers.webp)
 
 | Modifier                   | Within Class | Same Package | Subclass (same pkg) | Subclass (different pkg) | Other Packages |
@@ -4580,7 +4785,6 @@ But sometimes we still need **controlled access** — that’s where getters and
 ✅ **Getter (Accessor)** → retrieves value
 
 ✅ **Setter (Mutator)** → updates value safely
-
 
 ### **Encapsulation Concept**
 
@@ -5031,7 +5235,9 @@ class mno {
     }
 }
 ```
+
 ### Types of Inheritance
+
 **1. Single Inheritance**
 
 In single inheritance, a sub-class is derived from only one super class. It inherits the properties and behavior of a single-parent class. Sometimes, it is also known as simple inheritance.
@@ -5058,6 +5264,7 @@ In Multiple inheritances, one class can have more than one superclass and inheri
 ![multiple_inheritance](./resources/multiple_inheritance.png)
 
 ### Upcasting
+
     abc obj = new xyz();
 - `obj` → reference of `abc`
 - `xyz` → object of class `xyz`
@@ -5069,10 +5276,12 @@ In Multiple inheritances, one class can have more than one superclass and inheri
   ![upcasting](./resources/upcasting.png)      
 
 ### Why use Inheritance in Java
+
 - For **Method Overriding**  (so that runtime polymorphism can be achieved.)
 - For Code Reusability.
 
 ### What Can Be Done in a Subclass?
+
 In sub-classes we can inherit members as is, replace them, hide them or supplement them with new members: 
 
 - The inherited fields can be used directly, just like any other fields.
@@ -5084,12 +5293,14 @@ In sub-classes we can inherit members as is, replace them, hide them or suppleme
 - We can write a subclass constructor that invokes the constructor of the superclass, either implicitly or by using the keyword `super`.
 
 ### Advantages of Inheritance in Java
+
 - **Code Reusability**: Inheritance allows for code reuse and reduces the amount of code that needs to be written. The subclass can reuse the properties and methods of the superclass, reducing duplication of code.
 - **Abstraction**: Inheritance allows for the creation of abstract classes that define a common interface for a group of related classes. This promotes abstraction and encapsulation, making the code easier to maintain and extend.
 - **Class Hierarchy**: Inheritance allows for the creation of a class hierarchy, which can be used to model real-world objects and their relationships.
 - **Polymorphism**: Inheritance allows for polymorphism, which is the ability of an object to take on multiple forms. Subclasses can override the methods of the superclass, which allows them to change their behavior in different ways.
 
 ### Disadvantages of Inheritance in Java
+
 - **Complexity**: Inheritance can make the code more complex and harder to understand. This is especially true if the inheritance hierarchy is deep or if multiple inheritances is used.
 - **Tight Coupling**: Inheritance creates a tight coupling between the superclass and subclass, making it difficult to make changes to the superclass without affecting the subclass.
 
@@ -5100,7 +5311,54 @@ In sub-classes we can inherit members as is, replace them, hide them or suppleme
 Consider a scenario where A, B and C are three classes. The C class inherits A and B classes. If A and B classes have same method and you call it from child class object, there will be ambiguity to call method of A or B class.
 Since compile time errors are better than runtime errors, Java renders compile time error if you inherit 2 classes. so whether you have same method or different, there will be compile time error now.
 
+❓: **Is there any limitation to using Inheritance?**
+▶ Yes, there is a limitation of using Inheritance in Java, as because of inheritance one can inherit everything from super class and interface because of which subclass is too clustered and sometimes error-prone when dynamic overriding or dynamic overloading is done in certain situations.
+
+❓: **What is the ‘IS-A ‘ relationship in OOPs Java?**
+▶ 'IS-A' is a type of relationship in OOPs Java where one class inherits another class.
+
+❓: **What is HAS-A relationship in OOP (Aggregation/Composition)?**
+▶ The HAS-A relationship represents composition or aggregation. It shows that one class contains another class as a field.
+
+```java
+class Engine {
+    void start() { System.out.println("Engine started"); }
+}
+
+class Car {
+    private Engine engine = new Engine(); // Car HAS-A Engine
+    void startCar() { engine.start(); }
+}
+```
+
+- **Aggregation**: “Has-a” relationship where the contained object can exist independently.
+- **Composition**: “Has-a” relationship where the contained object cannot exist without the container.
+
+❓: **What do you mean by aggregation?**
+▶ Aggregation is a term related to the relationship between two classes best described as a "has-a" relationship. This kind is the most specialized version of association. It is a unidirectional association means it is a one-way relationship. It contains the reference to another class and is said to have ownership of that class.
+
+![Aggregation-in-Java](./resources/Aggregation-in-Java.png)
+
+❓: **What is an association?**
+▶ The association is a relation between two separate classes established through their Objects. It represents Has-A’s relationship.
+
+❓: **What is the composition of Java and State the difference between Composition and Aggregation?**
+▶ Composition in Java is a design principle where one class contains an instance of another class and establishes a strong relationship between them. The child object cannot exist independently of the parent object.
+
+Example:
+
+> A Human has a Heart, but a Heart cannot exist without a Human.
+
+| Feature               | Aggregation                                         | Composition                                  |
+| --------------------- | --------------------------------------------------- | -------------------------------------------- |
+| Relationship type     | Defines a **“has-a”** relationship between objects  | Represents a **part-of** relationship        |
+| Object dependency     | Objects are **independent** of each other           | Objects are **dependent** on each other      |
+| UML notation          | Represented using an **empty diamond**              | Represented using a **filled diamond**       |
+| Child object lifetime | Child objects **do not have a lifetime dependency** | Child objects **have a lifetime dependency** |
+
+
 ## 41. Polymorphism  (Method Overriding - Runtime Polymorphism)
+
 Polymorphism means "**many forms**", and it occurs when we have many classes that are related to each other by inheritance.
 
 It works hand-in-hand with inheritance:
@@ -5115,6 +5373,7 @@ It works hand-in-hand with inheritance:
 ![polymorphism](./resources/polymorphism_in_java.png)
 
 ### Types of Polymorphism
+
 Polymorphism in Java is mainly of 2 types as mentioned below: 
 1. **Method Overloading**: Also, known as compile-time polymorphism, is the concept of Polymorphism where more than one method share the same name with different signature(Parameters) in a class. The return type of these methods can or cannot be same.
 
@@ -6914,6 +7173,35 @@ double d = ((a1.getFreeSpace()/1024)/1024)/1024;
 System.out.println(d);
 ```
 > Function to get/calculate total space of a drive: `getTotalSpace()`.
+
+❓: **What do you understand by an IO stream?**
+Java brings various Streams with its I/O package that helps the user to perform all the input-output operations. These streams support all types of objects, data types, characters, files, etc to fully execute the I/O operations.
+
+![IO stream](./resources/IOstream.png)
+
+❓: **What are the super most classes for all the streams?**
+▶ In Java’s I/O system, the topmost (super) classes for all streams are:
+
+- **InputStream** - Superclass of all byte-oriented input streams.
+- **OutputStream** - Superclass of all byte-oriented output streams.
+- **Reader** - Superclass of all character-oriented input streams.
+- **Writer** - Superclass of all character-oriented output streams
+
+❓: **What are the FileInputStream and FileOutputStream?**
+▶ To read and write data, Java offers I/O Streams. A Stream represents an input source or an output destination, which could be a file, an i/o device, another program, etc. FileInputStream in Java is used to read data from a file as a stream of bytes. It is mostly used for reading binary data such as images, audio files, or serialized objects. 
+
+Example:
+````java
+File file = new File("path_of_the_file");
+FileInputStream inputStream = new FileInputStream(file);
+````
+In Java, the FileOutputStream function is used to write data byte by byte into a given file or file descriptor. Usually, raw byte data, such as pictures, is written into a file using FileOutputStream.
+
+Example:
+````java
+File file = new File("path_of_the_file");
+FileOutputStream outputStream = new FileOutputStream(file);
+````
 
 ## 51. File Class
 
