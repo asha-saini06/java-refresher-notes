@@ -26309,3 +26309,271 @@ Bad candidates:
 
 ❓ **When should Selenium tests be run?**
 ▶ After unit tests pass—typically in CI pipelines or before major releases.
+
+## 150. Build Tools (Maven / Gradle) for Web Projects
+
+**Build tools** automate the process of **building, testing, packaging, and managing dependencies** for Java web applications.
+
+Instead of manually:
+
+* Downloading JARs
+* Configuring classpaths
+* Writing repetitive build scripts
+
+Build tools handle everything **consistently and repeatably**.
+
+📌 In modern Java web development, **using a build tool is mandatory**, not optional.
+
+### Why Build Tools Are Needed
+
+Without build tools:
+
+* Dependency versions conflict
+* Builds behave differently on each machine
+* Manual packaging is error-prone
+* CI/CD integration becomes difficult
+
+Build tools ensure:
+
+* Reproducible builds
+* Centralized dependency management
+* Standard project structure
+* Easy integration with IDEs and CI pipelines
+
+### Common Build Tools in Java
+
+The two dominant tools are:
+
+* **Maven**
+* **Gradle**
+
+Both are widely used for **Servlet, JSP, Spring MVC, and enterprise web projects**.
+
+### Maven Overview
+
+**Maven** is a **convention-over-configuration** build tool.
+
+It relies heavily on:
+
+* XML configuration
+* Standard project structure
+* Declarative dependency management
+
+📌 Maven emphasizes **standardization and predictability**.
+
+![Maven](./resources/Maven-Architecture.png)
+
+### Maven Project Structure (Web Project)
+
+```
+project-root
+ ├── src
+ │   ├── main
+ │   │   ├── java
+ │   │   ├── resources
+ │   │   └── webapp
+ │   │       └── WEB-INF
+ │   │           └── web.xml
+ │   └── test
+ │       └── java
+ ├── pom.xml
+```
+
+📌 This structure is **expected** by Maven and most IDEs.
+
+### Maven Core Concepts
+
+#### pom.xml
+
+The **Project Object Model (POM)** defines everything about the project.
+
+```xml
+<!-- Maven project configuration file -->
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>my-webapp</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+</project>
+```
+
+📌 `packaging=war` is used for Servlet/JSP web apps.
+
+#### Dependencies
+
+```xml
+<!-- Servlet API dependency -->
+<dependency>
+    <groupId>jakarta.servlet</groupId>
+    <artifactId>jakarta.servlet-api</artifactId>
+    <version>6.0.0</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+📌 `provided` means the server (Tomcat) supplies it.
+
+#### Maven Lifecycle
+
+Maven uses a **fixed lifecycle**.
+
+Common phases:
+
+* `compile`
+* `test`
+* `package`
+* `install`
+* `deploy`
+
+```bash
+mvn clean package
+```
+
+📌 One command triggers multiple steps automatically.
+
+### Gradle Overview
+
+**Gradle** is a **flexible, code-driven** build tool.
+
+It uses:
+
+* Groovy or Kotlin DSL
+* Task-based execution
+* Incremental builds
+
+📌 Gradle prioritizes **performance and flexibility**.
+
+![Gradle](./resources/Gradle.png)
+
+### Gradle Project Structure
+
+```
+project-root
+ ├── src
+ │   ├── main
+ │   │   ├── java
+ │   │   └── webapp
+ │   └── test
+ │       └── java
+ ├── build.gradle
+ └── settings.gradle
+```
+
+📌 Structure is similar to Maven but more customizable.
+
+### Gradle Core Concepts
+
+#### build.gradle
+
+```gradle
+// Gradle build configuration
+plugins {
+    id 'java'
+    id 'war'
+}
+
+dependencies {
+    // Servlet API dependency
+    providedCompile 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+}
+```
+
+📌 Logic is expressed as code, not XML.
+
+#### Tasks
+
+Gradle executes **tasks**, not phases.
+
+```bash
+gradle build
+```
+
+📌 Gradle runs only required tasks, improving speed.
+
+### Dependency Management (Conceptual)
+
+Both Maven and Gradle:
+
+* Download dependencies from repositories (Maven Central)
+* Resolve transitive dependencies
+* Cache artifacts locally
+
+📌 No more manual JAR handling.
+
+### Maven vs Gradle (Web Projects)
+
+| Aspect           | Maven       | Gradle               |
+| ---------------- | ----------- | -------------------- |
+| Configuration    | XML         | Groovy / Kotlin      |
+| Learning curve   | Easier      | Steeper              |
+| Flexibility      | Moderate    | High                 |
+| Performance      | Good        | Better (incremental) |
+| Convention       | Strong      | Customizable         |
+| Enterprise usage | Very common | Increasing           |
+
+📌 Maven favors consistency; Gradle favors control.
+
+![Maven vs Gradle](./resources/Maven-vs-Gradle.png) 
+
+### Build Tools in Web Application Flow
+
+Typical flow:
+
+1. Developer writes code
+2. Build tool resolves dependencies
+3. Tests are executed
+4. WAR/JAR is generated
+5. Artifact is deployed to server/cloud
+
+📌 Build tools sit between **code and deployment**.
+
+### Common Build Tasks for Web Apps
+
+* Compile Java code
+* Run unit & integration tests
+* Package WAR files
+* Manage environment profiles
+* Integrate with CI/CD tools
+
+📌 Manual builds don’t scale beyond small projects.
+
+### Common Mistakes with Build Tools
+
+* Committing `target/` or `build/` directories
+* Using wrong dependency scope
+* Mixing Maven and Gradle styles
+* Hardcoding paths
+* Skipping tests blindly
+
+📌 Build configuration is part of application design.
+
+### 📝 Points to Remember
+
+* Build tools automate the entire build lifecycle
+* Never manage JARs manually
+* Use `war` packaging for JSP/Servlet apps
+* `provided` scope avoids duplicate server libraries
+* Maven emphasizes conventions
+* Gradle emphasizes flexibility and speed
+* Build tools integrate with CI/CD pipelines
+* Build configuration must be version-controlled
+
+---
+
+❓ **Why can’t we just use an IDE without Maven or Gradle?**
+▶ IDEs hide complexity locally, but builds must also work on servers and CI pipelines. Build tools ensure consistent behavior everywhere.
+
+❓ **Why is `provided` scope important for web projects?**
+▶ Because the servlet container already provides APIs like Servlet and JSP. Packaging them again can cause classloading conflicts.
+
+❓ **Why does Maven enforce a strict directory structure?**
+▶ Standard structure reduces configuration, improves tooling support, and makes projects easier to understand across teams.
+
+❓ **Why is Gradle considered faster than Maven?**
+▶ Gradle supports incremental builds and task caching, so unchanged parts are not rebuilt.
+
+❓ **Can Maven and Gradle be used for the same project?**
+▶ No. A project should use **one build tool** to avoid confusion and conflicting build logic.
+
