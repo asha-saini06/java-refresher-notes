@@ -2,7 +2,7 @@
 
 > Started in 1991 → Oak → 1995 → Java (breed of Coffee)
 
-- Java is _statically typed_, so variable type must be declared before use.
+- Java is *statically typed*, so variable type must be declared before use.
 - Use `var` (Java 10+) for type inference.
 - Java is a compiled language, so you must compile your code before you can run it.
 
@@ -61,9 +61,9 @@
   ```
 
   **Explanation:**
-  * `-d .` → tells the compiler where to place `.class` files (current directory)
-  * `src/banking/*.java` → compiles all Java source files inside the `banking` package
-  * When packages are used, the program is run using the **fully qualified class name**
+- `-d .` → tells the compiler where to place `.class` files (current directory)
+- `src/banking/*.java` → compiles all Java source files inside the `banking` package
+- When packages are used, the program is run using the **fully qualified class name**
 
 ### Interpreter & Compiler
 
@@ -75,9 +75,11 @@ JVM has an Interpreter which is known as **Just-In-Time** (JIT) compiler.
 
     > Java Code → Compile (Compiler) → Bytecode → Independent
 
-> Hello.java → javac Hello.java → Hello.class
+```
+Hello.java → javac Hello.java → Hello.class
 
-> Hello.class → Java Virtual Machine (JVM) → Executable Code (OS)
+Hello.class → Java Virtual Machine (JVM) → Executable Code (OS)
+```
 
 > - **JVM** : Dependent on OS
 > - **Bytecode** : Independent
@@ -5593,6 +5595,7 @@ If we don't want a method to be overridden, we declare it as `final`.
 
 
 ### Why Do We Use Method Overriding?
+
 - To change or enhance the behavior of an existing method in a subclass.
 - To achieve runtime polymorphism — method calls depend on the actual object type.
 - To reuse method names logically, reducing redundancy.
@@ -5615,12 +5618,38 @@ If we don't want a method to be overridden, we declare it as `final`.
 > Java doesn't support **multiple inheritance** due to the ambiguity (data loss).
 To reduce the complexity and simplify the language, multiple inheritance is not supported in Java.
 
+❓: **Can we override the static method ?**
+▶ No, as static methods are part of the class rather than the object so we can't override them.
+
+❓: **Can we change the scope of the overridden method in the subclass?**
+▶ Yes, we can change the scope of an overridden method in the subclass, but only to make it wider or the same as the superclass method’s scope.
+
+- If the overridden method in the superclass is public, the subclass method must be public (it cannot be protected, default, or private).
+- If the overridden method in the superclass is protected, the subclass method can be protected or public, but not private or default.
+- If the overridden method in the superclass has default (package-private) access, the subclass method can be default, protected, or public, but not private.
+- A private method cannot be overridden because it is not visible to the subclass.
+
+❓: **Give some features of the Interface.**
+▶ An Interface in Java programming language is defined as an abstract type used to specify the behavior of a class. An interface in Java is a blueprint of a behavior. A Java interface contains static constants and abstract methods.
+
+Features of the Interface are mentioned below:
+
+- The interface can help to achieve total abstraction.
+- Allows us to use multiple inheritances in Java.
+- Any class can implement multiple interfaces even when one class can extend only one class.
+- It is also used to achieve loose coupling.
+
+❓: **What is a marker interface?**
+▶ An Interface is recognized as an empty interface (no field or methods) it is called a marker interface. Examples of marker interfaces are Serializable, Cloneable and Remote interfaces. 
+
 ## 42. `super` keyword
+
 The `super` keyword in java is a reference variable which is used to refer immediate parent class object. Whenever you create the instance of subclass, an instance of parent class is created implicitly which is referred by `super` reference variable.
 
 It helps access **parent class members** (variables, methods, constructors) that are **hidden or overridden** by the child class.
 
 ### Usage of `super` keyword
+
 1. `super` can be used to refer immediate parent class instance variable.
 2. `super` can be used to invoke immediate parent class method. (it is used if function is overriden.)
 3. `super()` can be used to invoke immediate parent class constructor.
@@ -5646,17 +5675,46 @@ As we know well that default constructor is provided by compiler automatically i
 3. `super` is **used only within a subclass constructor or method**.
 4. If you don’t call `super()` explicitly, Java automatically calls the **no-argument constructor** of the parent class.
 
-⚙️ Difference Between `this` and `super`
-| Feature          | `this`                                  | `super`                           |
-| ---------------- | --------------------------------------- | --------------------------------- |
-| Refers to        | Current class instance                  | Immediate parent class instance   |
-| Access           | Current class members                   | Parent class members              |
-| Constructor call | Calls another constructor of same class | Calls constructor of parent class |
-| Usage location   | Within the same class                   | Inside subclass only              |
+### Difference Between `this` and `super`
+
+| Aspect             | `this()`                                       | `super()`                                       |
+| ------------------ | ---------------------------------------------- | ----------------------------------------------- |
+| Meaning            | Refers to the **current class instance**       | Refers to the **parent (superclass) instance**  |
+| Constructor call   | Calls the **constructor of the same class**    | Calls the **constructor of the parent class**   |
+| Default behavior   | Calls another constructor in the same class    | Calls the default constructor of the superclass |
+| Method access      | Used to access **current class methods**       | Used to access **parent class methods**         |
+| Variable reference | Points to **current class variables**          | Points to **superclass variables**              |
+| Instance reference | Represents **current object**                  | Represents **parent part of the object**        |
+| Position rule      | Must be the **first statement** in constructor | Must be the **first statement** in constructor  |
+
+* `this()` and `super()` **cannot be used together** in the same constructor
+* If you don’t write `super()` explicitly, **Java inserts it automatically**
+* `this` and `super` (without brackets) are used to access variables and methods
+* `this()` and `super()` (with brackets) are used **only for constructor calls**
+
+```java
+class Parent {
+    Parent() {
+        System.out.println("Parent constructor");
+    }
+}
+
+class Child extends Parent {
+    Child() {
+        super(); // calls Parent constructor
+        System.out.println("Child constructor");
+    }
+}
+```
+### One-line memory trick 🧠
+
+* **`this` → same class**
+* **`super` → parent class**
 
 > 📝: `super` improves clarity in inheritance, avoids ambiguity, and supports **constructor chaining** — a core part of OOP design.
 
 ## 43. Abstraction
+
 Abstraction in Java is the process of hiding internal implementation details and showing only essential functionality to the user. It focuses on what an object does rather than how it does it.
 
 - Abstraction hides the complex details and shows only essential features.
@@ -5676,6 +5734,7 @@ The `abstract` keyword is a non-access modifier, used for classes and methods:
     ```
 
 ### How to Achieve Abstraction in Java?
+
 Java provides two ways to implement abstraction, which are listed below:
 - Abstract Classes (Partial Abstraction)
 - Interface (100% Abstraction)
@@ -5702,6 +5761,7 @@ class mno exteds XYZ{
 - **Rule 2:** If you are extending any abstract class that have abstract method, you must either provide the implementation of the method or make the class abstract.
 
 ### Key Features of Abstraction
+
 1. An abstract class has no use until unless it is extended by some other class.
 2. If you declare an abstract method in a class then you must declare the class abstract as well. You can't have abstract method in a concrete class. Its vice versa is not always true: If a class is not having any abstract method then also it can be marked as abstract.
 3. Abstract method has no body.
@@ -5719,26 +5779,37 @@ abstract class abc{
 `main()` isn't called by an object nor we can define its object. Therefore, adhering the property of abstract class. As abstract class cannot be instantiated.
 
 ### Advantages of Abstraction
+
 - Abstraction makes complex systems easier to understand by hiding the implementation details.
 - Abstraction keeps different part of the system separated.
 - Abstraction maintains code more efficiently.
 - Abstraction increases the security by only showing the necessary details to the user.
 
 ### Disadvantages of Abstraction
+
 - It can add unnecessary complexity if overused.
 - May reduce flexibility in implementation.
 - Makes debugging and understanding the system harder for unfamiliar users.
 - Overhead from abstraction layers can affect performance.
 
 ### Common Mistakes to Avoid
+
 The common mistakes that can occur and we should avoid when working with Abstraction in Java are listed below:
 
 - **Not Implementing Abstract Methods**: Always make sure that the abstract methods are implemented in the concrete subclass.
 - **Overusing Abstraction**: Avoid making everything abstract when it’s not required. Use abstraction only when it enhances the design.
 - **Inconsistent Method Signatures in Subclasses**: When you override abstract methods, please make sure the method signature matches exactly, any mistake can cause errors.
 
+❓: **How many ways to achieve abstraction in Java.**
+▶ Java provides two ways to implement abstraction, which are listed below:
+
+- Abstract Classes (Partial Abstraction)
+- Interface (100% Abstraction)
+
 ❓ **Why And When To Use Abstract Classes and Methods?**
 ▶ To achieve security - hide certain details and only show the important details of an object.
+
+> An abstract method is used when we want to use a method but want to child classes to decide the implementation in that case we use Abstract methods with the parent classes.
 
 ❓ **Why can't we create the object of abstract class?**
 ▶ Because these classes are incomplete, they have abstract methods that have no body so if Java allows you to create object of this class then if someone calls the abstract method using that object then *what* would happen? There would be no actual implementation of the method to invoke. Also, becuase an object is concrete. An abstract class is like a template, so you have to extend it and build on it before you can use it.
@@ -5747,6 +5818,7 @@ The common mistakes that can occur and we should avoid when working with Abstrac
 Similarly, you can only create an object from a **concrete subclass**, not from the abstract class itself.
 
 ⚠️ **Common Misconceptions about Abstract Classes**
+
 | ❓ **Misconception**                                                | ✅ **Clarification / Truth**                                                                                                                                                                                                         |
 | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **1. Abstract classes cannot have constructors.**                  | ❌ False. Abstract classes **can have constructors**, and they are often used to **initialize common fields** when a subclass object is created. The constructor of an abstract class is called **when a subclass is instantiated**. |
@@ -5759,9 +5831,8 @@ Similarly, you can only create an object from a **concrete subclass**, not from 
 
 > Abstract classes act as **partially implemented blueprints**, combining both concrete behavior and abstract structure - bridging the gap between a simple class and a pure interface.
 
-
-
 ## 44. Anonymous Class
+
 It is an inner class without a name and for which only a single object is created.
 
 It should be used if you have to override method of class or interface.
@@ -5773,6 +5844,7 @@ An **anonymous class** in Java is a **local inner class without a name**, used t
 It is typically used when you need to **override a method** of a class or interface without formally declaring a subclass.
 
 ### Internal working of Anonymous Class
+
 ✅ **Key Features**
 
 - Declared and instantiated **at the same time**.
@@ -5980,6 +6052,7 @@ Thread running via anonymous class
 > An *anonymous class* is perfect when you need a **one-off** subclass or interface implementation that won’t be reused — clean, quick, and concise. 
 
 ## 45. Encapsulation
+
 Encapsulation is defined as the **process of wrapping data (variables) and the methods into a single unit**, typically a **class**. It is the mechanism that binds together the code and the data. It manipulates. Another way to think about encapsulation is that it is a protective shield that prevents the data from being accessed by the code outside this shield. 
 
 - Technically, in encapsulation, the variables or the data in a class is hidden from any other class and can be accessed only through any member function of the class in which they are declared.
@@ -5994,12 +6067,14 @@ Encapsulation is defined as the **process of wrapping data (variables) and the m
 - **Apply proper access modifiers**: Use private for data hiding and public for methods that provide access.
 
 ### Best Practices for Encapsulation
+
 - Always give the most restrictive access level that still allows the code to work. This helps hide implementation details and reduces coupling.
 - Expose data through methods (getters/setters) rather than making fields public. This gives more control (validation, lazy initialization, invariants, etc.).
 - Use validation logic inside setters to ensure correct data.
 - Avoid unnecessary setters if data should not be modified externally (e.g., IDs).
 
 ### Advantages of Encapsulation
+
 - **Data Hiding**: Encapsulation restricts direct access to class variables, protecting sensitive data from unauthorized access.
 - **Improved Maintainability**: Changes to internal implementation can be made without affecting external code that uses the class.
 - **Enhanced Security**: Encapsulation allows validation and control over data, preventing invalid or harmful values from being set.
@@ -6007,17 +6082,20 @@ Encapsulation is defined as the **process of wrapping data (variables) and the m
 - **Better Modularity**: Encapsulation promotes organized, modular code by keeping data and methods together within a class.
 
 ### Disadvantages of Encapsulation
+
 - **Increased Code Complexity**: Writing getter and setter methods for every variable can make the code longer and slightly more complex.
 - **Performance Overhead**: Accessing data through methods instead of directly can introduce a minor performance cost, especially in performance-critical applications.
 - **Less Flexibility in Some Cases**: Over-restricting access to class members may limit the ability of other classes to extend or use the class efficiently.
 
 ### Why Encapsulation?
+
 - Better control of class attributes and methods
 - Class attributes can be made **read-only** (if you only use the `get` method), or **write-only** (if you only use the `set` method)
 - Flexible: the programmer can change one part of the code without affecting other parts
 - Increased security of data
 
 ## 46. Interface
+
 - Like a class, an interface can have methods and variables, but the methods declared in interface are by default abstract (only method signature, no today).
 - The members of an interface are `public`, `static` and `final` by nature.
 - Java Interface also represents **IS-A** relationship.
@@ -6059,6 +6137,7 @@ class xyz implements abc{
 ▶ The reason is, abstract classes may contain non-final variables, whereas variables in interface are `final`, `public` and `static`.
 
 ### Important points about Interface
+
 - We can't create instance (interface can't be instantiated) of interface but we can make reference of it that refers to the object of its implementing class.
 - A class can **implement** more than one interface.
     ![class_implement](/resources/class_interface.png)
@@ -6120,6 +6199,7 @@ class xyz {
 - We have to override all the members of an Interface.
 
 ### Why And When To Use Interfaces?
+
 1) To achieve security - hide certain details and only show the important details of an object (interface).
 
 2) Java does not support "multiple inheritance" (a class can only inherit from one superclass). However, it can be achieved with interfaces, because the class can implement multiple interfaces. Note: To implement multiple interfaces, separate them with a comma (see example below).
@@ -6135,11 +6215,13 @@ class xyz {
 - You can **implement multiple interfaces**, achieving multiple inheritance in Java.
 
 ### Relationship Between Class and Interface
+
 A class can extend another class and similarly, an interface can extend another interface. However, only a class can implement an interface and the reverse (an interface implementing a class) is not allowed.
 
 ![class-interface](./resources/Interfaces.png)
 
 ### When to Use Class and Interface?
+
 **Use a Class when:**
 - Use a class when you need to represent a real-world entity with attributes (fields) and behaviors (methods).
 - Use a class when you need to create objects that hold state and perform actions
@@ -6152,6 +6234,7 @@ A class can extend another class and similarly, an interface can extend another 
 > **Implementation**: To implement an interface, we use the keyword `implements`
 
 ### Multiple Inheritance in Java Using Interface
+
 Java does not support multiple inheritance with classes to avoid ambiguity, but it supports multiple inheritance using interfaces.
 
 ![multiple_inheritance](./resources/MutlipleInheritance_Interface.png)
@@ -6207,7 +6290,8 @@ Substraction : 1
 - Interface attributes are by default `public`, `static` and `final`
 - An interface cannot contain a constructor (as it cannot be used to create objects)
 
-### JDK 8 New Features Added in Interfaces 
+### JDK 8 New Features Added in Interfaces
+
 There are certain features added to Interfaces in JDK 8 update mentioned below:
 
 1. **Default Methods**
@@ -6310,6 +6394,7 @@ public interface Calculator {
 ```
 
 ###  JDK 9 New Features Added in Interfaces
+
 From Java 9 onwards, interfaces can contain the following also:
 
 **Private Methods**
@@ -6351,6 +6436,7 @@ Vehicle is now driving.
 ```
 
 ### Extending Interfaces
+
 One interface can inherit another by the use of keyword extends. When a class implements an interface that inherits another interface, it must provide an implementation for all methods required by the interface inheritance chain.
 
 ❓: **Multiple inheritance is not supported through class in Java but it is possible by interface, why?**
@@ -6377,6 +6463,7 @@ class TestInterface implements Printable, Showable{
 In the above example,`Printable` and `Showable` interface have same methods but its impleentation is provided by class `TestInterface`, so there is no ambiguity.
 
 ### Internal addition by Compiler
+
 The Java compiler adds `public` and `abstract` keywords before the interface method.
 More, it adds `public`, `static` and `final` keywords before data members.
 
@@ -6404,6 +6491,7 @@ Although Class and Interface seem the same there are certain differences between
 - An interface defines only behavior (method signatures) - it’s a contract that classes must follow.
 
 ## 47. Abstract Class vs. Interface
+
 | Feature              | Abstract Class                                                      | Interface                                                                                  |
 | -------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | **Keyword**          | `abstract`                                                          | `interface`                                                                                |
@@ -6420,7 +6508,8 @@ Although Class and Interface seem the same there are certain differences between
 
 **Abstraction**: Hiding the internal implementation of the feature and only showing the functionality to the users, i.e., what it works(showing), how it works (hiding). Both abstract class and interface are used for abstraction.
 
-###  When to use what?
+### When to use what?
+
 🔸 **Abstract Class**
 - In Java application, there are some related classes that need to share some lines of code then you can put these lines of code within abstract class and this abstract class should be extended by all these related classes.
 - You can define non-static or non-final field(s) in abstract class, so that via a method you can access and modify the state of Object to which they belong.
@@ -6431,7 +6520,10 @@ Although Class and Interface seem the same there are certain differences between
 - A class can implement more than one interface. It is called **multiple inheritance**.
 - You want to **specify the behaviour** of particular data type, but not concerned about who implements its behaviour.
 
+![abstract class and interface](./resources/Abstract-class-and-interface.png)
+
 ---
+
 🧩 Additional Points to Add
 
 **1. Real-world Analogy**
@@ -6504,7 +6596,22 @@ Error is irrecoverable. eg, `OutOfMemoryError`, `VirtualMachineError`, `Assertio
 
 ![exception_types](/resources/Exceptions-in-Java.png)
 
+There are generally two types of exceptions in Java:
+
+- **Built-in Exceptions**: Built-in exceptions in Java are provided by the Java Libraries. These exceptions can be further divided into two subcategories i.e., checked and unchecked Exceptions. Below are some of the built-in exceptions in Java:
+    - ArrayIndexOutOfBoundsExceptions
+    - ClassNotFoundException
+    - FileNotFoundException
+    - IOException
+    - NullPointerException
+    - ArithmeticException
+    - InterruptedException
+    - RuntimeException
+
+- **User-Defined Exceptions**: User-defined exceptions are defined by the programmers themselves to handle some specific situations or errors which are not covered by built-in exceptions. To define user-defined exceptions a new class that extends the appropriate exception class must be defined. User-defined Exceptions in Java when built-in exceptions don’t cover specific cases.
+
 ---
+
 ### Exception Handling Keywords
 
 1. `try`
@@ -6550,7 +6657,7 @@ class A{
 - The try block contains code that might throw an exception,
 - The catch block handles the exception if it occurs.
 
-#### Internal Working of try-catch Block:
+#### Internal Working of try-catch Block
 
 - JVM executes code inside the try block.
 - If an exception occurs, remaining try code is skipped and JVM searches for a matching catch block.
@@ -6630,6 +6737,7 @@ catch(Exception ee){
 
 }
 ```
+
 📝: At a time only one Exception is occurred and at a time only one catch block is executed.
 📝: All `catch` blocks must be ordered from most specific to most general, i.e., `catch` for `ArithemeticException` must come before `catch` for Exception.
 
@@ -6747,6 +6855,7 @@ class A{
 ```
 
 ### Custom Exceptions (User defined exceptions) : Checked
+
 ```java
 class CustomException extends Exception{
     CustomException(String message){
@@ -6770,6 +6879,7 @@ class CustomException extends Exception{
 ```
 
 ### How Does JVM Handle an Exception?
+
 When an Exception occurs, the JVM creates an exception object containing the error name, description and program state. Creating the exception object and handling it in the run-time system is called throwing an exception. There might be a list of the methods that had been called to get to the method where an exception occurred. This ordered list of methods is called call stack. Now the following procedure will happen:
 
 - The run-time system searches the call stack for an exception handler
@@ -6793,7 +6903,47 @@ class abc{
 }
 ```
 
+❓: **Explain Runtime Exceptions.**
+▶ Runtime Exceptions are exceptions that occur during the execution of a code, as opposed to compile-time exceptions that occur during compilation. Runtime exceptions are unchecked exceptions, as they aren't accounted for by the JVM.
+
+Examples of runtime exceptions in Java include:
+- **NullPointerException**: This occurs when an application attempts to use a null object reference.
+- **ArrayIndexOutOfBoundsException**: This occurs when an application attempts to access an array index that is out of bounds.
+- **ArithmeticException**: This occurs when an application attempts to divide by zero.
+- **IllegalArgumentException**: This occurs when a method is passed on an illegal or inappropriate argument.
+
+Unlike checked exceptions, runtime exceptions do not require a declaration in the throws clause or capture in a try-catch block. However, handling runtime exceptions is advisable in order to provide meaningful error messages and prevent a system crash. Because runtime exceptions provide more specific information about the problem than checked exceptions, they enable developers to detect and correct programming errors more easily and quickly.
+
+❓: **What is NullPointerException?**
+▶ It is a runtime exception thrown when a program tries to use an object reference that is null. It usually indicates that no value has been assigned to a reference variable.
+
+❓: **What is the base class for Error and Exception?**
+▶ Both Error and Exception classes inherit from the common parent class java.lang.Throwable.
+
+Error: Represents serious problems that occur in the JVM and are usually not recoverable (e.g., OutOfMemoryError, StackOverflowError).
+Exception: Represents conditions that a program might want to catch and handle to maintain normal flow (e.g., IOException, NullPointerException).
+
+![base class](./resources/Exception-Handling.png)
+
+❓: **Is it necessary that each try block must be followed by a catch block?**
+▶ No, It is not necessary to use catch block after try block in Java as we can create another combination with finally block. Finally is the block which runs despite the fact that the exception is thrown or not.
+
+❓: **What is exception propagation?**
+▶ Exception propagation is a process in which the exception is dropped from to the top to the bottom of the stack. If not caught once, the exception again drops down to the previous method, and so on until it gets caught or until it reaches the very bottom of the call stack.
+
+❓: **What will happen if you put System.exit(0) on the try or catch block? Will finally block execute?**
+▶ System.exit(int) has the capability to throw SecurityException. So, if in case of security, the exception is thrown then finally block will be executed otherwise JVM will be closed while calling System. exit(0) because of which finally block will not be executed.
+
+❓: **What do you understand by Object Cloning and how do you achieve it in Java?**
+▶ It is the process of creating an exact copy of any object. In order to support this, a java class has to implement the Cloneable interface of java.lang package and override the clone() method provided by the Object class the syntax of which is:
+
+Protected Object clone() throws CloneNotSupportedException{ return (Object)super.clone();}In case the Cloneable interface is not implemented and just the method is overridden, it results in CloneNotSupportedException in Java.
+
+❓: **How do exceptions affect the program if it doesn't handle them?**
+▶ Exceptions are responsible for abruptly terminating the running of the program while executing and the code written after the exception occurs is not executed.
+
 ## 49. Inner Classes (Nested Classes)
+
 An **inner class** is a class **defined inside another class**.
 It helps logically group classes that are only used in one place, improving **encapsulation and readability**.
 
@@ -6870,7 +7020,7 @@ A.B b1 = a1.new B();
 A.B.C c1 = b1.new C();
 ```
 
-### **Types of Inner Classes in Java**
+### Types of Inner Classes in Java
 
 | Type                          | Defined As            | Can Access Outer Members?               | Static/Non-static | Typical Use Case                                            |
 | ----------------------------- | --------------------- | --------------------------------------- | ----------------- | ----------------------------------------------------------- |
@@ -6987,7 +7137,8 @@ Dog barks
 | **Encapsulation**       | Inner classes can access outer private data, supporting data hiding. |
 
 ---
-### **Advantage of Inner Class**
+
+### Advantage of Inner Class
 
 1. Nested classes represent a special type of relationship that is **it can access all the members (data members and methods) of outer class** including private.
 2. Nested classes are used to develop more readable and maintainable code because it logically group classes and interfaces in one place only.
@@ -9759,6 +9910,7 @@ class RS{
 - Always close Connection.
 
 ### Statement vs PreparedStatement - Comparison Table
+
 | Feature / Aspect       | **Statement**                       | **PreparedStatement**                                      |
 | ---------------------- | ----------------------------------- | ---------------------------------------------------------- |
 | **Type of SQL**        | Static SQL (fixed query)            | Parameterized SQL (uses `?` placeholders)                  |
@@ -9785,6 +9937,7 @@ class RS{
 `Statement` is rarely used except for DDL or simple queries.
 
 ## 65. Collections
+
 The **Collection Framework** in Java is a unified architecture to **store, retrieve, manipulate, and aggregate** groups of objects efficiently.
 
 Java Collections support operations like **searching, sorting, insertion, deletion, iteration**, etc., through well-defined interfaces and ready-made implementations.
@@ -9798,6 +9951,7 @@ A *framework* is:
 * **Optional**, but makes development faster and standardized
 
 ### What is Collection Framework
+
 The Collection framework represents a unified architecture for storing and manipulating a group of objects. It has:
 - Interfaces and its implementations, i.e., Classes
 - Algorithm
@@ -9811,6 +9965,7 @@ The Collection Framework represents a **unified architecture** for storing and m
 * **Algorithms** (sorting, searching, etc.)
 
 #### **Root Interfaces**
+
 Java Collection Framework has two main roots:
 | Root Interface | Package     | Represents                                                         |
 | -------------- | ----------- | ------------------------------------------------------------------ |
@@ -9818,6 +9973,7 @@ Java Collection Framework has two main roots:
 | `Map`          | `java.util` | Key–value pairs (not part of Collection hierarchy but part of JCF) |
 
 ### Features of Java Collection Framework
+
 - Provides ready-to-use data structures (e.g., `ArrayList`, `HashSet`, `HashMap`).
 - Offers interfaces (`Collection`, `List`, `Set`, `Map`, `Queue`) to define standard behaviors.
 - Supports **dynamic resizing**, unlike arrays with a fixed size.
@@ -9826,6 +9982,7 @@ Java Collection Framework has two main roots:
 - Enables **easy iteration** using Iterator and for-each loop
 
 ### Hierarchy of Collection Framework
+
 A Collection is a group of objects treated as a single unit.
 
 Java provides a powerful Collection Framework supporting interfaces like:
@@ -9861,6 +10018,7 @@ Collection
 ```
 
 ### Need for Collection Framework
+
 Before JDK 1.2:
 
 * Developers used **Arrays**, **Vectors**, and **HashTables**
@@ -9872,6 +10030,7 @@ Before JDK 1.2:
 To solve these problems, Java introduced the **Collection Framework**, providing standard APIs and powerful data structures.
 
 ### Real World Example
+
 Managing a library with thousands of books:
 
 * Without a framework → manual storing, searching, sorting
@@ -9882,6 +10041,7 @@ Similarly, the Collection Framework acts like a **catalog** for managing objects
 ![JCF7](./resources/JCF7.png)
 
 ### Advantages of Collection Framework
+
 **1. Consistent API :**
 The API has a basic set of interfaces like `Collection`, `Set`, `List` or `Map`. All classes (`ArrayList`, `LinkedList`, `Vector`, etc) that implement these interfaces have some common set of methods.
 
@@ -9907,6 +10067,7 @@ Class **`Collections`** provides:
 ### Key Interfaces in the Collection Framework
 
 #### List Interface (`java.util.List`)
+
 The **List** interface represents an **ordered**, **index-based**, and **duplicate-allowed** collection.
 
 It preserves the insertion order and allows positional access using indexes (0, 1, 2…).
@@ -9920,6 +10081,7 @@ It preserves the insertion order and allows positional access using indexes (0, 
 ![JCF3](./resources/JCF3.png)
 
 #### Set Interface (`java.util.Set`)
+
 The **Set** interface represents a collection that **does not allow duplicate elements**.
 
 It models the mathematical set abstraction and may or may not maintain order depending on the implementation.
@@ -9936,6 +10098,7 @@ It models the mathematical set abstraction and may or may not maintain order dep
 ![JCF4](./resources/JCF4.png)
 
 #### Map Interface (`java.util.Map`)
+
 The **Map** interface represents a structure that maps **keys to values**.
 Each key must be **unique**, but values may be duplicated.
 Not a child of `Collection` but a major part of JCF.
@@ -9949,6 +10112,7 @@ Not a child of `Collection` but a major part of JCF.
 ![JCF6](./resources/JCF6.png)
 
 #### Queue / Deque Interface (`java.util.Queue`, `java.util.Deque`)
+
 **Queue Interface**
 
 The **Queue** interface represents a collection designed for **FIFO (First-In-First-Out)** order.
@@ -9975,7 +10139,19 @@ It can work as either a **Queue** (FIFO) or **Stack** (LIFO).
 
 ![JCF5](./resources/JCF5.png)
 
+❓: **What is the difference between Collection and Collections?**
+▶ 1. **Collection**:
+- It is an interface in the java.util package.
+- It represents a group of objects (elements).
+Used as a parent interface for List, Set, and Queue.
+
+2. **Collections**:
+- It is a utility class in the java.util package.
+- Provides static methods like sort(), reverse(), shuffle().
+- Used to perform operations on Collection objects.
+
 ## 66. List Interface
+
 List is an dynamic array which is implemented by `ArrayList` (dynamic array based) and `LinkedList` (static array).
 
 The `List` interface in Java extends the `Collection` interface and is part of the `java.util` package. It is used to store ordered collections where duplicates are allowed and elements can be accessed by their index.
@@ -10007,6 +10183,11 @@ public interface List<E> extends Collection <E>
 > `ListIterator` interface is used to traverse the element in backward and forward direction. `ListIterator` is a child interface of `Iterator`.
 
 ### Important List Implementations
+
+- **ArrayList**: It is implemented using resizable array, offers fast random access but slower insert/delete.
+- **LinkedList**: It is implemented using Doubly-linked list, efficient for frequent insertions and deletions.
+- **Vector**: It is implemented using Legacy synchronized dynamic array, thread-safe but slower.
+- **Stack**: It is implemented using a LIFO (Last-In-First-Out) subclass of Vector for stack operations.
 
 | Implementation | Underlying Structure         | Performance                   | Features                |
 | -------------- | ---------------------------- | ----------------------------- | ----------------------- |
@@ -10309,6 +10490,7 @@ while (it.hasPrevious()) {
 | Memory        | Less            | More                   |
 
 ### Why Use Generics in List?
+
 Generics prevent storing wrong data types:
 
 ```java
@@ -10335,6 +10517,7 @@ List<Integer> safeList = Collections.synchronizedList(new ArrayList<>());
 ```
 
 ### Real-World Example of List
+
 List is like a playlist where:
 - Songs have positions (indexes)
 - You can add duplicate songs
@@ -10357,6 +10540,7 @@ System.out.println(shoppingList);
 * Use generics for type safety
 
 ## 67. ArrayList Class
+
 An ArrayList in Java is a **resizable** (or dynamic) array from the `java.util.ArrayList` package that can grow or shrink automatically as elements are added or removed, unlike regular arrays with a fixed size. It inherits `AbstractList` class and implements `List` interface.
 
 - **Indexed Access**: Elements can be accessed using their index, just like arrays.
@@ -10371,6 +10555,7 @@ The normal array in Java has a fixed size.
 ArrayList solves this limitation by providing a dynamic array that grows and shrinks automatically.
 
 ### Features of ArrayList
+
 - Dynamic resizing (grows automatically)
 - Duplicates allowed
 - Null values allowed
@@ -10380,6 +10565,7 @@ ArrayList solves this limitation by providing a dynamic array that grows and shr
 - Implements List Interface
 
 ### Hierarchy of ArrayList class
+
 It implements `List` Interface which is a sub-interface of `Collection` Interface.
 
 ![ArrayList](./resources/ArrayList.png)
@@ -10387,6 +10573,7 @@ It implements `List` Interface which is a sub-interface of `Collection` Interfac
 Java `ArrayList` class extends `AbstractList` class which implements `List` interface. The `List` interface extends `Collection` & `Iterable` interfaces in hierarchical order.
 
 ### ArrayList class declaration
+
 ```java
 public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAccess, Cloneable, Serializable
 ```
@@ -10404,6 +10591,7 @@ ArrayList<Student> students = new ArrayList<>();
 ```
 
 ### ArrayList Constructors in Java
+
 Java provides multiple constructors to create an ArrayList based on different requirements:
 
 **1. ArrayList()**
@@ -10426,6 +10614,7 @@ ArrayList<Double> arr = new ArrayList<>(20);
 ```
 
 ### **Methods of ArrayList**
+
 **1. Add elements**
 
 ```java
@@ -10549,7 +10738,6 @@ Use **LinkedList** instead when:
 | Memory Usage         | Less                  | More                           |
 | Best For             | Read-heavy operations | Insert/delete-heavy operations |
 
-
 ### Complexity of Java ArrayList
 
 Understanding the **time and space complexity** of ArrayList operations helps in writing efficient programs. Since `ArrayList` is internally backed by a **dynamic array (`Object[]`)**, most operations depend on how arrays behave.
@@ -10661,6 +10849,188 @@ mm = toArray();
 - Use `toArray()` → returns `Object[]`, requires explicit typecasting.
 - Use `toArray(T[] array)` → returns `T[]`, no manual typecasting needed if the array type matches.​
 
+❓: **How can you synchronize an ArrayList in Java?**
+▶ An ArrayList can be synchronized using two methods mentioned below:
+
+1. Using Collections.synchronizedList(): Wrap the ArrayList inside a synchronized list.
+
+```java
+List<String> list = new ArrayList<>();
+​
+List<String> syncList = Collections.synchronizedList(list);
+​
+synchronized (syncList) {
+    for (String s : syncList) {
+        System.out.println(s);
+    }
+}
+```
+
+2. Using CopyOnWriteArrayList: Instead of synchronizing manually, use a thread-safe collection from java.util.concurrent.
+```java
+CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
+```
+
+❓: **Why do we need a synchronized ArrayList when we have Vectors (which are synchronized) in Java?**
+▶ Vector is always synchronized, which makes it slow. ArrayList can be synchronized only when needed, giving better performance and flexibility.
+
+❓: **Why can’t we create a generic array?**
+▶ Generic arrays can't be created because an array carries type information of its elements at runtime because of which during runtime it throw 'ArrayStoreException' if the elements' type is not similar. Since generics type information gets erased at compile time by Type Erasure, the array store check would have been passed where it should have failed.
+
+❓: **How are elements stored in memory for arrays and ArrayLists in Java?**
+▶ Array: In arrays, elements are stored in contiguous memory locations, making access very fast using an index.
+
+ArrayList: In ArrayList, elements are stored inside a resizable array, which grows automatically; although memory is still contiguous, resizing may involve creating a new larger array and copying elements.
+
+❓: **How do you convert an ArrayList to an Array and an Array to an ArrayList in Java?**
+▶ 1. **Convert Array to ArrayList**: There are multiple methods to convert Array into ArrayList
+
+![Convert-Array-into-ArrayList](./resources/Convert-Array-into-ArrayList.png)
+
+Programmers can convert an Array to ArrayList using asList() method of the Arrays class. It is a static method of the Arrays class that accepts the List object.
+
+Syntax:
+```
+Arrays.asList(item)
+```
+
+Example: Java program to demonstrate conversion of Array to ArrayList of fixed-size.
+
+```java
+import java.util.*;
+// Driver Class
+class GFG {
+    // Main Function
+    public static void main(String[] args)
+    {
+        String[] temp = { "Abc", "Def", "Ghi", "Jkl" };
+        // Conversion of array to ArrayList using Arrays.asList
+        List conv = Arrays.asList(temp);
+        System.out.println(conv);
+    }
+}
+```
+
+Output:
+```
+[Abc, Def, Ghi, Jkl]
+```
+
+2. **Convert ArrayList to Array**
+
+![Convert ArrayList to Array](./resources/Convert-ArrayList-to-Array.png)
+
+Syntax:
+```
+List_object.toArray(new String[List_object.size()])
+```
+
+Example: Java programmers can convert ArrayList to
+
+```java
+import java.util.List;
+import java.util.ArrayList;
+​
+// Driver Class
+class GFG {
+    // Main Function
+    public static void main(String[] args) {
+        // List declared
+        List<Integer> arr = new ArrayList<>();
+        arr.add(1);
+        arr.add(2);
+        arr.add(3);
+        arr.add(2);
+        arr.add(1);
+        
+        // Conversion
+        Object[] objects = arr.toArray();
+        
+        // Printing array of objects
+        for (Object obj : objects)
+            System.out.print(obj + " ");
+    }
+}
+```
+
+Output:
+```
+1 2 3 2 1 
+```
+
+❓: **How does the size of ArrayList grow dynamically? And also state how it is implemented internally.**
+▶ An ArrayList stores elements in an internal array. When the array is full, it automatically creates a larger array (about 1.5× the old size) and copies existing elements, allowing dynamic growth.
+
+❓: **What is a Vector in Java?**
+▶ A Vector in Java is a dynamic array that can grow or shrink automatically when elements are added or removed. It is part of the java.util package. Vector is very similar to ArrayList, but the key difference is: Vector is synchronized (thread-safe), while ArrayList is not.
+
+```java
+import java.util.Vector;
+​
+public class VectorExample {
+    public static void main(String[] args) {
+        Vector<String> vector = new Vector<>();
+        vector.add("Apple");
+        vector.add("Banana");
+        vector.add("Apple"); // duplicate allowed
+        System.out.println(vector); // Output: [Apple, Banana, Apple]
+    }
+}
+```
+
+Output:
+```
+[Apple, Banana, Apple]
+```
+
+❓: **How to make Java ArrayList Read-Only?**
+▶ An ArrayList can be made ready only using the method provided by Collections using the Collections.unmodifiableList() method. 
+
+Syntax:
+```
+array_readonly = Collections.unmodifiableList(ArrayList);
+```
+
+Example:
+```java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] argv) throws Exception {
+        try {
+            // creating object of ArrayList
+            ArrayList<Character> temp = new ArrayList<>();
+            // populate the list
+            temp.add('X');
+            temp.add('Y');
+            temp.add('Z');
+            // printing the list
+            System.out.println("Initial list: " + temp);
+            
+            // getting readonly list using unmodifiableList() method
+            List<Character> new_array = Collections.unmodifiableList(temp);
+            
+            // printing the list
+            System.out.println("ReadOnly ArrayList: " + new_array);
+            
+            // Attempting to add element to new Collection
+            System.out.println("\nAttempting to add element to the ReadOnly ArrayList");
+            new_array.add('A');
+        } catch (UnsupportedOperationException e) {
+            System.out.println("Exception is thrown : " + e);
+        }
+    }
+}
+```
+Output:
+```
+Initial list: [X, Y, Z]
+ReadOnly ArrayList: [X, Y, Z]
+
+Attempting to add element to the ReadOnly ArrayList
+Exception is thrown : java.lang.UnsupportedOperationException
+```
+
 ## 68. LinkedList Class
 LinkedList is a part of the Java Collection Framework and is present in the `java.util package`. It implements a **doubly-linked list data structure** where elements are not stored in contiguous memory. 
 
@@ -10758,7 +11128,6 @@ public class LinkedList<E>
 | Memory Usage         | Less                       | More (extra pointers)          |
 | Best For             | Read-heavy operations      | Insert/Delete heavy operations |
 | Implements           | List                       | List + Deque (queue + stack)   |
-
 
 ## 69. Difference between ArrayList and LinkedList
 `ArrayList` and `LinkedList` are two commonly used implementations of the `List` interface in Java. Both store ordered elements and allow duplicates, but they differ **internally**, resulting in different **performance characteristics**.
@@ -26864,4 +27233,281 @@ Typical flow:
 
 ❓ **Can Maven and Gradle be used for the same project?**
 ▶ No. A project should use **one build tool** to avoid confusion and conflicting build logic.
+
+## 151. CI/CD in Java Projects (GitHub Actions / Jenkins)
+
+**CI/CD (Continuous Integration / Continuous Deployment)** is the practice of **automating build, test, and deployment pipelines** so that code changes move from commit to production **reliably and repeatedly**.
+
+In Java web projects, CI/CD typically automates:
+
+* Code checkout
+* Build (Maven / Gradle)
+* Unit & integration tests
+* Packaging (WAR/JAR)
+* Deployment to server or cloud
+
+📌 CI/CD turns deployments from a risky event into a routine operation.
+
+### Why CI/CD Is Needed
+
+Without CI/CD:
+
+* Builds work only on developer machines
+* Bugs are discovered late
+* Manual deployments cause human errors
+* Rollbacks are painful
+
+CI/CD ensures:
+
+* Early bug detection
+* Faster feedback cycles
+* Consistent builds
+* Reliable deployments
+
+### CI vs CD (Clear Separation)
+
+#### Continuous Integration (CI)
+
+CI focuses on **code quality and correctness**.
+
+It ensures:
+
+* Every commit triggers a build
+* Tests run automatically
+* Broken code is detected early
+
+📌 CI answers: “Is the code safe to merge?”
+
+#### Continuous Deployment / Delivery (CD)
+
+CD focuses on **releasing software**.
+
+It ensures:
+
+* Artifacts are deployable at any time
+* Deployments are automated
+* Environments stay consistent
+
+📌 CD answers: “Can this code be safely released?”
+
+### Typical CI/CD Pipeline Flow (Conceptual)
+
+1. Developer pushes code to GitHub
+2. CI pipeline triggers automatically
+3. Dependencies are resolved
+4. Tests are executed
+5. Build artifact (WAR/JAR) is created
+6. Artifact is deployed (optional or automatic)
+7. Logs and status are reported
+
+📌 The pipeline is code, not clicks.
+
+### CI/CD with GitHub Actions
+
+**GitHub Actions** is a **cloud-native CI/CD platform** integrated directly into GitHub.
+
+It uses **YAML-based workflows** stored inside the repository.
+
+📌 No external CI server required.
+
+### GitHub Actions Workflow Structure
+
+```
+.github/workflows/
+ └── ci.yml
+```
+
+📌 Workflow files live alongside source code.
+
+### Example: CI Pipeline for Java Web Project (Maven)
+
+```yaml
+# GitHub Actions workflow for Java CI
+name: Java CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Java environment
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Step 3: Build project using Maven
+      - name: Build with Maven
+        run: mvn clean package
+
+      # Step 4: Run tests (included in Maven lifecycle)
+      - name: Run tests
+        run: mvn test
+```
+
+📌 This pipeline runs automatically on every push or PR.
+
+### What This Pipeline Does
+
+* Ensures project builds successfully
+* Runs all tests
+* Produces a WAR/JAR artifact
+* Fails fast if something breaks
+
+📌 CI feedback arrives within minutes.
+
+### CI/CD with Jenkins
+
+**Jenkins** is a **self-hosted automation server**.
+
+It offers:
+
+* Full customization
+* Plugin ecosystem
+* On-premise or cloud deployment
+
+📌 Jenkins requires setup and maintenance.
+
+### Jenkins Architecture (Conceptual)
+
+* Jenkins server runs jobs
+* Agents execute tasks
+* Pipelines define workflow
+* Plugins extend capabilities
+
+📌 Jenkins gives power at the cost of simplicity.
+
+### Jenkins Pipeline (Declarative)
+
+Pipelines are defined using a **Jenkinsfile**.
+
+```groovy
+// Jenkins pipeline definition
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Fetch code from repository
+                git 'https://github.com/asha-saini06/java-refresher-notes.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Build project using Maven
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run unit tests
+                sh 'mvn test'
+            }
+        }
+    }
+
+    post {
+        success {
+            // Action on successful build
+            echo 'Build succeeded!'
+        }
+        failure {
+            // Action on failure
+            echo 'Build failed!'
+        }
+    }
+}
+```
+
+📌 Pipeline logic is version-controlled with code.
+
+### GitHub Actions vs Jenkins
+
+| Aspect        | GitHub Actions | Jenkins            |
+| ------------- | -------------- | ------------------ |
+| Setup         | Minimal        | Manual             |
+| Hosting       | GitHub-managed | Self-hosted        |
+| Configuration | YAML           | Groovy             |
+| Maintenance   | None           | Required           |
+| Scalability   | Automatic      | Manual             |
+| Use case      | Most projects  | Large/custom infra |
+
+📌 GitHub Actions favors simplicity; Jenkins favors control.
+
+### CI/CD for Java Web Applications (WAR-Based)
+
+Common pipeline steps:
+
+* Build WAR using Maven/Gradle
+* Run tests
+* Upload artifact
+* Deploy to:
+
+  * Tomcat
+  * AWS / GCP
+  * Docker container
+
+📌 CI builds artifacts; CD moves them.
+
+### Deployment Strategies (Conceptual)
+
+* **Manual deployment** – human-triggered
+* **Automated deployment** – pipeline-triggered
+* **Continuous delivery** – deployable anytime
+* **Continuous deployment** – auto-deploy on success
+
+📌 Choose strategy based on risk tolerance.
+
+### Common CI/CD Mistakes
+
+* Skipping tests to “save time”
+* Hardcoding secrets
+* Not versioning pipelines
+* Running pipelines only before release
+* Mixing build and deployment concerns
+
+📌 A broken pipeline is worse than no pipeline.
+
+### 📝 Points to Remember
+
+* CI/CD automates build, test, and deploy
+* CI catches bugs early
+* CD ensures reliable releases
+* Pipelines must be version-controlled
+* Secrets should never be hardcoded
+* GitHub Actions is easy to start
+* Jenkins offers maximum flexibility
+* CI should run on every commit
+* Fast feedback is critical
+
+---
+
+❓ **Why is CI/CD critical for team-based Java projects?**
+▶ Multiple developers push changes frequently. CI/CD ensures every change is validated automatically, preventing broken builds and integration conflicts.
+
+❓ **Why should pipelines be treated as code?**
+▶ Versioning pipelines ensures transparency, reproducibility, reviewability, and rollback capability just like application code.
+
+❓ **Why is running tests in CI non-negotiable?**
+▶ Local tests can be skipped or misconfigured. CI enforces consistent execution in a clean environment, catching regressions early.
+
+❓ **Why are secrets managed separately in CI/CD tools?**
+▶ Hardcoding credentials risks leaks. CI/CD platforms provide encrypted secret stores to keep sensitive data secure.
+
+❓ **When should Jenkins be preferred over GitHub Actions?**
+▶ When organizations require custom infrastructure, advanced workflows, on-premise control, or deep plugin-based customization.
 
